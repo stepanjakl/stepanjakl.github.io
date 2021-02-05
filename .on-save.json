@@ -1,0 +1,7 @@
+[
+  {
+    "files": "*.scss",
+    "command": "pnpm run style:build",
+    "showOutput": true
+  }
+]
