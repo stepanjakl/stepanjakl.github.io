@@ -1,2 +1,2 @@
-# stepan
-Stepan Web
+# Personal website
+WIP

@@ -1,8 +1,0 @@
-{
-	"dependencies": {
-		"uniformcss": "^0.8.0"
-	},
-	"scripts": {
-		"style:build": "sass --no-source-map --load-path=node_modules/uniformcss style.scss style.css"
-	}
-}
