@@ -643,7 +643,8 @@ body>input[type="checkbox"] {
 
 /* Side background shapes */
 
-#triangle-left::before {
+
+/* #triangle-left::before {
     content: '';
     position: absolute;
     left: 0;
@@ -670,8 +671,9 @@ body>input[type="checkbox"] {
     height: 55vh;
     z-index: 2;
 }
+*/
 
-#triangle-right::before {
+/* #triangle-right::before {
     content: '';
     position: absolute;
     right: 0;
@@ -697,6 +699,101 @@ body>input[type="checkbox"] {
     width: 100vh;
     height: 100vh;
     z-index: 2;
+} */
+
+/* #triangle-right::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 50vh;
+    clip-path: polygon(100% 0, 0% 50%, 100% 100%);
+    background: linear-gradient(45deg, rgba(0, 52, 141, 0) 29.289321881345%, rgba(0, 52, 141, 1));
+} */
+
+/* top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    */
+
+/* #triangle-right::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50vh;
+    height: 50vh;
+    border-image-slice: 1;
+    border-image: linear-gradient(#00f, #000) 0 100%;
+    border-right: 50vh solid;
+
+    border-left: 50vh solid transparent;
+    border-bottom: 50vh solid transparent;
+    border-top: 50vh solid transparent;
+} */
+
+#triangle-left,
+#triangle-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+
+#triangle-left::before {
+    content: '';
+    position: absolute;
+    left: 50vh;
+    top: 0;
+    height: calc(70.710678118655vh + 16vh);
+    width: 8vh;
+    transform: rotate(45deg) translateY(-8vh);
+    transform-origin: top left;
+    background: linear-gradient(to top, rgba(0, 31, 36, 0), rgba(0, 31, 36, 1));
+}
+
+#triangle-left::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: url(images/triangle-left-upper.svg);
+    background-size: 100% 100%;
+    background-position: left;
+    width: 70.710678118655vh;
+    height: 70.710678118655vh;
+    transform: translateX(-50%) translateY(-50%) rotate(45deg);
+    background: linear-gradient(to top, rgba(0, 52, 141, 0), rgba(0, 52, 141, 1));
+}
+
+#triangle-right::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 70.710678118655vh;
+    width: 8vh;
+    transform: rotate(45deg);
+    transform-origin: top right;
+    background: linear-gradient(to top, rgba(0, 31, 36, 0), rgba(0, 31, 36, 1));
+}
+
+
+#triangle-right::after {
+    content: '';
+    position: absolute;
+    top: 14.6446609406725vh;
+    right: 0;
+    height: 70.710678118655vh;
+    width: 70.710678118655vh;
+    transform-origin: center;
+    transform: translateX(50%) rotate(45deg);
+    background: linear-gradient(to top, rgba(0, 52, 141, 0), rgba(0, 52, 141, 1));
 }
 
 /* Tooltip */
