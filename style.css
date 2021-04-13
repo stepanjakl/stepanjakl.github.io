@@ -115,8 +115,10 @@
         --icon-bg: var(--cyan-quarter-75);
         --icon-fg: var(--cyan-quarter-45);
 
-        --menu-border-inner: var(--cyan-quarter-95);
-        --menu-border-outer: var(--cyan-quarter-75);
+        --context-border-inner: var(--cyan-quarter-95);
+        --context-border-outer: var(--cyan-quarter-75);
+        /* 210, 25, 70 */
+        --context-bg: rgba(176, 203, 210, 0.5);
 
         --modal-border-inner: var(--cyan-quarter-95);
         --modal-border-outer: var(--cyan-full-75);
@@ -126,9 +128,6 @@
 
         --modal-icon-bg: var(--cyan-half-55);
         --modal-icon-fg: var(--cyan-half-95);
-
-        /* 210, 25, 70 */
-        --helper-bg: rgba(176, 203, 210, 0.5);
     }
 
     .intro__content .name div.logo span {
@@ -148,8 +147,10 @@
         --icon-bg: var(--cyan-quarter-45);
         --icon-fg: var(--cyan-quarter-85);
 
-        --menu-border-inner: var(--cyan-quarter-10);
-        --menu-border-outer: var(--cyan-quarter-25);
+        --context-border-inner: var(--cyan-quarter-10);
+        --context-border-outer: var(--cyan-quarter-25);
+        /* 210, 25, 25 */
+        --context-bg: rgba(51, 61, 63, 0.5);
 
         --modal-border-inner: var(--cyan-quarter-10);
         --modal-border-outer: var(--cyan-full-25);
@@ -159,9 +160,6 @@
 
         --modal-icon-bg: var(--cyan-half-45);
         --modal-icon-fg: var(--cyan-half-85);
-
-        /* 210, 25, 25 */
-        --helper-bg: rgba(51, 61, 63, 0.5);
     }
 
     #mode:checked~.intro .intro__content .name div.logo span {
@@ -195,8 +193,10 @@
         --icon-bg: var(--cyan-quarter-45);
         --icon-fg: var(--cyan-quarter-85);
 
-        --menu-border-inner: var(--cyan-quarter-10);
-        --menu-border-outer: var(--cyan-quarter-25);
+        --context-border-inner: var(--cyan-quarter-10);
+        --context-border-outer: var(--cyan-quarter-25);
+        /* 210, 25, 25 */
+        --context-bg: rgba(51, 61, 63, 0.5);
 
         --modal-border-inner: var(--cyan-quarter-10);
         --modal-border-outer: var(--cyan-full-25);
@@ -206,9 +206,6 @@
 
         --modal-icon-bg: var(--cyan-half-45);
         --modal-icon-fg: var(--cyan-half-85);
-
-        /* 210, 25, 25 */
-        --helper-bg: rgba(51, 61, 63, 0.5);
     }
 
     .intro__content .name div.logo span {
@@ -228,8 +225,10 @@
         --icon-bg: var(--cyan-quarter-75);
         --icon-fg: var(--cyan-quarter-45);
 
-        --menu-border-inner: var(--cyan-quarter-95);
-        --menu-border-outer: var(--cyan-quarter-75);
+        --context-border-inner: var(--cyan-quarter-95);
+        --context-border-outer: var(--cyan-quarter-75);
+        /* 210, 25, 70 */
+        --context-bg: rgba(176, 203, 210, 0.5);
 
         --modal-border-inner: var(--cyan-quarter-95);
         --modal-border-outer: var(--cyan-full-75);
@@ -239,9 +238,6 @@
 
         --modal-icon-bg: var(--cyan-half-55);
         --modal-icon-fg: var(--cyan-half-95);
-
-        /* 210, 25, 70 */
-        --helper-bg: rgba(176, 203, 210, 0.5);
     }
 
     #mode:checked~.intro .intro__content .name div.logo span {
@@ -503,9 +499,9 @@ body>input[type="checkbox"] {
     position: absolute;
     bottom: 100%;
     left: 0;
-    background-color: var(--helper-bg);
-    box-shadow: inset 0 0 0 1px var(--menu-border-inner);
-    border: solid 1px var(--menu-border-outer);
+    background-color: var(--context-bg);
+    box-shadow: inset 0 0 0 1px var(--context-border-inner);
+    border: solid 1px var(--context-border-outer);
     padding: 10px 0px;
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
@@ -537,8 +533,8 @@ body>input[type="checkbox"] {
     line-height: 12px;
     letter-spacing: 0.5px;
     color: var(--text-2);
-    box-shadow: 0 -1px 0 0 var(--menu-border-inner);
-    border-top: solid 1px var(--menu-border-outer);
+    box-shadow: 0 -1px 0 0 var(--context-border-inner);
+    border-top: solid 1px var(--context-border-outer);
 }
 
 .intro__content .links button#menu>div>*>span {
@@ -826,12 +822,12 @@ body>input[type="checkbox"] {
     margin-top: 10px;
     padding: 10px 12px;
     border-radius: 4px;
-    background: var(--helper-bg);
-    color: var(--cyan-quarter-85);
+    background: var(--context-bg);
+    color: var(--text-2);
     text-align: center;
     display: none;
-    box-shadow: inset 0 0 0 1px var(--cyan-quarter-10);
-    border: solid 1px var(--cyan-quarter-25);
+    box-shadow: inset 0 0 0 1px var(--context-border-inner);
+    border: solid 1px var(--context-border-outer);
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
     pointer-events: none;
