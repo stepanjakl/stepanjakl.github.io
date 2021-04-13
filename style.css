@@ -7,38 +7,80 @@
     --cyan-full-5: #001417;
     /* 210, 100, 10 */
     --cyan-full-10: #001F24;
+    /* 210, 100, 15 */
+    --cyan-full-15: #002a30;
     /* 210, 100, 25 */
     --cyan-full-25: #00424b;
     /* 210, 100, 45 */
     --cyan-full-45: #007684;
     /* 210, 100, 65 */
     --cyan-full-65: #00aec2;
+    /* 210, 100, 75 */
+    --cyan-full-75: #00CBE2;
     /* 210, 100, 85 */
     --cyan-full-85: #4ce7ff;
     /* 210, 100, 95 */
     --cyan-full-95: #D4F7FF;
+    /* 210, 75, 25 */
+    --cyan-three-quarters-25: #1c4047;
+    /* 210, 75, 45 */
+    --cyan-three-quarters-45: #37737e;
+    /* 210, 75, 65 */
+    --cyan-three-quarters-65: #55aab9;
+    /* 210, 75, 85 */
+    --cyan-three-quarters-85: #83e2f5;
+    /* 210, 75, 95 */
+    --cyan-three-quarters-95: #dcf5fb;
     /* 210, 50, 25 */
     --cyan-half-25: #2A3F43;
     /* 210, 50, 45 */
     --cyan-half-45: #4e7077;
+    /* 210, 50, 55 */
+    --cyan-half-55: #618a93;
     /* 210, 50, 65 */
     --cyan-half-65: #75a6b0;
     /* 210, 50, 85 */
     --cyan-half-85: #a5deea;
+    /* 210, 50, 90 */
+    --cyan-half-90: #c6e9f1;
+    /* 210, 50, 95 */
+    --cyan-half-95: #e3f4f8;
     /* 210, 25, 5 */
     --cyan-quarter-5: #0e1213;
     /* 210, 25, 10 */
     --cyan-quarter-10: #171c1e;
     /* 210, 25, 15 */
     --cyan-quarter-15: #202729;
+    /* 210, 25, 20 */
+    --cyan-quarter-20: #2a3234;
     /* 210, 25, 25 */
     --cyan-quarter-25: #333d3f;
+    /* 210, 25, 30 */
+    --cyan-quarter-30: #3e494b;
+    /* 210, 25, 35 */
+    --cyan-quarter-35: #485558;
     /* 210, 25, 40 */
+    --cyan-quarter-40: #536164;
+    /* 210, 25, 45 */
     --cyan-quarter-45: #5e6d71;
+    /* 210, 25, 50 */
+    --cyan-quarter-50: #697a7e;
+    /* 210, 25, 55 */
+    --cyan-quarter-55: #74878c;
     /* 210, 25, 65 */
     --cyan-quarter-65: #8BA2A7;
+    /* 210, 25, 70 */
+    --cyan-quarter-70: #97afb5;
+    /* 210, 25, 75 */
+    --cyan-quarter-75: #a3bdc3;
+    /* 210, 25, 80 */
+    --cyan-quarter-80: #b0cbd2;
     /* 210, 25, 85 */
     --cyan-quarter-85: #BFD9DF;
+    /* 210, 25, 90 */
+    --cyan-quarter-90: #d5e5ea;
+    /* 210, 25, 95 */
+    --cyan-quarter-95: #eaf2f4;
 
     /* 260, 100, 45 */
     --blue-full-45: #005FF1;
@@ -53,37 +95,77 @@
 }
 
 
-/* Dark mode */
+/* Light and dark mode */
 
-/* @media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: light) {
     :root {
-        --hello-dark-mode: no;
+        --dark-mode: no;
     }
 
+    /* light */
     .intro {
-        --background: var(--cyan-full-95);
-        --text-1: var(--cyan-full-5);
-        --text-2: var(--cyan-quarter-15);
+        --background: #ffffff;
+        --background-pattern: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='31' y='31' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
+        --triangle: rgba(0, 203, 226, 0), rgba(0, 203, 226, 1);
+        --triangle-stripe: rgba(180, 236, 248, 0), rgba(180, 236, 248, 1);
+        --text-1: var(--cyan-full-10);
+        --text-2: var(--cyan-quarter-30);
         --highlight: var(--blue-full-45);
 
+        --icon-bg: var(--cyan-quarter-75);
+        --icon-fg: var(--cyan-quarter-45);
 
-        --modal-icon-bg: var(--cyan-half-45);
-        --modal-icon-fg: var(--cyan-half-85);
+        --menu-border-inner: var(--cyan-quarter-95);
+        --menu-border-outer: var(--cyan-quarter-75);
 
-        --helper-bg: rgba(51, 61, 63, 0.5);
+        --modal-border-inner: var(--cyan-quarter-95);
+        --modal-border-outer: var(--cyan-full-75);
+        /* 210, 100, 70 */
+        --modal-bg: rgba(0, 188, 210, 0.45), rgba(0, 188, 210, 0.15);
+        --modal-text: var(--cyan-full-5);
+
+        --modal-icon-bg: var(--cyan-half-55);
+        --modal-icon-fg: var(--cyan-half-95);
+
+        /* 210, 25, 70 */
+        --helper-bg: rgba(176, 203, 210, 0.5);
     }
 
+    .intro__content .name div.logo span {
+        background-image: url(images/logo-animated-light.svg)
+    }
+
+    /* dark */
     #mode:checked~.intro {
         --background: var(--cyan-full-5);
+        --background-pattern: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='31' y='31' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
+        --triangle: rgba(0, 52, 141, 0), rgba(0, 52, 141, 1);
+        --triangle-stripe: rgba(0, 31, 36, 0), rgba(0, 31, 36, 1);
         --text-1: var(--cyan-full-95);
         --text-2: var(--cyan-quarter-85);
         --highlight: var(--blue-full-45);
 
+        --icon-bg: var(--cyan-quarter-45);
+        --icon-fg: var(--cyan-quarter-85);
+
+        --menu-border-inner: var(--cyan-quarter-10);
+        --menu-border-outer: var(--cyan-quarter-25);
+
+        --modal-border-inner: var(--cyan-quarter-10);
+        --modal-border-outer: var(--cyan-full-25);
+        /* 210, 100, 25 */
+        --modal-bg: rgba(0, 66, 75, 0.65), rgba(0, 66, 75, 0.35);
+        --modal-text: var(--cyan-full-95);
 
         --modal-icon-bg: var(--cyan-half-45);
         --modal-icon-fg: var(--cyan-half-85);
 
+        /* 210, 25, 25 */
         --helper-bg: rgba(51, 61, 63, 0.5);
+    }
+
+    #mode:checked~.intro .intro__content .name div.logo span {
+        background-image: url(images/logo-animated-dark.svg)
     }
 
     #mode:not(:checked)~.intro .intro__content .links button#menu>div label.light {
@@ -97,33 +179,73 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --hello-dark-mode: yes;
+        --dark-mode: yes;
     }
 
+    /* dark */
     .intro {
         --background: var(--cyan-full-5);
+        --background-pattern: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='31' y='31' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
+        --triangle: rgba(0, 52, 141, 0), rgba(0, 52, 141, 1);
+        --triangle-stripe: rgba(0, 31, 36, 0), rgba(0, 31, 36, 1);
         --text-1: var(--cyan-full-95);
         --text-2: var(--cyan-quarter-85);
         --highlight: var(--blue-full-45);
 
+        --icon-bg: var(--cyan-quarter-45);
+        --icon-fg: var(--cyan-quarter-85);
+
+        --menu-border-inner: var(--cyan-quarter-10);
+        --menu-border-outer: var(--cyan-quarter-25);
+
+        --modal-border-inner: var(--cyan-quarter-10);
+        --modal-border-outer: var(--cyan-full-25);
+        /* 210, 100, 25 */
+        --modal-bg: rgba(0, 66, 75, 0.65), rgba(0, 66, 75, 0.35);
+        --modal-text: var(--cyan-full-95);
 
         --modal-icon-bg: var(--cyan-half-45);
         --modal-icon-fg: var(--cyan-half-85);
 
+        /* 210, 25, 25 */
         --helper-bg: rgba(51, 61, 63, 0.5);
     }
 
+    .intro__content .name div.logo span {
+        background-image: url(images/logo-animated-dark.svg)
+    }
+
+    /* light */
     #mode:checked~.intro {
-        --background: var(--cyan-full-95);
-        --text-1: var(--cyan-full-5);
-        --text-2: var(--cyan-quarter-15);
+        --background: #ffffff;
+        --background-pattern: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='31' y='31' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
+        --triangle: rgba(0, 203, 226, 0), rgba(0, 203, 226, 1);
+        --triangle-stripe: rgba(180, 236, 248, 0), rgba(180, 236, 248, 1);
+        --text-1: var(--cyan-full-10);
+        --text-2: var(--cyan-quarter-30);
         --highlight: var(--blue-full-45);
 
+        --icon-bg: var(--cyan-quarter-75);
+        --icon-fg: var(--cyan-quarter-45);
 
-        --modal-icon-bg: var(--cyan-half-45);
-        --modal-icon-fg: var(--cyan-half-85);
+        --menu-border-inner: var(--cyan-quarter-95);
+        --menu-border-outer: var(--cyan-quarter-75);
 
-        --helper-bg: rgba(51, 61, 63, 0.5);
+        --modal-border-inner: var(--cyan-quarter-95);
+        --modal-border-outer: var(--cyan-full-75);
+        /* 210, 100, 70 */
+        --modal-bg: rgba(0, 188, 210, 0.45), rgba(0, 188, 210, 0.15);
+        --modal-text: var(--cyan-full-5);
+
+        --modal-icon-bg: var(--cyan-half-55);
+        --modal-icon-fg: var(--cyan-half-95);
+
+        /* 210, 25, 70 */
+        --helper-bg: rgba(176, 203, 210, 0.5);
+    }
+
+    #mode:checked~.intro .intro__content .name div.logo span {
+        background-image: url(images/logo-animated-light.svg)
     }
 
     #mode:not(:checked)~.intro .intro__content .links button#menu>div label.dark {
@@ -134,20 +256,6 @@
         display: none;
     }
 
-}
-*/
-
-.intro {
-    --background: var(--cyan-full-5);
-    --text-1: var(--cyan-full-95);
-    --text-2: var(--cyan-quarter-85);
-    --highlight: var(--blue-full-45);
-
-
-    --modal-icon-bg: var(--cyan-half-45);
-    --modal-icon-fg: var(--cyan-half-85);
-
-    --helper-bg: rgba(51, 61, 63, 0.5);
 }
 
 
@@ -182,7 +290,7 @@ body {
     background-repeat: repeat;
     background-position: 0% 0%;
     background-origin: border-box;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' fill='none' viewBox='0 0 64 64'%3E%3Cpath fill='%232A3F43' d='M31 31h2v2h-2z'/%3E%3C/svg%3E");
+    background-image: var(--background-pattern);
 }
 
 .intro__content {
@@ -367,7 +475,7 @@ body {
     display: table;
 }
 
-.intro__content .links>a>span>img {
+.intro__content .links>a>span>svg {
     margin-left: 6px;
 }
 
@@ -396,8 +504,8 @@ body>input[type="checkbox"] {
     bottom: 100%;
     left: 0;
     background-color: var(--helper-bg);
-    box-shadow: inset 0 0 0 1px var(--cyan-quarter-10);
-    border: solid 1px var(--cyan-quarter-25);
+    box-shadow: inset 0 0 0 1px var(--menu-border-inner);
+    border: solid 1px var(--menu-border-outer);
     padding: 10px 0px;
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
@@ -429,8 +537,8 @@ body>input[type="checkbox"] {
     line-height: 12px;
     letter-spacing: 0.5px;
     color: var(--text-2);
-    box-shadow: 0 -1px 0 0 var(--cyan-quarter-25);
-    border-top: solid 1px var(--cyan-quarter-10);
+    box-shadow: 0 -1px 0 0 var(--menu-border-inner);
+    border-top: solid 1px var(--menu-border-outer);
 }
 
 .intro__content .links button#menu>div>*>span {
@@ -505,18 +613,18 @@ body>input[type="checkbox"] {
     left: 48px;
     right: 176px;
     bottom: 40px;
-    box-shadow: inset 0 0 0 1px var(--cyan-full-10);
-    background: linear-gradient(to top right, rgba(0, 66, 75, 0.65), rgba(0, 66, 75, 0.35));
-    color: #00424b;
+    box-shadow: inset 0 0 0 1px var(--modal-border-inner);
+    background: linear-gradient(to top right, var(--modal-bg));
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     pointer-events: all;
     z-index: 10;
     border-radius: 8px 32px 8px 8px;
-    border: solid 1px var(--cyan-full-25);
+    border: solid 1px var(--modal-border-outer);
 }
 
-.intro__wrapper div:target {
+.intro__wrapper div:target,
+.intro__wrapper div:target~.intro__content .links button#menu>div {
     display: block !important;
 }
 
@@ -537,7 +645,7 @@ body>input[type="checkbox"] {
 .intro__wrapper div#whois ul {
     padding: 0;
     list-style: none;
-    color: var(--cyan-full-95);
+    color: var(--modal-text);
     font-size: 17.1429px;
     line-height: 12px;
 }
@@ -643,97 +751,6 @@ body>input[type="checkbox"] {
 
 /* Side background shapes */
 
-
-/* #triangle-left::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 0;
-    height: 0;
-    background: url(images/triangle-left-lower.svg);
-    background-size: 100% 100%;
-    background-position: left;
-    width: 65vh;
-    height: 65vh;
-    z-index: 1;
-}
-
-#triangle-left::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: url(images/triangle-left-upper.svg);
-    background-size: 100% 100%;
-    background-position: left;
-    width: 55vh;
-    height: 55vh;
-    z-index: 2;
-}
-*/
-
-/* #triangle-right::before {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: -10vh;
-    background: url(images/triangle-right-lower.svg);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: top right;
-    width: 110vh;
-    height: 110vh;
-    z-index: 1;
-}
-
-#triangle-right::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 0;
-    background: url(images/triangle-right-upper.svg);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: right;
-    width: 100vh;
-    height: 100vh;
-    z-index: 2;
-} */
-
-/* #triangle-right::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 100vh;
-    width: 50vh;
-    clip-path: polygon(100% 0, 0% 50%, 100% 100%);
-    background: linear-gradient(45deg, rgba(0, 52, 141, 0) 29.289321881345%, rgba(0, 52, 141, 1));
-} */
-
-/* top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    */
-
-/* #triangle-right::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 50vh;
-    height: 50vh;
-    border-image-slice: 1;
-    border-image: linear-gradient(#00f, #000) 0 100%;
-    border-right: 50vh solid;
-
-    border-left: 50vh solid transparent;
-    border-bottom: 50vh solid transparent;
-    border-top: 50vh solid transparent;
-} */
-
 #triangle-left,
 #triangle-right {
     position: absolute;
@@ -754,7 +771,7 @@ body>input[type="checkbox"] {
     width: 8vh;
     transform: rotate(45deg) translateY(-8vh);
     transform-origin: top left;
-    background: linear-gradient(to top, rgba(0, 31, 36, 0), rgba(0, 31, 36, 1));
+    background-image: linear-gradient(to top, var(--triangle-stripe));
 }
 
 #triangle-left::after {
@@ -768,7 +785,7 @@ body>input[type="checkbox"] {
     width: 70.710678118655vh;
     height: 70.710678118655vh;
     transform: translateX(-50%) translateY(-50%) rotate(45deg);
-    background: linear-gradient(to top, rgba(0, 52, 141, 0), rgba(0, 52, 141, 1));
+    background-image: linear-gradient(to top, var(--triangle));
 }
 
 #triangle-right::before {
@@ -780,7 +797,7 @@ body>input[type="checkbox"] {
     width: 8vh;
     transform: rotate(45deg);
     transform-origin: top right;
-    background: linear-gradient(to top, rgba(0, 31, 36, 0), rgba(0, 31, 36, 1));
+    background-image: linear-gradient(to top, var(--triangle-stripe));
 }
 
 
@@ -793,7 +810,7 @@ body>input[type="checkbox"] {
     width: 70.710678118655vh;
     transform-origin: center;
     transform: translateX(50%) rotate(45deg);
-    background: linear-gradient(to top, rgba(0, 52, 141, 0), rgba(0, 52, 141, 1));
+    background-image: linear-gradient(to top, var(--triangle));
 }
 
 /* Tooltip */
@@ -807,7 +824,7 @@ body>input[type="checkbox"] {
     top: 100%;
     transform: translateX(-50%);
     margin-top: 10px;
-    padding: 10px 16px;
+    padding: 10px 12px;
     border-radius: 4px;
     background: var(--helper-bg);
     color: var(--cyan-quarter-85);
@@ -820,7 +837,7 @@ body>input[type="checkbox"] {
     pointer-events: none;
     white-space: nowrap;
     font-weight: 500;
-    letter-spacing: 0.25px;
+    letter-spacing: 0.375px;
     font-size: 15.7143px;
     line-height: 11px;
 }
