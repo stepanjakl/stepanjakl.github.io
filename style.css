@@ -274,6 +274,7 @@ body {
 }
 
 .intro__wrapper {
+    position: relative;
     height: 100vh;
     width: var(--width-lg);
     margin: auto;
@@ -324,7 +325,7 @@ body {
     display: table;
 }
 
-.intro__content>div>p {
+.intro__content>div.specialisation>p {
     color: var(--text-1);
     font-weight: 200;
     font-size: 45.7143px;
@@ -332,13 +333,13 @@ body {
     padding-top: 16px;
 }
 
-.intro__content>div>p::before {
+.intro__content>div.specialisation>p::before {
     content: "";
     margin-bottom: -0.375em;
     display: table;
 }
 
-.intro__content>div>p::after {
+.intro__content>div.specialisation>p::after {
     content: "";
     margin-top: -0.325em;
     display: table;
@@ -722,7 +723,7 @@ body>input[type="checkbox"] {
     }
 }
 
-.intro__content>div:first-of-type>div {
+.intro__content .name div.logo {
     padding: 20px;
     margin-top: 324px;
     margin-left: -20px;
@@ -855,17 +856,115 @@ body>input[type="checkbox"] {
     display: block;
 }
 
-@media (max-width: 1200px) {
-    ... // rules here apply to devices from 993px to 1200px (inclusive)
-    ...
+
+
+
+/* Desktop-first media queries */
+
+/* xs: 400, sm: 640, md: 960, lg: 1280, xl: 1600 */
+
+@media (max-width: 1600px) {
+    /* rules here apply to devices from 1600px and lower */
+
 }
 
-@media (max-width: 992px) {
-    ... // rules here apply to devices from 769px to 992px (inclusive)
-    ...
+@media (max-width: 1280px) {
+    /* rules here apply to devices from 1280px and lower */
+
+    /* .intro__wrapper {
+        width: var(--width-md);
+    } */
+
+    #triangle-left,
+    #triangle-right {
+        display: none;
+    }
+
+    .intro__content .specialisation {
+        padding-left: 0px;
+    }
+
+    .intro__content {
+        padding-top: 176px;
+    }
+
 }
 
-@media (max-width: 768px) {
-    ... // rules here apply to devices from 0px to 768px (inclusive)
-    ...
+@media (max-width: 960px) {
+    /* rules here apply to devices from 960px and lower */
+
+    /* .intro__wrapper {
+        width: var(--width-sm);
+    } */
+
+    .intro__wrapper {
+        width: auto;
+        height: auto;
+    }
+
+    .intro__content .name {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    .intro__content .name div.logo {
+        margin-top: 0px;
+        padding: 32px 0px 104px 20px;
+    }
+
+    .intro__content>div.specialisation>p {
+        padding-top: 96px;
+    }
+
+    .intro__content .specialisation {
+        padding-left: 32px;
+    }
+
+    .intro__content {
+        padding-top: 0px;
+        grid-template-columns: auto;
+    }
+
+    .intro__wrapper div#whois {
+        top: auto;
+        left: 32px;
+        right: 32px;
+        bottom: 32px;
+    }
+
+    .intro__wrapper div#whois .information {
+        padding-top: 48px;
+        padding-left: 48px;
+        display: grid;
+        grid-template-columns: auto;
+        grid-template-rows: 1fr;
+        grid-column-gap: 48px;
+        grid-row-gap: 0px;
+    }
+}
+
+@media (max-width: 640px) {
+    /* rules here apply to devices from 640px and lower */
+
+    /* .intro__wrapper {
+        width: var(--width-xs);
+    } */
+
+    .intro__content .links {
+        padding-top: 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .intro__content .links>a,
+    .intro__content .links>button {
+        padding-top: 16px;
+    }
+
+}
+
+@media (max-width: 400px) {
+    /* rules here apply to devices from 400px and lower */
+
 }

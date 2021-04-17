@@ -1,3 +1,13 @@
-<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M48 0H0V48H48V0ZM12 36V30H30.06V27H12V21H36V36H12ZM12 12H36V18H12V12Z" fill="#4CE7FF"/>
+<svg width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<style>
+        path {
+            fill: #00AEC2;
+        }
+        @media (prefers-color-scheme: dark) {
+            path {
+                fill: #00CBE2;
+            }
+        }
+    </style>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M48 0H0v48h48V0zM12 36v-6h18.06v-3H12v-6h24v15H12zm0-24h24v6H12v-6z"/>
 </svg>
