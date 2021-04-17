@@ -87,7 +87,7 @@
     /* 260, 100, 95 */
     --blue-full-95: #EEF0FF;
 
-    --width-xs: 400px;
+    --width-xs: 480px;
     --width-sm: 640px;
     --width-md: 960px;
     --width-lg: 1280px;
@@ -861,7 +861,7 @@ body>input[type="checkbox"] {
 
 /* Desktop-first media queries */
 
-/* xs: 400, sm: 640, md: 960, lg: 1280, xl: 1600 */
+/* xs: 480, sm: 640, md: 960, lg: 1280, xl: 1600 */
 
 @media (max-width: 1600px) {
     /* rules here apply to devices from 1600px and lower */
@@ -964,8 +964,8 @@ body>input[type="checkbox"] {
 
 }
 
-@media (max-width: 400px) {
-    /* rules here apply to devices from 400px and lower */
+@media (max-width: 480px) {
+    /* rules here apply to devices from 480px and lower */
 
     .intro__wrapper {
         width: var(--width-xs);
