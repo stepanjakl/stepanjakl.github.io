@@ -967,6 +967,10 @@ body>input[type="checkbox"] {
 @media (max-width: 400px) {
     /* rules here apply to devices from 400px and lower */
 
+    .intro__wrapper {
+        width: var(--width-xs);
+    }
+
 }
 
 
