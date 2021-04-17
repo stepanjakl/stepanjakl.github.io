@@ -968,3 +968,15 @@ body>input[type="checkbox"] {
     /* rules here apply to devices from 400px and lower */
 
 }
+
+
+/* https://bubblin.io/blog/notch */
+@supports(padding:max(0px)) {
+
+    body,
+    header,
+    footer {
+        padding-left: min(0vmin, env(safe-area-inset-left));
+        padding-right: min(0vmin, env(safe-area-inset-right));
+    }
+}
