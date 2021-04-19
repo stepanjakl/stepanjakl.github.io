@@ -84,6 +84,10 @@
 
     /* 260, 100, 45 */
     --blue-full-45: #005FF1;
+    /* 260, 100, 55 */
+    --blue-full-55: #4e7bff;
+    /* 260, 100, 65 */
+    --blue-full-65: #7e98ff;
     /* 260, 100, 95 */
     --blue-full-95: #EEF0FF;
 
@@ -254,6 +258,32 @@
 
 }
 
+@media (max-width: 960px) and (prefers-color-scheme: light) {
+
+    /* light */
+    .intro {
+        --background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
+    }
+
+    /* dark */
+    #mode:checked~.intro {
+        --background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
+    }
+}
+
+@media (max-width: 960px) and (prefers-color-scheme: dark) {
+
+    /* dark */
+    .intro {
+        --background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
+    }
+
+    /* light */
+    #mode:checked~.intro {
+        --background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
+    }
+}
+
 
 /* Intro */
 
@@ -265,6 +295,7 @@
 body {
     font-family: 'Bai Jamjuree', sans-serif;
     font-weight: 400;
+    display: inline-block;
 }
 
 .intro {
@@ -505,8 +536,8 @@ body>input[type="checkbox"] {
     box-shadow: inset 0 0 0 1px var(--context-border-inner);
     border: solid 1px var(--context-border-outer);
     padding: 10px 0px;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(8px) grayscale(0.75);
+    -webkit-backdrop-filter: blur(8px) grayscale(0.75);
     pointer-events: all;
     border-radius: 6px;
     margin-bottom: 8px;
@@ -608,13 +639,13 @@ body>input[type="checkbox"] {
     display: none;
     position: absolute;
     top: 120px;
-    left: 48px;
-    right: 176px;
-    bottom: 40px;
+    left: 0;
+    right: 96px;
+    bottom: 24px;
     box-shadow: inset 0 0 0 1px var(--modal-border-inner);
     background: linear-gradient(to top right, var(--modal-bg));
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(20px) grayscale(0.75);
+    -webkit-backdrop-filter: blur(20px) grayscale(0.75);
     pointer-events: all;
     z-index: 10;
     border-radius: 8px 32px 8px 8px;
@@ -640,76 +671,74 @@ body>input[type="checkbox"] {
     height: 100%;
 }
 
-.intro__wrapper div#whois ul {
+.intro__wrapper div#whois .information dl {
     padding: 0;
     list-style: none;
     color: var(--modal-text);
-    font-size: 17.1429px;
-    line-height: 12px;
 }
 
-.intro__wrapper div#whois ul::before {
-    content: "";
-    margin-bottom: -0.025em;
-    display: table;
-}
-
-.intro__wrapper div#whois ul::after {
-    content: "";
-    margin-top: 0.025em;
-    display: table;
-}
-
-.intro__wrapper div#whois ul li {
-    margin-bottom: 40px;
-}
-
-.intro__wrapper div#whois ul li a {
-    height: 12px;
-    display: inline-flex;
-    align-items: center;
-}
-
-.intro__wrapper div#whois ul li img {
-    height: 15px;
-    margin-left: 8px;
-}
-
-.intro__wrapper div#whois .information {
+.intro__wrapper div#whois .information dl div {
     padding-top: 48px;
     padding-left: 48px;
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 240px 1fr 1fr;
     grid-template-rows: 1fr;
     grid-column-gap: 48px;
     grid-row-gap: 0px;
 }
 
-.intro__wrapper div#whois ul:nth-of-type(1) {
+.intro__wrapper div#whois .information dl div a {
+    height: 12px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.intro__wrapper div#whois .information dl div img {
+    height: 15px;
+    margin-left: 8px;
+}
+
+.intro__wrapper div#whois .information dl div dt {
     font-family: 'Chakra Petch', sans-serif;
     text-transform: uppercase;
     font-weight: 600;
     letter-spacing: 4px;
     font-size: 12.8571px;
     line-height: 9px;
+    padding-top: 2.75px;
+    padding-bottom: 0.25px;
 }
 
-.intro__wrapper div#whois ul:nth-of-type(1)::before {
+.intro__wrapper div#whois .information dl div dt::before {
     content: "";
     margin-bottom: -0.025em;
     display: table;
 }
 
-.intro__wrapper div#whois ul:nth-of-type(1)::after {
+.intro__wrapper div#whois .information dl div dt::after {
     content: "";
     margin-top: 0.025em;
     display: table;
 }
 
-.intro__wrapper div#whois ul:nth-of-type(1) li {
-    padding-top: 2.75px;
-    padding-bottom: 0.25px;
+.intro__wrapper div#whois .information dl div dd {
+    grid-column: span 2 / span 2;
+    font-size: 17.1429px;
+    line-height: 12px;
 }
+
+.intro__wrapper div#whois .information dl div dd::before {
+    content: "";
+    margin-bottom: -0.025em;
+    display: table;
+}
+
+.intro__wrapper div#whois .information dl div dd::after {
+    content: "";
+    margin-top: 0.025em;
+    display: table;
+}
+
 
 /* Logo animation */
 
@@ -725,9 +754,9 @@ body>input[type="checkbox"] {
 
 .intro__content .name div.logo {
     padding: 20px;
-    margin-top: 324px;
-    margin-left: -20px;
+    margin: 324px 0px 0px -20px;
     display: inline-block;
+    align-self: flex-start;
 }
 
 .intro__content .name div.logo span {
@@ -830,8 +859,8 @@ body>input[type="checkbox"] {
     display: none;
     box-shadow: inset 0 0 0 1px var(--context-border-inner);
     border: solid 1px var(--context-border-outer);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(6px) grayscale(0.75);
+    -webkit-backdrop-filter: blur(6px) grayscale(0.75);
     pointer-events: none;
     white-space: nowrap;
     font-weight: 500;
@@ -862,6 +891,18 @@ body>input[type="checkbox"] {
 /* Desktop-first media queries */
 
 /* xs: 480, sm: 640, md: 960, lg: 1280, xl: 1600 */
+
+@media (max-height: 720px) {
+    /*  */
+
+    .intro__content {
+        padding-top: 176px;
+    }
+
+    .intro__wrapper div#whois {
+        top: 88px;
+    }
+}
 
 @media (max-width: 1600px) {
     /* rules here apply to devices from 1600px and lower */
@@ -903,21 +944,21 @@ body>input[type="checkbox"] {
     }
 
     .intro__content .name {
+        padding-left: 24px;
         display: flex;
         flex-direction: column-reverse;
     }
 
     .intro__content .name div.logo {
-        margin-top: 0px;
-        padding: 32px 0px 104px 20px;
+        margin: 4px 0px 84px -20px;
     }
 
     .intro__content>div.specialisation>p {
-        padding-top: 96px;
+        padding-top: 64px;
     }
 
     .intro__content .specialisation {
-        padding-left: 32px;
+        padding-left: 24px;
     }
 
     .intro__content {
@@ -925,21 +966,26 @@ body>input[type="checkbox"] {
         grid-template-columns: auto;
     }
 
-    .intro__wrapper div#whois {
-        top: auto;
-        left: 32px;
-        right: 32px;
-        bottom: 32px;
+    .intro__content .availability {
+        padding-top: 45px;
     }
 
-    .intro__wrapper div#whois .information {
+    .intro__wrapper div#whois {
+        top: 16px;
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+    }
+
+    .intro__wrapper div#whois .information dl div {
+        padding-top: 20px;
+        margin-bottom: 14px;
+        grid-template-columns: 1fr;
+        row-gap: 14px;
+    }
+
+    .intro__wrapper div#whois .information dl div:first-child {
         padding-top: 48px;
-        padding-left: 48px;
-        display: grid;
-        grid-template-columns: auto;
-        grid-template-rows: 1fr;
-        grid-column-gap: 48px;
-        grid-row-gap: 0px;
     }
 }
 
@@ -951,7 +997,7 @@ body>input[type="checkbox"] {
     } */
 
     .intro__content .links {
-        padding-top: 32px;
+        padding-top: 10px;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -959,7 +1005,11 @@ body>input[type="checkbox"] {
 
     .intro__content .links>a,
     .intro__content .links>button {
-        padding-top: 16px;
+        margin-top: 16px;
+    }
+
+    .intro__content .email {
+        padding-top: 63px;
     }
 
 }
