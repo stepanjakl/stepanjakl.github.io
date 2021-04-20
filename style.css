@@ -11,8 +11,12 @@
     --cyan-full-15: #002a30;
     /* 210, 100, 25 */
     --cyan-full-25: #00424b;
+    /* 210, 100, 35 */
+    --cyan-full-35: #005b66;
     /* 210, 100, 45 */
     --cyan-full-45: #007684;
+    /* 210, 100, 55 */
+    --cyan-full-55: #0091a2;
     /* 210, 100, 65 */
     --cyan-full-65: #00aec2;
     /* 210, 100, 75 */
@@ -82,6 +86,16 @@
     /* 210, 25, 95 */
     --cyan-quarter-95: #eaf2f4;
 
+    /* 260, 100, 5 */
+    --blue-full-5: #000e33;
+    /* 260, 100, 10 */
+    --blue-full-10: #00184a;
+    /* 260, 100, 15 */
+    --blue-full-15: #00215f;
+    /* 260, 100, 25 */
+    --blue-full-25: #00348d;
+    /* 260, 100, 35 */
+    --blue-full-35: #0049be;
     /* 260, 100, 45 */
     --blue-full-45: #005FF1;
     /* 260, 100, 55 */
@@ -177,6 +191,18 @@
     #mode:checked~.intro .intro__content .links button#menu>div label.dark {
         display: none;
     }
+
+    /* light */
+    #mode:not(:checked)~#debug:checked~.intro * {
+        outline: 1px solid var(--blue-full-45);
+        outline-offset: -1px;
+    }
+
+    /* dark */
+    #mode:checked~#debug:checked~.intro * {
+        outline: 1px solid var(--blue-full-55);
+        outline-offset: -1px;
+    }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -256,6 +282,26 @@
         display: none;
     }
 
+    /* dark */
+    #mode:not(:checked)~#debug:checked~.intro * {
+        outline: 1px solid var(--blue-full-55);
+        outline-offset: -1px;
+    }
+
+    /* light */
+    #mode:checked~#debug:checked~.intro * {
+        outline: 1px solid var(--blue-full-45);
+        outline-offset: -1px;
+    }
+
+}
+
+#debug:not(:checked)~.intro .intro__content .links button#menu>div label[for="debug"] svg.hide {
+    display: none;
+}
+
+#debug:checked~.intro .intro__content .links button#menu>div label[for="debug"] svg.show {
+    display: none;
 }
 
 @media (max-width: 960px) and (prefers-color-scheme: light) {
@@ -287,11 +333,6 @@
 
 /* Intro */
 
-/* * {
-    outline: 1px solid red;
-    outline-offset: -1px;
-} */
-
 body {
     font-family: 'Bai Jamjuree', sans-serif;
     font-weight: 400;
@@ -311,6 +352,7 @@ body {
     margin: auto;
     padding-top: 24px;
     padding-bottom: 24px;
+    outline: none !important;
 }
 
 .intro__background {
@@ -323,18 +365,21 @@ body {
 }
 
 .intro__content {
-    z-index: 5;
-    position: relative;
     padding-top: 240px;
     display: grid;
     grid-template-columns: 37.5% 1fr;
     grid-template-rows: 1fr;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
+    position: relative;
+    z-index: 5;
 }
 
 .intro__content .name {
     padding-left: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .intro__content .name h2 {
@@ -468,6 +513,7 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-bottom: -6px;
 }
 
 .intro__content .links>a {
@@ -536,8 +582,8 @@ body>input[type="checkbox"] {
     box-shadow: inset 0 0 0 1px var(--context-border-inner);
     border: solid 1px var(--context-border-outer);
     padding: 10px 0px;
-    backdrop-filter: blur(8px) grayscale(0.75);
-    -webkit-backdrop-filter: blur(8px) grayscale(0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     pointer-events: all;
     border-radius: 6px;
     margin-bottom: 8px;
@@ -644,8 +690,8 @@ body>input[type="checkbox"] {
     bottom: 24px;
     box-shadow: inset 0 0 0 1px var(--modal-border-inner);
     background: linear-gradient(to top right, var(--modal-bg));
-    backdrop-filter: blur(20px) grayscale(0.75);
-    -webkit-backdrop-filter: blur(20px) grayscale(0.75);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
     pointer-events: all;
     z-index: 10;
     border-radius: 8px 32px 8px 8px;
@@ -754,7 +800,8 @@ body>input[type="checkbox"] {
 
 .intro__content .name div.logo {
     padding: 20px;
-    margin: 324px 0px 0px -20px;
+    margin-left: -20px;
+    margin-bottom: -20px;
     display: inline-block;
     align-self: flex-start;
 }
@@ -786,8 +833,18 @@ body>input[type="checkbox"] {
     bottom: 0;
     left: 0;
     overflow: hidden;
+    user-select: none;
+    pointer-events: none;
+    z-index: 0;
+    outline: none !important;
 }
 
+#triangle-left::before,
+#triangle-left::after,
+#triangle-right::before,
+#triangle-right::after {
+    z-index: -1;
+}
 
 #triangle-left::before {
     content: '';
@@ -856,17 +913,19 @@ body>input[type="checkbox"] {
     background: var(--context-bg);
     color: var(--text-2);
     text-align: center;
-    display: none;
+    visibility: hidden;
     box-shadow: inset 0 0 0 1px var(--context-border-inner);
     border: solid 1px var(--context-border-outer);
-    backdrop-filter: blur(6px) grayscale(0.75);
-    -webkit-backdrop-filter: blur(6px) grayscale(0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     pointer-events: none;
     white-space: nowrap;
     font-weight: 500;
     letter-spacing: 0.375px;
     font-size: 15.7143px;
     line-height: 11px;
+    transition-property: visibility;
+    transition-delay: 250ms;
 }
 
 .tooltip__content::before {
@@ -882,7 +941,8 @@ body>input[type="checkbox"] {
 }
 
 .tooltip:hover .tooltip__content {
-    display: block;
+    visibility: visible;
+    transition-delay: 500ms;
 }
 
 
@@ -940,7 +1000,7 @@ body>input[type="checkbox"] {
 
     .intro__wrapper {
         width: auto;
-        height: auto;
+        /* height: auto; */
     }
 
     .intro__content .name {
@@ -967,7 +1027,7 @@ body>input[type="checkbox"] {
     }
 
     .intro__content .availability {
-        padding-top: 45px;
+        padding-top: 46px;
     }
 
     .intro__wrapper div#whois {
@@ -997,7 +1057,7 @@ body>input[type="checkbox"] {
     } */
 
     .intro__content .links {
-        padding-top: 10px;
+        padding-top: 16px;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -1009,7 +1069,7 @@ body>input[type="checkbox"] {
     }
 
     .intro__content .email {
-        padding-top: 63px;
+        padding-top: 64px;
     }
 
 }
