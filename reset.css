@@ -99,3 +99,14 @@ ol {
     margin-block-start: 0;
     margin-block-end: 0;
 }
+
+/* https://bubblin.io/blog/notch */
+@supports(padding:max(0px)) {
+
+    body,
+    header,
+    footer {
+        padding-left: min(0vmin, env(safe-area-inset-left));
+        padding-right: min(0vmin, env(safe-area-inset-right));
+    }
+}

@@ -345,6 +345,10 @@ body {
     min-height: 100vh;
 }
 
+svg * {
+    outline: none !important;
+}
+
 .intro__wrapper {
     position: relative;
     height: 100vh;
@@ -945,12 +949,36 @@ body>input[type="checkbox"] {
     transition-delay: 500ms;
 }
 
+@media (min-width: 3200px) {
 
+    /* rules here apply to devices from 3200px and higher */
+    .intro__wrapper {
+        padding-top: 96px;
+        padding-bottom: 96px;
+    }
+
+    .intro__background {
+        background: none;
+    }
+
+    #triangle-left,
+    #triangle-right {
+        display: none;
+    }
+}
+
+@media (min-width: 1600px) and (max-width: 3200px) {
+
+    /* rules here apply to devices from 1600px and higher */
+    .intro__wrapper {
+        width: var(--width-xl);
+        padding-top: 48px;
+        padding-bottom: 48px;
+    }
+}
 
 
 /* Desktop-first media queries */
-
-/* xs: 480, sm: 640, md: 960, lg: 1280, xl: 1600 */
 
 @media (max-height: 720px) {
     /*  */
@@ -962,11 +990,6 @@ body>input[type="checkbox"] {
     .intro__wrapper div#whois {
         top: 88px;
     }
-}
-
-@media (max-width: 1600px) {
-    /* rules here apply to devices from 1600px and lower */
-
 }
 
 @media (max-width: 1280px) {
@@ -1081,16 +1104,4 @@ body>input[type="checkbox"] {
         width: var(--width-xs);
     }
 
-}
-
-
-/* https://bubblin.io/blog/notch */
-@supports(padding:max(0px)) {
-
-    body,
-    header,
-    footer {
-        padding-left: min(0vmin, env(safe-area-inset-left));
-        padding-right: min(0vmin, env(safe-area-inset-right));
-    }
 }
