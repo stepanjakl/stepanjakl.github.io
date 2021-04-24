@@ -975,8 +975,17 @@ body>input[type="checkbox"] {
         padding-top: 48px;
         padding-bottom: 48px;
     }
-}
 
+    .intro__content {
+        padding-top: 240px;
+        display: grid;
+        grid-template-columns: 42.5% 1fr;
+    }
+
+    .intro__content .specialisation {
+        padding-left: 56px;
+    }
+}
 
 /* Desktop-first media queries */
 
