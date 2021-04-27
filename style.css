@@ -105,11 +105,11 @@
     /* 260, 100, 95 */
     --blue-full-95: #EEF0FF;
 
-    --width-xs: 480px;
-    --width-sm: 640px;
-    --width-md: 960px;
-    --width-lg: 1280px;
-    --width-xl: 1600px;
+    --width-xs: 400px;
+    --width-sm: 720px;
+    --width-md: 1040px;
+    --width-lg: 1360px;
+    --width-xl: 1680px;
 }
 
 
@@ -304,7 +304,7 @@
     display: none;
 }
 
-@media (max-width: 960px) and (prefers-color-scheme: light) {
+@media (max-width: 1040px) and (prefers-color-scheme: light) {
 
     /* light */
     .intro {
@@ -317,7 +317,7 @@
     }
 }
 
-@media (max-width: 960px) and (prefers-color-scheme: dark) {
+@media (max-width: 1040px) and (prefers-color-scheme: dark) {
 
     /* dark */
     .intro {
@@ -949,9 +949,9 @@ body>input[type="checkbox"] {
     transition-delay: 500ms;
 }
 
-@media (min-width: 3200px) {
+@media (min-width: 3360px) {
 
-    /* rules here apply to devices from 3200px and higher */
+    /* rules here apply to devices from 3360px and higher */
     .intro__wrapper {
         padding-top: 96px;
         padding-bottom: 96px;
@@ -967,9 +967,9 @@ body>input[type="checkbox"] {
     }
 }
 
-@media (min-width: 1600px) and (max-width: 3200px) {
+@media (min-width: 1680px) and (max-width: 3360px) {
 
-    /* rules here apply to devices from 1600px and higher */
+    /* rules here apply to devices from 1680px and higher */
     .intro__wrapper {
         width: var(--width-xl);
         padding-top: 48px;
@@ -990,7 +990,7 @@ body>input[type="checkbox"] {
 /* Desktop-first media queries */
 
 @media (max-height: 720px) {
-    /*  */
+    /* rules here apply to devices with height from 720px and lower */
 
     .intro__content {
         padding-top: 176px;
@@ -1001,8 +1001,8 @@ body>input[type="checkbox"] {
     }
 }
 
-@media (max-width: 1280px) {
-    /* rules here apply to devices from 1280px and lower */
+@media (max-width: 1360px) {
+    /* rules here apply to devices from 1360px and lower */
 
     /* .intro__wrapper {
         width: var(--width-md);
@@ -1023,8 +1023,8 @@ body>input[type="checkbox"] {
 
 }
 
-@media (max-width: 960px) {
-    /* rules here apply to devices from 960px and lower */
+@media (max-width: 1040px) {
+    /* rules here apply to devices from 1040px and lower */
 
     /* .intro__wrapper {
         width: var(--width-sm);
@@ -1081,8 +1081,8 @@ body>input[type="checkbox"] {
     }
 }
 
-@media (max-width: 640px) {
-    /* rules here apply to devices from 640px and lower */
+@media (max-width: 720px) {
+    /* rules here apply to devices from 720px and lower */
 
     /* .intro__wrapper {
         width: var(--width-xs);
@@ -1106,7 +1106,7 @@ body>input[type="checkbox"] {
 
 }
 
-@media (max-width: 480px) {
+@media (max-width: 400px) {
     /* rules here apply to devices from 480px and lower */
 
     .intro__wrapper {
