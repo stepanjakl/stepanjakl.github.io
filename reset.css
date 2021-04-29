@@ -32,6 +32,11 @@ body {
     line-height: 1
 }
 
+html,
+body {
+    height: 100%;
+}
+
 a:not([class]) {
     text-decoration-skip-ink: auto
 }

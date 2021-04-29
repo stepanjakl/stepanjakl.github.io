@@ -7,7 +7,7 @@
     <meta name="description" content="Štěpán Jákl - Front-end developer & interface designer">
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <!-- Viewport -->
-    <meta name="viewport" content="width=device-width, shrink-to-fit=no, viewport-fit=cover, user-scalable=no, initial-scale=1.0 minimum-scale=0.5, maximum-scale=2.0 " />
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, viewport-fit=cover, user-scalable=no" />
     <!-- Favicon -->
     <meta name="theme-color" content="#ffffff">
     <link rel="icon" href="favicon.svg">
@@ -15,6 +15,9 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ffffff">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="fonts.css">
+    <!-- Styles -->
     <link rel="stylesheet" href="reset.css">
     <style>
         body {
@@ -24,14 +27,50 @@
         }
 
         iframe {
+            display: none;
             width: 100%;
             height: 100%;
             position: absolute;
             border: none;
         }
+
+        p {
+            font-family: 'Bai Jamjuree', sans-serif;
+            font-weight: 500;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: center;
+            padding: 32px;
+            font-size: 20px;
+            line-height: 24px;
+        }
+
+        .capsizedText::before {
+            content: "";
+            margin-bottom: -0.275em;
+            display: table;
+        }
+
+        .capsizedText::after {
+            content: "";
+            margin-top: -0.225em;
+            display: table;
+        }
+
+        @media (any-hover: hover) {
+            iframe {
+                display: block;
+            }
+
+            p {
+                display: none;
+            }
+        }
     </style>
 </head>
 
 <body>
+    <p>You cannot view the portfolio on this device. Use a laptop or desktop computer. Sorry for the inconvenience.</p>
     <iframe src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FsceM70Y0bLEZWJedqtxcEx%2F%25C5%25A0t%25C4%259Bp%25C3%25A1n-J%25C3%25A1kl-%25E2%2580%2593-Portfolio%3Fpage-id%3D0%253A1%26node-id%3D1%253A2%26viewport%3D187%252C198%252C0.7431791424751282%26scaling%3Dmin-zoom%26hide-ui=1" allowfullscreen></iframe>
 </body>

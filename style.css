@@ -105,11 +105,11 @@
     /* 260, 100, 95 */
     --blue-full-95: #EEF0FF;
 
-    --width-xs: 400px;
-    --width-sm: 720px;
-    --width-md: 1040px;
-    --width-lg: 1360px;
-    --width-xl: 1680px;
+    --width-xs: 480px;
+    --width-sm: 640px;
+    --width-md: 880px;
+    --width-lg: 1200px;
+    --width-xl: 1600px;
 }
 
 
@@ -304,7 +304,7 @@
     display: none;
 }
 
-@media (max-width: 1040px) and (prefers-color-scheme: light) {
+@media (max-width: 880px) and (prefers-color-scheme: light) {
 
     /* light */
     .intro {
@@ -317,7 +317,7 @@
     }
 }
 
-@media (max-width: 1040px) and (prefers-color-scheme: dark) {
+@media (max-width: 880px) and (prefers-color-scheme: dark) {
 
     /* dark */
     .intro {
@@ -336,13 +336,12 @@
 body {
     font-family: 'Bai Jamjuree', sans-serif;
     font-weight: 400;
-    display: inline-block;
+    overflow: overlay;
 }
 
 .intro {
     background-color: var(--background);
-    min-width: 100vw;
-    min-height: 100vh;
+    min-height: 100%;
 }
 
 svg * {
@@ -351,7 +350,7 @@ svg * {
 
 .intro__wrapper {
     position: relative;
-    height: 100vh;
+    height: 100%;
     width: var(--width-lg);
     margin: auto;
     padding-top: 24px;
@@ -366,10 +365,12 @@ svg * {
     background-position: 0% 0%;
     background-origin: border-box;
     background-image: var(--background-pattern);
+    padding-bottom: 32px;
 }
 
 .intro__content {
     padding-top: 240px;
+    padding-bottom: 64px;
     display: grid;
     grid-template-columns: 37.5% 1fr;
     grid-template-rows: 1fr;
@@ -689,9 +690,9 @@ body>input[type="checkbox"] {
     display: none;
     position: absolute;
     top: 120px;
-    left: 0;
-    right: 96px;
-    bottom: 24px;
+    left: 32px;
+    right: 40px;
+    bottom: 56px;
     box-shadow: inset 0 0 0 1px var(--modal-border-inner);
     background: linear-gradient(to top right, var(--modal-bg));
     backdrop-filter: blur(32px);
@@ -774,18 +775,18 @@ body>input[type="checkbox"] {
 .intro__wrapper div#whois .information dl div dd {
     grid-column: span 2 / span 2;
     font-size: 17.1429px;
-    line-height: 12px;
+    line-height: 22px;
 }
 
 .intro__wrapper div#whois .information dl div dd::before {
     content: "";
-    margin-bottom: -0.025em;
+    margin-bottom: -0.3167em;
     display: table;
 }
 
 .intro__wrapper div#whois .information dl div dd::after {
     content: "";
-    margin-top: 0.025em;
+    margin-top: -0.2667em;
     display: table;
 }
 
@@ -949,9 +950,9 @@ body>input[type="checkbox"] {
     transition-delay: 500ms;
 }
 
-@media (min-width: 3360px) {
+@media (min-width: 3200px) {
 
-    /* rules here apply to devices from 3360px and higher */
+    /* rules here apply to devices from 3200px and higher */
     .intro__wrapper {
         padding-top: 96px;
         padding-bottom: 96px;
@@ -967,9 +968,9 @@ body>input[type="checkbox"] {
     }
 }
 
-@media (min-width: 1680px) and (max-width: 3360px) {
+@media (min-width: 1600px) and (max-width: 3200px) {
 
-    /* rules here apply to devices from 1680px and higher */
+    /* rules here apply to devices from 1600px and higher */
     .intro__wrapper {
         width: var(--width-xl);
         padding-top: 48px;
@@ -989,8 +990,8 @@ body>input[type="checkbox"] {
 
 /* Desktop-first media queries */
 
-@media (max-height: 720px) {
-    /* rules here apply to devices with height from 720px and lower */
+@media (max-height: 640px) {
+    /* rules here apply to devices with height from 640px and lower */
 
     .intro__content {
         padding-top: 176px;
@@ -1001,8 +1002,8 @@ body>input[type="checkbox"] {
     }
 }
 
-@media (max-width: 1360px) {
-    /* rules here apply to devices from 1360px and lower */
+@media (max-width: 1200px) {
+    /* rules here apply to devices from 1200px and lower */
 
     /* .intro__wrapper {
         width: var(--width-md);
@@ -1021,10 +1022,17 @@ body>input[type="checkbox"] {
         padding-top: 176px;
     }
 
+    .intro__wrapper div#whois {
+        top: 56px;
+        left: 32px;
+        right: 80px;
+        bottom: 56px;
+    }
+
 }
 
-@media (max-width: 1040px) {
-    /* rules here apply to devices from 1040px and lower */
+@media (max-width: 880px) {
+    /* rules here apply to devices from 880px and lower */
 
     /* .intro__wrapper {
         width: var(--width-sm);
@@ -1032,7 +1040,6 @@ body>input[type="checkbox"] {
 
     .intro__wrapper {
         width: auto;
-        /* height: auto; */
     }
 
     .intro__content .name {
@@ -1055,6 +1062,7 @@ body>input[type="checkbox"] {
 
     .intro__content {
         padding-top: 0px;
+        padding-bottom: 32px;
         grid-template-columns: auto;
     }
 
@@ -1081,8 +1089,8 @@ body>input[type="checkbox"] {
     }
 }
 
-@media (max-width: 720px) {
-    /* rules here apply to devices from 720px and lower */
+@media (max-width: 640px) {
+    /* rules here apply to devices from 640px and lower */
 
     /* .intro__wrapper {
         width: var(--width-xs);
@@ -1104,13 +1112,27 @@ body>input[type="checkbox"] {
         padding-top: 64px;
     }
 
+    .intro__wrapper div#whois {
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+    }
+
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
     /* rules here apply to devices from 480px and lower */
 
     .intro__wrapper {
         width: var(--width-xs);
+    }
+
+    .intro__wrapper div#whois {
+        top: 4px;
+        left: 4px;
+        right: 4px;
+        bottom: 4px;
     }
 
 }
