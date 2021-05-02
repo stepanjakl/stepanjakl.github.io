@@ -121,7 +121,7 @@
     }
 
     /* light */
-    .intro {
+    :root {
         --background: #ffffff;
         --background-pattern: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='31' y='31' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
         --triangle: rgba(0, 203, 226, 0), rgba(0, 203, 226, 1);
@@ -153,7 +153,7 @@
     }
 
     /* dark */
-    #mode:checked~.intro {
+    #mode:checked~:root {
         --background: var(--cyan-full-5);
         --background-pattern: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='31' y='31' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
         --triangle: rgba(0, 52, 141, 0), rgba(0, 52, 141, 1);
@@ -211,7 +211,7 @@
     }
 
     /* dark */
-    .intro {
+    :root {
         --background: var(--cyan-full-5);
         --background-pattern: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='31' y='31' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
         --triangle: rgba(0, 52, 141, 0), rgba(0, 52, 141, 1);
@@ -243,7 +243,7 @@
     }
 
     /* light */
-    #mode:checked~.intro {
+    #mode:checked~:root {
         --background: #ffffff;
         --background-pattern: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='31' y='31' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
         --triangle: rgba(0, 203, 226, 0), rgba(0, 203, 226, 1);
