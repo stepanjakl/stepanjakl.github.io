@@ -110,10 +110,11 @@
     --width-md: 880px;
     --width-lg: 1200px;
     --width-xl: 1600px;
+}
 
+/* Light mode */
 
-    /* Default light mode - fallback in case prefers-color-scheme is not supported */
-
+.intro {
     --background: #ffffff;
     --background-pattern: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='31' y='31' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
     --triangle: rgba(0, 203, 226, 0), rgba(0, 203, 226, 1);
@@ -140,106 +141,72 @@
     --modal-icon-fg: var(--cyan-half-95);
 }
 
-
-/* Light and dark mode */
-
-@media (prefers-color-scheme: light) {
-    :root {
-        --dark-mode: no;
-    }
-
-    /* light */
-    :root {
-        --background: #ffffff;
-        --background-pattern: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='31' y='31' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
-        --triangle: rgba(0, 203, 226, 0), rgba(0, 203, 226, 1);
-        --triangle-stripe: rgba(180, 236, 248, 0), rgba(180, 236, 248, 1);
-        --text-1: var(--cyan-full-10);
-        --text-2: var(--cyan-quarter-30);
-        --highlight: var(--blue-full-45);
-
-        --icon-bg: var(--cyan-quarter-75);
-        --icon-fg: var(--cyan-quarter-45);
-
-        --context-border-inner: var(--cyan-quarter-95);
-        --context-border-outer: var(--cyan-quarter-75);
-        /* 210, 25, 70 */
-        --context-bg: rgba(176, 203, 210, 0.5);
-
-        --modal-border-inner: var(--cyan-quarter-95);
-        --modal-border-outer: var(--cyan-full-75);
-        /* 210, 100, 70 */
-        --modal-bg: rgba(0, 188, 210, 0.45), rgba(0, 188, 210, 0.15);
-        --modal-text: var(--cyan-full-5);
-
-        --modal-icon-bg: var(--cyan-half-55);
-        --modal-icon-fg: var(--cyan-half-95);
-    }
-
-    .intro__content .name div.logo span {
-        background-image: url(images/logo-animated-light.svg)
-    }
-
-    /* dark */
-    #mode:checked~:root {
-        --background: var(--cyan-full-5);
-        --background-pattern: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='31' y='31' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
-        --triangle: rgba(0, 52, 141, 0), rgba(0, 52, 141, 1);
-        --triangle-stripe: rgba(0, 31, 36, 0), rgba(0, 31, 36, 1);
-        --text-1: var(--cyan-full-95);
-        --text-2: var(--cyan-quarter-85);
-        --highlight: var(--blue-full-45);
-
-        --icon-bg: var(--cyan-quarter-45);
-        --icon-fg: var(--cyan-quarter-85);
-
-        --context-border-inner: var(--cyan-quarter-10);
-        --context-border-outer: var(--cyan-quarter-25);
-        /* 210, 25, 25 */
-        --context-bg: rgba(51, 61, 63, 0.5);
-
-        --modal-border-inner: var(--cyan-quarter-10);
-        --modal-border-outer: var(--cyan-full-25);
-        /* 210, 100, 25 */
-        --modal-bg: rgba(0, 66, 75, 0.65), rgba(0, 66, 75, 0.35);
-        --modal-text: var(--cyan-full-95);
-
-        --modal-icon-bg: var(--cyan-half-45);
-        --modal-icon-fg: var(--cyan-half-85);
-    }
-
-    #mode:checked~.intro .intro__content .name div.logo span {
-        background-image: url(images/logo-animated-dark.svg)
-    }
-
-    #mode:not(:checked)~.intro .intro__content .links button#menu>div label.light {
-        display: none;
-    }
-
-    #mode:checked~.intro .intro__content .links button#menu>div label.dark {
-        display: none;
-    }
-
-    /* light */
-    #mode:not(:checked)~#debug:checked~.intro * {
-        outline: 1px solid var(--blue-full-45);
-        outline-offset: -1px;
-    }
-
-    /* dark */
-    #mode:checked~#debug:checked~.intro * {
-        outline: 1px solid var(--blue-full-55);
-        outline-offset: -1px;
-    }
+.intro__content .name div.logo span {
+    background-image: url(images/logo-animated-light.svg)
 }
+
+
+/* dark */
+#mode:checked~.intro {
+    --background: var(--cyan-full-5);
+    --background-pattern: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='31' y='31' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
+    --triangle: rgba(0, 52, 141, 0), rgba(0, 52, 141, 1);
+    --triangle-stripe: rgba(0, 31, 36, 0), rgba(0, 31, 36, 1);
+    --text-1: var(--cyan-full-95);
+    --text-2: var(--cyan-quarter-85);
+    --highlight: var(--blue-full-45);
+
+    --icon-bg: var(--cyan-quarter-45);
+    --icon-fg: var(--cyan-quarter-85);
+
+    --context-border-inner: var(--cyan-quarter-10);
+    --context-border-outer: var(--cyan-quarter-25);
+    /* 210, 25, 25 */
+    --context-bg: rgba(51, 61, 63, 0.5);
+
+    --modal-border-inner: var(--cyan-quarter-10);
+    --modal-border-outer: var(--cyan-full-25);
+    /* 210, 100, 25 */
+    --modal-bg: rgba(0, 66, 75, 0.65), rgba(0, 66, 75, 0.35);
+    --modal-text: var(--cyan-full-95);
+
+    --modal-icon-bg: var(--cyan-half-45);
+    --modal-icon-fg: var(--cyan-half-85);
+}
+
+#mode:checked~.intro .intro__content .name div.logo span {
+    background-image: url(images/logo-animated-dark.svg)
+}
+
+#mode:not(:checked)~.intro .intro__content .links button#menu>div label.light {
+    display: none;
+}
+
+#mode:checked~.intro .intro__content .links button#menu>div label.dark {
+    display: none;
+}
+
+/* light */
+#mode:not(:checked)~#debug:checked~.intro * {
+    outline: 1px solid var(--blue-full-45);
+    outline-offset: -1px;
+}
+
+/* dark */
+#mode:checked~#debug:checked~.intro * {
+    outline: 1px solid var(--blue-full-55);
+    outline-offset: -1px;
+}
+
+
+/* Dark mode */
 
 @media (prefers-color-scheme: dark) {
     :root {
         --dark-mode: yes;
     }
 
-    /* dark */
-    :root {
+    .intro {
         --background: var(--cyan-full-5);
         --background-pattern: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='31' y='31' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
         --triangle: rgba(0, 52, 141, 0), rgba(0, 52, 141, 1);
@@ -271,7 +238,7 @@
     }
 
     /* light */
-    #mode:checked~:root {
+    #mode:checked~.intro {
         --background: #ffffff;
         --background-pattern: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='31' y='31' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
         --triangle: rgba(0, 203, 226, 0), rgba(0, 203, 226, 1);
@@ -302,12 +269,20 @@
         background-image: url(images/logo-animated-light.svg)
     }
 
-    #mode:not(:checked)~.intro .intro__content .links button#menu>div label.dark {
-        display: none;
+    #mode:not(:checked)~.intro .intro__content .links button#menu>div label.light {
+        display: flex;
     }
 
     #mode:checked~.intro .intro__content .links button#menu>div label.light {
         display: none;
+    }
+
+    #mode:not(:checked)~.intro .intro__content .links button#menu>div label.dark {
+        display: none;
+    }
+
+    #mode:checked~.intro .intro__content .links button#menu>div label.dark {
+        display: flex;
     }
 
     /* dark */
