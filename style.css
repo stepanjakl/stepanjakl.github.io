@@ -35,6 +35,10 @@
     --cyan-three-quarters-85: #83e2f5;
     /* 210, 75, 95 */
     --cyan-three-quarters-95: #dcf5fb;
+    /* 210, 50, 10 */
+    --cyan-half-10: #121d20;
+    /* 210, 50, 15 */
+    --cyan-half-15: #19282b;
     /* 210, 50, 25 */
     --cyan-half-25: #2A3F43;
     /* 210, 50, 45 */
@@ -133,8 +137,9 @@
 
     --modal-border-inner: var(--cyan-quarter-95);
     --modal-border-outer: var(--cyan-full-75);
+    --modal-bg: var(--cyan-three-quarters-95);
     /* 210, 100, 70 */
-    --modal-bg: rgba(0, 188, 210, 0.45), rgba(0, 188, 210, 0.15);
+    --modal-bg-blur: rgba(0, 188, 210, 0.45), rgba(0, 188, 210, 0.15);
     --modal-text: var(--cyan-full-5);
 
     --modal-icon-bg: var(--cyan-half-55);
@@ -166,8 +171,9 @@
 
     --modal-border-inner: var(--cyan-quarter-10);
     --modal-border-outer: var(--cyan-full-25);
+    --modal-bg: var(--cyan-half-10);
     /* 210, 100, 25 */
-    --modal-bg: rgba(0, 66, 75, 0.65), rgba(0, 66, 75, 0.35);
+    --modal-bg-blur: rgba(0, 66, 75, 0.65), rgba(0, 66, 75, 0.35);
     --modal-text: var(--cyan-full-95);
 
     --modal-icon-bg: var(--cyan-half-45);
@@ -225,8 +231,9 @@
 
         --modal-border-inner: var(--cyan-quarter-10);
         --modal-border-outer: var(--cyan-full-25);
+        --modal-bg: var(--cyan-half-10);
         /* 210, 100, 25 */
-        --modal-bg: rgba(0, 66, 75, 0.65), rgba(0, 66, 75, 0.35);
+        --modal-bg-blur: rgba(0, 66, 75, 0.65), rgba(0, 66, 75, 0.35);
         --modal-text: var(--cyan-full-95);
 
         --modal-icon-bg: var(--cyan-half-45);
@@ -257,8 +264,9 @@
 
         --modal-border-inner: var(--cyan-quarter-95);
         --modal-border-outer: var(--cyan-full-75);
+        --modal-bg: var(--cyan-three-quarters-95);
         /* 210, 100, 70 */
-        --modal-bg: rgba(0, 188, 210, 0.45), rgba(0, 188, 210, 0.15);
+        --modal-bg-blur: rgba(0, 188, 210, 0.45), rgba(0, 188, 210, 0.15);
         --modal-text: var(--cyan-full-5);
 
         --modal-icon-bg: var(--cyan-half-55);
@@ -697,13 +705,19 @@ body>input[type="checkbox"] {
     right: 40px;
     bottom: 56px;
     box-shadow: inset 0 0 0 1px var(--modal-border-inner);
-    background: linear-gradient(to top right, var(--modal-bg));
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
+    background: var(--modal-bg);
     pointer-events: all;
     z-index: 10;
     border-radius: 8px 32px 8px 8px;
     border: solid 1px var(--modal-border-outer);
+}
+
+@supports (backdrop-filter: blur(32px)) or (-webkit-backdrop-filter: blur(32px)) {
+    .intro__wrapper div#whois {
+        background: linear-gradient(to top right, var(--modal-bg-blur));
+        backdrop-filter: blur(32px);
+        -webkit-backdrop-filter: blur(32px);
+    }
 }
 
 .intro__wrapper div:target,
