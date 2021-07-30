@@ -238,6 +238,8 @@
 
         --modal-icon-bg: var(--cyan-half-45);
         --modal-icon-fg: var(--cyan-half-85);
+
+        --modal-tag-bg: var(--cyan-three-quarters-45);
     }
 
     .intro__content .name div.logo span {
@@ -353,6 +355,7 @@ body {
 .intro {
     background-color: var(--background);
     min-height: 100%;
+    overflow: scroll;
 }
 
 svg * {
@@ -748,6 +751,7 @@ body>input[type="checkbox"] {
 .intro__wrapper div#whois .information dl div {
     padding-top: 48px;
     padding-left: 48px;
+    padding-right: 96px;
     display: grid;
     grid-template-columns: 240px 1fr 1fr;
     grid-template-rows: 1fr;
@@ -773,8 +777,7 @@ body>input[type="checkbox"] {
     letter-spacing: 4px;
     font-size: 12.8571px;
     line-height: 9px;
-    padding-top: 2.75px;
-    padding-bottom: 0.25px;
+    padding-top: 1.75px;
 }
 
 .intro__wrapper div#whois .information dl div dt::before {
@@ -791,22 +794,64 @@ body>input[type="checkbox"] {
 
 .intro__wrapper div#whois .information dl div dd {
     grid-column: span 2 / span 2;
+}
+
+.intro__wrapper div#whois .information dl div dd>span {
     font-size: 17.1429px;
-    line-height: 22px;
+    line-height: 26px;
 }
 
-.intro__wrapper div#whois .information dl div dd::before {
+.intro__wrapper div#whois .information dl div dd>span::before {
     content: "";
-    margin-bottom: -0.3167em;
+    margin-bottom: -0.4333em;
     display: table;
 }
 
-.intro__wrapper div#whois .information dl div dd::after {
+.intro__wrapper div#whois .information dl div dd>span::after {
     content: "";
-    margin-top: -0.2667em;
+    margin-top: -0.3833em;
     display: table;
 }
 
+.intro__wrapper div#whois .information dl div dd ul.tags {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    list-style-type: unset;
+    margin: 0;
+    padding: 0;
+}
+
+.intro__wrapper div#whois .information dl div dd ul.tags li {
+    display: inline-flex;
+    border-radius: 1000px;
+    background-color: var(--modal-tag-bg);
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-right: 8px;
+    margin-bottom: 10px;
+}
+
+.intro__wrapper div#whois .information dl div dd ul.tags li span {
+    font-family: 'Chakra Petch';
+    font-size: 15.7143px;
+    line-height: 26px;
+    font-weight: 400;
+}
+
+.intro__wrapper div#whois .information dl div dd ul.tags li span::before {
+    content: "";
+    margin-bottom: -0.5023em;
+    display: table;
+}
+
+.intro__wrapper div#whois .information dl div dd ul.tags li span::after {
+    content: "";
+    margin-top: -0.4523em;
+    display: table;
+}
 
 /* Logo animation */
 
@@ -964,7 +1009,7 @@ body>input[type="checkbox"] {
 
 .tooltip:hover .tooltip__content {
     visibility: visible;
-    transition-delay: 500ms;
+    /* transition-delay: 200ms; */
 }
 
 @media (min-width: 3200px) {
@@ -1096,13 +1141,19 @@ body>input[type="checkbox"] {
 
     .intro__wrapper div#whois .information dl div {
         padding-top: 20px;
+        padding-left: 20px;
+        padding-right: 40px;
         margin-bottom: 14px;
         grid-template-columns: 1fr;
         row-gap: 14px;
     }
 
     .intro__wrapper div#whois .information dl div:first-child {
-        padding-top: 48px;
+        padding-top: 28px;
+    }
+
+    .intro__wrapper div#whois .information dl div dt {
+        padding-bottom: 2.75px;
     }
 }
 
