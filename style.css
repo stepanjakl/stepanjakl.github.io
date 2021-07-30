@@ -122,8 +122,7 @@
 
 /* Light mode */
 
-html,
-body {
+html {
     background-color: #FFFFFF;
 }
 
@@ -225,8 +224,7 @@ body {
         --dark-mode: yes;
     }
 
-    html,
-    body {
+    html {
         background-color: var(--cyan-full-5);
     }
 
