@@ -1,6 +1,6 @@
 <p align="left">
 <a href="https://stepanjakl.com" target="_blank">
-	<img src="./images/logo-static-2.svg" alt="Logo" height="44" />
+	<img src="./images/logo-static-1.svg" alt="Logo" height="44" />
 </a>
 </p>
 
