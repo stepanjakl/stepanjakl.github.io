@@ -10,7 +10,7 @@ Experienced and detail-oriented user interface engineer who specializes in craft
 
 Live site: [stepanjakl.com](https://stepanjakl.com)
 
-[Portfolio](https://stepanjakl.com/portfolio.html)
+[Portfolio (Figma)](https://stepanjakl.com/portfolio.html)
 
 [Résumé (LinkedIn)](https://www.linkedin.com/in/stepanjakl)
 
