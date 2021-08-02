@@ -1,6 +1,6 @@
 <p align="left">
 <a href="https://stepanjakl.com" target="_blank">
-	<img src="./images/logo-static-2.svg" alt="Logo" height="44" />
+	<img src="./images/logo-static-1.svg" alt="Logo" height="44" />
 </a>
 </p>
 
@@ -10,7 +10,7 @@ Experienced and detail-oriented user interface engineer who specializes in craft
 
 Live site: [stepanjakl.com](https://stepanjakl.com)
 
-[Portfolio](https://stepanjakl.com/portfolio.html)
+[Portfolio (Figma)](https://stepanjakl.com/portfolio.html)
 
 [Résumé (LinkedIn)](https://www.linkedin.com/in/stepanjakl)
 
