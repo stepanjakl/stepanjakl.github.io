@@ -9,6 +9,8 @@
 	--cyan-full-10: #001F24;
 	/* 210, 100, 15 */
 	--cyan-full-15: #002a30;
+	/* 210, 100, 20 */
+	--cyan-full-20: #00363d;
 	/* 210, 100, 25 */
 	--cyan-full-25: #00424b;
 	/* 210, 100, 35 */
@@ -202,11 +204,11 @@ body, html {
 	background-image: url(images/logo-animated-dark.svg)
 }
 
-#mode:not(:checked) ~ .page .intro__content .links button#menu > div label.light {
+#mode:not(:checked) ~ .page .intro__content .links .menu > span.menu__dropdown label.light {
 	display: none;
 }
 
-#mode:checked ~ .page .intro__content .links button#menu > div label.dark {
+#mode:checked ~ .page .intro__content .links .menu > span.menu__dropdown label.dark {
 	display: none;
 }*/
 
@@ -223,12 +225,12 @@ body, html {
 }
 
 
-/* Dark mode (by default) */
+/* Dark mode (by default now) */
 
-/*@media (prefers-color-scheme: dark) {*/
+/*@media (prefers-color-scheme: dark) {
 :root {
 	--dark-mode: yes;
-}
+}*/
 
 body, html {
 	background-color: var(--cyan-full-5);
@@ -241,6 +243,7 @@ body, html {
 	--triangle-stripe: rgba(0, 31, 36, 0), rgba(0, 31, 36, 1);
 	--text-1: var(--cyan-full-95);
 	--text-2: var(--cyan-quarter-85);
+	--text-3: var(--cyan-quarter-65);
 	--highlight: var(--blue-full-45);
 	
 	--icon-bg: var(--cyan-quarter-45);
@@ -268,7 +271,7 @@ body, html {
 	--footer-square-2: var(--cyan-full-85);
 	--footer-square-3: var(--cyan-full-65);
 	--footer-square-4: var(--cyan-full-45);
-	--footer-rectangle: var(--cyan-full-15);
+	--footer-rectangle: var(--cyan-full-20);
 }
 
 .intro__content .name div.logo span {
@@ -283,6 +286,7 @@ body, html {
 	--triangle-stripe: rgba(180, 236, 248, 0), rgba(180, 236, 248, 1);
 	--text-1: var(--cyan-full-10);
 	--text-2: var(--cyan-quarter-30);
+	--text-3: var(--cyan-quarter-65);
 	--highlight: var(--blue-full-45);
 	
 	--icon-bg: var(--cyan-quarter-75);
@@ -317,19 +321,19 @@ body, html {
 	background-image: url(images/logo-animated-light.svg)
 }
 
-#mode:not(:checked) ~ .page .intro__content .links button#menu > div label.light {
+#mode:not(:checked) ~ .page .intro__content .links .menu > span.menu__dropdown label.light {
 	display: flex;
 }
 
-#mode:checked ~ .page .intro__content .links button#menu > div label.light {
+#mode:checked ~ .page .intro__content .links .menu > span.menu__dropdown label.light {
 	display: none;
 }
 
-#mode:not(:checked) ~ .page .intro__content .links button#menu > div label.dark {
+#mode:not(:checked) ~ .page .intro__content .links .menu > span.menu__dropdown label.dark {
 	display: none;
 }
 
-#mode:checked ~ .page .intro__content .links button#menu > div label.dark {
+#mode:checked ~ .page .intro__content .links .menu > span.menu__dropdown label.dark {
 	display: flex;
 }
 
@@ -347,22 +351,22 @@ body, html {
 
 /*}*/
 
-#debug:not(:checked) ~ .page .intro__content .links button#menu > div label[for="debug"] svg.hide {
+#debug:not(:checked) ~ .page .intro__content .links .menu > span.menu__dropdown label[for="debug"] svg.hide {
 	display: none;
 }
 
-#debug:checked ~ .page .intro__content .links button#menu > div label[for="debug"] svg.show {
+#debug:checked ~ .page .intro__content .links .menu > span.menu__dropdown label[for="debug"] svg.show {
 	display: none;
 }
 
-@media (max-width: 880px) and (prefers-color-scheme: light) {
+/*@media (max-width: 880px) and (prefers-color-scheme: light) {
 	
-	/* light */
+	!* light *!
 	.page {
 		--background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
 	}
 	
-	/* dark */
+	!* dark *!
 	#mode:checked ~ .page {
 		--background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
 	}
@@ -370,12 +374,22 @@ body, html {
 
 @media (max-width: 880px) and (prefers-color-scheme: dark) {
 	
-	/* dark */
+	!* dark *!
 	.page {
 		--background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
 	}
 	
-	/* light */
+	!* light *!
+	#mode:checked ~ .page {
+		--background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
+	}
+}*/
+
+@media (max-width: 880px) {
+	.page {
+		--background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
+	}
+	
 	#mode:checked ~ .page {
 		--background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
 	}
@@ -387,7 +401,7 @@ body, html {
 body {
 	font-family: 'Bai Jamjuree', sans-serif;
 	font-weight: 400;
-	overflow: overlay;
+	overflow: auto;
 }
 
 .page {
@@ -400,9 +414,6 @@ body {
 /* Intro */
 
 .intro {
-	position: relative;
-	z-index: 2;
-	height: auto;
 	overflow: scroll;
 }
 
@@ -432,13 +443,15 @@ svg * {
 }
 
 .intro__content {
+	position: relative;
+	z-index: 1;
 	padding-top: 240px;
 	padding-bottom: 64px;
 	display: grid;
 	grid-template-columns: 37.5% 1fr;
 	grid-template-rows: 1fr;
-	grid-column-gap: 0px;
-	grid-row-gap: 0px;
+	grid-column-gap: 0;
+	grid-row-gap: 0;
 }
 
 .intro__content .name {
@@ -467,7 +480,7 @@ svg * {
 	display: table;
 }
 
-.intro__content > div.specialisation > p {
+.intro__content > div.specialisation > h3 {
 	color: var(--text-1);
 	font-weight: 200;
 	font-size: 45.7143px;
@@ -475,13 +488,13 @@ svg * {
 	padding-top: 16px;
 }
 
-.intro__content > div.specialisation > p::before {
+.intro__content > div.specialisation > h3::before {
 	content: "";
 	margin-bottom: -0.375em;
 	display: table;
 }
 
-.intro__content > div.specialisation > p::after {
+.intro__content > div.specialisation > h3::after {
 	content: "";
 	margin-top: -0.325em;
 	display: table;
@@ -564,13 +577,17 @@ svg * {
 }*/
 
 .intro__content .email {
-	padding-top: 121.5px;
 	display: flex;
+	padding-top: 121.5px;
+}
+
+.intro__content .email .email__wrapper {
+	display: inline-flex;
 	flex-direction: row;
 	align-items: center;
 }
 
-.intro__content .email span {
+.intro__content .email .email__wrapper > span {
 	color: var(--text-2);
 	margin-left: 12px;
 	margin-right: 24px;
@@ -580,24 +597,23 @@ svg * {
 	letter-spacing: 1.25px;
 }
 
-.intro__content .email span::before {
+.intro__content .email .email__wrapper > span::before {
 	content: "";
 	margin-bottom: -0.025em;
 	display: table;
 }
 
-.intro__content .email span::after {
+.intro__content .email .email__wrapper > span::after {
 	content: "";
 	margin-top: 0.025em;
 	display: table;
 }
 
 .intro__content .links {
-	padding-top: 32px;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	margin-bottom: -6px;
+	padding-top: 32.5px;
 }
 
 .intro__content .links > a {
@@ -615,8 +631,8 @@ svg * {
 	font-weight: 300;
 	letter-spacing: 1.25px;
 	border-bottom: solid 3px var(--highlight);
-	padding-bottom: 6px;
-	padding-top: 9px;
+	padding-bottom: 5px;
+	padding-top: 3px;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -638,7 +654,7 @@ svg * {
 	margin-left: 6px;
 }
 
-.intro__content .links button {
+.intro__content .links .menu {
 	position: relative;
 	display: flex;
 	flex-direction: row;
@@ -646,10 +662,17 @@ svg * {
 	outline: none;
 }
 
-.intro__content .links button:target a:first-of-type {
+.intro__content .links .menu:target > a:first-of-type {
 	display: none;
 }
 
+.intro__content .links .menu > a:nth-of-type(2) {
+	display: none;
+}
+
+.intro__content .links .menu:target > a:nth-of-type(2) {
+	display: block !important;
+}
 
 /* Menu */
 
@@ -657,116 +680,121 @@ body > input[type="checkbox"] {
 	display: none;
 }
 
-.intro__content .links button#menu > div {
-	display: none;
-	position: absolute;
-	bottom: 100%;
-	left: 0;
-	background-color: var(--context-bg);
-	box-shadow: inset 0 0 0 1px var(--context-border-inner);
-	border: solid 1px var(--context-border-outer);
-	padding: 10px 0px;
-	backdrop-filter: blur(8px);
-	-webkit-backdrop-filter: blur(8px);
-	pointer-events: all;
-	border-radius: 6px;
-	margin-bottom: 8px;
-}
-
-.intro__content .links button:target > div {
-	display: block !important;
-}
-
-.intro__content .links button#menu > div > * {
-	display: block;
-	white-space: nowrap;
-	text-align: left;
-	display: flex;
+.intro__content .links .menu > span.menu__button {
+	position: relative;
+	z-index: 1;
+	display: inline-flex;
 	flex-direction: row;
 	align-items: center;
-	width: 100%;
-	padding-top: 8px;
-	padding-right: 14px;
-	padding-left: 14px;
-	padding-bottom: 0px;
-	margin-top: 10px;
-	margin-left: 0;
-	margin-right: 0;
-	font-size: 17.1429px;
-	line-height: 12px;
-	letter-spacing: 0.5px;
-	color: var(--text-2);
-	box-shadow: 0 -1px 0 0 var(--context-border-inner);
-	border-top: solid 1px var(--context-border-outer);
 }
 
-.intro__content .links button#menu > div > * > span {
-	margin-left: 10px;
-}
-
-.intro__content .links button > a {
-	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-}
-
-.intro__content .links button#menu > div > *:first-child {
-	margin-top: 0;
-	padding-top: 0;
-	border-top: none;
-	box-shadow: none;
-}
-
-.intro__content .links button#menu > div > *::before {
-	content: "";
-	margin-bottom: -0.025em;
-	display: table;
-}
-
-.intro__content .links button#menu > div > *::after {
-	content: "";
-	margin-top: 0.025em;
-	display: table;
-}
-
-.intro__content .links button > span {
+.intro__content .links .menu > span.menu__button > span {
 	color: var(--text-2);
 	margin-left: 10px;
 	font-size: 22.8571px;
 	line-height: 16px;
 	font-weight: 300;
 	letter-spacing: 1.25px;
-	border-bottom: solid 3px transparent;
-	padding-bottom: 6px;
-	padding-top: 9px;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
+	user-select: none;
 }
 
-.intro__content .links button > span::before {
+.intro__content .links .menu > span.menu__button > span::before {
 	content: "";
 	margin-bottom: -0.025em;
 	display: table;
 }
 
-.intro__content .links button > span::after {
+.intro__content .links .menu > span.menu__button > span::after {
 	content: "";
 	margin-top: 0.025em;
 	display: table;
 }
 
-.intro__content .links button > span > img {
+.intro__content .links .menu > span.menu__button > span > img {
 	margin-left: 6px;
 }
 
+.intro__content .links .menu > span.menu__dropdown {
+	visibility: hidden;
+	position: absolute;
+	z-index: 1;
+	bottom: 100%;
+	left: 0;
+	display: flex;
+	flex-direction: column;
+	background-color: var(--context-bg);
+	box-shadow: inset 0 0 0 1px var(--context-border-inner);
+	border: solid 1px var(--context-border-outer);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	pointer-events: all;
+	border-radius: 6px;
+	margin-bottom: 8px;
+	margin-left: -12px;
+	row-gap: 4px;
+}
+
+.intro__content .links .menu:target > span.menu__dropdown {
+	visibility: visible !important;
+}
+
+.intro__content .links .menu > span.menu__dropdown > * {
+	display: flex;
+	white-space: nowrap;
+	text-align: left;
+	flex-direction: row;
+	align-items: center;
+	width: 100%;
+	padding: 8px 16px 6px 16px;
+	/*margin: 2px 0;*/
+	font-size: 17.1429px;
+	line-height: 12px;
+	letter-spacing: 0.5px;
+	color: var(--text-2);
+	box-shadow: 0 -1px 0 0 var(--context-border-inner);
+	border-top: solid 1px var(--context-border-outer);
+	user-select: none;
+}
+
+.intro__content .links .menu > span.menu__dropdown > *:last-child {
+	padding-bottom: 8px;
+}
+
+.intro__content .links .menu > span.menu__dropdown > * > span {
+	margin-left: 14px;
+}
+
+.intro__content .links .menu > a {
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+}
+
+.intro__content .links .menu > span.menu__dropdown > *:first-child {
+	margin-top: 0;
+	border-top-color: transparent;
+	box-shadow: none;
+}
+
+.intro__content .links .menu > span.menu__dropdown > *::before {
+	content: "";
+	margin-bottom: -0.025em;
+	display: table;
+}
+
+.intro__content .links .menu > span.menu__dropdown > *::after {
+	content: "";
+	margin-top: 0.025em;
+	display: table;
+}
 
 /* Modal */
 
-.intro__wrapper div#about {
+.intro__wrapper .about {
 	visibility: hidden;
+}
+
+.intro__wrapper .about .about__wrapper {
 	position: absolute;
 	top: 120px;
 	left: 32px;
@@ -782,19 +810,19 @@ body > input[type="checkbox"] {
 }
 
 @supports (backdrop-filter: blur(64px)) or (-webkit-backdrop-filter: blur(64px)) {
-	.intro__wrapper div#about {
+	.intro__wrapper .about .about__wrapper {
 		background: linear-gradient(to top right, var(--modal-bg-blur));
-		backdrop-filter: blur(64px);
-		-webkit-backdrop-filter: blur(64px);
+		backdrop-filter: blur(48px);
+		-webkit-backdrop-filter: blur(48px);
 	}
 }
 
-.intro__wrapper div#about:target,
-.intro__wrapper div#about:target ~ .page__content .links button#menu > div {
+.intro__wrapper .about:target,
+.intro__wrapper .about:target ~ .intro__content .links .menu__dropdown  {
 	visibility: visible !important;
 }
 
-.intro__wrapper div#about a.close {
+.intro__wrapper .about a.close {
 	position: absolute;
 	top: 16px;
 	right: 16px;
@@ -803,18 +831,18 @@ body > input[type="checkbox"] {
 	height: 32px;
 }
 
-.intro__wrapper div#about a.close svg {
+.intro__wrapper .about a.close svg {
 	width: 100%;
 	height: 100%;
 }
 
-.intro__wrapper div#about .information dl {
+.intro__wrapper .about .information dl {
 	padding: 0;
 	list-style: none;
 	color: var(--modal-text);
 }
 
-.intro__wrapper div#about .information dl div {
+.intro__wrapper .about .information dl div {
 	padding-top: 48px;
 	padding-left: 48px;
 	padding-right: 96px;
@@ -822,25 +850,25 @@ body > input[type="checkbox"] {
 	grid-template-columns: 240px 1fr 1fr;
 	grid-template-rows: 1fr;
 	grid-column-gap: 48px;
-	grid-row-gap: 0px;
+	grid-row-gap: 0;
 }
 
-.intro__wrapper div#about .information dl div:last-child {
+.intro__wrapper .about .information dl div:last-child {
 	padding-bottom: 48px;
 }
 
-.intro__wrapper div#about .information dl div a {
+.intro__wrapper .about .information dl div a {
 	height: 12px;
 	display: inline-flex;
 	align-items: center;
 }
 
-.intro__wrapper div#about .information dl div img {
+.intro__wrapper .about .information dl div img {
 	height: 15px;
 	margin-left: 8px;
 }
 
-.intro__wrapper div#about .information dl div dt {
+.intro__wrapper .about .information dl div dt {
 	font-family: 'Chakra Petch', sans-serif;
 	text-transform: uppercase;
 	font-weight: 600;
@@ -850,40 +878,40 @@ body > input[type="checkbox"] {
 	padding-top: 1.75px;
 }
 
-.intro__wrapper div#about .information dl div dt::before {
+.intro__wrapper .about .information dl div dt::before {
 	content: "";
 	margin-bottom: -0.025em;
 	display: table;
 }
 
-.intro__wrapper div#about .information dl div dt::after {
+.intro__wrapper .about .information dl div dt::after {
 	content: "";
 	margin-top: 0.025em;
 	display: table;
 }
 
-.intro__wrapper div#about .information dl div dd {
+.intro__wrapper .about .information dl div dd {
 	grid-column: span 2 / span 2;
 }
 
-.intro__wrapper div#about .information dl div dd > span {
+.intro__wrapper .about .information dl div dd > span {
 	font-size: 17.1429px;
 	line-height: 26px;
 }
 
-.intro__wrapper div#about .information dl div dd > span::before {
+.intro__wrapper .about .information dl div dd > span::before {
 	content: "";
 	margin-bottom: -0.4333em;
 	display: table;
 }
 
-.intro__wrapper div#about .information dl div dd > span::after {
+.intro__wrapper .about .information dl div dd > span::after {
 	content: "";
 	margin-top: -0.3833em;
 	display: table;
 }
 
-.intro__wrapper div#about .information dl div dd ul.tags {
+.intro__wrapper .about .information dl div dd ul.tags {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -892,32 +920,29 @@ body > input[type="checkbox"] {
 	padding: 0;
 }
 
-.intro__wrapper div#about .information dl div dd ul.tags li {
+.intro__wrapper .about .information dl div dd ul.tags li {
 	display: inline-flex;
 	border-radius: 1000px;
 	background-color: var(--modal-tag-bg);
-	padding-left: 12px;
-	padding-right: 12px;
-	padding-top: 9.75px;
-	padding-bottom: 8px;
+	padding: 9.75px 12px 8px;
 	margin-right: 8px;
 	margin-bottom: 10px;
 }
 
-.intro__wrapper div#about .information dl div dd ul.tags li span {
-	font-family: 'Chakra Petch';
+.intro__wrapper .about .information dl div dd ul.tags li span {
+	font-family: 'Chakra Petch', serif;
 	font-size: 15.7143px;
 	line-height: 26px;
 	font-weight: 400;
 }
 
-.intro__wrapper div#about .information dl div dd ul.tags li span::before {
+.intro__wrapper .about .information dl div dd ul.tags li span::before {
 	content: "";
 	margin-bottom: -0.5023em;
 	display: table;
 }
 
-.intro__wrapper div#about .information dl div dd ul.tags li span::after {
+.intro__wrapper .about .information dl div dd ul.tags li span::after {
 	content: "";
 	margin-top: -0.4523em;
 	display: table;
@@ -927,11 +952,11 @@ body > input[type="checkbox"] {
 
 @keyframes logoAnimation {
 	0% {
-		background-position: 0px 0px;
+		background-position: 0 0;
 	}
 	
 	100% {
-		background-position: -1200px 0px;
+		background-position: -1200px 0;
 	}
 }
 
@@ -941,6 +966,7 @@ body > input[type="checkbox"] {
 	margin-bottom: -20px;
 	display: inline-block;
 	align-self: flex-start;
+	user-select: none;
 }
 
 .intro__content .name div.logo span {
@@ -959,26 +985,53 @@ body > input[type="checkbox"] {
 	animation-play-state: running;
 }
 
+/* Underlays */
+
+.underlay {
+	visibility: hidden;
+	position: fixed;
+	inset: 0;
+	user-select: none;
+}
+
+.underlay.underlay-menu {
+	backdrop-filter: blur(3px);
+	-webkit-backdrop-filter: blur(3px);
+}
+
+.underlay.underlay-about {
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+}
+
+#debug:not(:checked) ~ .page div:target .underlay.underlay-menu {
+	visibility: visible !important;
+	z-index: 0;
+}
+
+#debug:not(:checked) ~ .page div:target .underlay.underlay-about {
+	visibility: visible !important;
+	z-index: 2;
+}
 
 /* Side background shapes */
 
 #triangle-left,
 #triangle-right {
-	position: absolute;
-	z-index: 1;
+	position: fixed;
+	z-index: 0;
 	inset: 0;
 	overflow: hidden;
 	user-select: none;
 	pointer-events: none;
-	outline: none !important;
 }
 
-#triangle-left::before,
+/*#triangle-left::before,
 #triangle-left::after,
 #triangle-right::before,
 #triangle-right::after {
 	z-index: -1;
-}
+}*/
 
 #triangle-left::before {
 	content: '';
@@ -997,7 +1050,6 @@ body > input[type="checkbox"] {
 	position: absolute;
 	left: 0;
 	top: 0;
-	background: url(images/triangle-left-upper.svg);
 	background-size: 100% 100%;
 	background-position: left;
 	width: 70.710678118655vh;
@@ -1039,10 +1091,9 @@ body > input[type="checkbox"] {
 
 .tooltip .tooltip__content {
 	position: absolute;
+	z-index: 100;
 	left: 50%;
-	top: 100%;
 	transform: translateX(-50%);
-	margin-top: 10px;
 	padding: 10px 12px;
 	border-radius: 4px;
 	background: var(--context-bg);
@@ -1054,6 +1105,7 @@ body > input[type="checkbox"] {
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
 	pointer-events: none;
+	user-select: none;
 	white-space: nowrap;
 	font-weight: 500;
 	letter-spacing: 0.375px;
@@ -1061,8 +1113,23 @@ body > input[type="checkbox"] {
 	line-height: 11px;
 	transition-property: visibility;
 	transition-delay: 250ms;
-	z-index: 100;
-	user-select: none;
+}
+
+.tooltip.tooltip-top .tooltip__content {
+	bottom: 100%;
+	margin-bottom: 10px;
+}
+
+.tooltip.tooltip-bottom .tooltip__content {
+	top: 100%;
+	margin-top: 10px;
+}
+
+.tooltip .tooltip__content u {
+	text-decoration-thickness: 1px;
+	text-underline-position: under;
+	text-underline-offset: 0;
+	text-decoration-color: var(--text-3);
 }
 
 .tooltip__content::before {
@@ -1202,7 +1269,7 @@ body > input[type="checkbox"] {
 		padding-top: 176px;
 	}
 	
-	.intro__wrapper div#about {
+	.intro__wrapper .about .about__wrapper {
 		top: 88px;
 	}
 }
@@ -1220,14 +1287,14 @@ body > input[type="checkbox"] {
 	}
 	
 	.intro__content .specialisation {
-		padding-left: 0px;
+		padding-left: 0;
 	}
 	
 	.intro__content {
 		padding-top: 176px;
 	}
 	
-	.intro__wrapper div#about {
+	.intro__wrapper .about .about__wrapper {
 		top: 56px;
 		left: 32px;
 		right: 80px;
@@ -1254,10 +1321,10 @@ body > input[type="checkbox"] {
 	}
 	
 	.intro__content .name div.logo {
-		margin: 4px 0px 84px -20px;
+		margin: 4px 0 84px -20px;
 	}
 	
-	.intro__content > div.specialisation > p {
+	.intro__content > div.specialisation > h3 {
 		padding-top: 64px;
 	}
 	
@@ -1266,7 +1333,7 @@ body > input[type="checkbox"] {
 	}
 	
 	.intro__content {
-		padding-top: 0px;
+		padding-top: 0;
 		padding-bottom: 32px;
 		grid-template-columns: auto;
 	}
@@ -1275,7 +1342,7 @@ body > input[type="checkbox"] {
 		padding-top: 46px;
 	}
 	
-	.intro__wrapper div#about {
+	.intro__wrapper .about .about__wrapper {
 		position: fixed;
 		top: 16px;
 		left: 16px;
@@ -1283,7 +1350,7 @@ body > input[type="checkbox"] {
 		bottom: 16px;
 	}
 	
-	.intro__wrapper div#about .information dl div {
+	.intro__wrapper .about .about__wrapper .information dl div {
 		padding-top: 20px;
 		padding-left: 20px;
 		padding-right: 28px;
@@ -1292,11 +1359,11 @@ body > input[type="checkbox"] {
 		row-gap: 14px;
 	}
 	
-	.intro__wrapper div#about .information dl div:first-child {
+	.intro__wrapper .about .about__wrapper .information dl div:first-child {
 		padding-top: 28px;
 	}
 	
-	.intro__wrapper div#about .information dl div dt {
+	.intro__wrapper .about .about__wrapper .information dl div dt {
 		padding-bottom: 2.75px;
 	}
 }
@@ -1309,22 +1376,22 @@ body > input[type="checkbox"] {
 	} */
 	
 	.intro__content .links {
-		padding-top: 16px;
+		padding-top: 28px;
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
 	}
 	
 	.intro__content .links > a,
-	.intro__content .links > button {
-		margin-top: 16px;
+	.intro__content .links > div {
+		margin-top: 20px;
 	}
 	
 	.intro__content .email {
 		padding-top: 59.5px;
 	}
 	
-	.intro__wrapper div#about {
+	.intro__wrapper .about .about__wrapper {
 		top: 12px;
 		left: 12px;
 		right: 12px;
@@ -1340,11 +1407,20 @@ body > input[type="checkbox"] {
 		width: var(--width-xs);
 	}
 	
-	.intro__wrapper div#about {
+	.intro__wrapper .about .about__wrapper {
 		top: 4px;
 		left: 4px;
 		right: 4px;
 		bottom: 4px;
 	}
 	
+}
+
+/* Accessibility */
+
+*:focus, *:focus-visible {
+	position: relative;
+	z-index: 10;
+	outline: var(--highlight) solid 2px;
+	outline-offset: 4px;
 }
