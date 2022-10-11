@@ -136,9 +136,9 @@
 
 /* Light mode */
 
-body, html {
+/*body, html {
 	background-color: #FFFFFF;
-}
+}*/
 
 /*.intro {
 	--background: #FFFFFF;
@@ -669,7 +669,7 @@ svg * {
 .intro__content .links > a span.material-symbols-sharp.secondary {
 	margin-left: 6px;
 	font-size: 24px;
-	font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+	font-variation-settings: 'opsz' 24, 'wght' 200, 'FILL' 1, 'GRAD' 200;
 }
 
 .intro__content .links .menu {
@@ -1462,5 +1462,5 @@ body > input[type="checkbox"] {
 span.material-symbols-sharp {
 	font-size: 32px;
 	color: var(--icon);
-	font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 40;
+	font-variation-settings: 'opsz' 40, 'wght' 600, 'FILL' 1, 'GRAD' 0;
 }
