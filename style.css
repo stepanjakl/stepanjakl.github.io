@@ -647,7 +647,7 @@ body > input[type="checkbox"] {
 	pointer-events: all;
 	border-radius: 6px;
 	margin-bottom: 12px;
-	margin-left: -12px;
+	margin-left: -14px;
 	row-gap: 4px;
 }
 
@@ -674,7 +674,7 @@ body > input[type="checkbox"] {
 	flex-direction: row;
 	align-items: center;
 	width: 100%;
-	padding: 8.5px 17.5px 6.5px 15.5px;
+	padding: 9px 18px 7px 16px;
 	font-size: 17.1429px;
 	line-height: 12px;
 	letter-spacing: 0.5px;
@@ -700,7 +700,7 @@ body > input[type="checkbox"] {
 }
 
 .intro__content .links .menu > span.menu__dropdown > *:last-child {
-	padding-bottom: 8.5px;
+	padding-bottom: 9px;
 }
 
 .intro__content .links .menu > span.menu__dropdown > * > span.label {
