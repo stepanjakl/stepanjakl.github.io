@@ -26,8 +26,6 @@
     <!-- Styles -->
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@24,200,1,200;40,600,1,0"/>
     <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /> -->
     <!-- Panelbear Analytics -->
     <script async src="https://cdn.panelbear.com/analytics.js?site=3Wx7jYhrVYN"></script>
@@ -57,14 +55,18 @@
                 <div class="about" id="about">
                     <div class="about__wrapper">
                         <a href="#menu" class="close" aria-label="Close menu">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M0 10C0 15.51 4.48 20 10 20C15.51 20 20 15.51 20 10C20 4.48 15.51 0 10 0C4.48 0 0 4.48 0 10V10Z"
-                                      fill="var(--modal-icon-bg)"/>
-                                <path d="M13.0155 11.7829C13.3555 12.1229 13.3555 12.6729 13.0155 13.0119C12.8455 13.1819 12.6255 13.2729 12.3955 13.2729C12.1755 13.2729 11.9555 13.1929 11.7855 13.0119L10.0055 11.2429L8.22547 13.0119C8.05547 13.1819 7.83547 13.2729 7.60547 13.2729C7.38547 13.2729 7.15547 13.1819 6.98547 13.0119C6.64547 12.6729 6.64547 12.1229 6.98547 11.7729L8.76547 10.0029L6.98547 8.22192C6.64547 7.88292 6.64547 7.32292 6.98547 6.98292C7.32547 6.64192 7.87547 6.64192 8.22547 6.98292L10.0055 8.76192L11.7755 6.98292C12.1255 6.64192 12.6755 6.64192 13.0155 6.98292C13.3555 7.32292 13.3555 7.88292 13.0155 8.22192L11.2355 10.0029L13.0155 11.7829Z"
-                                      fill="var(--modal-icon-fg)"/>
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20"
+                                 viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M6 15.708 4.333 14l3.979-4-3.979-4.021L6 4.271l4 4.021 4-4.021 1.667 1.708L11.688 10l3.979 4L14 15.708l-4-4.02Z"/>
                             </svg>
                         </a>
+                        <script>
+							document.addEventListener('keydown', function (event) {
+								if (event.keyCode === 27) {
+									document.location.hash = ''
+								}
+							})
+                        </script>
                         <div class="information">
                             <dl>
                                 <div>
@@ -74,15 +76,11 @@
                                 <div class="profile">
                                     <dt>Profile:</dt>
                                     <dd>
-                                        <p>
-                                            Experienced and detail-oriented user interface engineer who specializes in
-                                            crafting intuitive digital solutions.<br>
-                                            Committed to producing high-quality results for projects with realistic and
-                                            exciting propositions and tangible outcomes.<br>
-                                            Equally dedicated to code and design.
-                                            <!-- Built with devotion to code and design. -->
-                                            <!-- I make complete solutions - from initial research and proposal, to a functional prototype and final app deployment; or I can take on a crucial role within your team. -->
-                                        </p>
+                                        <p>Experienced and detail-oriented user interface engineer who specializes in
+                                            crafting intuitive digital solutions.</p>
+                                        <p>Committed to producing high-quality results for projects with realistic and
+                                            exciting propositions and tangible outcomes.</p>
+                                        <p>Equally dedicated to code and design.</p>
                                     </dd>
                                 </div>
                                 <div>
@@ -118,7 +116,7 @@
                                     <dd><span>Europe/London</span>
                                         <span id="live-timezone-time"></span>
                                         <script>
-											setInterval((() => {
+											const liveTimezoneTime = () => {
 												document.querySelector('#live-timezone-time').innerHTML =
 													`(${new Intl.DateTimeFormat([], {
 														timeZone: 'Europe/London',
@@ -129,7 +127,9 @@
 														hour: 'numeric',
 														minute: 'numeric'
 													}).format(new Date())})`
-											}), 30000)
+											}
+											liveTimezoneTime()
+											setInterval(liveTimezoneTime, 15000)
                                         </script>
                                     </dd>
                                 </div>
@@ -144,7 +144,6 @@
                                             <li><span>Landing page</span></li>
                                             <li><span>Dashboard app</span></li>
                                             <li><span>SaaS app</span></li>
-                                            <!-- <li><span>Mobile app</span></li> -->
                                         </ul>
                                     </dd>
                                 </div>
@@ -179,31 +178,31 @@
 
                 <div class="intro__content">
 
-                    <div class="name">
+                    <div class="left-column">
                         <h2>Štěpán Jákl</h2>
                         <div class="logo">
                             <span></span>
                         </div>
                     </div>
 
-                    <div class="specialisation">
+                    <div class="right-column">
 
                         <h3>Front-end developer <br> & interface designer</h3>
 
                         <div class="availability">
                             <div class="tooltip tooltip-bottom">
                                 <a href="https://calendly.com/stepanjakl" target="_blank" rel="noreferrer"
-                                   aria-label="Available for hire, schedule a call" class="badge">
+                                   aria-label="Open to new opportunities, book a virtual meeting" class="badge">
                                     <div>
                                         <span class="dot"></span>
-                                        <span class="text">Available for hire</span>
+                                        <span class="text">Open to new opportunities</span>
                                     </div>
                                 </a>
                                 <div class="tooltip__content">
-                                    <span><u>Schedule</u> a call via Calendly</span>
+                                    <span><u>Book</u> a virtual meeting via Calendly</span>
                                 </div>
                             </div>
-                            <!-- <span>in Q4/2022</span> -->
+                            <!-- <span>in Q2-Q4/2023</span> -->
                         </div>
 
                         <div class="email">
@@ -211,17 +210,12 @@
                                  onmousedown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@outlook.com')"
                                  onkeydown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@outlook.com')"
                                  tabindex="0" aria-label="Contact me via email">
-                                <!-- <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M29.3337 21.2536C29.3337 24.9736 26.347 27.9869 22.627 28.0003H22.6137H9.40033C5.69366 28.0003 2.66699 25.0003 2.66699 21.2803V21.2669C2.66699 21.2669 2.67499 15.3656 2.68566 12.3976C2.68699 11.8403 3.32699 11.5283 3.76299 11.8749C6.93099 14.3883 12.5963 18.9709 12.667 19.0309C13.6137 19.7896 14.8137 20.2176 16.0403 20.2176C17.267 20.2176 18.467 19.7896 19.4137 19.0163C19.4843 18.9696 25.023 14.5243 28.239 11.9696C28.6763 11.6216 29.319 11.9336 29.3203 12.4896C29.3337 15.4349 29.3337 21.2536 29.3337 21.2536Z"
-                                          fill="var(--icon-bg)"/>
-                                    <path d="M28.6342 7.56478C27.4795 5.38878 25.2075 3.99945 22.7062 3.99945H9.39952C6.89819 3.99945 4.62619 5.38878 3.47152 7.56478C3.21285 8.05145 3.33552 8.65812 3.76619 9.00212L13.6662 16.9208C14.3595 17.4808 15.1995 17.7594 16.0395 17.7594C16.0449 17.7594 16.0489 17.7594 16.0529 17.7594C16.0569 17.7594 16.0622 17.7594 16.0662 17.7594C16.9062 17.7594 17.7462 17.4808 18.4395 16.9208L28.3395 9.00212C28.7702 8.65812 28.8929 8.05145 28.6342 7.56478Z"
-                                          fill="var(--icon-fg)"/>
-                                </svg> -->
-                                <span class="material-symbols-sharp">chat
-                                    <!-- mark_as_unread, inbox, local_post_office, drafts, mail --></span>
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                     viewBox="0 0 40 40" fill="currentColor">
+                                    <path d="M10 23.375h13.125v-2.792H10Zm0-5.292h20v-2.791H10Zm0-5.291h20v-2.75H10ZM2.667 37.333V2.667h34.666v28h-28Z"/>
+                                </svg>
                                 <span class="label">stepan.jakl@outlook.com</span>
-                                <div class="tooltip__content" style="margin-bottom: 5px">
+                                <div class="tooltip__content">
                                     <span><u>Contact</u> me via email</span>
                                 </div>
                             </div>
@@ -230,41 +224,34 @@
                         <div class="links">
 
                             <a href="https://www.linkedin.com/in/stepanjakl" target="_blank"
-                               aria-label="Read my résumé on LinkedIn" rel="noreferrer"
+                               aria-label="Browse my LinkedIn profile" rel="noreferrer"
                                class="resume tooltip tooltip-bottom">
-                                <!-- <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M2.66699 14.7714C2.73366 17.8887 2.92033 23.2207 2.94699 23.8087C3.04166 25.066 3.52299 26.3367 4.27233 27.2327C5.31499 28.49 6.59899 29.0514 8.38966 29.0514C10.8643 29.0647 13.5923 29.0647 16.2417 29.0647C18.9017 29.0647 21.483 29.0647 23.663 29.0514C25.4283 29.0514 26.7523 28.4754 27.7817 27.2327C28.531 26.3367 29.0123 25.0527 29.0803 23.8087C29.107 23.314 29.2403 17.526 29.3203 14.7714H2.66699Z"
-                                          fill="var(--icon-bg)"/>
-                                    <path d="M14.9941 20.5123V22.2377C14.9941 22.7897 15.4421 23.2377 15.9941 23.2377C16.5461 23.2377 16.9941 22.7897 16.9941 22.2377V20.5123C16.9941 19.9603 16.5461 19.5123 15.9941 19.5123C15.4421 19.5123 14.9941 19.9603 14.9941 20.5123Z"
-                                          fill="var(--icon-fg)"/>
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                          d="M13.615 19.4086C13.4817 19.8926 13.0163 20.2019 12.5123 20.1352C9.11099 19.6606 5.86033 18.4539 3.11633 16.6419C2.83499 16.4579 2.66699 16.1432 2.66699 15.8072V11.1859C2.66699 8.3859 4.94966 6.10857 7.75633 6.10857H10.379C10.6297 4.17257 12.2697 2.66724 14.2723 2.66724H17.715C19.7163 2.66724 21.3577 4.17257 21.6083 6.10857H24.2443C27.043 6.10857 29.3203 8.3859 29.3203 11.1859V15.8072C29.3203 16.1432 29.151 16.4566 28.8723 16.6419C26.123 18.4619 22.859 19.6739 19.435 20.1472C19.3883 20.1539 19.343 20.1566 19.2977 20.1566C18.8457 20.1566 18.4417 19.8512 18.3283 19.4032C18.059 18.3419 17.095 17.5992 15.987 17.5992C14.8643 17.5992 13.911 18.3259 13.615 19.4086ZM17.7149 4.66724H14.2723C13.3749 4.66724 12.6256 5.28057 12.4016 6.10857H19.5843C19.3603 5.28057 18.6109 4.66724 17.7149 4.66724Z"
-                                          fill="var(--icon-fg)"/>
-                                </svg> -->
-                                <span class="material-symbols-sharp">contact_page
-                                    <!-- description, document_scanner, article, history_edu --></span>
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="40" width="40"
+                                     viewBox="0 0 40 40" fill="currentColor">
+                                    <path d="M20 23.042q1.5 0 2.562-1.084 1.063-1.083 1.063-2.583 0-1.5-1.063-2.563Q21.5 15.75 20 15.75q-1.5 0-2.562 1.062-1.063 1.063-1.063 2.563 0 1.5 1.063 2.583Q18.5 23.042 20 23.042Zm-6.958 7.25h13.916v-1.25q0-1.084-.604-2-.604-.917-1.604-1.375-1.125-.459-2.292-.709-1.166-.25-2.458-.25-1.292 0-2.458.25-1.167.25-2.292.709-1 .458-1.604 1.375-.604.916-.604 2ZM6 37.333V2.667h17.625L34 13.042v24.291Z"/>
+                                </svg>
                                 <span class="label">Résumé</span>
-                                <!-- <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9.43832 2.15332H6.32249C3.75999 2.15332 2.15332 3.96749 2.15332 6.53582V13.4642C2.15332 16.0325 3.75249 17.8467 6.32249 17.8467H13.6758C16.2467 17.8467 17.8458 16.0325 17.8458 13.4642V10.1075"
-                                          stroke="var(--text-2)" stroke-width="1.5" stroke-linecap="round"
-                                          stroke-linejoin="round"/>
-                                    <path d="M17.8457 2.15332L13.0303 6.96872M17.8457 2.15332L13.4194 2.16257M17.8457 2.15332L17.8364 6.57963"
-                                          stroke="var(--text-2)" stroke-width="1.5" stroke-linecap="round"
-                                          stroke-linejoin="round"/>
-                                </svg> -->
-                                <span class="material-symbols-sharp secondary">open_in_new</span>
-                                <span class="tooltip__content" style="margin-top: 13px">
+                                <svg class="icon secondary" xmlns="http://www.w3.org/2000/svg" height="20" width="20"
+                                     viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M2.667 17.333V2.667h7.166v1.458H4.125v11.75h11.75v-5.708h1.458v7.166Zm5.416-4.375-1.041-1.041 7.812-7.792h-2.625V2.667h5.104v5.104h-1.458V5.146Z"/>
+                                </svg>
+                                <span class="tooltip__content">
                                     <span><u>Browse</u> my LinkedIn profile</span>
                                 </span>
                             </a>
 
                             <a href="https://github.com/stepanjakl" target="_blank"
                                aria-label="Visit my profile on GitHub" rel="noreferrer" class="github">
-                                <span class="material-symbols-sharp">terminal</span>
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="40" width="40"
+                                     viewBox="0 0 40 40"
+                                     fill="currentColor">
+                                    <path d="M2.667 34V6h34.666v28Zm3.666-3.667h27.334V13.125H6.333Zm13.959-2.208v-2.792h9.416v2.792ZM12.5 28l-1.958-1.958 4.291-4.334-4.333-4.333 2-1.917 6.292 6.25Z"/>
+                                </svg>
                                 <span class="label">GitHub</span>
-                                <span class="material-symbols-sharp secondary">open_in_new</span>
+                                <svg class="icon secondary" xmlns="http://www.w3.org/2000/svg" height="20" width="20"
+                                     viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M2.667 17.333V2.667h7.166v1.458H4.125v11.75h11.75v-5.708h1.458v7.166Zm5.416-4.375-1.041-1.041 7.812-7.792h-2.625V2.667h5.104v5.104h-1.458V5.146Z"/>
+                                </svg>
                             </a>
 
                             <!-- <a href="portfolio.html" target="_blank" aria-label="Portfolio - Figma board" rel="noreferrer" class="tooltip tooltip-bottom" onclick="return false;" style="transition: filter 400ms linear; cursor: not-allowed;">
@@ -291,68 +278,61 @@
                                 <a href="#" aria-label="Close dropdown menu"></a>
                                 <span class="menu__dropdown">
                                     <a href="#about" aria-label="Find out more about me">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                  d="M17.294 7.29105C17.294 10.2281 14.9391 12.5831 12 12.5831C9.0619 12.5831 6.70601 10.2281 6.70601 7.29105C6.70601 4.35402 9.0619 2 12 2C14.9391 2 17.294 4.35402 17.294 7.29105ZM12 22C7.66237 22 4 21.295 4 18.575C4 15.8539 7.68538 15.1739 12 15.1739C16.3386 15.1739 20 15.8789 20 18.599C20 21.32 16.3146 22 12 22Z"/>
+                                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                                             viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M5.85 17.1q1.275-.975 2.85-1.538Q10.275 15 12 15q1.725 0 3.3.562 1.575.563 2.85 1.538.875-1.025 1.363-2.325Q20 13.475 20 12q0-3.325-2.337-5.663Q15.325 4 12 4T6.338 6.337Q4 8.675 4 12q0 1.475.488 2.775.487 1.3 1.362 2.325ZM12 13q-1.475 0-2.488-1.012Q8.5 10.975 8.5 9.5t1.012-2.488Q10.525 6 12 6t2.488 1.012Q15.5 8.025 15.5 9.5t-1.012 2.488Q13.475 13 12 13Zm0 9q-2.075 0-3.9-.788-1.825-.787-3.175-2.137-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175 1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138 1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175-1.35 1.35-3.175 2.137Q14.075 22 12 22Z"/>
                                         </svg>
-                                        <span>About</span>
+                                        <span class="label">About</span>
                                     </a>
                                     <a href="https://calendly.com/stepanjakl" target="_blank"
                                        aria-label="Schedule a call via Calendly" rel="noreferrer">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15.2477 16.11L16.9277 14.43C17.154 14.2066 17.4403 14.0536 17.7518 13.9897C18.0634 13.9258 18.3867 13.9537 18.6827 14.07L20.7302 14.8875C21.0293 15.0089 21.2858 15.2162 21.4673 15.4831C21.6488 15.75 21.7473 16.0647 21.7502 16.3875V20.1375C21.7485 20.3571 21.7023 20.5741 21.6145 20.7753C21.5267 20.9766 21.3991 21.158 21.2393 21.3087C21.0796 21.4594 20.891 21.5761 20.6849 21.652C20.4788 21.7278 20.2595 21.7612 20.0402 21.75C5.69272 20.8575 2.79772 8.70753 2.25022 4.05753C2.22481 3.82918 2.24803 3.59804 2.31836 3.37931C2.38869 3.16058 2.50453 2.95922 2.65827 2.78848C2.81201 2.61774 3.00016 2.48148 3.21034 2.38868C3.42052 2.29587 3.64797 2.24862 3.87772 2.25003H7.50022C7.82348 2.25099 8.13906 2.34863 8.40637 2.5304C8.67368 2.71217 8.8805 2.96976 9.00022 3.27003L9.81772 5.31753C9.93791 5.61233 9.96858 5.93601 9.90588 6.24814C9.84319 6.56027 9.68992 6.847 9.46522 7.07253L7.78522 8.75253C7.78522 8.75253 8.75272 15.3 15.2477 16.11Z"/>
+                                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                                             viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 23v-2h7v-1h-4v-8h4v-1q0-2.9-2.05-4.95Q14.9 4 12 4 9.1 4 7.05 6.05 5 8.1 5 11v1h4v8H3v-9q0-1.85.712-3.488.713-1.637 1.938-2.862t2.862-1.938Q10.15 2 12 2t3.488.712q1.637.713 2.862 1.938t1.938 2.862Q21 9.15 21 11v12Z"/>
                                         </svg>
-                                        <span>Schedule a call</span>
+                                        <span class="label">Virtual meeting</span>
+                                        <svg class="icon secondary" xmlns="http://www.w3.org/2000/svg" height="20"
+                                             width="20" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M2.667 17.333V2.667h7.166v1.458H4.125v11.75h11.75v-5.708h1.458v7.166Zm5.416-4.375-1.041-1.041 7.812-7.792h-2.625V2.667h5.104v5.104h-1.458V5.146Z"/>
+                                        </svg>
                                     </a>
                                     <label for="mode" class="light" tabindex="0">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#e2ec00"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12.75 4.5V2.25C12.75 1.83579 12.4142 1.5 12 1.5C11.5858 1.5 11.25 1.83579 11.25 2.25V4.5C11.25 4.91421 11.5858 5.25 12 5.25C12.4142 5.25 12.75 4.91421 12.75 4.5Z"/>
-                                            <path d="M18.3637 4.57546L16.7949 6.14428C16.5021 6.43715 16.5021 6.91197 16.7949 7.20484C17.0878 7.4977 17.5626 7.4977 17.8555 7.20484L19.4243 5.63602C19.7172 5.34315 19.7172 4.86832 19.4243 4.57546C19.1314 4.2826 18.6566 4.2826 18.3637 4.57546Z"/>
-                                            <path d="M21.75 11.25H19.5C19.0858 11.25 18.75 11.5858 18.75 12C18.75 12.4142 19.0858 12.75 19.5 12.75H21.75C22.1642 12.75 22.5 12.4142 22.5 12C22.5 11.5858 22.1642 11.25 21.75 11.25Z"/>
-                                            <path d="M19.4243 18.364L17.8555 16.7952C17.5626 16.5023 17.0878 16.5023 16.7949 16.7952C16.5021 17.088 16.5021 17.5629 16.7949 17.8557L18.3637 19.4245C18.6566 19.7174 19.1314 19.7174 19.4243 19.4245C19.7172 19.1317 19.7172 18.6568 19.4243 18.364Z"/>
-                                            <path d="M12.75 21.75V19.5C12.75 19.0858 12.4142 18.75 12 18.75C11.5858 18.75 11.25 19.0858 11.25 19.5V21.75C11.25 22.1642 11.5858 22.5 12 22.5C12.4142 22.5 12.75 22.1642 12.75 21.75Z"/>
-                                            <path d="M6.14402 16.7952L4.5752 18.364C4.28234 18.6569 4.28233 19.1317 4.5752 19.4246C4.86806 19.7174 5.34289 19.7174 5.63575 19.4246L7.20457 17.8557C7.49744 17.5629 7.49744 17.0881 7.20458 16.7952C6.91171 16.5023 6.43688 16.5023 6.14402 16.7952Z"/>
-                                            <path d="M4.5 11.25H2.25C1.83579 11.25 1.5 11.5858 1.5 12C1.5 12.4142 1.83579 12.75 2.25 12.75H4.5C4.91421 12.75 5.25 12.4142 5.25 12C5.25 11.5858 4.91421 11.25 4.5 11.25Z"/>
-                                            <path d="M7.20457 6.14426L5.63575 4.57544C5.34289 4.28257 4.86806 4.28257 4.5752 4.57544C4.28233 4.8683 4.28234 5.34313 4.5752 5.63599L6.14402 7.20481C6.43688 7.49768 6.91171 7.49768 7.20457 7.20481C7.49744 6.91195 7.49744 6.43712 7.20457 6.14426Z"/>
-                                            <path d="M12 7.5C11.11 7.5 10.24 7.76392 9.49994 8.25839C8.75991 8.75285 8.18314 9.45566 7.84254 10.2779C7.50195 11.1002 7.41283 12.005 7.58647 12.8779C7.7601 13.7508 8.18869 14.5526 8.81802 15.182C9.44736 15.8113 10.2492 16.2399 11.1221 16.4135C11.995 16.5872 12.8998 16.4981 13.7221 16.1575C14.5443 15.8169 15.2471 15.2401 15.7416 14.5001C16.2361 13.76 16.5 12.89 16.5 12C16.5 10.8065 16.0259 9.66193 15.182 8.81802C14.3381 7.97411 13.1935 7.5 12 7.5Z"/>
+                                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                                             viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M11 4V1h2v3Zm0 19v-3h2v3Zm9-10v-2h3v2ZM1 13v-2h3v2Zm17.7-6.3-1.4-1.4 1.75-1.8 1.45 1.45ZM4.95 20.5 3.5 19.05l1.8-1.75 1.4 1.4Zm14.1 0-1.75-1.8 1.4-1.4 1.8 1.75ZM5.3 6.7 3.5 4.95 4.95 3.5 6.7 5.3ZM12 18q-2.5 0-4.25-1.75T6 12q0-2.5 1.75-4.25T12 6q2.5 0 4.25 1.75T18 12q0 2.5-1.75 4.25T12 18Z"/>
                                         </svg>
-                                        <span>Light mode</span>
+                                        <span class="label">Light mode</span>
                                     </label>
                                     <label for="mode" class="dark" tabindex="0">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M11.2352 2.25C11.1913 2.25007 11.1475 2.25398 11.1042 2.2617C8.71607 2.68589 6.56931 3.97876 5.07747 5.89129C3.58562 7.80382 2.85422 10.2007 3.02414 12.6203C3.19406 15.0399 4.25328 17.3111 5.99779 18.9963C7.74229 20.6816 10.0487 21.6617 12.4727 21.748C12.5958 21.7525 12.7188 21.748 12.8409 21.748C14.415 21.7488 15.9662 21.3706 17.3632 20.6454C18.7603 19.9201 19.9622 18.8691 20.8674 17.5813C20.9408 17.4703 20.9836 17.3419 20.9916 17.2091C20.9995 17.0763 20.9724 16.9438 20.9128 16.8248C20.8532 16.7058 20.7634 16.6047 20.6523 16.5315C20.5412 16.4583 20.4127 16.4157 20.2799 16.408C18.7815 16.2765 17.3335 15.8023 16.0476 15.0219C14.7618 14.2416 13.6726 13.176 12.8643 11.9076C12.0559 10.6391 11.5501 9.20177 11.3859 7.70665C11.2216 6.21153 11.4034 4.69867 11.9171 3.285C11.9608 3.1719 11.9769 3.04999 11.9639 2.92942C11.951 2.80886 11.9094 2.69314 11.8427 2.59188C11.776 2.49063 11.6861 2.40678 11.5804 2.34731C11.4747 2.28784 11.3564 2.25448 11.2352 2.25V2.25Z"/>
+                                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                                             viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M13.1 23q-2.1 0-3.938-.8-1.837-.8-3.199-2.162Q4.6 18.675 3.8 16.837 3 15 3 12.9q0-3.65 2.325-6.438Q7.65 3.675 11.25 3q-.45 2.475.275 4.837.725 2.363 2.5 4.138t4.138 2.5q2.362.725 4.837.275-.65 3.6-3.45 5.925Q16.75 23 13.1 23Z"/>
                                         </svg>
-                                        <span>Dark mode</span>
+                                        <span class="label">Dark mode</span>
                                     </label>
                                     <label for="debug" tabindex="0">
-                                        <svg class="show" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                  d="M8.09756 12C8.09756 14.1333 9.8439 15.8691 12 15.8691C14.1463 15.8691 15.8927 14.1333 15.8927 12C15.8927 9.85697 14.1463 8.12121 12 8.12121C9.8439 8.12121 8.09756 9.85697 8.09756 12ZM17.7366 6.04606C19.4439 7.36485 20.8976 9.29455 21.9415 11.7091C22.0195 11.8933 22.0195 12.1067 21.9415 12.2812C19.8537 17.1103 16.1366 20 12 20H11.9902C7.86341 20 4.14634 17.1103 2.05854 12.2812C1.98049 12.1067 1.98049 11.8933 2.05854 11.7091C4.14634 6.88 7.86341 4 11.9902 4H12C14.0683 4 16.0293 4.71758 17.7366 6.04606ZM12.0012 14.4124C13.3378 14.4124 14.4304 13.3264 14.4304 11.9979C14.4304 10.6597 13.3378 9.57362 12.0012 9.57362C11.8841 9.57362 11.767 9.58332 11.6597 9.60272C11.6207 10.6694 10.7426 11.5227 9.65971 11.5227H9.61093C9.58166 11.6779 9.56215 11.833 9.56215 11.9979C9.56215 13.3264 10.6548 14.4124 12.0012 14.4124Z"/>
+                                        <svg class="icon enable" xmlns="http://www.w3.org/2000/svg" height="24"
+                                             width="24"
+                                             viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 16q1.875 0 3.188-1.312Q16.5 13.375 16.5 11.5q0-1.875-1.312-3.188Q13.875 7 12 7q-1.875 0-3.188 1.312Q7.5 9.625 7.5 11.5q0 1.875 1.312 3.188Q10.125 16 12 16Zm0-1.8q-1.125 0-1.912-.788Q9.3 12.625 9.3 11.5t.788-1.913Q10.875 8.8 12 8.8t1.913.787q.787.788.787 1.913t-.787 1.912q-.788.788-1.913.788Zm0 4.8q-3.65 0-6.65-2.038-3-2.037-4.35-5.462 1.35-3.425 4.35-5.463Q8.35 4 12 4q3.65 0 6.65 2.037 3 2.038 4.35 5.463-1.35 3.425-4.35 5.462Q15.65 19 12 19Z"/>
                                         </svg>
-                                        <svg class="hide" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                  d="M9.80327 15.2526C10.4277 15.6759 11.1888 15.9319 11.9987 15.9319C14.1453 15.9319 15.8919 14.1696 15.8919 12.0037C15.8919 11.1866 15.6382 10.4186 15.2186 9.78855L14.1551 10.8617C14.3307 11.1964 14.4283 11.5902 14.4283 12.0037C14.4283 13.3525 13.3354 14.4551 11.9987 14.4551C11.5889 14.4551 11.1986 14.3567 10.8668 14.1795L9.80327 15.2526ZM18.4288 6.54952C19.8436 7.84907 21.0438 9.60149 21.9415 11.7083C22.0195 11.8954 22.0195 12.112 21.9415 12.2892C19.8534 17.1921 16.1358 20.1259 11.9987 20.1259H11.9889C10.1058 20.1259 8.30063 19.5056 6.71018 18.3735L4.81725 20.2834C4.67089 20.4311 4.4855 20.5 4.30011 20.5C4.11472 20.5 3.91957 20.4311 3.78297 20.2834C3.53903 20.0373 3.5 19.6435 3.69515 19.358L3.72442 19.3186L18.1556 4.75771C18.1751 4.73802 18.1946 4.71833 18.2044 4.69864L18.2044 4.69863C18.2239 4.67894 18.2434 4.65925 18.2532 4.63957L19.1704 3.71413C19.4631 3.42862 19.9217 3.42862 20.2046 3.71413C20.4974 3.99964 20.4974 4.4722 20.2046 4.75771L18.4288 6.54952ZM8.09836 12.0075C8.09836 12.2635 8.12764 12.5195 8.16667 12.7558L4.55643 16.3984C3.5807 15.2564 2.7318 13.8781 2.05854 12.293C1.98049 12.1158 1.98049 11.8992 2.05854 11.7122C4.14662 6.80933 7.86419 3.88534 11.9916 3.88534H12.0013C13.3966 3.88534 14.7529 4.22007 16.0018 4.85015L12.7429 8.13841C12.5087 8.09903 12.255 8.0695 12.0013 8.0695C9.84494 8.0695 8.09836 9.83177 8.09836 12.0075Z"/>
+                                        <svg class="icon disable" xmlns="http://www.w3.org/2000/svg" height="24"
+                                             width="24"
+                                             viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="m19.8 22.6-4.2-4.15q-.875.275-1.762.413Q12.95 19 12 19q-3.775 0-6.725-2.087Q2.325 14.825 1 11.5q.525-1.325 1.325-2.463Q3.125 7.9 4.15 7L1.4 4.2l1.4-1.4 18.4 18.4ZM12 16q.275 0 .512-.025.238-.025.513-.1l-5.4-5.4q-.075.275-.1.513-.025.237-.025.512 0 1.875 1.312 3.188Q10.125 16 12 16Zm7.3.45-3.175-3.15q.175-.425.275-.862.1-.438.1-.938 0-1.875-1.312-3.188Q13.875 7 12 7q-.5 0-.938.1-.437.1-.862.3L7.65 4.85q1.025-.425 2.1-.638Q10.825 4 12 4q3.775 0 6.725 2.087Q21.675 8.175 23 11.5q-.575 1.475-1.512 2.738Q20.55 15.5 19.3 16.45Zm-4.625-4.6-3-3q.7-.125 1.288.112.587.238 1.012.688.425.45.613 1.038.187.587.087 1.162Z"/>
                                         </svg>
-                                        <span>Debug</span>
+                                        <span class="label">Debug</span>
                                     </label>
                                 </span>
                                 <span class="menu__button">
-                                    <!-- <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M21.787 2.6664H10.227C5.70699 2.6664 2.66699 5.83974 2.66699 10.5597V21.4531C2.66699 26.1597 5.70699 29.3331 10.227 29.3331H21.787C26.307 29.3331 29.3337 26.1597 29.3337 21.4531V10.5597C29.3337 5.83974 26.307 2.6664 21.787 2.6664Z"
-                                              fill="var(--icon-bg)"/>
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                              d="M10.028 14.4047C9.14666 14.4047 8.43066 15.1207 8.43066 15.9993C8.43066 16.8793 9.14666 17.5967 10.028 17.5967C10.9093 17.5967 11.6253 16.8793 11.6253 15.9993C11.6253 15.1207 10.9093 14.4047 10.028 14.4047ZM15.9998 14.4047C15.1185 14.4047 14.4025 15.1207 14.4025 15.9993C14.4025 16.8793 15.1185 17.5967 15.9998 17.5967C16.8811 17.5967 17.5971 16.8793 17.5971 15.9993C17.5971 15.1207 16.8811 14.4047 15.9998 14.4047ZM20.3755 15.9993C20.3755 15.1207 21.0915 14.4047 21.9728 14.4047C22.8542 14.4047 23.5702 15.1207 23.5702 15.9993C23.5702 16.8793 22.8542 17.5967 21.9728 17.5967C21.0915 17.5967 20.3755 16.8793 20.3755 15.9993Z"
-                                              fill="var(--icon-fg)"/>
-                                    </svg> -->
-                                    <span class="material-symbols-sharp open">unfold_more</span>
-                                    <span class="material-symbols-sharp close">unfold_less</span>
+                                    <svg class="icon open" xmlns="http://www.w3.org/2000/svg" height="40" width="40"
+                                         viewBox="0 0 40 40" fill="currentColor">
+                                        <path d="m20 35.625-8.167-8.167 2.625-2.666L20 30.333l5.542-5.541 2.625 2.666Zm-5.542-20.333-2.625-2.625L20 4.5l8.167 8.167-2.625 2.625L20 9.792Z"/>
+                                    </svg>
+                                    <svg class="icon close" xmlns="http://www.w3.org/2000/svg" height="40" width="40"
+                                         viewBox="0 0 40 40" fill="currentColor">
+                                        <path d="m14.458 33.958-2.583-2.583L20 23.25l8.125 8.125-2.583 2.583L20 28.417ZM20 16.75l-8.125-8.125 2.583-2.583L20 11.583l5.542-5.541 2.583 2.583Z"/>
+                                    </svg>
                                     <span class="label">More</span>
                                 </span>
                                 <div class="underlay underlay-menu"></div>

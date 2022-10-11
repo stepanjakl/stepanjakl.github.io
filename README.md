@@ -6,12 +6,16 @@
 
 # Personal website of Štěpán Jákl
 
-Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to producing high-quality results for projects with realistic and exciting propositions and tangible outcomes.
+#### Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to producing high-quality results for projects with realistic and exciting propositions and tangible outcomes. Equally dedicated to code and design.
 
-Live site: [stepanjakl.com](https://stepanjakl.com)
+---
 
-[Portfolio (Figma)](https://stepanjakl.com/portfolio.html)
+### Live site: [stepanjakl.com](https://stepanjakl.com)
 
-[Résumé (LinkedIn)](https://www.linkedin.com/in/stepanjakl)
+---
 
-[Schedule a call (Calendly)](https://calendly.com/stepanjakl)
+#### [Résumé (LinkedIn)](https://www.linkedin.com/in/stepanjakl)
+
+#### [GitHub](https://github.com/stepanjakl)
+
+#### [Video call (Calendly)](https://calendly.com/stepanjakl)
