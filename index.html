@@ -5,7 +5,7 @@
     <title>Štěpán Jákl | Front-end web developer & interface designer</title>
     <meta charset="UTF-8"/>
     <meta name="description"
-          content="Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to producing high-quality results for projects with realistic and exciting propositions and tangible outcomes.">
+          content="Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to producing high-quality results for projects with realistic and exciting propositions and tangible outcomes. Equally dedicated to code and design.">
     <meta http-equiv="x-ua-compatible" content="ie=edge"/>
     <meta name="color-scheme" content="dark light">
     <!-- Viewport -->
@@ -26,6 +26,8 @@
     <!-- Styles -->
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
     <!-- Panelbear Analytics -->
     <script async src="https://cdn.panelbear.com/analytics.js?site=3Wx7jYhrVYN"></script>
     <script>
@@ -74,6 +76,7 @@
                                     <span>
                                         Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions.
                                         Committed to producing high-quality results for projects with realistic and exciting propositions and tangible outcomes.
+                                        Equally dedicated to code and design.
                                         <!-- Built with devotion to code and design. -->
                                         <!-- I make complete solutions - from initial research and proposal, to a functional prototype and final app deployment; or I can take on a crucial role within your team. -->
                                     </span>
@@ -189,14 +192,15 @@
                                  onmousedown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@outlook.com')"
                                  onkeydown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@outlook.com')"
                                  tabindex="0" aria-label="Contact me via email">
-                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                <!-- <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path d="M29.3337 21.2536C29.3337 24.9736 26.347 27.9869 22.627 28.0003H22.6137H9.40033C5.69366 28.0003 2.66699 25.0003 2.66699 21.2803V21.2669C2.66699 21.2669 2.67499 15.3656 2.68566 12.3976C2.68699 11.8403 3.32699 11.5283 3.76299 11.8749C6.93099 14.3883 12.5963 18.9709 12.667 19.0309C13.6137 19.7896 14.8137 20.2176 16.0403 20.2176C17.267 20.2176 18.467 19.7896 19.4137 19.0163C19.4843 18.9696 25.023 14.5243 28.239 11.9696C28.6763 11.6216 29.319 11.9336 29.3203 12.4896C29.3337 15.4349 29.3337 21.2536 29.3337 21.2536Z"
                                           fill="var(--icon-bg)"/>
                                     <path d="M28.6342 7.56478C27.4795 5.38878 25.2075 3.99945 22.7062 3.99945H9.39952C6.89819 3.99945 4.62619 5.38878 3.47152 7.56478C3.21285 8.05145 3.33552 8.65812 3.76619 9.00212L13.6662 16.9208C14.3595 17.4808 15.1995 17.7594 16.0395 17.7594C16.0449 17.7594 16.0489 17.7594 16.0529 17.7594C16.0569 17.7594 16.0622 17.7594 16.0662 17.7594C16.9062 17.7594 17.7462 17.4808 18.4395 16.9208L28.3395 9.00212C28.7702 8.65812 28.8929 8.05145 28.6342 7.56478Z"
                                           fill="var(--icon-fg)"/>
-                                </svg>
-                                <span>stepan.jakl@outlook.com</span>
+                                </svg> -->
+                                <span class="material-symbols-sharp">mail</span>
+                                <span class="label">stepan.jakl@outlook.com</span>
                                 <div class="tooltip__content" style="margin-bottom: 5px">
                                     <span><u>Contact</u> me via email</span>
                                 </div>
@@ -206,8 +210,8 @@
                         <div class="links">
 
                             <a href="https://www.linkedin.com/in/stepanjakl" target="_blank"
-                               aria-label="Read my résumé on LinkedIn" rel="noreferrer">
-                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                               aria-label="Read my résumé on LinkedIn" rel="noreferrer" class="resume tooltip tooltip-bottom">
+                                <!-- <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path d="M2.66699 14.7714C2.73366 17.8887 2.92033 23.2207 2.94699 23.8087C3.04166 25.066 3.52299 26.3367 4.27233 27.2327C5.31499 28.49 6.59899 29.0514 8.38966 29.0514C10.8643 29.0647 13.5923 29.0647 16.2417 29.0647C18.9017 29.0647 21.483 29.0647 23.663 29.0514C25.4283 29.0514 26.7523 28.4754 27.7817 27.2327C28.531 26.3367 29.0123 25.0527 29.0803 23.8087C29.107 23.314 29.2403 17.526 29.3203 14.7714H2.66699Z"
                                           fill="var(--icon-bg)"/>
@@ -216,22 +220,29 @@
                                     <path fill-rule="evenodd" clip-rule="evenodd"
                                           d="M13.615 19.4086C13.4817 19.8926 13.0163 20.2019 12.5123 20.1352C9.11099 19.6606 5.86033 18.4539 3.11633 16.6419C2.83499 16.4579 2.66699 16.1432 2.66699 15.8072V11.1859C2.66699 8.3859 4.94966 6.10857 7.75633 6.10857H10.379C10.6297 4.17257 12.2697 2.66724 14.2723 2.66724H17.715C19.7163 2.66724 21.3577 4.17257 21.6083 6.10857H24.2443C27.043 6.10857 29.3203 8.3859 29.3203 11.1859V15.8072C29.3203 16.1432 29.151 16.4566 28.8723 16.6419C26.123 18.4619 22.859 19.6739 19.435 20.1472C19.3883 20.1539 19.343 20.1566 19.2977 20.1566C18.8457 20.1566 18.4417 19.8512 18.3283 19.4032C18.059 18.3419 17.095 17.5992 15.987 17.5992C14.8643 17.5992 13.911 18.3259 13.615 19.4086ZM17.7149 4.66724H14.2723C13.3749 4.66724 12.6256 5.28057 12.4016 6.10857H19.5843C19.3603 5.28057 18.6109 4.66724 17.7149 4.66724Z"
                                           fill="var(--icon-fg)"/>
-                                </svg>
-                                <span class="tooltip tooltip-bottom">
-                                    <span>Résumé</span>
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9.43832 2.15332H6.32249C3.75999 2.15332 2.15332 3.96749 2.15332 6.53582V13.4642C2.15332 16.0325 3.75249 17.8467 6.32249 17.8467H13.6758C16.2467 17.8467 17.8458 16.0325 17.8458 13.4642V10.1075"
-                                              stroke="var(--text-2)" stroke-width="1.5" stroke-linecap="round"
-                                              stroke-linejoin="round"/>
-                                        <path d="M17.8457 2.15332L13.0303 6.96872M17.8457 2.15332L13.4194 2.16257M17.8457 2.15332L17.8364 6.57963"
-                                              stroke="var(--text-2)" stroke-width="1.5" stroke-linecap="round"
-                                              stroke-linejoin="round"/>
-                                    </svg>
-                                    <span class="tooltip__content" style="margin-top: 13px">
-                                        <span><u>Browse</u> my LinkedIn profile</span>
-                                    </span>
+                                </svg> -->
+                                <span class="material-symbols-sharp">work</span>
+                                <span class="label">Résumé</span>
+                                <!-- <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9.43832 2.15332H6.32249C3.75999 2.15332 2.15332 3.96749 2.15332 6.53582V13.4642C2.15332 16.0325 3.75249 17.8467 6.32249 17.8467H13.6758C16.2467 17.8467 17.8458 16.0325 17.8458 13.4642V10.1075"
+                                          stroke="var(--text-2)" stroke-width="1.5" stroke-linecap="round"
+                                          stroke-linejoin="round"/>
+                                    <path d="M17.8457 2.15332L13.0303 6.96872M17.8457 2.15332L13.4194 2.16257M17.8457 2.15332L17.8364 6.57963"
+                                          stroke="var(--text-2)" stroke-width="1.5" stroke-linecap="round"
+                                          stroke-linejoin="round"/>
+                                </svg> -->
+                                <span class="material-symbols-sharp secondary">open_in_new</span>
+                                <span class="tooltip__content" style="margin-top: 13px">
+                                    <span><u>Browse</u> my LinkedIn profile</span>
                                 </span>
+                            </a>
+
+                            <a href="https://github.com/stepanjakl" target="_blank"
+                               aria-label="Visit my profile on GitHub" rel="noreferrer" class="github">
+                                <span class="material-symbols-sharp">terminal</span>
+                                <span class="label">GitHub</span>
+                                <span class="material-symbols-sharp secondary">open_in_new</span>
                             </a>
 
                             <!-- <a href="portfolio.html" target="_blank" aria-label="Portfolio - Figma board" rel="noreferrer" class="tooltip tooltip-bottom" onclick="return false;" style="transition: filter 400ms linear; cursor: not-allowed;">
@@ -289,7 +300,7 @@
                                         <span>Light mode</span>
                                     </label>
                                     <label for="mode" class="dark" tabindex="0">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#580063"
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <path d="M11.2352 2.25C11.1913 2.25007 11.1475 2.25398 11.1042 2.2617C8.71607 2.68589 6.56931 3.97876 5.07747 5.89129C3.58562 7.80382 2.85422 10.2007 3.02414 12.6203C3.19406 15.0399 4.25328 17.3111 5.99779 18.9963C7.74229 20.6816 10.0487 21.6617 12.4727 21.748C12.5958 21.7525 12.7188 21.748 12.8409 21.748C14.415 21.7488 15.9662 21.3706 17.3632 20.6454C18.7603 19.9201 19.9622 18.8691 20.8674 17.5813C20.9408 17.4703 20.9836 17.3419 20.9916 17.2091C20.9995 17.0763 20.9724 16.9438 20.9128 16.8248C20.8532 16.7058 20.7634 16.6047 20.6523 16.5315C20.5412 16.4583 20.4127 16.4157 20.2799 16.408C18.7815 16.2765 17.3335 15.8023 16.0476 15.0219C14.7618 14.2416 13.6726 13.176 12.8643 11.9076C12.0559 10.6391 11.5501 9.20177 11.3859 7.70665C11.2216 6.21153 11.4034 4.69867 11.9171 3.285C11.9608 3.1719 11.9769 3.04999 11.9639 2.92942C11.951 2.80886 11.9094 2.69314 11.8427 2.59188C11.776 2.49063 11.6861 2.40678 11.5804 2.34731C11.4747 2.28784 11.3564 2.25448 11.2352 2.25V2.25Z"/>
                                         </svg>
@@ -310,15 +321,17 @@
                                     </label>
                                 </span>
                                 <span class="menu__button">
-                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                    <!-- <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <path d="M21.787 2.6664H10.227C5.70699 2.6664 2.66699 5.83974 2.66699 10.5597V21.4531C2.66699 26.1597 5.70699 29.3331 10.227 29.3331H21.787C26.307 29.3331 29.3337 26.1597 29.3337 21.4531V10.5597C29.3337 5.83974 26.307 2.6664 21.787 2.6664Z"
                                               fill="var(--icon-bg)"/>
                                         <path fill-rule="evenodd" clip-rule="evenodd"
                                               d="M10.028 14.4047C9.14666 14.4047 8.43066 15.1207 8.43066 15.9993C8.43066 16.8793 9.14666 17.5967 10.028 17.5967C10.9093 17.5967 11.6253 16.8793 11.6253 15.9993C11.6253 15.1207 10.9093 14.4047 10.028 14.4047ZM15.9998 14.4047C15.1185 14.4047 14.4025 15.1207 14.4025 15.9993C14.4025 16.8793 15.1185 17.5967 15.9998 17.5967C16.8811 17.5967 17.5971 16.8793 17.5971 15.9993C17.5971 15.1207 16.8811 14.4047 15.9998 14.4047ZM20.3755 15.9993C20.3755 15.1207 21.0915 14.4047 21.9728 14.4047C22.8542 14.4047 23.5702 15.1207 23.5702 15.9993C23.5702 16.8793 22.8542 17.5967 21.9728 17.5967C21.0915 17.5967 20.3755 16.8793 20.3755 15.9993Z"
                                               fill="var(--icon-fg)"/>
-                                    </svg>
-                                    <span>More</span>
+                                    </svg> -->
+                                    <span class="material-symbols-sharp open">unfold_more</span>
+                                    <span class="material-symbols-sharp close">unfold_less</span>
+                                    <span class="label">More</span>
                                 </span>
                                 <div class="underlay underlay-menu"></div>
                             </div>
