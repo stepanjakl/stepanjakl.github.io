@@ -26,6 +26,8 @@
 	--cyan-full-75: #00CBE2;
 	/* 210, 100, 85 */
 	--cyan-full-85: #4ce7ff;
+	/* 210, 100, 90 */
+	--cyan-full-90: #a0efff;
 	/* 210, 100, 95 */
 	--cyan-full-95: #D4F7FF;
 	/* 210, 75, 25 */
@@ -54,6 +56,10 @@
 	--cyan-half-55: #618a93;
 	/* 210, 50, 65 */
 	--cyan-half-65: #75a6b0;
+	/* 210, 50, 70 */
+	--cyan-half-70: #7fb4bf;
+	/* 210, 50, 75 */
+	--cyan-half-75: #89c2ce;
 	/* 210, 50, 85 */
 	--cyan-half-85: #a5deea;
 	/* 210, 50, 90 */
@@ -270,6 +276,7 @@ body, html {
 	
 	--modal-icon-bg: var(--cyan-half-45);
 	--modal-icon-fg: var(--cyan-half-85);
+	--modal-icon-outline: var(--cyan-half-70);
 	
 	--modal-tag-bg: var(--cyan-three-quarters-45);
 	
@@ -407,7 +414,7 @@ body, html {
 /* Page */
 
 body {
-	font-family: 'Bai Jamjuree', sans-serif;
+	font-family: 'Bai Jamjuree', monospace;
 	font-weight: 400;
 	overflow: auto;
 }
@@ -542,7 +549,7 @@ svg * {
 
 .intro__content .badge {
 	display: block;
-	font-family: 'Chakra Petch', sans-serif;
+	font-family: 'Chakra Petch', monospace;
 	font-weight: 600;
 	color: var(--blue-full-95);
 	text-transform: uppercase;
@@ -598,6 +605,7 @@ svg * {
 .intro__content .email .email__wrapper > span.label {
 	color: var(--text-2);
 	margin-left: 12px;
+	margin-bottom: 8px;
 	/*margin-right: 24px;*/
 	font-size: 22.8571px;
 	line-height: 16px;
@@ -632,7 +640,7 @@ svg * {
 }
 
 .intro__content .links > a.resume {
-	margin-right: 36px;
+	margin-right: 38px;
 }
 
 .intro__content .links > a span.label {
@@ -747,7 +755,7 @@ body > input[type="checkbox"] {
 	-webkit-backdrop-filter: blur(8px);
 	pointer-events: all;
 	border-radius: 6px;
-	margin-bottom: 8px;
+	margin-bottom: 12px;
 	margin-left: -12px;
 	row-gap: 4px;
 }
@@ -829,10 +837,7 @@ body > input[type="checkbox"] {
 
 .intro__wrapper .about .about__wrapper {
 	position: absolute;
-	top: 120px;
-	left: 32px;
-	right: 40px;
-	bottom: 56px;
+	inset: 120px 96px 0 16px;
 	box-shadow: inset 0 0 0 1px var(--modal-border-inner);
 	background: var(--modal-bg);
 	overflow-y: scroll;
@@ -899,10 +904,13 @@ body > input[type="checkbox"] {
 .intro__wrapper .about .information dl div img {
 	height: 15px;
 	margin-left: 8px;
+	box-sizing: content-box;
+	border: 1px solid var(--modal-icon-outline);
+	border-radius: 2px;
 }
 
 .intro__wrapper .about .information dl div dt {
-	font-family: 'Chakra Petch', sans-serif;
+	font-family: 'Chakra Petch', monospace;
 	text-transform: uppercase;
 	font-weight: 600;
 	letter-spacing: 4px;
@@ -927,18 +935,47 @@ body > input[type="checkbox"] {
 	grid-column: span 2 / span 2;
 }
 
-.intro__wrapper .about .information dl div dd > span {
-	font-size: 17.1429px;
-	line-height: 26px;
+.intro__wrapper .about .information dl div.timezone dd {
+	display: flex;
+	align-items: center;
+	column-gap: 16px;
 }
 
-.intro__wrapper .about .information dl div dd > span::before {
+.intro__wrapper .about .information dl div dd span#live-timezone-time {
+	font-family: 'Chakra Petch', monospace;
+	text-transform: uppercase;
+	font-weight: 600;
+	letter-spacing: 2px;
+	font-size: 12.8571px;
+	line-height: 9px;
+	/*margin-left: 16px;*/
+}
+
+.intro__wrapper .about .information dl div dd #live-timezone-time::before {
+	content: "";
+	margin-bottom: -0.025em;
+	display: table;
+}
+
+.intro__wrapper .about .information dl div dd #live-timezone-time::after {
+	content: "";
+	margin-top: 0.025em;
+	display: table;
+}
+
+.intro__wrapper .about .information dl div dd > span, .intro__wrapper .about .information dl div dd > p {
+	font-size: 17.1429px;
+	line-height: 26px;
+	display: inline-block;
+}
+
+.intro__wrapper .about .information dl div dd > span::before, .intro__wrapper .about .information dl div dd > p::before {
 	content: "";
 	margin-bottom: -0.4333em;
 	display: table;
 }
 
-.intro__wrapper .about .information dl div dd > span::after {
+.intro__wrapper .about .information dl div dd > span::after, .intro__wrapper .about .information dl div dd > p::after {
 	content: "";
 	margin-top: -0.3833em;
 	display: table;
@@ -1128,7 +1165,7 @@ body > input[type="checkbox"] {
 	left: 50%;
 	transform: translateX(-50%);
 	padding: 10px 12px;
-	border-radius: 4px;
+	border-radius: 2px;
 	background: var(--context-bg);
 	color: var(--text-2);
 	text-align: center;
@@ -1307,6 +1344,19 @@ body > input[type="checkbox"] {
 	}
 }
 
+@media (max-width: 1600px) {
+	/* rules here apply to devices from 1600px and lower */
+	
+	.intro__wrapper .about .about__wrapper {
+		/*inset: 120px 96px 0 16px;*/
+		inset: 56px 32px 0 16px;
+	}
+	
+	.intro__wrapper .about .information dl div.profile p {
+		text-align: justify;
+	}
+}
+
 @media (max-width: 1200px) {
 	/* rules here apply to devices from 1200px and lower */
 	
@@ -1328,10 +1378,8 @@ body > input[type="checkbox"] {
 	}
 	
 	.intro__wrapper .about .about__wrapper {
-		top: 56px;
-		left: 32px;
-		right: 80px;
-		bottom: 56px;
+		position: fixed;
+		inset: 24px;
 	}
 	
 }
@@ -1376,11 +1424,7 @@ body > input[type="checkbox"] {
 	}
 	
 	.intro__wrapper .about .about__wrapper {
-		position: fixed;
-		top: 16px;
-		left: 16px;
-		right: 16px;
-		bottom: 16px;
+		inset: 16px;
 	}
 	
 	.intro__wrapper .about .about__wrapper .information dl div {
@@ -1425,10 +1469,7 @@ body > input[type="checkbox"] {
 	}
 	
 	.intro__wrapper .about .about__wrapper {
-		top: 12px;
-		left: 12px;
-		right: 12px;
-		bottom: 12px;
+		inset: 12px;
 	}
 	
 }
@@ -1441,10 +1482,7 @@ body > input[type="checkbox"] {
 	}
 	
 	.intro__wrapper .about .about__wrapper {
-		top: 4px;
-		left: 4px;
-		right: 4px;
-		bottom: 4px;
+		inset: 6px;
 	}
 	
 }
