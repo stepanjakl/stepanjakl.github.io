@@ -134,10 +134,11 @@
 	--navy: #6b0076;
 	
 	--width-xs: 480px;
-	--width-sm: 640px;
-	--width-md: 880px;
+	--width-sm: 720px;
+	--width-md: 960px;
 	--width-lg: 1200px;
-	--width-xl: 1600px;
+	--width-xl: 1440px;
+	--width-2xl: 1680px;
 }
 
 /* Light mode debug */
@@ -316,7 +317,8 @@ svg * {
 .intro__wrapper {
 	position: relative;
 	height: 100%;
-	width: var(--width-lg);
+	width: 100%;
+	max-width: var(--width-xl);
 	margin: auto;
 	padding-top: 24px;
 	padding-bottom: 24px;
@@ -339,9 +341,9 @@ svg * {
 	padding-top: 240px;
 	padding-bottom: 64px;
 	display: grid;
-	grid-template-columns: 37.5% 1fr;
+	grid-template-columns: 544px 1fr;
 	grid-template-rows: 1fr;
-	grid-column-gap: 0;
+	grid-column-gap: 32px;
 	grid-row-gap: 0;
 }
 
@@ -356,18 +358,18 @@ svg * {
 	color: var(--text-1);
 	font-weight: 200;
 	font-size: 68.5714px;
-	line-height: 48px;
+	line-height: 96px;
 }
 
 .intro__content .left-column h2::before {
 	content: "";
-	margin-bottom: -0.025em;
+	margin-bottom: -0.375em;
 	display: table;
 }
 
 .intro__content .left-column h2::after {
 	content: "";
-	margin-top: 0.025em;
+	margin-top: -0.325em;
 	display: table;
 }
 
@@ -376,7 +378,6 @@ svg * {
 	font-weight: 200;
 	font-size: 45.7143px;
 	line-height: 64px;
-	padding-top: 16px;
 }
 
 .intro__content > div.right-column > h3::before {
@@ -392,7 +393,8 @@ svg * {
 }
 
 .intro__content .right-column {
-	padding-left: 64px;
+	padding-top: 16px;
+	padding-left: 33px;
 }
 
 .intro__content .availability {
@@ -526,7 +528,7 @@ svg * {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	padding-top: 32.5px;
+	padding-top: 32px;
 }
 
 .intro__content .links > a {
@@ -739,7 +741,7 @@ body > input[type="checkbox"] {
 
 .intro__wrapper .about .about__wrapper {
 	position: absolute;
-	inset: 120px 96px 0 16px;
+	inset: 120px 80px 0 48px;
 	box-shadow: inset 0 0 0 1px var(--modal-border-inner);
 	background: var(--modal-bg);
 	overflow-y: scroll;
@@ -1142,7 +1144,7 @@ body > input[type="checkbox"] {
 	flex-direction: row;
 	column-gap: 20px;
 	width: 100%;
-	max-width: var(--width-lg);
+	max-width: var(--width-xl);
 	padding: 48px 32px;
 	margin: auto;
 }
@@ -1187,8 +1189,8 @@ body > input[type="checkbox"] {
 
 /* Media queries */
 
-@media (min-width: 3200px) {
-	/* rules here apply to devices from 3200px and higher */
+@media (min-width: 2560px) {
+	/* rules here apply to devices from 2560px and higher */
 	
 	.intro__wrapper {
 		padding-top: 96px;
@@ -1205,59 +1207,47 @@ body > input[type="checkbox"] {
 	}
 }
 
-@media (min-width: 1600px) and (max-width: 3200px) {
-	/* rules here apply to devices from 1600px and higher */
+@media (min-width: 1680px) and (max-width: 2560px) {
+	/* rules here apply to devices from 1680px and higher */
 	
 	.intro__wrapper {
-		width: var(--width-xl);
-		padding-top: 48px;
-		padding-bottom: 48px;
+		max-width: var(--width-2xl);
+		/*padding: 48px 80px 48px 48px;*/
+		padding: 48px;
 	}
 	
 	.intro__content {
 		padding-top: 240px;
 		display: grid;
-		grid-template-columns: 42.5% 1fr;
+		grid-template-columns: 671px 1fr;
 	}
 	
-	.intro__content .right-column {
-		padding-left: 56px;
-	}
+	/*.intro__content .right-column {
+		padding-top: 16px;
+		padding-left: 33px;
+	}*/
 	
 	.footer .footer__wrapper {
-		max-width: var(--width-xl);
-		padding-top: 48px;
-		padding-bottom: 48px;
+		max-width: var(--width-2xl);
+		padding: 48px 80px;
 	}
 }
 
 /* Desktop-first media queries */
 
 @media (max-height: 880px) {
-	/* rules here apply to devices with height from 880px and lower */
+	/* rules here apply to devices with height from 720px and lower */
 	
 	.footer {
 		display: none;
 	}
 }
 
-@media (max-height: 640px) {
-	/* rules here apply to devices with height from 640px and lower */
-	
-	.intro__content {
-		padding-top: 176px;
-	}
+@media (max-width: 1680px) {
+	/* rules here apply to devices from 1680px (2xl) and lower */
 	
 	.intro__wrapper .about .about__wrapper {
-		top: 88px;
-	}
-}
-
-@media (max-width: 1600px) {
-	/* rules here apply to devices from 1600px and lower */
-	
-	.intro__wrapper .about .about__wrapper {
-		inset: 56px 32px 0 16px;
+		inset: 88px 32px 0 16px;
 	}
 	
 	.intro__wrapper .about .information dl div.profile p {
@@ -1265,12 +1255,27 @@ body > input[type="checkbox"] {
 	}
 }
 
-@media (max-width: 1200px) {
-	/* rules here apply to devices from 1200px and lower */
+@media (max-width: 1440px) {
+	/* rules here apply to devices from 1440px (xl) and lower */
 	
-	#triangle-left,
-	#triangle-right {
-		display: none;
+	.intro__wrapper {
+		max-width: var(--width-xl);
+	}
+	
+	.intro__content {
+		grid-template-columns: 37.5% 1fr;
+	}
+	
+	.footer .footer__wrapper {
+		max-width: var(--width-xl);
+	}
+}
+
+@media (max-width: 1200px) {
+	/* rules here apply to devices from 1200px (lg) and lower */
+	
+	.intro__wrapper, .footer .footer__wrapper {
+		max-width: var(--width-lg);
 	}
 	
 	.intro__content .right-column {
@@ -1279,6 +1284,7 @@ body > input[type="checkbox"] {
 	
 	.intro__content {
 		padding-top: 176px;
+		grid-column-gap: 64px;
 	}
 	
 	.intro__wrapper .about .about__wrapper {
@@ -1286,10 +1292,15 @@ body > input[type="checkbox"] {
 		inset: 24px;
 	}
 	
+	#triangle-left,
+	#triangle-right {
+		display: none;
+	}
+	
 }
 
-@media (max-width: 880px) {
-	/* rules here apply to devices from 880px and lower */
+@media (max-width: 960px) {
+	/* rules here apply to devices from 960px (md) and lower */
 	
 	.page {
 		--background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
@@ -1297,10 +1308,6 @@ body > input[type="checkbox"] {
 	
 	#mode:checked ~ .page {
 		--background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
-	}
-	
-	.intro__wrapper {
-		width: auto;
 	}
 	
 	.intro__content .left-column {
@@ -1314,7 +1321,7 @@ body > input[type="checkbox"] {
 	}
 	
 	.intro__content > div.right-column > h3 {
-		padding-top: 64px;
+		padding-top: 48px;
 	}
 	
 	.intro__content .right-column {
@@ -1329,6 +1336,10 @@ body > input[type="checkbox"] {
 	
 	.intro__content .availability {
 		padding-top: 46px;
+	}
+	
+	.intro__content .email {
+		padding-top: 106px;
 	}
 	
 	.intro__wrapper .about .about__wrapper {
@@ -1351,10 +1362,14 @@ body > input[type="checkbox"] {
 	.intro__wrapper .about .about__wrapper .information dl div dt {
 		padding-bottom: 2.75px;
 	}
+	
+	.footer .footer__wrapper {
+		padding: 40px 24px;
+	}
 }
 
-@media (max-width: 640px) {
-	/* rules here apply to devices from 640px and lower */
+@media (max-width: 720px) {
+	/* rules here apply to devices from 720px (sm) and lower */
 	
 	.intro__content .links {
 		padding-top: 28px;
@@ -1369,26 +1384,24 @@ body > input[type="checkbox"] {
 	}
 	
 	.intro__content .email {
-		padding-top: 59.5px;
+		padding-top: 58px;
 	}
 	
 	.intro__wrapper .about .about__wrapper {
 		inset: 12px;
 	}
-	
 }
 
 @media (max-width: 480px) {
-	/* rules here apply to devices from 480px and lower */
+	/* rules here apply to devices from 480px (xs) and lower */
 	
 	.intro__wrapper {
-		width: var(--width-xs);
+		max-width: var(--width-xs);
 	}
 	
 	.intro__wrapper .about .about__wrapper {
 		inset: 6px;
 	}
-	
 }
 
 /* Accessibility */
