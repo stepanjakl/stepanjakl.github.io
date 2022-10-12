@@ -143,17 +143,65 @@
 
 /* Light mode debug */
 
-#mode:not(:checked) ~ #debug:checked ~ .page * {
-	outline: 1px solid var(--blue-full-45);
+#mode:checked ~ #debug:checked ~ .page * {
+	outline: 1px solid var(--blue-full-45) !important;
 	outline-offset: -1px;
 }
 
 /* Dark mode debug */
 
-#mode:checked ~ #debug:checked ~ .page * {
+#mode:not(:checked) ~ #debug:checked ~ .page * {
 	outline: 1px solid var(--blue-full-55);
 	outline-offset: -1px;
 }
+
+/* Debug grid */
+
+#debug-grid {
+	visibility: hidden;
+	position: fixed;
+	inset: 0;
+	z-index: 200;
+	pointer-events: none;
+}
+
+/* Debug grid - light mode */
+
+#mode:checked ~ #debug:checked ~ .page svg#debug-grid * {
+	outline: none !important;
+}
+
+#mode:checked ~ #debug:checked ~ .page svg#debug-grid {
+	visibility: visible !important;
+}
+
+#mode:checked ~ #debug:checked ~ .page svg#debug-grid #debug-grid-fill {
+	color: var(--blue-full-65);
+}
+
+#mode:checked ~ #debug:checked ~ .page svg#debug-grid #debug-grid-outline {
+	color: var(--blue-full-55);
+}
+
+/* Debug grid - dark mode */
+
+#mode:not(:checked) ~ #debug:checked ~ .page svg#debug-grid * {
+	outline: none !important;
+}
+
+#mode:not(:checked) ~ #debug:checked ~ .page svg#debug-grid {
+	visibility: visible !important;
+}
+
+#mode:not(:checked) ~ #debug:checked ~ .page svg#debug-grid #debug-grid-fill {
+	color: var(--blue-full-45);
+}
+
+#mode:not(:checked) ~ #debug:checked ~ .page svg#debug-grid #debug-grid-outline {
+	color: var(--blue-full-35);
+}
+
+
 
 /* Dark mode (by default) */
 
@@ -264,20 +312,6 @@ body, html {
 
 #mode:checked ~ .page .intro__content .links .menu > span.menu__dropdown label.dark {
 	display: flex;
-}
-
-/* Dark mode debug */
-
-#mode:not(:checked) ~ #debug:checked ~ .page * {
-	outline: 1px solid var(--blue-full-55);
-	outline-offset: -1px;
-}
-
-/* Light mode debug */
-
-#mode:checked ~ #debug:checked ~ .page * {
-	outline: 1px solid var(--blue-full-45);
-	outline-offset: -1px;
 }
 
 #debug:not(:checked) ~ .page .intro__content .links .menu > span.menu__dropdown label[for="debug"] .disable {
