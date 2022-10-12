@@ -1358,6 +1358,10 @@ body > input[type="checkbox"] {
 	.footer .footer__wrapper {
 		padding: 32px 24px;
 	}
+	
+	.tooltip:hover .tooltip__content {
+		visibility: hidden !important;
+	}
 }
 
 @media (max-width: 720px) {
