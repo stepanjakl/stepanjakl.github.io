@@ -460,7 +460,7 @@ svg * {
 
 .intro__content .badge {
 	display: flex;
-	padding: 14px 16px;
+	padding: 15px 17px;
 	background-color: var(--highlight);
 	border-radius: 6px;
 }
@@ -492,14 +492,14 @@ svg * {
 .intro__content .badge span.text::before {
 	content: "";
 	/* margin-bottom: -0.025em; */
-	margin-bottom: 0.075em;
+	margin-bottom: 0.008em;
 	display: table;
 }
 
 .intro__content .badge span.text::after {
 	content: "";
 	/* margin-top: 0.025em; */
-	margin-bottom: 0.075em;
+	margin-top: -0.008em;
 	display: table;
 }
 
@@ -1108,7 +1108,7 @@ body > input[type="checkbox"] {
 	left: 50%;
 	transform: translateX(-50%);
 	padding: 10px 12px;
-	border-radius: 2px;
+	border-radius: 3px;
 	background: var(--context-bg);
 	color: var(--text-2);
 	text-align: center;
@@ -1140,8 +1140,8 @@ body > input[type="checkbox"] {
 
 .tooltip .tooltip__content u {
 	text-decoration-thickness: 1px;
-	text-underline-position: under;
-	text-underline-offset: 0;
+	text-underline-position: from-font;
+	text-underline-offset: 2px;
 	text-decoration-color: var(--text-3);
 }
 
