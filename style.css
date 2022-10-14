@@ -201,8 +201,6 @@
 	color: var(--blue-full-35);
 }
 
-
-
 /* Dark mode (by default) */
 
 body, html {
@@ -1140,9 +1138,10 @@ body > input[type="checkbox"] {
 
 .tooltip .tooltip__content u {
 	text-decoration-thickness: 1px;
+	text-decoration-style: dotted;
+	text-decoration-color: var(--text-3);
 	text-underline-position: from-font;
 	text-underline-offset: 2px;
-	text-decoration-color: var(--text-3);
 }
 
 .tooltip__content::before {
@@ -1436,7 +1435,8 @@ body > input[type="checkbox"] {
 
 /* Accessibility */
 
-*:focus, *:focus-visible {
+a:active, button:active, [tabindex="0"]:active,
+a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
 	position: relative;
 	z-index: 10;
 	outline: var(--highlight) solid 2px;
