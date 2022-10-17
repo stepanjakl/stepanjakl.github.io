@@ -23,7 +23,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'npm'
       # - run: npm install -g terser
       - run: npm install -g csso-cli
       - run: npm install -g html-minifier
