@@ -14,8 +14,9 @@
 
 ---
 
-#### [Résumé (LinkedIn)](https://www.linkedin.com/in/stepanjakl)
-
-#### [Video call (Calendly)](https://calendly.com/stepanjakl)
-
 #### [GitHub](https://github.com/stepanjakl)
+
+#### [LinkedIn](https://www.linkedin.com/in/stepanjakl)
+
+#### [Calendly](https://calendly.com/stepanjakl)
+
