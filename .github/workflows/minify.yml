@@ -35,6 +35,7 @@ jobs:
       - run: csso ./fonts.css -o ./fonts.css
       - run: html-minifier --collapse-boolean-attributes --collapse-whitespace --minify-css --minify-js --minify-urls --remove-attribute-quotes --remove-comments --remove-empty-attributes --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-style-link-type-attributes --remove-tag-whitespace --use-short-doctype -o index.html index.html
       - run: svgo -f ./ -o ./
+      - run: svgo -f ./images -o ./images
 
       # (Force) push changes to `gh-pages` branch
       - run: |
