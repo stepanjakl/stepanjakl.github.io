@@ -7,7 +7,7 @@
 name: minify
 run-name: Minify JS/CSS/HTML [gh-pages branch]
 
-# Run on pushes to `main` branch
+# Run on pushes to `release` branch
 on:
   push:
     branches:
@@ -22,7 +22,7 @@ jobs:
       # Install NodeJS and CLI tools
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '16'
       # - run: npm install -g terser
       - run: npm install -g csso-cli
       - run: npm install -g html-minifier
