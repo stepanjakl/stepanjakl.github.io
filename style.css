@@ -501,6 +501,11 @@ svg * {
 	display: table;
 }
 
+.icon {
+	flex-shrink: 0;
+	box-sizing: content-box;
+}
+
 .intro__content .right-column .icon {
 	/* opsz' 40, 'wght' 600, 'FILL' 1, 'GRAD' 0 */
 	width: 32px;
@@ -517,7 +522,8 @@ svg * {
 
 .intro__content .right-column .links .menu .icon.secondary {
 	/* 'opsz' 20, 'wght' 200, 'FILL' 1, 'GRAD' 200 */
-	margin-left: 6px;
+	margin-left: auto;
+	padding-left: 12px;
 	width: 20px;
 	height: 20px;
 }
