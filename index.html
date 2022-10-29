@@ -55,21 +55,22 @@
         <div class="intro__wrapper">
             <div class="intro__background">
 
-                <div class="about" id="about">
-                    <div class="about__wrapper">
-                        <a href="#menu" class="close" aria-label="Close menu">
+                <script>
+					document.addEventListener('keydown', function (event) {
+						if (event.keyCode === 27) {
+							document.location.hash = ''
+						}
+					})
+                </script>
+
+                <div class="modal" id="profile">
+                    <div class="modal__wrapper">
+                        <a href="#" class="close" aria-label="Close menu">
                             <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20"
                                  viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M6 15.708 4.333 14l3.979-4-3.979-4.021L6 4.271l4 4.021 4-4.021 1.667 1.708L11.688 10l3.979 4L14 15.708l-4-4.02Z"/>
                             </svg>
                         </a>
-                        <script>
-							document.addEventListener('keydown', function (event) {
-								if (event.keyCode === 27) {
-									document.location.hash = ''
-								}
-							})
-                        </script>
                         <div class="information">
                             <dl>
                                 <div>
@@ -97,7 +98,7 @@
                                         <a href="https://www.google.com/maps/place/Czechia" target="_blank"
                                            aria-label="See where I am from" rel="noreferrer">
                                             <span>Czech</span>
-                                            <img alt="czech-flag" src="images/cs-2.svg" width="20" height="15">
+                                            <img alt="czech-flag" src="images/cs-2.svg" width="20" height="15" loading="lazy">
                                         </a>
                                     </span>
                                     </dd>
@@ -109,7 +110,7 @@
                                         <a href="https://www.google.com/maps/place/Cheltenham" target="_blank"
                                            aria-label="See where I currently live" rel="noreferrer">
                                             <span>Cheltenham, United Kingdom</span>
-                                            <img alt="united-kingdom-flag" src="images/gb-2.svg" width="20" height="15">
+                                            <img alt="united-kingdom-flag" src="images/gb-2.svg" width="20" height="15" loading="lazy">
                                         </a>
                                     </span>
                                     </dd>
@@ -176,7 +177,56 @@
                             </dl>
                         </div>
                     </div>
-                    <div class="underlay underlay-about"></div>
+                    <div class="underlay underlay-modal"></div>
+                </div>
+
+                <div class="modal" id="archives">
+                    <div class="modal__wrapper" style="border-radius: 8px 32px 32px 8px;">
+                        <a href="#" class="close" aria-label="Close menu">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20"
+                                 viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M6 15.708 4.333 14l3.979-4-3.979-4.021L6 4.271l4 4.021 4-4.021 1.667 1.708L11.688 10l3.979 4L14 15.708l-4-4.02Z"/>
+                            </svg>
+                        </a>
+
+                        <div style="position: relative; height: 100%; overflow-y: scroll;">
+
+                            <div style="height: 200vh; padding-top: 48px; padding-left: 48px; padding-right: 96px;">
+
+                                <div style="display: flex; flex-direction: column; column-gap: 24px;">
+
+                                    <div style="display: grid; grid-auto-flow: column; grid-auto-columns: 240px 800px; column-gap: 48px;">
+
+                                        <div style="display: flex; flex-direction: column; outline: 1px solid red;">
+                                            <div style="display: flex; flex-direction: column; align-items: flex-end; row-gap: 20px; position: sticky; top: 20px; padding-bottom: 32px;">
+                                                <hr style="display: inline-flex; width: 100%; margin: 0; border: none;  height: 1px; background-color: white;"/>
+                                                <span style="display: inline-flex; text-align: right; font-family: 'Chakra Petch', monospace; font-size: 34.2857px;
+  line-height: 24px; font-weight: 400;">2022</span>
+                                            </div>
+                                        </div>
+                                        <div style="height: 400px; outline: 1px solid red;"><span>AHOJ</span></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div style="position: fixed; inset: auto 0 24px 0">
+                                <div style="margin-left: calc(48px + 48px + 240px ); width: 800px;">
+                                    <div style="margin: 0 64px; border: white 1px solid; border-radius: 9999px;">
+                                        <div style="display: grid; grid-auto-flow: column; grid-auto-columns: max-content; column-gap: 10px;  padding: 10px 16px; font-size: 15px;">
+                                            <button>2022</button>
+                                            <button>2021</button>
+                                            <button>2020</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="underlay underlay-modal"></div>
                 </div>
 
                 <div class="intro__content">
@@ -226,7 +276,7 @@
 
                         <div class="links">
 
-                            <a href="https://www.linkedin.com/in/stepanjakl" target="_blank"
+                            <!-- <a href="https://www.linkedin.com/in/stepanjakl" target="_blank"
                                aria-label="Browse my LinkedIn profile" rel="noreferrer"
                                class="resume tooltip tooltip-bottom">
                                 <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="40" width="40"
@@ -241,20 +291,33 @@
                                 <span class="tooltip__content">
                                     <span><u>Browse</u> my LinkedIn profile</span>
                                 </span>
+                            </a> -->
+
+                            <a href="#profile"
+                               aria-label="Learn more about me" rel="noreferrer"
+                               class="resume tooltip tooltip-bottom">
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="40" width="40"
+                                     viewBox="0 0 40 40" fill="currentColor">
+                                    <path d="M14.917 24q-.959 0-1.605-.646-.645-.646-.645-1.604 0-.958.666-1.604.667-.646 1.625-.646.959 0 1.584.646.625.646.625 1.604 0 .958-.646 1.604-.646.646-1.604.646Zm10.166 0q-.958 0-1.604-.646-.646-.646-.646-1.604 0-.958.646-1.604.646-.646 1.604-.646.959 0 1.625.646.667.646.667 1.604 0 .958-.667 1.604-.666.646-1.625.646ZM20 33.667q5.708 0 9.688-3.979 3.979-3.98 3.979-9.688 0-1.042-.146-2.021-.146-.979-.438-1.812-.833.208-1.75.291-.916.084-1.916.084-3.917 0-7.375-1.604-3.459-1.605-5.917-4.605-1.375 3.25-3.917 5.667-2.541 2.417-5.833 3.75v.292q0 5.708 3.958 9.666 3.959 3.959 9.667 3.959Zm.042 3.666q-3.625 0-6.771-1.375t-5.5-3.708q-2.354-2.333-3.729-5.5T2.667 20q0-3.583 1.375-6.75t3.729-5.5q2.354-2.333 5.5-3.708t6.771-1.375q3.583 0 6.729 1.375t5.5 3.708q2.354 2.333 3.708 5.5T37.333 20q0 3.583-1.354 6.75t-3.708 5.521q-2.354 2.354-5.521 3.708t-6.708 1.354Z"/>
+                                </svg>
+                                <span class="label">Profile</span>
+                                <span class="tooltip__content">
+                                    <span><u>Learn</u> more about me</span>
+                                </span>
                             </a>
 
-                            <a href="https://github.com/stepanjakl" target="_blank"
-                               aria-label="Visit my profile on GitHub" rel="noreferrer" class="github">
+                            <a href="#archives"
+                               aria-label="Explore repository of past work" rel="noreferrer"
+                               class="tooltip tooltip-bottom no-underline">
                                 <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="40" width="40"
                                      viewBox="0 0 40 40"
                                      fill="currentColor">
-                                    <path d="M2.667 34V6h34.666v28Zm3.666-3.667h27.334V13.125H6.333Zm13.959-2.208v-2.792h9.416v2.792ZM12.5 28l-1.958-1.958 4.291-4.334-4.333-4.333 2-1.917 6.292 6.25Z"/>
+                                    <path d="M30.542 33.75V6.25h3.416v27.5ZM4.125 37.125V2.875h22.542v34.25Zm33.708-6.833V9.667h2.25v20.625Z"/>
                                 </svg>
-                                <span class="label">GitHub</span>
-                                <svg class="icon secondary" xmlns="http://www.w3.org/2000/svg" height="20" width="20"
-                                     viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M2.667 17.333V2.667h7.166v1.458H4.125v11.75h11.75v-5.708h1.458v7.166Zm5.416-4.375-1.041-1.041 7.812-7.792h-2.625V2.667h5.104v5.104h-1.458V5.146Z"/>
-                                </svg>
+                                <span class="label">Archives</span>
+                                <span class="tooltip__content">
+                                    <span><u>Explore</u> snippets of my past work</span>
+                                </span>
                             </a>
 
                             <!-- <a href="portfolio.html" target="_blank" aria-label="Portfolio - Figma board" rel="noreferrer" class="tooltip tooltip-bottom" onclick="return false;" style="transition: filter 400ms linear; cursor: not-allowed;">
@@ -280,13 +343,13 @@
                                 <a href="#menu" aria-label="Open dropdown menu"></a>
                                 <a href="#" aria-label="Close dropdown menu"></a>
                                 <span class="menu__dropdown">
-                                    <a href="#about" aria-label="Find out more about me">
+                                    <!-- <a href="#about" aria-label="Find out more about me">
                                         <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
                                              viewBox="0 0 24 24" fill="currentColor">
                                             <path d="M5.85 17.1q1.275-.975 2.85-1.538Q10.275 15 12 15q1.725 0 3.3.562 1.575.563 2.85 1.538.875-1.025 1.363-2.325Q20 13.475 20 12q0-3.325-2.337-5.663Q15.325 4 12 4T6.338 6.337Q4 8.675 4 12q0 1.475.488 2.775.487 1.3 1.362 2.325ZM12 13q-1.475 0-2.488-1.012Q8.5 10.975 8.5 9.5t1.012-2.488Q10.525 6 12 6t2.488 1.012Q15.5 8.025 15.5 9.5t-1.012 2.488Q13.475 13 12 13Zm0 9q-2.075 0-3.9-.788-1.825-.787-3.175-2.137-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175 1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138 1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175-1.35 1.35-3.175 2.137Q14.075 22 12 22Z"/>
                                         </svg>
                                         <span class="label">About</span>
-                                    </a>
+                                    </a> -->
                                     <a href="https://calendly.com/stepanjakl" target="_blank"
                                        aria-label="Schedule a call via Calendly" rel="noreferrer">
                                         <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
@@ -294,6 +357,31 @@
                                             <path d="M12 23v-2h7v-1h-4v-8h4v-1q0-2.9-2.05-4.95Q14.9 4 12 4 9.1 4 7.05 6.05 5 8.1 5 11v1h4v8H3v-9q0-1.85.712-3.488.713-1.637 1.938-2.862t2.862-1.938Q10.15 2 12 2t3.488.712q1.637.713 2.862 1.938t1.938 2.862Q21 9.15 21 11v12Z"/>
                                         </svg>
                                         <span class="label">Virtual meeting</span>
+                                        <svg class="icon secondary" xmlns="http://www.w3.org/2000/svg" height="20"
+                                             width="20" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M2.667 17.333V2.667h7.166v1.458H4.125v11.75h11.75v-5.708h1.458v7.166Zm5.416-4.375-1.041-1.041 7.812-7.792h-2.625V2.667h5.104v5.104h-1.458V5.146Z"/>
+                                        </svg>
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/stepanjakl" target="_blank"
+                                       aria-label="Find out more about me on LinkedIn">
+                                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                                             viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M2 21V6h6V2h8v4h6v15Zm8-15h4V4h-4Z"/>
+                                        </svg>
+                                        <span class="label">LinkedIn profile</span>
+                                        <svg class="icon secondary" xmlns="http://www.w3.org/2000/svg" height="20"
+                                             width="20" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M2.667 17.333V2.667h7.166v1.458H4.125v11.75h11.75v-5.708h1.458v7.166Zm5.416-4.375-1.041-1.041 7.812-7.792h-2.625V2.667h5.104v5.104h-1.458V5.146Z"/>
+                                        </svg>
+                                    </a>
+                                    <a href="https://github.com/stepanjakl" target="_blank"
+                                       aria-label="Visit my profile on GitHub" rel="noreferrer">
+                                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                                             viewBox="0 0 24 24"
+                                             fill="currentColor">
+                                            <path d="M2 20V4h20v16Zm2-2h16V8H4Zm8-1v-2h6v2Zm-4.5 0-1.4-1.4L8.675 13l-2.6-2.6L7.5 9l4 4Z"/>
+                                        </svg>
+                                        <span class="label">GitHub profile</span>
                                         <svg class="icon secondary" xmlns="http://www.w3.org/2000/svg" height="20"
                                              width="20" viewBox="0 0 20 20" fill="currentColor">
                                             <path d="M2.667 17.333V2.667h7.166v1.458H4.125v11.75h11.75v-5.708h1.458v7.166Zm5.416-4.375-1.041-1.041 7.812-7.792h-2.625V2.667h5.104v5.104h-1.458V5.146Z"/>
