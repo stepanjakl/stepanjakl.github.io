@@ -338,7 +338,7 @@ body {
 /* Intro */
 
 .intro {
-	overflow: scroll;
+	overflow: auto;
 }
 
 svg * {
@@ -832,7 +832,7 @@ body > input[type="checkbox"] {
 
 .modal .information {
 	height: 100%;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 .modal .information dl {
