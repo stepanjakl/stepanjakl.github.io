@@ -1,0 +1,24 @@
+/*
+ * State
+ */
+
+/* Debug */
+
+#debug:checked~.page .debug-checked\:flex {
+    display: flex;
+}
+
+#debug:checked~.page .debug-checked\:hidden {
+    display: none;
+}
+
+
+/* Modal - Profile */
+
+.modal#profile:target,
+.modal#profile:target svg,
+.modal#profile:target img,
+.modal#profile:target video {
+    display: block;
+    visibility: visible;
+}
