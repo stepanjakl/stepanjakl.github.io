@@ -19,6 +19,18 @@
 .modal#profile:target svg,
 .modal#profile:target img,
 .modal#profile:target video {
-    display: block;
-    visibility: visible;
+    /* display: block; */
+    /* visibility: visible; */
+    pointer-events: auto;
+}
+
+/* Modal - Archive */
+
+.modal#archive:target,
+.modal#archive:target svg,
+.modal#archive:target img,
+.modal#archive:target video {
+    /* display: block; */
+    /* visibility: visible; */
+    pointer-events: auto;
 }
