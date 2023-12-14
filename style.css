@@ -8,9 +8,11 @@
 :root {
     /* Segment */
     --segment: 64px;
+    --segment-double: calc(var(--segment) * 2);
     --segment-half: calc(var(--segment) / 2);
     --segment-third: calc(var(--segment) / 3);
     --segment-quarter: calc(var(--segment) / 4);
+    --segment-eighth: calc(var(--segment) / 8);
 
     /* Breakpoints */
 
@@ -90,6 +92,7 @@
     --cyan-quarter-5: #0e1213;
     /* 210, 25, 10 */
     --cyan-quarter-10: #171c1e;
+    /* rgba(23, 28, 30, 1) */
     /* 210, 25, 15 */
     --cyan-quarter-15: #202729;
     /* 210, 25, 20 */
@@ -448,23 +451,52 @@ body {
     display: table;
 }
 
-#intro>div.right-column>h3 {
+#intro>div.right-column>h3 span {
+    display: inline-block;
     padding-top: var(--segment-quarter);
     color: var(--text-1);
     font-weight: 200;
     font-size: 45.7143px;
+    /* Cap Height: 32; Line Gap: 32 */
     line-height: 64px;
 }
 
-#intro>div.right-column>h3::before {
+#intro>div.right-column>h3 span::before {
     content: "";
     margin-bottom: -0.375em;
     display: table;
 }
 
-#intro>div.right-column>h3::after {
+#intro>div.right-column>h3 span::after {
     content: "";
     margin-top: -0.325em;
+    display: table;
+}
+
+#intro>div.right-column>h3 span.highlight {
+    color: var(--highlight);
+}
+
+/* TODO defo simplify this selector */
+#intro>div.right-column>h3.h3-title--secondary span {
+    display: inline-block;
+    font-family: "Newsreader";
+    font-weight: 300;
+    font-style: italic;
+    font-size: 47.7612px;
+    line-height: 64px;
+    /* font-variation-settings: "opsz" 24; */
+}
+
+#intro>div.right-column>h3.h3-title--secondary span::before {
+    content: "";
+    margin-bottom: -0.235em;
+    display: table;
+}
+
+#intro>div.right-column>h3.h3-title--secondary span::after {
+    content: "";
+    margin-top: -0.435em;
     display: table;
 }
 
@@ -639,6 +671,15 @@ body {
     align-items: center;
 }
 
+#intro .links>a span.label u,
+#intro .links .menu>span.menu__button>span.label u {
+    text-decoration-thickness: 2px;
+    text-decoration-style: dotted;
+    text-decoration-color: var(--text-3);
+    text-underline-position: from-font;
+    text-underline-offset: 2px;
+}
+
 #intro .links>a span.label::before {
     content: "";
     margin-bottom: -0.025em;
@@ -751,7 +792,9 @@ body>input[type="checkbox"] {
     display: none !important;
 }
 
-#intro .links .menu>span.menu__dropdown>* {
+/* TODO change label to button ? and make sure other styles don't get applied where they shouldn't e.g. before/after of fonts - like the selector below */
+#intro .links .menu>span.menu__dropdown>a,
+#intro .links .menu>span.menu__dropdown>label {
     display: flex;
     white-space: nowrap;
     text-align: left;
@@ -768,6 +811,7 @@ body>input[type="checkbox"] {
     user-select: none;
 }
 
+/* this one */
 #intro .links .menu>span.menu__dropdown>*>.icon {
     /* 'opsz' 24, 'wght' 400, 'FILL' 1, 'GRAD' 0 */
     width: 26px;
@@ -790,6 +834,26 @@ body>input[type="checkbox"] {
 #intro .links .menu>span.menu__dropdown>*>span.label {
     margin-left: 14px;
 }
+
+
+/* #intro .links .menu>span.menu__dropdown hr:before,
+#intro .links .menu>span.menu__dropdown hr:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    border-top: solid 1px var(--context-border-outer);
+}
+
+#intro .links .menu>span.menu__dropdown hr:before {
+    transform: translateX(1px);
+}
+
+#intro .links .menu>span.menu__dropdown hr:after {
+    transform: translateX(-1px);
+} */
+
 
 #intro .links .menu>a {
     position: absolute;
@@ -817,52 +881,77 @@ body>input[type="checkbox"] {
 
 /* Modal */
 
-.modal{
-    /* display: none; */
-    /* visibility: hidden; */
+/* .modal{
     pointer-events: none;
 }
-/* .modal svg,
-.modal img,
-.modal video { */
 
 .modal .modal__content {
     position: fixed;
-    /* inset: 120px 80px 0 48px; */
     box-shadow: inset 0 0 0 1px var(--modal-border-inner);
     background: var(--modal-bg);
     opacity: 0;
     pointer-events: none;
     z-index: 10;
     inset: 0;
+} */
+
+.modal {
+    position: fixed;
+    z-index: 2;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+
+    padding: var(--segment);
+}
+
+.modal .modal__content {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--segment-quarter);
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: auto;
+    box-shadow: inset 0 0 0 1px var(--modal-border-inner);
+    background: var(--modal-bg);
+    opacity: 0;
+    pointer-events: none;
+    padding-top: var(--segment);
+    /* padding-top: calc(36px + var(--segment-half)); */
+}
+
+.modal .modal__content>* {
+    transform: translateY(calc(var(--segment) * -1));
+    /* transform: translateY(calc((36px + var(--segment-half)) * -1)) */
 }
 
 @media (min-width: 720px) {
+    .modal {
+        padding: var(--segment-quarter);
+    }
+
     .modal .modal__content {
         border: solid 1px var(--modal-border-outer);
-        border-radius: 8px 32px 8px 8px;
-        inset: var(--segment-quarter);
+        border-radius: var(--segment-eighth) var(--segment-half) var(--segment-eighth) var(--segment-eighth);
     }
 }
 
 @media (min-width: 960px) {
-    .modal .modal__content {
-        position: absolute;
-        inset: var(--segment-half) var(--segment-third) 0 var(--segment-third);
+    .modal {
+        /* position: absolute; */
+        /* inset: var(--segment-half) var(--segment-third) 0 var(--segment-third); */
+        padding: var(--segment-half) var(--segment-third) 0 var(--segment-third);
     }
 }
 
 @media (min-width: 1200px) {
-    .modal .modal__content {
-        inset: var(--segment) var(--segment-half) 0 var(--segment-half);
+    .modal {
+        /* inset: var(--segment) var(--segment-half) 0 var(--segment-half); */
+        padding: var(--segment) var(--segment-half) var(--segment-half) var(--segment-half);
     }
 }
 
-/* @media (min-width: 1680px) {
-    .modal .modal__content {
-
-    }
-} */
 
 @supports (backdrop-filter: blur(64px)) or (-webkit-backdrop-filter: blur(64px)) {
     .modal .modal__content {
@@ -882,11 +971,14 @@ body>input[type="checkbox"] {
 
 /* Modal - Close button */
 
-.modal a.close {
-    position: absolute;
+.modal .modal__close-icon {
+    align-self: end;
+    position: sticky;
     z-index: 1;
-    top: 16px;
-    right: 16px;
+    top: 0px;
+    top: var(--segment-quarter);
+    margin-top: var(--segment-quarter);
+    margin-right: var(--segment-quarter);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -896,15 +988,19 @@ body>input[type="checkbox"] {
     background-color: var(--modal-icon-bg);
 }
 
-.modal a.close svg {
+.modal .modal__close-icon svg {
     color: var(--modal-icon-fg);
 }
 
-.modal a.close .icon {
+.modal .modal__close-icon .icon {
     /* 'opsz' 20, 'wght' 600, 'FILL' 1, 'GRAD' 200 */
     width: 20px;
     height: 20px;
 }
+
+
+
+
 
 .modal .information dl {
     padding: 0;
@@ -923,9 +1019,13 @@ body>input[type="checkbox"] {
     grid-row-gap: 0;
 }
 
-.modal .information dl div:last-child {
-    padding-bottom: 48px;
+.modal .information dl div:first-child {
+    padding-top: var(--segment-half);
 }
+
+/* .modal .information dl div:last-child {
+    padding-bottom: 48px;
+} */
 
 .modal .information dl div a {
     height: 12px;
@@ -1200,13 +1300,13 @@ body>input[type="checkbox"] {
     margin-top: 10px;
 }
 
-.tooltip .tooltip__content u {
+/* .tooltip .tooltip__content u {
     text-decoration-thickness: 1px;
     text-decoration-style: dotted;
     text-decoration-color: var(--text-3);
     text-underline-position: from-font;
     text-underline-offset: 2px;
-}
+} */
 
 .tooltip__content::before {
     content: "";
@@ -1234,49 +1334,49 @@ body>input[type="checkbox"] {
     pointer-events: none;
 }
 
-.footer .footer__wrapper {
+.footer .footer__content {
     display: flex;
     flex-direction: row;
     column-gap: 18px;
     width: 100%;
     max-width: var(--breakpoint-xl);
-    padding: 0px 64px 32px 64px;
+    padding: 0 var(--segment) var(--segment-half) var(--segment);
     margin: auto;
 }
 
-.footer .footer__wrapper div.section {
+.footer .footer__content div.section {
     display: flex;
     flex-direction: row;
     column-gap: 8px;
 }
 
-.footer .footer__wrapper .square {
+.footer .footer__content .square {
     width: 12px;
     height: 12px;
     pointer-events: auto;
 }
 
-.footer .footer__wrapper .square#square-1 {
+.footer .footer__content .square#square-1 {
     background-color: var(--footer-square-1);
 }
 
-.footer .footer__wrapper .square#square-1:hover {
+.footer .footer__content .square#square-1:hover {
     background-color: var(--footer-square-1-hover);
 }
 
-.footer .footer__wrapper .square#square-2 {
+.footer .footer__content .square#square-2 {
     background-color: var(--footer-square-2);
 }
 
-.footer .footer__wrapper .square#square-3 {
+.footer .footer__content .square#square-3 {
     background-color: var(--footer-square-3);
 }
 
-.footer .footer__wrapper .square#square-4 {
+.footer .footer__content .square#square-4 {
     background-color: var(--footer-square-4);
 }
 
-.footer .footer__wrapper .rectangle {
+.footer .footer__content .rectangle {
     width: 100%;
     height: 12px;
     background: repeating-linear-gradient(135deg, transparent, transparent 6px, var(--footer-rectangle) 6px, var(--footer-rectangle) 12px), linear-gradient(to bottom, transparent, transparent);
@@ -1293,7 +1393,7 @@ body>input[type="checkbox"] {
         padding: 48px;
     }
 
-    .footer .footer__wrapper {
+    .footer .footer__content {
         max-width: var(--breakpoint-2xl);
         padding: 56px 80px;
     }
@@ -1307,7 +1407,7 @@ body>input[type="checkbox"] {
         padding-bottom: 96px;
     }
 
-    .footer .footer__wrapper {
+    .footer .footer__content {
         padding: 80px 80px;
     }
 }
@@ -1337,7 +1437,7 @@ body>input[type="checkbox"] {
         max-width: var(--breakpoint-xl);
     }
 
-    .footer .footer__wrapper {
+    .footer .footer__content {
         max-width: var(--breakpoint-xl);
     }
 }
@@ -1346,7 +1446,7 @@ body>input[type="checkbox"] {
     /* rules here apply to devices from 1200px (lg) and lower */
 
     .intro__wrapper,
-    .footer .footer__wrapper {
+    .footer .footer__content {
         max-width: var(--breakpoint-lg);
     }
 
@@ -1359,7 +1459,7 @@ body>input[type="checkbox"] {
         display: none;
     }
 
-    .footer .footer__wrapper {
+    .footer .footer__content {
         padding: 40px 32px;
     }
 
@@ -1419,7 +1519,7 @@ body>input[type="checkbox"] {
         padding-bottom: 2.75px;
     }
 
-    .footer .footer__wrapper {
+    .footer .footer__content {
         padding: 32px 24px;
     }
 

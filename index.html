@@ -29,6 +29,9 @@
     <link rel="stylesheet" href="state.css">
     <link rel="stylesheet" href="animation.css" rel="preload">
     <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,200;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,600&display=swap" rel="stylesheet">
     <script>
         console.log('%cŠtěpán Jákl | Full-stack developer & interface designer', `border: 1px solid #4e7bff; border-radius: 2px; color: #4e7bff; font-size: 12.5px; padding: 22.5px 35px 20px 35px; margin: 20px 20px; /* padding: 29.75px 30px 29.75px 84px; background-image: url("data:image/svg+xml,%3Csvg width='100%' height='100%' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 40V10.033L10.033 0H40V30L30 40H0ZM10 30V25H22.5L25 22.5H10V17.5H30V25L25 30H10ZM15 10H30V15H10L15 10Z' fill='%234e7bff'/%3E%3C/svg%3E%0A"); background-repeat: no-repeat; background-position: 20px 50%; background-size: 40px 40px */`)
         console.log('%cThis website was created with HTML, CSS and sprinkled with a tiny bit of JS.', 'color: #4e7bff; margin: 15px 0 15px 20px;')
@@ -64,18 +67,167 @@
 <body class="primary-font text-base overflow-auto">
     <input type="checkbox" id="mode" hidden aria-hidden="true">
     <input type="checkbox" id="debug" hidden aria-hidden="true">
+    <input type="hidden" id="profile" hidden aria-hidden="true">
+    <input type="hidden" id="archive" hidden aria-hidden="true">
     <!-- <div class="fixed inset-0" style="z-index: 2; background-image: linear-gradient(45deg, var(--blue-full-10), var(--blue-full-25));"></div> -->
     <div id="page" class="relative w-full h-auto" style="background-color: var(--background);">
         <div class="relative h-full w-full max-w-xl pt-1/2"><!-- pb-1/2 -->
             <div class="absolute inset-0" style="background-repeat: repeat; background-origin: border-box; background-position: 0 0; background-image: var(--background-pattern);"></div>
-            <div class="modal" id="profile" role="dialog" aria-modal="true">
+            <div id="intro">
+                <div class="left-column">
+                    <!-- Copy for name -->
+                    <h2 class="animate-fade-in-name tooltip tooltip-bottom" style="user-select: none; -webkit-user-select: none;"><span style="--i: 1;">Š</span><span style="--i: 2;">t</span><span style="--i: 3;">ě</span><span style="--i: 4;">p</span><span style="--i: 5;">á</span><span style="--i: 6;">n</span><span style="--i: 7;">&nbsp;</span><span style="--i: 8;">J</span><span style="--i: 9;">á</span><span style="--i: 10;">k</span><span style="--i: 11;">l</span>
+                        <div class="tooltip__content">
+                            <span>It's pronouced ... - or just call me Stepan. Click to copy.</span>
+                        </div>
+                    </h2>
+                    <div class="animate-fade-in-logo logo">
+                        <span></span>
+                    </div>
+                </div>
+                <div class="right-column">
+                    <h3 class="animate-fade-in-title" style="display: inline-flex; user-select: none; -webkit-user-select: none;">
+                        <span style="--i: 1;">F</span><span style="--i: 2;">u</span><span style="--i: 3;">l</span><span style="--i: 4;">l</span><span style="--i: 5;">-</span><span style="--i: 6;">s</span><span style="--i: 7;">t</span><span style="--i: 8;">a</span><span style="--i: 9;">c</span><span style="--i: 10;">k</span><span style="--i: 11;">&nbsp;</span><span class="highlight" style="--i: 12;">d</span><span class="highlight" style="--i: 13;">e</span><span class="highlight" style="--i: 14;">v</span><span class="highlight" style="--i: 15;">e</span><span class="highlight" style="--i: 16;">l</span><span class="highlight" style="--i: 17;">o</span><span class="highlight" style="--i: 18;">p</span><span class="highlight" style="--i: 19;">e</span><span class="highlight" style="--i: 20;">r</span><span style="--i: 21;">&nbsp;</span>
+                    </h3>
+                    <h3 class="animate-fade-in-title h3-title--secondary" style="letter-spacing: 1.5px; margin-top: 16px; display: inline-flex; user-select: none; -webkit-user-select: none;">
+                        <span style="--i: 22;">&</span><span style="--i: 23;">&nbsp;</span><span style="--i: 24;">i</span><span style="--i: 25;">n</span><span style="--i: 26;">t</span><span style="--i: 27;">e</span><span style="--i: 28;">r</span><span style="--i: 29;">f</span><span style="--i: 30;">a</span><span style="--i: 31;">c</span><span style="--i: 32;">e</span><span style="--i: 33;">&nbsp;</span><span class="highlight" style="--i: 34;">d</span><span class="highlight" style="--i: 35;">e</span><span class="highlight" style="--i: 36;">s</span><span class="highlight" style="--i: 37;">i</span><span class="highlight" style="--i: 38;">g</span><span class="highlight" style="--i: 39;">n</span><span class="highlight" style="--i: 40;">e</span><span class="highlight" style="--i: 41;">r</span></p>
+                    </h3>
+                    <div class="availability animate-fade-in-cta-1">
+                        <div class="tooltip tooltip-bottom">
+                            <a href="https://calendly.com/stepanjakl" target="_blank" rel="noreferrer" aria-label="Open to new opportunities, book a virtual meeting" class="badge">
+                                <div>
+                                    <span class="dot"></span>
+                                    <span class="text">Open to new opportunities</span>
+                                </div>
+                            </a>
+                            <div class="tooltip__content">
+                                <span><u>Book</u> a virtual meeting via Calendly</span>
+                            </div>
+                        </div>
+                        <!-- <span>in Q2-Q4/2023</span> -->
+                    </div>
+                    <div class="email animate-fade-in-cta-2">
+                        <div class="email__wrapper tooltip tooltip-top" onmousedown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@outlook.com')" onkeydown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@outlook.com')" tabindex="0" aria-label="Contact me via email">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="currentColor">
+                                <path d="M10 23.375h13.125v-2.792H10Zm0-5.292h20v-2.791H10Zm0-5.291h20v-2.75H10ZM2.667 37.333V2.667h34.666v28h-28Z" />
+                            </svg>
+                            <span class="label">stepan.jakl@outlook.com</span>
+                            <div class="tooltip__content">
+                                <span><u>Contact</u> me via email</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="links animate-fade-in-cta-2">
+                        <a href="#profile" aria-label="Learn more about me" rel="noreferrer" class="resume tooltip tooltip-bottom">
+                            <svg class="icon animate-face-icon" xmlns="http://www.w3.org/2000/svg" height="40" width="40" viewBox="0 0 40 40" fill="currentColor">
+                                <path d="M14.917 24c-.64 0-1.174-.215-1.605-.646-.43-.43-.645-.965-.645-1.604 0-.639.222-1.173.666-1.604.445-.43.986-.646 1.625-.646.64 0 1.167.215 1.584.646.417.43.625.965.625 1.604 0 .639-.215 1.173-.646 1.604-.43.43-.965.646-1.604.646Zm10.166 0c-.639 0-1.173-.215-1.604-.646-.43-.43-.646-.965-.646-1.604 0-.639.215-1.173.646-1.604.43-.43.965-.646 1.604-.646.64 0 1.181.215 1.625.646.445.43.667.965.667 1.604 0 .639-.222 1.173-.667 1.604a2.25 2.25 0 0 1-1.625.646ZM20 33.667c3.805 0 7.035-1.326 9.688-3.979 2.653-2.653 3.979-5.883 3.979-9.688 0-.695-.049-1.368-.146-2.021a9.868 9.868 0 0 0-.438-1.812 11.41 11.41 0 0 1-1.75.291c-.61.056-1.25.084-1.916.084-2.611 0-5.07-.535-7.375-1.604a16.598 16.598 0 0 1-5.917-4.605A16.73 16.73 0 0 1 12.208 16a18.409 18.409 0 0 1-5.833 3.75v.292c0 3.805 1.32 7.027 3.958 9.666 2.64 2.64 5.862 3.959 9.667 3.959Zm.042 3.666c-2.417 0-4.674-.458-6.771-1.375-2.097-.917-3.93-2.153-5.5-3.708-1.57-1.555-2.812-3.389-3.729-5.5-.917-2.111-1.375-4.361-1.375-6.75 0-2.389.458-4.639 1.375-6.75.917-2.111 2.16-3.945 3.729-5.5 1.57-1.555 3.403-2.791 5.5-3.708 2.097-.917 4.354-1.375 6.771-1.375 2.389 0 4.632.458 6.729 1.375 2.097.917 3.93 2.153 5.5 3.708 1.57 1.555 2.805 3.389 3.708 5.5s1.354 4.361 1.354 6.75c0 2.389-.451 4.639-1.354 6.75-.903 2.111-2.139 3.952-3.708 5.521-1.57 1.57-3.41 2.805-5.521 3.708-2.111.903-4.347 1.354-6.708 1.354Z" />
+                            </svg>
+                            <span class="label">Profile</span>
+                            <span class="tooltip__content">
+                                <span><u>Learn</u> more about me</span>
+                            </span>
+                        </a>
+                        <a href="#archive" aria-label="Explore repository of past work" rel="noreferrer" class="tooltip tooltip-bottom no-underline">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="40" width="40" viewBox="0 0 40 40" fill="currentColor">
+                                <path d="M30.542 33.75V6.25h3.416v27.5ZM4.125 37.125V2.875h22.542v34.25Zm33.708-6.833V9.667h2.25v20.625Z" />
+                            </svg>
+                            <span class="label"><u>A</u>rchive</span>
+                            <span class="tooltip__content">
+                                <span><u>Explore</u> snippets of my past work</span>
+                            </span>
+                        </a>
+                        <div class="menu" id="menu">
+                            <a href="#menu" aria-label="Open dropdown menu"></a>
+                            <a href="#" aria-label="Close dropdown menu"></a>
+                            <span class="menu__dropdown">
+                                <!-- <a href="#about" aria-label="Find out more about me">
+                                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                                             viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M5.85 17.1q1.275-.975 2.85-1.538Q10.275 15 12 15q1.725 0 3.3.562 1.575.563 2.85 1.538.875-1.025 1.363-2.325Q20 13.475 20 12q0-3.325-2.337-5.663Q15.325 4 12 4T6.338 6.337Q4 8.675 4 12q0 1.475.488 2.775.487 1.3 1.362 2.325ZM12 13q-1.475 0-2.488-1.012Q8.5 10.975 8.5 9.5t1.012-2.488Q10.525 6 12 6t2.488 1.012Q15.5 8.025 15.5 9.5t-1.012 2.488Q13.475 13 12 13Zm0 9q-2.075 0-3.9-.788-1.825-.787-3.175-2.137-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175 1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138 1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175-1.35 1.35-3.175 2.137Q14.075 22 12 22Z"/>
+                                        </svg>
+                                        <span class="label">About</span>
+                                    </a> -->
+                                <a href="https://calendly.com/stepanjakl" target="_blank" aria-label="Schedule a call via Calendly" rel="noreferrer">
+                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 23v-2h7v-1h-4v-8h4v-1q0-2.9-2.05-4.95Q14.9 4 12 4 9.1 4 7.05 6.05 5 8.1 5 11v1h4v8H3v-9q0-1.85.712-3.488.713-1.637 1.938-2.862t2.862-1.938Q10.15 2 12 2t3.488.712q1.637.713 2.862 1.938t1.938 2.862Q21 9.15 21 11v12Z" />
+                                    </svg>
+                                    <span class="label">Virtual meeting</span>
+                                    <svg class="icon secondary" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M2.667 17.333V2.667h7.166v1.458H4.125v11.75h11.75v-5.708h1.458v7.166Zm5.416-4.375-1.041-1.041 7.812-7.792h-2.625V2.667h5.104v5.104h-1.458V5.146Z" />
+                                    </svg>
+                                </a>
+                                <a href="https://www.linkedin.com/in/stepanjakl" target="_blank" aria-label="Find out more about me on LinkedIn">
+                                    <!-- <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                                             viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M2 21V6h6V2h8v4h6v15Zm8-15h4V4h-4Z"/>
+                                        </svg> -->
+                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M14 13.5h4V12h-4Zm0 3h4V15h-4ZM15 7h7v15H2V7h7V2h6Zm-4 2h2V4h-2Zm-2 6q.625 0 1.062-.438.438-.437.438-1.062t-.438-1.062Q9.625 12 9 12t-1.062.438Q7.5 12.875 7.5 13.5t.438 1.062Q8.375 15 9 15Zm-3 3h6v-.45q0-.425-.238-.788-.237-.362-.662-.562-.5-.225-1.012-.337Q9.575 15.75 9 15.75q-.575 0-1.087.113-.513.112-1.013.337-.425.2-.662.562Q6 17.125 6 17.55Z" />
+                                    </svg>
+                                    <span class="label">LinkedIn profile</span>
+                                    <svg class="icon secondary" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M2.667 17.333V2.667h7.166v1.458H4.125v11.75h11.75v-5.708h1.458v7.166Zm5.416-4.375-1.041-1.041 7.812-7.792h-2.625V2.667h5.104v5.104h-1.458V5.146Z" />
+                                    </svg>
+                                </a>
+                                <a href="https://github.com/stepanjakl" target="_blank" aria-label="Visit my profile on GitHub" rel="noreferrer">
+                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M2 20V4h20v16Zm2-2h16V8H4Zm8-1v-2h6v2Zm-4.5 0-1.4-1.4L8.675 13l-2.6-2.6L7.5 9l4 4Z" />
+                                    </svg>
+                                    <span class="label">GitHub profile</span>
+                                    <svg class="icon secondary" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M2.667 17.333V2.667h7.166v1.458H4.125v11.75h11.75v-5.708h1.458v7.166Zm5.416-4.375-1.041-1.041 7.812-7.792h-2.625V2.667h5.104v5.104h-1.458V5.146Z" />
+                                    </svg>
+                                </a>
+                                <hr style="width: 100%; height: 6px; margin: 0px 1px 0px 1px; border: 0; background-color: rgba(23, 28, 30, 0.375); box-shadow: 0 -1px 0 0 var(--context-border-inner); border-top: solid 1px var(--context-border-outer); box-sizing: content-box; transform: translateY(3px) translateX(-1px); overflow: visible;">
+                                <label for="mode" class="light" tabindex="0">
+                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M11 4V1h2v3Zm0 19v-3h2v3Zm9-10v-2h3v2ZM1 13v-2h3v2Zm17.7-6.3-1.4-1.4 1.75-1.8 1.45 1.45ZM4.95 20.5 3.5 19.05l1.8-1.75 1.4 1.4Zm14.1 0-1.75-1.8 1.4-1.4 1.8 1.75ZM5.3 6.7 3.5 4.95 4.95 3.5 6.7 5.3ZM12 18q-2.5 0-4.25-1.75T6 12q0-2.5 1.75-4.25T12 6q2.5 0 4.25 1.75T18 12q0 2.5-1.75 4.25T12 18Z" />
+                                    </svg>
+                                    <span class="label">Light mode</span>
+                                </label>
+                                <label for="mode" class="dark" tabindex="0">
+                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M13.1 23q-2.1 0-3.938-.8-1.837-.8-3.199-2.162Q4.6 18.675 3.8 16.837 3 15 3 12.9q0-3.65 2.325-6.438Q7.65 3.675 11.25 3q-.45 2.475.275 4.837.725 2.363 2.5 4.138t4.138 2.5q2.362.725 4.837.275-.65 3.6-3.45 5.925Q16.75 23 13.1 23Z" />
+                                    </svg>
+                                    <span class="label">Dark mode</span>
+                                </label>
+                                <label for="debug" tabindex="0">
+                                    <svg class="icon flex debug-checked:hidden" description="enable debug mode" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 16q1.875 0 3.188-1.312Q16.5 13.375 16.5 11.5q0-1.875-1.312-3.188Q13.875 7 12 7q-1.875 0-3.188 1.312Q7.5 9.625 7.5 11.5q0 1.875 1.312 3.188Q10.125 16 12 16Zm0-1.8q-1.125 0-1.912-.788Q9.3 12.625 9.3 11.5t.788-1.913Q10.875 8.8 12 8.8t1.913.787q.787.788.787 1.913t-.787 1.912q-.788.788-1.913.788Zm0 4.8q-3.65 0-6.65-2.038-3-2.037-4.35-5.462 1.35-3.425 4.35-5.463Q8.35 4 12 4q3.65 0 6.65 2.037 3 2.038 4.35 5.463-1.35 3.425-4.35 5.462Q15.65 19 12 19Z" />
+                                    </svg>
+                                    <svg class="icon hidden debug-checked:flex" description="disable debug mode" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="m19.8 22.6-4.2-4.15q-.875.275-1.762.413Q12.95 19 12 19q-3.775 0-6.725-2.087Q2.325 14.825 1 11.5q.525-1.325 1.325-2.463Q3.125 7.9 4.15 7L1.4 4.2l1.4-1.4 18.4 18.4ZM12 16q.275 0 .512-.025.238-.025.513-.1l-5.4-5.4q-.075.275-.1.513-.025.237-.025.512 0 1.875 1.312 3.188Q10.125 16 12 16Zm7.3.45-3.175-3.15q.175-.425.275-.862.1-.438.1-.938 0-1.875-1.312-3.188Q13.875 7 12 7q-.5 0-.938.1-.437.1-.862.3L7.65 4.85q1.025-.425 2.1-.638Q10.825 4 12 4q3.775 0 6.725 2.087Q21.675 8.175 23 11.5q-.575 1.475-1.512 2.738Q20.55 15.5 19.3 16.45Zm-4.625-4.6-3-3q.7-.125 1.288.112.587.238 1.012.688.425.45.613 1.038.187.587.087 1.162Z" />
+                                    </svg>
+                                    <span class="label">Debug</span>
+                                </label>
+                            </span>
+                            <span class="menu__button">
+                                <svg class="icon open" xmlns="http://www.w3.org/2000/svg" height="40" width="40" viewBox="0 0 40 40" fill="currentColor">
+                                    <path d="m20 35.625-8.167-8.167 2.625-2.666L20 30.333l5.542-5.541 2.625 2.666Zm-5.542-20.333-2.625-2.625L20 4.5l8.167 8.167-2.625 2.625L20 9.792Z" />
+                                </svg>
+                                <svg class="icon close" xmlns="http://www.w3.org/2000/svg" height="40" width="40" viewBox="0 0 40 40" fill="currentColor">
+                                    <path d="m14.458 33.958-2.583-2.583L20 23.25l8.125 8.125-2.583 2.583L20 28.417ZM20 16.75l-8.125-8.125 2.583-2.583L20 11.583l5.542-5.541 2.583 2.583Z" />
+                                </svg>
+                                <span class="label"><u>M</u>ore</span>
+                            </span>
+                            <div class="underlay underlay__menu"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal modal__profile" role="dialog" aria-modal="true">
                 <div class="modal__content">
-                    <a href="#" class="close" aria-label="Close modal">
+                    <!-- <div style="align-self: end;
+                    position: sticky; top: 0;
+                    padding-top: var(--segment-quarter);
+                    padding-right: var(--segment-quarter);"> -->
+                    <a href="#" class="modal__close-icon" aria-label="Close modal">
                         <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M6 15.708 4.333 14l3.979-4-3.979-4.021L6 4.271l4 4.021 4-4.021 1.667 1.708L11.688 10l3.979 4L14 15.708l-4-4.02Z" />
                         </svg>
                     </a>
-                    <div class="information h-full overflow-auto mr-1">
+                    <!-- </div> -->
+                    <div class="information mr-1"> <!-- h-full overflow-auto -->
                         <dl>
                             <div>
                                 <dt>Full name:</dt>
@@ -90,8 +242,8 @@
                                 </dd>
                             </div>
                             <div>
-                                <dt>Age:</dt>
-                                <dd><span>27 years</span></dd>
+                                <dt>Year of birth:</dt>
+                                <dd><span>1995</span></dd>
                             </div>
                             <div>
                                 <dt>Nationality:</dt>
@@ -177,14 +329,14 @@
                 </div>
                 <div class="underlay underlay__modal"></div>
             </div>
-            <div class="modal" id="archive" role="dialog" aria-modal="true">
+            <div class="modal modal__archive" role="dialog" aria-modal="true">
                 <div class="modal__content" style="border-radius: 8px 32px 32px 8px;">
-                    <a href="#" class="close" aria-label="Close modal">
+                    <a href="#" class="modal__close-icon" aria-label="Close modal">
                         <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M6 15.708 4.333 14l3.979-4-3.979-4.021L6 4.271l4 4.021 4-4.021 1.667 1.708L11.688 10l3.979 4L14 15.708l-4-4.02Z" />
                         </svg>
                     </a>
-                    <div style="position: relative; height: 100%; overflow-y: scroll;">
+                    <div style="position: relative; height: 100%;"> <!-- overflow-y: scroll; -->
                         <div style="height: 200vh; padding-top: 48px; padding-left: 48px; padding-right: 96px;">
                             <div style="display: flex; flex-direction: column; column-gap: 24px;">
                                 <div style="display: grid; grid-auto-flow: column; grid-auto-columns: 240px 800px; column-gap: 48px;">
@@ -222,179 +374,12 @@
                 </div>
                 <div class="underlay underlay__modal"></div>
             </div>
-            <div id="intro">
-                <div class="left-column">
-                    <h2 class="animate-fade-in-name"><span style="--i: 1;">Š</span><span style="--i: 2;">t</span><span style="--i: 3;">ě</span><span style="--i: 4;">p</span><span style="--i: 5;">á</span><span style="--i: 6;">n</span><span style="--i: 7;">&nbsp;</span><span style="--i: 8;">J</span><span style="--i: 9;">á</span><span style="--i: 10;">k</span><span style="--i: 11;">l</span></h2>
-                    <div class="animate-fade-in-logo logo">
-                        <span></span>
-                    </div>
-                </div>
-                <div class="right-column">
-                    <h3 class="animate-fade-in-title">
-                        <span style="--i: 1;">F</span><span style="--i: 2;">u</span><span style="--i: 3;">l</span><span style="--i: 4;">l</span><span style="--i: 5;">-</span><span style="--i: 6;">s</span><span style="--i: 7;">t</span><span style="--i: 8;">a</span><span style="--i: 9;">c</span><span style="--i: 10;">k</span><span style="--i: 11;">&nbsp;</span><span style="--i: 12;">d</span><span style="--i: 13;">e</span><span style="--i: 14;">v</span><span style="--i: 15;">e</span><span style="--i: 16;">l</span><span style="--i: 17;">o</span><span style="--i: 18;">p</span><span style="--i: 19;">e</span><span style="--i: 20;">r</span><span style="--i: 21;">&nbsp;</span><br><span style="--i: 22;">&</span><span style="--i: 23;">&nbsp;</span><span style="--i: 24;">i</span><span style="--i: 25;">n</span><span style="--i: 26;">t</span><span style="--i: 27;">e</span><span style="--i: 28;">r</span><span style="--i: 29;">f</span><span style="--i: 30;">a</span><span style="--i: 31;">c</span><span style="--i: 32;">e</span><span style="--i: 33;">&nbsp;</span><span style="--i: 34;">d</span><span style="--i: 35;">e</span><span style="--i: 36;">s</span><span style="--i: 37;">i</span><span style="--i: 38;">g</span><span style="--i: 39;">n</span><span style="--i: 40;">e</span><span style="--i: 41;">r</span>
-                    </h3>
-                    <div class="availability animate-fade-in-cta-1">
-                        <div class="tooltip tooltip-bottom">
-                            <a href="https://calendly.com/stepanjakl" target="_blank" rel="noreferrer" aria-label="Open to new opportunities, book a virtual meeting" class="badge">
-                                <div>
-                                    <span class="dot"></span>
-                                    <span class="text">Open to new opportunities</span>
-                                </div>
-                            </a>
-                            <div class="tooltip__content">
-                                <span><u>Book</u> a virtual meeting via Calendly</span>
-                            </div>
-                        </div>
-                        <!-- <span>in Q2-Q4/2023</span> -->
-                    </div>
-                    <div class="email animate-fade-in-cta-2">
-                        <div class="email__wrapper tooltip tooltip-top" onmousedown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@outlook.com')" onkeydown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@outlook.com')" tabindex="0" aria-label="Contact me via email">
-                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="currentColor">
-                                <path d="M10 23.375h13.125v-2.792H10Zm0-5.292h20v-2.791H10Zm0-5.291h20v-2.75H10ZM2.667 37.333V2.667h34.666v28h-28Z" />
-                            </svg>
-                            <span class="label">stepan.jakl@outlook.com</span>
-                            <div class="tooltip__content">
-                                <span><u>Contact</u> me via email</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="links animate-fade-in-cta-2">
-                        <!-- <a href="https://www.linkedin.com/in/stepanjakl" target="_blank"
-                               aria-label="Browse my LinkedIn profile" rel="noreferrer"
-                               class="resume tooltip tooltip-bottom">
-                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="40" width="40"
-                                     viewBox="0 0 40 40" fill="currentColor">
-                                    <path d="M20 23.042q1.5 0 2.562-1.084 1.063-1.083 1.063-2.583 0-1.5-1.063-2.563Q21.5 15.75 20 15.75q-1.5 0-2.562 1.062-1.063 1.063-1.063 2.563 0 1.5 1.063 2.583Q18.5 23.042 20 23.042Zm-6.958 7.25h13.916v-1.25q0-1.084-.604-2-.604-.917-1.604-1.375-1.125-.459-2.292-.709-1.166-.25-2.458-.25-1.292 0-2.458.25-1.167.25-2.292.709-1 .458-1.604 1.375-.604.916-.604 2ZM6 37.333V2.667h17.625L34 13.042v24.291Z"/>
-                                </svg>
-                                <span class="label">Résumé</span>
-                                <svg class="icon secondary" xmlns="http://www.w3.org/2000/svg" height="20" width="20"
-                                     viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M2.667 17.333V2.667h7.166v1.458H4.125v11.75h11.75v-5.708h1.458v7.166Zm5.416-4.375-1.041-1.041 7.812-7.792h-2.625V2.667h5.104v5.104h-1.458V5.146Z"/>
-                                </svg>
-                                <span class="tooltip__content">
-                                    <span><u>Browse</u> my LinkedIn profile</span>
-                                </span>
-                            </a> -->
-                        <a href="#profile" aria-label="Learn more about me" rel="noreferrer" class="resume tooltip tooltip-bottom">
-                            <svg class="icon animate-face-icon" xmlns="http://www.w3.org/2000/svg" height="40" width="40" viewBox="0 0 40 40" fill="currentColor">
-                                <path d="M14.917 24c-.64 0-1.174-.215-1.605-.646-.43-.43-.645-.965-.645-1.604 0-.639.222-1.173.666-1.604.445-.43.986-.646 1.625-.646.64 0 1.167.215 1.584.646.417.43.625.965.625 1.604 0 .639-.215 1.173-.646 1.604-.43.43-.965.646-1.604.646Zm10.166 0c-.639 0-1.173-.215-1.604-.646-.43-.43-.646-.965-.646-1.604 0-.639.215-1.173.646-1.604.43-.43.965-.646 1.604-.646.64 0 1.181.215 1.625.646.445.43.667.965.667 1.604 0 .639-.222 1.173-.667 1.604a2.25 2.25 0 0 1-1.625.646ZM20 33.667c3.805 0 7.035-1.326 9.688-3.979 2.653-2.653 3.979-5.883 3.979-9.688 0-.695-.049-1.368-.146-2.021a9.868 9.868 0 0 0-.438-1.812 11.41 11.41 0 0 1-1.75.291c-.61.056-1.25.084-1.916.084-2.611 0-5.07-.535-7.375-1.604a16.598 16.598 0 0 1-5.917-4.605A16.73 16.73 0 0 1 12.208 16a18.409 18.409 0 0 1-5.833 3.75v.292c0 3.805 1.32 7.027 3.958 9.666 2.64 2.64 5.862 3.959 9.667 3.959Zm.042 3.666c-2.417 0-4.674-.458-6.771-1.375-2.097-.917-3.93-2.153-5.5-3.708-1.57-1.555-2.812-3.389-3.729-5.5-.917-2.111-1.375-4.361-1.375-6.75 0-2.389.458-4.639 1.375-6.75.917-2.111 2.16-3.945 3.729-5.5 1.57-1.555 3.403-2.791 5.5-3.708 2.097-.917 4.354-1.375 6.771-1.375 2.389 0 4.632.458 6.729 1.375 2.097.917 3.93 2.153 5.5 3.708 1.57 1.555 2.805 3.389 3.708 5.5s1.354 4.361 1.354 6.75c0 2.389-.451 4.639-1.354 6.75-.903 2.111-2.139 3.952-3.708 5.521-1.57 1.57-3.41 2.805-5.521 3.708-2.111.903-4.347 1.354-6.708 1.354Z" />
-                            </svg>
-                            <span class="label">Profile</span>
-                            <span class="tooltip__content">
-                                <span><u>Learn</u> more about me</span>
-                            </span>
-                        </a>
-                        <a href="#archive" aria-label="Explore repository of past work" rel="noreferrer" class="tooltip tooltip-bottom no-underline">
-                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="40" width="40" viewBox="0 0 40 40" fill="currentColor">
-                                <path d="M30.542 33.75V6.25h3.416v27.5ZM4.125 37.125V2.875h22.542v34.25Zm33.708-6.833V9.667h2.25v20.625Z" />
-                            </svg>
-                            <span class="label">Archive</span>
-                            <span class="tooltip__content">
-                                <span><u>Explore</u> snippets of my past work</span>
-                            </span>
-                        </a>
-                        <!-- <a href="portfolio.html" target="_blank" aria-label="Portfolio - Figma board" rel="noreferrer" class="tooltip tooltip-bottom" onclick="return false;" style="transition: filter 400ms linear; cursor: not-allowed;">
-                                 onMouseOver="this.style.filter='blur(0px)'" onMouseOut="this.style.filter='blur(6px)'"
-                                <svg style="opacity: 50%; filter: grayscale(1);" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M29.3329 19.6032V21.4479C29.3329 21.754 29.3195 22.0628 29.2928 22.3689C28.9187 26.581 25.9929 29.3334 21.7711 29.3334H10.228C8.09042 29.3334 6.28681 28.6396 4.99088 27.3817C4.4832 26.9152 4.05568 26.3671 3.72168 25.7388C4.16256 25.2028 4.65688 24.616 5.13785 24.0278C5.95281 23.052 6.74105 22.0882 7.23537 21.4612C7.97018 20.5523 9.90738 18.1595 12.5928 19.2823C13.1405 19.5096 13.6215 19.8304 14.0624 20.1111C15.1445 20.833 15.5988 21.0469 16.3603 20.6325C17.202 20.178 17.7497 19.2823 18.3242 18.3466C18.6315 17.8507 18.9388 17.3708 19.2728 16.9297C20.729 15.0315 22.9735 14.5235 24.8439 15.6464C25.7791 16.2078 26.5807 16.9163 27.3289 17.6368C27.4892 17.7972 27.6495 17.9456 27.7965 18.0926C27.9969 18.2932 28.6649 18.9615 29.3329 19.6032Z" fill="var(--icon-fg)" />
-                                    <path d="M21.7852 2.66669H10.2288C5.69972 2.66669 2.66699 5.83478 2.66699 10.5522V21.448C2.66699 23.0909 3.04107 24.5493 3.72244 25.739C4.16332 25.2029 4.65764 24.6161 5.1386 24.0266C5.95357 23.0521 6.74181 22.0883 7.23613 21.4614C7.97093 20.5524 9.90814 18.1596 12.5935 19.2825C13.1413 19.5097 13.6222 19.8305 14.0631 20.1113C15.1453 20.8331 15.5995 21.047 16.361 20.6313C17.2027 20.1781 17.7505 19.2825 18.325 18.3454C18.6323 17.8508 18.9395 17.3709 19.2735 16.9298C20.7298 15.0316 22.9743 14.5236 24.8447 15.6465C25.7799 16.208 26.5815 16.9164 27.3297 17.6369C27.49 17.7973 27.6503 17.9457 27.7973 18.0928C27.9977 18.2919 28.6657 18.9603 29.3337 19.6033V10.5522C29.3337 5.83478 26.3009 2.66669 21.7852 2.66669Z" fill="var(--icon-bg)" />
-                                    <path d="M15.2724 11.7289C15.2724 13.6071 13.7079 15.1711 11.8308 15.1711C9.95509 15.1711 8.39062 13.6071 8.39062 11.7289C8.39062 9.85214 9.95509 8.2868 11.8308 8.2868C13.7079 8.2868 15.2724 9.85214 15.2724 11.7289Z" fill="var(--icon-fg)" />
-                                </svg>
-                                <span style="opacity: 50%; filter: grayscale(1);">
-                                    Portfolio
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9.43832 2.15332H6.32249C3.75999 2.15332 2.15332 3.96749 2.15332 6.53582V13.4642C2.15332 16.0325 3.75249 17.8467 6.32249 17.8467H13.6758C16.2467 17.8467 17.8458 16.0325 17.8458 13.4642V10.1075" stroke="var(--text-2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M17.8457 2.15332L13.0303 6.96872M17.8457 2.15332L13.4194 2.16257M17.8457 2.15332L17.8364 6.57963" stroke="var(--text-2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </span>
-                                <div class="tooltip__content">
-                                    Releasing soon
-                                </div>
-                            </a> -->
-                        <div class="menu" id="menu">
-                            <a href="#menu" aria-label="Open dropdown menu"></a>
-                            <a href="#" aria-label="Close dropdown menu"></a>
-                            <span class="menu__dropdown">
-                                <!-- <a href="#about" aria-label="Find out more about me">
-                                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
-                                             viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M5.85 17.1q1.275-.975 2.85-1.538Q10.275 15 12 15q1.725 0 3.3.562 1.575.563 2.85 1.538.875-1.025 1.363-2.325Q20 13.475 20 12q0-3.325-2.337-5.663Q15.325 4 12 4T6.338 6.337Q4 8.675 4 12q0 1.475.488 2.775.487 1.3 1.362 2.325ZM12 13q-1.475 0-2.488-1.012Q8.5 10.975 8.5 9.5t1.012-2.488Q10.525 6 12 6t2.488 1.012Q15.5 8.025 15.5 9.5t-1.012 2.488Q13.475 13 12 13Zm0 9q-2.075 0-3.9-.788-1.825-.787-3.175-2.137-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175 1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138 1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175-1.35 1.35-3.175 2.137Q14.075 22 12 22Z"/>
-                                        </svg>
-                                        <span class="label">About</span>
-                                    </a> -->
-                                <a href="https://calendly.com/stepanjakl" target="_blank" aria-label="Schedule a call via Calendly" rel="noreferrer">
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 23v-2h7v-1h-4v-8h4v-1q0-2.9-2.05-4.95Q14.9 4 12 4 9.1 4 7.05 6.05 5 8.1 5 11v1h4v8H3v-9q0-1.85.712-3.488.713-1.637 1.938-2.862t2.862-1.938Q10.15 2 12 2t3.488.712q1.637.713 2.862 1.938t1.938 2.862Q21 9.15 21 11v12Z" />
-                                    </svg>
-                                    <span class="label">Virtual meeting</span>
-                                    <svg class="icon secondary" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M2.667 17.333V2.667h7.166v1.458H4.125v11.75h11.75v-5.708h1.458v7.166Zm5.416-4.375-1.041-1.041 7.812-7.792h-2.625V2.667h5.104v5.104h-1.458V5.146Z" />
-                                    </svg>
-                                </a>
-                                <a href="https://www.linkedin.com/in/stepanjakl" target="_blank" aria-label="Find out more about me on LinkedIn">
-                                    <!-- <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
-                                             viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M2 21V6h6V2h8v4h6v15Zm8-15h4V4h-4Z"/>
-                                        </svg> -->
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M14 13.5h4V12h-4Zm0 3h4V15h-4ZM15 7h7v15H2V7h7V2h6Zm-4 2h2V4h-2Zm-2 6q.625 0 1.062-.438.438-.437.438-1.062t-.438-1.062Q9.625 12 9 12t-1.062.438Q7.5 12.875 7.5 13.5t.438 1.062Q8.375 15 9 15Zm-3 3h6v-.45q0-.425-.238-.788-.237-.362-.662-.562-.5-.225-1.012-.337Q9.575 15.75 9 15.75q-.575 0-1.087.113-.513.112-1.013.337-.425.2-.662.562Q6 17.125 6 17.55Z" />
-                                    </svg>
-                                    <span class="label">LinkedIn profile</span>
-                                    <svg class="icon secondary" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M2.667 17.333V2.667h7.166v1.458H4.125v11.75h11.75v-5.708h1.458v7.166Zm5.416-4.375-1.041-1.041 7.812-7.792h-2.625V2.667h5.104v5.104h-1.458V5.146Z" />
-                                    </svg>
-                                </a>
-                                <a href="https://github.com/stepanjakl" target="_blank" aria-label="Visit my profile on GitHub" rel="noreferrer">
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M2 20V4h20v16Zm2-2h16V8H4Zm8-1v-2h6v2Zm-4.5 0-1.4-1.4L8.675 13l-2.6-2.6L7.5 9l4 4Z" />
-                                    </svg>
-                                    <span class="label">GitHub profile</span>
-                                    <svg class="icon secondary" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M2.667 17.333V2.667h7.166v1.458H4.125v11.75h11.75v-5.708h1.458v7.166Zm5.416-4.375-1.041-1.041 7.812-7.792h-2.625V2.667h5.104v5.104h-1.458V5.146Z" />
-                                    </svg>
-                                </a>
-                                <label for="mode" class="light" tabindex="0">
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M11 4V1h2v3Zm0 19v-3h2v3Zm9-10v-2h3v2ZM1 13v-2h3v2Zm17.7-6.3-1.4-1.4 1.75-1.8 1.45 1.45ZM4.95 20.5 3.5 19.05l1.8-1.75 1.4 1.4Zm14.1 0-1.75-1.8 1.4-1.4 1.8 1.75ZM5.3 6.7 3.5 4.95 4.95 3.5 6.7 5.3ZM12 18q-2.5 0-4.25-1.75T6 12q0-2.5 1.75-4.25T12 6q2.5 0 4.25 1.75T18 12q0 2.5-1.75 4.25T12 18Z" />
-                                    </svg>
-                                    <span class="label">Light mode</span>
-                                </label>
-                                <label for="mode" class="dark" tabindex="0">
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M13.1 23q-2.1 0-3.938-.8-1.837-.8-3.199-2.162Q4.6 18.675 3.8 16.837 3 15 3 12.9q0-3.65 2.325-6.438Q7.65 3.675 11.25 3q-.45 2.475.275 4.837.725 2.363 2.5 4.138t4.138 2.5q2.362.725 4.837.275-.65 3.6-3.45 5.925Q16.75 23 13.1 23Z" />
-                                    </svg>
-                                    <span class="label">Dark mode</span>
-                                </label>
-                                <label for="debug" tabindex="0">
-                                    <svg class="icon flex debug-checked:hidden" description="enable debug mode" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 16q1.875 0 3.188-1.312Q16.5 13.375 16.5 11.5q0-1.875-1.312-3.188Q13.875 7 12 7q-1.875 0-3.188 1.312Q7.5 9.625 7.5 11.5q0 1.875 1.312 3.188Q10.125 16 12 16Zm0-1.8q-1.125 0-1.912-.788Q9.3 12.625 9.3 11.5t.788-1.913Q10.875 8.8 12 8.8t1.913.787q.787.788.787 1.913t-.787 1.912q-.788.788-1.913.788Zm0 4.8q-3.65 0-6.65-2.038-3-2.037-4.35-5.462 1.35-3.425 4.35-5.463Q8.35 4 12 4q3.65 0 6.65 2.037 3 2.038 4.35 5.463-1.35 3.425-4.35 5.462Q15.65 19 12 19Z" />
-                                    </svg>
-                                    <svg class="icon hidden debug-checked:flex" description="disable debug mode" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="m19.8 22.6-4.2-4.15q-.875.275-1.762.413Q12.95 19 12 19q-3.775 0-6.725-2.087Q2.325 14.825 1 11.5q.525-1.325 1.325-2.463Q3.125 7.9 4.15 7L1.4 4.2l1.4-1.4 18.4 18.4ZM12 16q.275 0 .512-.025.238-.025.513-.1l-5.4-5.4q-.075.275-.1.513-.025.237-.025.512 0 1.875 1.312 3.188Q10.125 16 12 16Zm7.3.45-3.175-3.15q.175-.425.275-.862.1-.438.1-.938 0-1.875-1.312-3.188Q13.875 7 12 7q-.5 0-.938.1-.437.1-.862.3L7.65 4.85q1.025-.425 2.1-.638Q10.825 4 12 4q3.775 0 6.725 2.087Q21.675 8.175 23 11.5q-.575 1.475-1.512 2.738Q20.55 15.5 19.3 16.45Zm-4.625-4.6-3-3q.7-.125 1.288.112.587.238 1.012.688.425.45.613 1.038.187.587.087 1.162Z" />
-                                    </svg>
-                                    <span class="label">Debug</span>
-                                </label>
-                            </span>
-                            <span class="menu__button">
-                                <svg class="icon open" xmlns="http://www.w3.org/2000/svg" height="40" width="40" viewBox="0 0 40 40" fill="currentColor">
-                                    <path d="m20 35.625-8.167-8.167 2.625-2.666L20 30.333l5.542-5.541 2.625 2.666Zm-5.542-20.333-2.625-2.625L20 4.5l8.167 8.167-2.625 2.625L20 9.792Z" />
-                                </svg>
-                                <svg class="icon close" xmlns="http://www.w3.org/2000/svg" height="40" width="40" viewBox="0 0 40 40" fill="currentColor">
-                                    <path d="m14.458 33.958-2.583-2.583L20 23.25l8.125 8.125-2.583 2.583L20 28.417ZM20 16.75l-8.125-8.125 2.583-2.583L20 11.583l5.542-5.541 2.583 2.583Z" />
-                                </svg>
-                                <span class="label">More</span>
-                            </span>
-                            <div class="underlay underlay__menu"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div id="triangle-left"></div>
             <div id="triangle-right"></div>
         </div>
     </div>
     <div class="footer">
-        <div class="footer__wrapper">
+        <div class="footer__content">
             <div class="section">
                 <span class="square" id="square-1"></span>
             </div>

@@ -12,25 +12,24 @@
     display: none;
 }
 
+/* TODO move all checked and target selectors here? */
 
 /* Modal - Profile */
 
-.modal#profile:target,
-.modal#profile:target svg,
-.modal#profile:target img,
-.modal#profile:target video {
-    /* display: block; */
-    /* visibility: visible; */
+#profile:target~#page .modal__profile {
+    overflow: auto;
+}
+
+#profile:target~#page .modal__profile .modal__content {
     pointer-events: auto;
 }
 
 /* Modal - Archive */
 
-.modal#archive:target,
-.modal#archive:target svg,
-.modal#archive:target img,
-.modal#archive:target video {
-    /* display: block; */
-    /* visibility: visible; */
+#archive:target~#page .modal__archive {
+    overflow: auto;
+}
+
+#archive:target~#page .modal__archive .modal__content {
     pointer-events: auto;
 }
