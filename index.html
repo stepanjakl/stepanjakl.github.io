@@ -21,17 +21,15 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ffffff">
     <!-- Fonts -->
-    <link rel="stylesheet" href="fonts.css" rel="preload">
+    <link rel="stylesheet" href="font-bai-jamjuree.css" rel="preload">
+    <link rel="stylesheet" href="font-chakra-petch.css" rel="preload">
+    <link rel="stylesheet" href="font-newsreader.css" rel="preload">
     <!-- Styles -->
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="utility.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="state.css">
     <link rel="stylesheet" href="animation.css" rel="preload">
-    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /> -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,200;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,600&display=swap" rel="stylesheet">
     <script>
         console.log('%cŠtěpán Jákl | Full-stack developer & interface designer', `border: 1px solid #4e7bff; border-radius: 2px; color: #4e7bff; font-size: 12.5px; padding: 22.5px 35px 20px 35px; margin: 20px 20px; /* padding: 29.75px 30px 29.75px 84px; background-image: url("data:image/svg+xml,%3Csvg width='100%' height='100%' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 40V10.033L10.033 0H40V30L30 40H0ZM10 30V25H22.5L25 22.5H10V17.5H30V25L25 30H10ZM15 10H30V15H10L15 10Z' fill='%234e7bff'/%3E%3C/svg%3E%0A"); background-repeat: no-repeat; background-position: 20px 50%; background-size: 40px 40px */`)
         console.log('%cThis website was created with HTML, CSS and sprinkled with a tiny bit of JS.', 'color: #4e7bff; margin: 15px 0 15px 20px;')
@@ -74,34 +72,34 @@
         <div class="relative h-full w-full max-w-xl pt-1/2"><!-- pb-1/2 -->
             <div class="absolute inset-0" style="background-repeat: repeat; background-origin: border-box; background-position: 0 0; background-image: var(--background-pattern);"></div>
             <div id="intro">
-                <div class="left-column">
-                    <!-- Copy for name -->
-                    <h2 class="animate-fade-in-name tooltip tooltip-bottom" style="user-select: none; -webkit-user-select: none;"><span style="--i: 1;">Š</span><span style="--i: 2;">t</span><span style="--i: 3;">ě</span><span style="--i: 4;">p</span><span style="--i: 5;">á</span><span style="--i: 6;">n</span><span style="--i: 7;">&nbsp;</span><span style="--i: 8;">J</span><span style="--i: 9;">á</span><span style="--i: 10;">k</span><span style="--i: 11;">l</span>
+                <div id="intro__left-column" class="z-1 flex flex-col-reverse items-start">
+                    <!-- Script to copy name on click -->
+                    <h2 class="animate-fade-in-name tooltip tooltip-bottom select-none cursor-pointer"><span style="--i: 1;">Š</span><span style="--i: 2;">t</span><span style="--i: 3;">ě</span><span style="--i: 4;">p</span><span style="--i: 5;">á</span><span style="--i: 6;">n</span><span style="--i: 7;">&nbsp;</span><span style="--i: 8;">J</span><span style="--i: 9;">á</span><span style="--i: 10;">k</span><span style="--i: 11;">l</span>
                         <div class="tooltip__content">
-                            <span>It's pronouced ... - or just call me Stepan. Click to copy.</span>
+                            <p>It's pronouced ... - or just call me Stepan. Click to copy.</p>
                         </div>
                     </h2>
-                    <div class="animate-fade-in-logo logo">
+                    <div id="logo" class="animate-fade-in-logo">
                         <span></span>
                     </div>
                 </div>
-                <div class="right-column">
-                    <h3 class="animate-fade-in-title" style="display: inline-flex; user-select: none; -webkit-user-select: none;">
+                <div id="intro__right-column" class="z-1 flex flex-col items-start">
+                    <h3 class="animate-fade-in-title inline-flex select-none">
                         <span style="--i: 1;">F</span><span style="--i: 2;">u</span><span style="--i: 3;">l</span><span style="--i: 4;">l</span><span style="--i: 5;">-</span><span style="--i: 6;">s</span><span style="--i: 7;">t</span><span style="--i: 8;">a</span><span style="--i: 9;">c</span><span style="--i: 10;">k</span><span style="--i: 11;">&nbsp;</span><span class="highlight" style="--i: 12;">d</span><span class="highlight" style="--i: 13;">e</span><span class="highlight" style="--i: 14;">v</span><span class="highlight" style="--i: 15;">e</span><span class="highlight" style="--i: 16;">l</span><span class="highlight" style="--i: 17;">o</span><span class="highlight" style="--i: 18;">p</span><span class="highlight" style="--i: 19;">e</span><span class="highlight" style="--i: 20;">r</span><span style="--i: 21;">&nbsp;</span>
                     </h3>
-                    <h3 class="animate-fade-in-title h3-title--secondary" style="letter-spacing: 1.5px; margin-top: 16px; display: inline-flex; user-select: none; -webkit-user-select: none;">
-                        <span style="--i: 22;">&</span><span style="--i: 23;">&nbsp;</span><span style="--i: 24;">i</span><span style="--i: 25;">n</span><span style="--i: 26;">t</span><span style="--i: 27;">e</span><span style="--i: 28;">r</span><span style="--i: 29;">f</span><span style="--i: 30;">a</span><span style="--i: 31;">c</span><span style="--i: 32;">e</span><span style="--i: 33;">&nbsp;</span><span class="highlight" style="--i: 34;">d</span><span class="highlight" style="--i: 35;">e</span><span class="highlight" style="--i: 36;">s</span><span class="highlight" style="--i: 37;">i</span><span class="highlight" style="--i: 38;">g</span><span class="highlight" style="--i: 39;">n</span><span class="highlight" style="--i: 40;">e</span><span class="highlight" style="--i: 41;">r</span></p>
+                    <h3 class="animate-fade-in-title h3-title--secondary inline-flex select-none pt-1/2" style="letter-spacing: 1.5px;">
+                        <span style="--i: 22;">&</span><span style="--i: 23;">&nbsp;</span><span style="--i: 24;">i</span><span style="--i: 25;">n</span><span style="--i: 26;">t</span><span style="--i: 27;">e</span><span style="--i: 28;">r</span><span style="--i: 29;">f</span><span style="--i: 30;">a</span><span style="--i: 31;">c</span><span style="--i: 32;">e</span><span style="--i: 33;">&nbsp;</span><span class="highlight-alt" style="--i: 34;">d</span><span class="highlight-alt" style="--i: 35;">e</span><span class="highlight-alt" style="--i: 36;">s</span><span class="highlight-alt" style="--i: 37;">i</span><span class="highlight-alt" style="--i: 38;">g</span><span class="highlight-alt" style="--i: 39;">n</span><span class="highlight-alt" style="--i: 40;">e</span><span class="highlight-alt" style="--i: 41;">r</span></p>
                     </h3>
                     <div class="availability animate-fade-in-cta-1">
                         <div class="tooltip tooltip-bottom">
                             <a href="https://calendly.com/stepanjakl" target="_blank" rel="noreferrer" aria-label="Open to new opportunities, book a virtual meeting" class="badge">
                                 <div>
                                     <span class="dot"></span>
-                                    <span class="text">Open to new opportunities</span>
+                                    <span class="text whitespace-nowrap">Open to new opportunities</span>
                                 </div>
                             </a>
                             <div class="tooltip__content">
-                                <span><u>Book</u> a virtual meeting via Calendly</span>
+                                <span>Book a virtual meeting via Calendly</span>
                             </div>
                         </div>
                         <!-- <span>in Q2-Q4/2023</span> -->
@@ -124,7 +122,7 @@
                             </svg>
                             <span class="label">Profile</span>
                             <span class="tooltip__content">
-                                <span><u>Learn</u> more about me</span>
+                                <span>Learn more about me</span>
                             </span>
                         </a>
                         <a href="#archive" aria-label="Explore repository of past work" rel="noreferrer" class="tooltip tooltip-bottom no-underline">
@@ -133,13 +131,23 @@
                             </svg>
                             <span class="label"><u>A</u>rchive</span>
                             <span class="tooltip__content">
-                                <span><u>Explore</u> snippets of my past work</span>
+                                <span>Explore snippets of my past work</span>
                             </span>
                         </a>
-                        <div class="menu" id="menu">
+                        <div id="menu">
                             <a href="#menu" aria-label="Open dropdown menu"></a>
                             <a href="#" aria-label="Close dropdown menu"></a>
-                            <span class="menu__dropdown">
+                            <button type="button" id="menu__button" class="pointer-events-none">
+                                <svg class="icon open" xmlns="http://www.w3.org/2000/svg" height="40" width="40" viewBox="0 0 40 40" fill="currentColor">
+                                    <path d="m20 35.625-8.167-8.167 2.625-2.666L20 30.333l5.542-5.541 2.625 2.666Zm-5.542-20.333-2.625-2.625L20 4.5l8.167 8.167-2.625 2.625L20 9.792Z" />
+                                </svg>
+                                <svg class="icon close" xmlns="http://www.w3.org/2000/svg" height="40" width="40" viewBox="0 0 40 40" fill="currentColor">
+                                    <path d="m14.458 33.958-2.583-2.583L20 23.25l8.125 8.125-2.583 2.583L20 28.417ZM20 16.75l-8.125-8.125 2.583-2.583L20 11.583l5.542-5.541 2.583 2.583Z" />
+                                </svg>
+                                <span class="label"><u>M</u>ore</span>
+                            </button>
+                            <div id="underlay__menu" class="fixed inset-0 pointer-events-none"></div>
+                            <div id="menu__dropdown">
                                 <!-- <a href="#about" aria-label="Find out more about me">
                                         <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
                                              viewBox="0 0 24 24" fill="currentColor">
@@ -178,7 +186,7 @@
                                         <path d="M2.667 17.333V2.667h7.166v1.458H4.125v11.75h11.75v-5.708h1.458v7.166Zm5.416-4.375-1.041-1.041 7.812-7.792h-2.625V2.667h5.104v5.104h-1.458V5.146Z" />
                                     </svg>
                                 </a>
-                                <hr style="width: 100%; height: 6px; margin: 0px 1px 0px 1px; border: 0; background-color: rgba(23, 28, 30, 0.375); box-shadow: 0 -1px 0 0 var(--context-border-inner); border-top: solid 1px var(--context-border-outer); box-sizing: content-box; transform: translateY(3px) translateX(-1px); overflow: visible;">
+                                <hr style="width: 100%; height: 8px; margin: 0px 1px 0px 1px; border: 0; background-color: rgba(23, 28, 30, 0.375); box-shadow: 0 -1px 0 0 var(--context-border-inner); border-top: solid 1px var(--context-border-outer); box-sizing: content-box; transform: translateX(-1px); overflow: visible;">
                                 <label for="mode" class="light" tabindex="0">
                                     <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M11 4V1h2v3Zm0 19v-3h2v3Zm9-10v-2h3v2ZM1 13v-2h3v2Zm17.7-6.3-1.4-1.4 1.75-1.8 1.45 1.45ZM4.95 20.5 3.5 19.05l1.8-1.75 1.4 1.4Zm14.1 0-1.75-1.8 1.4-1.4 1.8 1.75ZM5.3 6.7 3.5 4.95 4.95 3.5 6.7 5.3ZM12 18q-2.5 0-4.25-1.75T6 12q0-2.5 1.75-4.25T12 6q2.5 0 4.25 1.75T18 12q0 2.5-1.75 4.25T12 18Z" />
@@ -201,16 +209,6 @@
                                     <span class="label">Debug</span>
                                 </label>
                             </span>
-                            <span class="menu__button">
-                                <svg class="icon open" xmlns="http://www.w3.org/2000/svg" height="40" width="40" viewBox="0 0 40 40" fill="currentColor">
-                                    <path d="m20 35.625-8.167-8.167 2.625-2.666L20 30.333l5.542-5.541 2.625 2.666Zm-5.542-20.333-2.625-2.625L20 4.5l8.167 8.167-2.625 2.625L20 9.792Z" />
-                                </svg>
-                                <svg class="icon close" xmlns="http://www.w3.org/2000/svg" height="40" width="40" viewBox="0 0 40 40" fill="currentColor">
-                                    <path d="m14.458 33.958-2.583-2.583L20 23.25l8.125 8.125-2.583 2.583L20 28.417ZM20 16.75l-8.125-8.125 2.583-2.583L20 11.583l5.542-5.541 2.583 2.583Z" />
-                                </svg>
-                                <span class="label"><u>M</u>ore</span>
-                            </span>
-                            <div class="underlay underlay__menu"></div>
                         </div>
                     </div>
                 </div>
@@ -237,7 +235,7 @@
                                 <dt>Profile:</dt>
                                 <dd>
                                     <p>Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to producing high-quality results for projects with realistic and exciting propositions and tangible outcomes. Comfortable with working on both back-end and front-end, but with a preference for user-facing/browser-oriented development.
-                                    <p>Coding and tweaking profesinally since 2014.</p>
+                                    <p>Coding and tweaking profesinally since 2014. In last few years, I've been especially focusing on developing sites built with <a href="#"><u>ApostropheCMS</u></a>.</p>
                                     <p>Equally dedicated to code and design.</p>
                                 </dd>
                             </div>
@@ -327,7 +325,7 @@
                         </dl>
                     </div>
                 </div>
-                <div class="underlay underlay__modal"></div>
+                <div id="underlay__modal" class="fixed inset-0 pointer-events-none"></div>
             </div>
             <div class="modal modal__archive" role="dialog" aria-modal="true">
                 <div class="modal__content" style="border-radius: 8px 32px 32px 8px;">
@@ -375,9 +373,11 @@
                 <div class="underlay underlay__modal"></div>
             </div>
             <div id="triangle-left"></div>
-            <div id="triangle-right"></div>
+            <div id="triangle-right" class="animate-flicker-triangle-shadow"></div>
+            <div id="triangle-right-alt" class="animate-flicker-triangle-light"></div>
         </div>
     </div>
+    <!-- TODO all ids come before class -->
     <div class="footer">
         <div class="footer__content">
             <div class="section">
