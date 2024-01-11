@@ -12,8 +12,16 @@
 
 /* Display */
 
+.inline-block {
+    display: inline-block;
+}
+
 .flex {
     display: flex;
+}
+
+.inline-flex {
+    display: inline-flex;
 }
 
 .grid {
@@ -24,6 +32,23 @@
     display: none;
 }
 
+/* Flex */
+
+.flex-row {
+    flex-direction: row;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.flex-col-reverse {
+    flex-direction: column-reverse;
+}
+
+.items-start {
+    align-items: start;
+}
 
 /* Typography */
 
@@ -32,12 +57,61 @@
     font-weight: 400;
 }
 
+/* .text-sm {
+    font-family: 'Chakra Petch', monospace;
+    font-size: 15.7143px;
+    line-height: 26px;
+    font-weight: 400;
+}
+
+.text-sm::before {
+    content: "";
+    margin-bottom: -0.5023em;
+    display: table;
+}
+
+.text-sm::after {
+    content: "";
+    margin-top: -0.4523em;
+    display: table;
+} */
+
+body {
+    --text-md-font-weight: 200;
+    --text-md-font-size: 68.5714px;
+    --text-md-line-height: 96px;
+    --text-md__before-margin-bottom: -0.375em;
+    --text-md__after-margin-bottom: -0.325em;
+}
+
+.text-md {
+    font-weight: var(--text-md-font-weight);
+    font-size: var(--text-md-font-size);
+    line-height: var(--text-md-line-height);
+}
+
+.text-md::before {
+    content: "";
+    margin-bottom: var(--text-md__before-margin-bottom);
+    display: table;
+}
+
+.text-md::after {
+    content: "";
+    margin-bottom: var(--text-md__after-margin-bottom);
+    display: table;
+}
+
+
 /* Oveflow */
 
 .overflow-auto {
     overflow: auto;
 }
 
+.overflow-hidden {
+    overflow: hidden;
+}
 
 /* Position */
 
@@ -134,13 +208,20 @@
 }
 
 
+/* Z-Index */
+
+.z-0 {
+    z-index: 0;
+}
+
+.z-1 {
+    z-index: 1;
+}
+
 /* Inset */
 
 .inset-0 {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
 }
 
 /* Margin */
@@ -152,3 +233,28 @@
     overflow-y: scroll;
     margin-right: var(--segment);
 } */
+
+/* User Select */
+
+.select-none {
+    user-select: none;
+}
+
+
+/* Cursor */
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Pointer Events */
+.pointer-events-none {
+    pointer-events: none;
+}
+
+
+/* Whitespace */
+
+.whitespace-nowrap {
+    white-space: nowrap;
+}
