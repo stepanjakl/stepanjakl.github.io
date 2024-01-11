@@ -29,7 +29,9 @@ body {
 .animate-fade-in-title span,
 .animate-fade-in-cta-1,
 .animate-fade-in-cta-2,
-.animate-fade-in-logo {
+.animate-fade-in-logo,
+.animate-fade-out-triangle-alt::after,
+.animate-fade-in-triangle::after {
     animation-name: fade-in;
     animation-fill-mode: both;
     animation-duration: 2.5s;
@@ -56,6 +58,19 @@ body {
     animation-delay: calc((var(--delay-segment) * 7) + 0.1s);
 }
 
+.animate-fade-out-triangle-alt::after {
+    animation-duration: 6s;
+    animation-delay: calc((var(--delay-segment) * 7) + 0.1s);
+    animation-direction: reverse;
+    animation-timing-function: linear;
+}
+
+/* .animate-fade-in-triangle::after {
+    animation-duration: 6s;
+    animation-delay: calc((var(--delay-segment) * 7) + 0.1s);
+    animation-timing-function: linear;
+} */
+
 @keyframes fade-in {
     0% {
         opacity: 0;
@@ -66,21 +81,78 @@ body {
     }
 }
 
+/* Triangle - Flicker */
+
+.animate-flicker-triangle-light::after,
+.animate-flicker-triangle-shadow::after {
+    animation-duration: calc(var(--delay-segment) * 24);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-delay: calc(var(--delay-segment) * 8 + 0.1s);
+}
+
+.animate-flicker-triangle-light::after {
+    animation-name: flicker-light;
+}
+
+.animate-flicker-triangle-shadow::after {
+    animation-name: flicker-shadow;
+}
+
+@keyframes flicker-light {
+    0%, 19.999%, 21%, 22.999%, 24%, 31.999%, 40%, 100% {
+        opacity: 0;
+    }
+
+        20%, 20.999%, 23%, 23.999%, 32%, 39.999% {
+        opacity: 1;
+    }
+}
+
+@keyframes flicker-shadow {
+    0%, 19.999%, 21%, 22.999%, 24%, 31.999%, 40%, 100% {
+        opacity: 1;
+    }
+
+    20%, 20.999%, 23%, 23.999%, 32%, 39.999% {
+        opacity: 0;
+    }
+}
+
+
 /* TODO - maybe change all linear funcs to quad? */
 
 /* Intro - Title Highlight */
 
-.animate-fade-in-title span.highlight {
-    animation-name: fade-in, de-highlight;
+.animate-fade-in-title span.highlight,
+.animate-fade-in-title span.highlight-alt {
     animation-fill-mode: both;
     animation-duration: 2.25s, 1s;
     animation-timing-function: var(--ease-out-quad);
     animation-delay: calc(0.3s + var(--delay-segment) + var(--i) * 15ms), calc(0.3s + (var(--delay-segment) * 2) + var(--i) * 10ms);
 }
 
+.animate-fade-in-title span.highlight {
+    animation-name: fade-in, de-highlight;
+}
+
 @keyframes de-highlight {
     0% {
         color: var(--highlight);
+    }
+
+    100% {
+        color: var(--text-1);
+    }
+}
+
+.animate-fade-in-title span.highlight-alt {
+    animation-name: fade-in, de-highlight-alt;
+}
+
+@keyframes de-highlight-alt {
+    0% {
+        color: var(--yellow);
     }
 
     100% {
@@ -177,34 +249,27 @@ svg.animate-face-icon path {
 
 /* Underlay */
 
-.underlay {
-    position: fixed;
-    inset: 0;
-    /* user-select: none; */
-    pointer-events: none;
-}
-
-.underlay.underlay__menu,
-.underlay.underlay__modal {
+#underlay__menu,
+#underlay__modal {
     opacity: 0;
     transition: opacity var(--animate-out-segment) linear;
 }
 
-.underlay.underlay__menu {
+#underlay__menu {
     z-index: 0;
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
 }
 
-.underlay.underlay__modal {
+#underlay__modal {
     z-index: 2;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
-#debug:not(:checked)~#page div:target .underlay.underlay__menu,
-#debug:not(:checked)~#profile:target~#page .modal__profile .underlay.underlay__modal,
-#debug:not(:checked)~#archive:target~#page .modal__archive .underlay.underlay__modal {
+#debug:not(:checked)~#page div:target #underlay__menu,
+#debug:not(:checked)~#profile:target~#page .modal__profile #underlay__modal,
+#debug:not(:checked)~#archive:target~#page .modal__archive #underlay__modal {
     pointer-events: auto;
     opacity: 1;
 }
