@@ -99,6 +99,16 @@ body {
     animation-name: flicker-shadow;
 }
 
+#profile:target~#page .animate-flicker-triangle-light::after,
+#archive:target~#page .animate-flicker-triangle-light::after {
+    animation: none;
+}
+
+#profile:target~#page .animate-flicker-triangle-shadow::after,
+#archive:target~#page .animate-flicker-triangle-shadow::after {
+    animation: none;
+}
+
 @keyframes flicker-light {
     0%, 19.999%, 21%, 22.999%, 24%, 31.999%, 40%, 100% {
         opacity: 0;
@@ -220,8 +230,8 @@ svg.animate-face-icon path {
 
 /* Modal - Profile */
 
-#profile~#page .modal__profile .modal__content,
-#archive~#page .modal__archive .modal__content {
+.modal__profile .modal__content,
+.modal__archive .modal__content {
     transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad);
     transform: scale(1.05);
     transform-origin: top;
@@ -234,16 +244,34 @@ svg.animate-face-icon path {
     transform: scale(1);
 }
 
-#intro {
+#intro__left-column, #intro__right-column {
     transition: transform var(--animate-out-segment) var(--ease-in-quad);
     transform-origin: center;
     /* transform: scale(1); */
 }
 
-#profile:target~#page #intro,
-#archive:target~#page #intro {
+#profile:target~#page #intro__left-column,
+#profile:target~#page #intro__right-column,
+#archive:target~#page #intro__left-column,
+#archive:target~#page #intro__right-column {
     transition: transform var(--animate-in-segment) var(--ease-out-quad);
     transform: scale(0.95);
+}
+
+
+/* Menu */
+
+#menu__dropdown {
+    opacity: 0;
+    transform: translateY(calc(-1 * (var(--segment) / 8)));
+    transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-out-quad);
+}
+
+#menu:target>#menu__dropdown {
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateY(0px);
+    transition: opacity var(--animate-in-segment) linear, transform var(--animate-in-segment) var(--ease-out-quad);
 }
 
 
@@ -252,24 +280,23 @@ svg.animate-face-icon path {
 #underlay__menu,
 #underlay__modal {
     opacity: 0;
-    transition: opacity var(--animate-out-segment) linear;
+    transition: opacity var(--animate-out-segment) linear var(--animate-out-segment);
 }
 
 #underlay__menu {
-    z-index: 0;
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
 }
 
 #underlay__modal {
-    z-index: 2;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
 }
 
 #debug:not(:checked)~#page div:target #underlay__menu,
-#debug:not(:checked)~#profile:target~#page .modal__profile #underlay__modal,
-#debug:not(:checked)~#archive:target~#page .modal__archive #underlay__modal {
+#debug:not(:checked)~#profile:target~#page #underlay__modal,
+#debug:not(:checked)~#archive:target~#page #underlay__modal {
     pointer-events: auto;
     opacity: 1;
+    transition: opacity var(--animate-in-segment) linear calc(2 * var(--animate-in-segment));
 }
