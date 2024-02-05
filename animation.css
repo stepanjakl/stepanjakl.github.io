@@ -31,7 +31,6 @@ body {
 .animate-fade-in-cta-1,
 .animate-fade-in-cta-2,
 .animate-fade-in-logo,
-.animate-fade-out-triangle-alt::after,
 .animate-fade-in-triangle::after {
     animation-name: fade-in;
     animation-fill-mode: both;
@@ -48,31 +47,33 @@ body {
 }
 
 .animate-fade-in-cta-1 {
+    animation-duration: 1.5s;
     animation-delay: calc((var(--delay-segment) * 5) + 0.1s);
 }
 
 .animate-fade-in-cta-2 {
-    animation-delay: calc((var(--delay-segment) * 6) + 0.1s);
+    animation-duration: 1s;
+    animation-delay: calc((var(--delay-segment) * 7) + 0.1s);
 }
 
 .animate-fade-in-logo {
-    animation-delay: calc((var(--delay-segment) * 7) + 0.1s);
-}
-
-.animate-fade-out-triangle-alt::after {
-    animation-duration: 6s;
-    animation-delay: calc((var(--delay-segment) * 7) + 0.1s);
-    animation-direction: reverse;
-    animation-timing-function: linear;
+    animation-duration: 1.5s;
+    animation-delay: calc((var(--delay-segment) * 9) + 0.1s);
 }
 
 @keyframes fade-in {
     0% {
         opacity: 0;
+        pointer-events: none;
+    }
+
+    99.9% {
+        pointer-events: none;
     }
 
     100% {
         opacity: 1;
+        pointer-events: auto;
     }
 }
 
@@ -84,7 +85,7 @@ body {
     animation-duration: calc(var(--delay-segment) * 24);
     animation-timing-function: linear;
     animation-iteration-count: infinite;
-    animation-delay: calc(var(--delay-segment) * 8 + 0.1s);
+    animation-delay: calc(var(--delay-segment) * 10 + 0.1s);
 }
 
 .animate-flicker-triangle-light::after {
@@ -206,7 +207,7 @@ svg.animate-face-icon path {
     animation-duration: calc(var(--delay-segment) * 24);
     animation-timing-function: linear;
     animation-iteration-count: infinite;
-    animation-delay: calc(var(--delay-segment) * 8 + 0.1s);
+    animation-delay: calc(var(--delay-segment) * 10 + 0.1s);
 }
 
 @keyframes face-icon-animation {
