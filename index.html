@@ -54,15 +54,25 @@
             console.log('%cWould you like to work with me? Email me at %cstepan.jakl@outlook.com', 'color: #4e7bff; margin: 15px 0 15px 20px;', 'color: #4e7bff; text-decoration: underline;')
         </script>
         <script>
-            function activateHighlight(element) {
-                console.log('activateHighlight', element);
-                function activateHighlightHandler() {
-                    console.log('activateHighlight - ended');
-                    element.classList.remove('active');
-                    element.removeEventListener('transitionend', activateHighlightHandler);
+            const activateHighlight = (element, tempInnerText) => {
+                const origInnerText = element.innerText
+                const activateHandler = () => {
+                    element.classList.remove('active')
+                    element.removeEventListener('transitionend', activateHandler)
+                    element.addEventListener('transitionend', deactivateHandler)
                 }
-                element.classList.toggle('active');
-                element.addEventListener('transitionend', activateHighlightHandler);
+                const deactivateHandler = () => {
+                    console.log('transitionend', this);
+                    if (tempInnerText) {
+                        element.innerText = origInnerText
+                    }
+                    element.removeEventListener('transitionend', deactivateHandler)
+                }
+                if (tempInnerText) {
+                    element.innerText = tempInnerText
+                }
+                element.classList.toggle('active')
+                element.addEventListener('transitionend', activateHandler)
             }
         </script>
         <script>
@@ -100,7 +110,6 @@
              style="background-color: var(--background)">
             <div class="relative h-full w-full max-w-xl pt-1/2"
                  style="padding-bottom: calc((var(--segment) / 2) + 1px)">
-                <!-- pb-1/2 -->
                 <div class="absolute inset-0"
                      style="background-repeat: repeat;
                             background-origin: border-box;
@@ -111,13 +120,16 @@
                     <div id="intro__left-column"
                          class="z-1 flex flex-col-reverse align-items-start">
                         <!-- Script to copy name on click -->
-                        <h2 class="animate-fade-in-name tooltip tooltip-bottom-left select-none cursor-pointer"
-                            onclick="navigator.clipboard.writeText('Štěpán Jákl'); activateHighlight(this.querySelector('i.highlight'))">
+                        <h2 class="animate-fade-in-name tooltip__wrapper select-none cursor-pointer"
+                            onclick="navigator.clipboard.writeText('Štěpán Jákl'); activateHighlight(this.querySelector('.highlight'), 'Copied to clipboard')">
                             <span style="--i: 1;">Š</span><span style="--i: 2;">t</span><span style="--i: 3;">ě</span><span style="--i: 4;">p</span><span style="--i: 5;">á</span><span style="--i: 6;">n</span><span style="--i: 7;">&nbsp;</span><span style="--i: 8;">J</span><span style="--i: 9;">á</span><span style="--i: 10;">k</span><span style="--i: 11;">l</span>
-                            <div class="tooltip__content">
+                            <div class="tooltip tooltip-top">
                                 <p>
-                                    Pronounced: shteh-PAHN YAH-kl | <i class="highlight">Click to copy</i>
+                                    Pronounced: shteh-PAHN YAH-kl
                                 </p>
+                            </div>
+                            <div class="tooltip tooltip-bottom">
+                                <span class="highlight">Click to copy</span>
                             </div>
                         </h2>
                         <div id="logo" class="animate-fade-in-logo select-none">
@@ -133,7 +145,7 @@
                             <span style="--i: 22;">&</span><span style="--i: 23;">&nbsp;</span><span style="--i: 24;">i</span><span style="--i: 25;">n</span><span style="--i: 26;">t</span><span style="--i: 27;">e</span><span style="--i: 28;">r</span><span style="--i: 29;">f</span><span style="--i: 30;">a</span><span style="--i: 31;">c</span><span style="--i: 32;">e</span><span style="--i: 33;">&nbsp;</span><span class="highlight-alt" style="--i: 34;">d</span><span class="highlight-alt" style="--i: 35;">e</span><span class="highlight-alt" style="--i: 36;">s</span><span class="highlight-alt" style="--i: 37;">i</span><span class="highlight-alt" style="--i: 38;">g</span><span class="highlight-alt" style="--i: 39;">n</span><span class="highlight-alt" style="--i: 40;">e</span><span class="highlight-alt" style="--i: 41;">r</span>
                         </h3>
                         <div class="availability animate-fade-in-cta-1">
-                            <div class="tooltip tooltip-bottom">
+                            <div class="tooltip__wrapper">
                                 <a href="https://calendly.com/stepanjakl"
                                    target="_blank"
                                    rel="noreferrer"
@@ -144,15 +156,15 @@
                                         <span class="text whitespace-nowrap">Open to new opportunities</span>
                                     </div>
                                 </a>
-                                <div class="tooltip__content">
+                                <div class="tooltip tooltip-bottom">
                                     <span>Book a virtual meeting via Calendly</span>
                                 </div>
                             </div>
                             <!-- <span>in Q2-Q4/2023</span> -->
                         </div>
                         <div id="intro__email" class="animate-fade-in-cta-2">
-                            <div class="email__wrapper tooltip tooltip-top"
-                                 onmousedown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@outlook.com')"
+                            <div class="tooltip__wrapper"
+                                 onmousedown="navigator.clipboard.writeText('stepan.jakl@outlook.com'); activateHighlight(this.querySelector('.highlight'), 'Copied to clipboard')"
                                  onkeydown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@outlook.com')"
                                  tabindex="0"
                                  aria-label="Contact me via email">
@@ -164,9 +176,11 @@
                                      fill="currentColor">
                                     <path d="M10 23.375h13.125v-2.792H10Zm0-5.292h20v-2.791H10Zm0-5.291h20v-2.75H10ZM2.667 37.333V2.667h34.666v28h-28Z" />
                                 </svg>
-                                <span class="label">stepan.jakl@outlook.com</span>
-                                <div class="tooltip__content">
-                                    <span><u>Contact</u> me via email</span>
+                                <span class="label">
+                                    stepan.jakl@outlook.com
+                                </span>
+                                <div class="tooltip tooltip-top">
+                                    <span class="highlight">Click to copy</span>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +188,7 @@
                             <a href="#profile"
                                aria-label="Learn more about me"
                                rel="noreferrer"
-                               class="resume tooltip tooltip-bottom">
+                               class="resume tooltip__wrapper">
                                 <svg class="icon animate-face-icon"
                                      xmlns="http://www.w3.org/2000/svg"
                                      height="40"
@@ -184,14 +198,14 @@
                                     <path d="M14.917 24c-.64 0-1.174-.215-1.605-.646-.43-.43-.645-.965-.645-1.604 0-.639.222-1.173.666-1.604.445-.43.986-.646 1.625-.646.64 0 1.167.215 1.584.646.417.43.625.965.625 1.604 0 .639-.215 1.173-.646 1.604-.43.43-.965.646-1.604.646Zm10.166 0c-.639 0-1.173-.215-1.604-.646-.43-.43-.646-.965-.646-1.604 0-.639.215-1.173.646-1.604.43-.43.965-.646 1.604-.646.64 0 1.181.215 1.625.646.445.43.667.965.667 1.604 0 .639-.222 1.173-.667 1.604a2.25 2.25 0 0 1-1.625.646ZM20 33.667c3.805 0 7.035-1.326 9.688-3.979 2.653-2.653 3.979-5.883 3.979-9.688 0-.695-.049-1.368-.146-2.021a9.868 9.868 0 0 0-.438-1.812 11.41 11.41 0 0 1-1.75.291c-.61.056-1.25.084-1.916.084-2.611 0-5.07-.535-7.375-1.604a16.598 16.598 0 0 1-5.917-4.605A16.73 16.73 0 0 1 12.208 16a18.409 18.409 0 0 1-5.833 3.75v.292c0 3.805 1.32 7.027 3.958 9.666 2.64 2.64 5.862 3.959 9.667 3.959Zm.042 3.666c-2.417 0-4.674-.458-6.771-1.375-2.097-.917-3.93-2.153-5.5-3.708-1.57-1.555-2.812-3.389-3.729-5.5-.917-2.111-1.375-4.361-1.375-6.75 0-2.389.458-4.639 1.375-6.75.917-2.111 2.16-3.945 3.729-5.5 1.57-1.555 3.403-2.791 5.5-3.708 2.097-.917 4.354-1.375 6.771-1.375 2.389 0 4.632.458 6.729 1.375 2.097.917 3.93 2.153 5.5 3.708 1.57 1.555 2.805 3.389 3.708 5.5s1.354 4.361 1.354 6.75c0 2.389-.451 4.639-1.354 6.75-.903 2.111-2.139 3.952-3.708 5.521-1.57 1.57-3.41 2.805-5.521 3.708-2.111.903-4.347 1.354-6.708 1.354Z" />
                                 </svg>
                                 <span class="label">Profile</span>
-                                <span class="tooltip__content">
+                                <span class="tooltip tooltip-bottom">
                                     <span>Learn more about me</span>
                                 </span>
                             </a>
                             <a href="#archive"
                                aria-label="Explore repository of past work"
                                rel="noreferrer"
-                               class="tooltip tooltip-bottom no-underline">
+                               class="tooltip__wrapper no-underline">
                                 <svg class="icon"
                                      xmlns="http://www.w3.org/2000/svg"
                                      height="40"
@@ -201,7 +215,7 @@
                                     <path d="M30.542 33.75V6.25h3.416v27.5ZM4.125 37.125V2.875h22.542v34.25Zm33.708-6.833V9.667h2.25v20.625Z" />
                                 </svg>
                                 <span class="label"><u>A</u>rchive</span>
-                                <span class="tooltip__content">
+                                <span class="tooltip tooltip-bottom">
                                     <span>Explore snippets of my past work</span>
                                 </span>
                             </a>
@@ -215,7 +229,10 @@
                                    class="z-2 inset-0"
                                    style="position: absolute"
                                    aria-label="Close dropdown menu"></a>
-                                <button type="button" id="menu__button" class="pointer-events-none">
+                                <button type="button"
+                                        id="menu__button"
+                                        class="pointer-events-none"
+                                        tabindex="-1">
                                     <svg class="icon open"
                                          xmlns="http://www.w3.org/2000/svg"
                                          height="40"
@@ -236,8 +253,7 @@
                                 </button>
                                 <div id="underlay__menu" class="fixed inset-0 pointer-events-none">
                                 </div>
-                                <div id="menu__dropdown"
-                                     class="absolute z-1 px-1/2 pt-1/2 pointer-events-none">
+                                <div id="menu__dropdown" class="absolute z-1 px-1/2 pt-1/2">
                                     <div>
                                         <!-- <a href="#about" aria-label="Find out more about me">
                                         <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">

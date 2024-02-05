@@ -26,8 +26,8 @@ body {
 
 /* Intro */
 
-.animate-fade-in-name span,
-.animate-fade-in-title span,
+.animate-fade-in-name > span,
+.animate-fade-in-title > span,
 .animate-fade-in-cta-1,
 .animate-fade-in-cta-2,
 .animate-fade-in-logo,
@@ -125,7 +125,9 @@ body {
     }
 }
 
+
 /* Universal Text Higlight */
+
 .highlight {
     transition-property: color;
     transition-duration: 0.3s;
@@ -246,17 +248,22 @@ svg.animate-face-icon path {
 }
 
 
-/* Modal - Profile */
+/* Modals */
+
+.modal .modal__content {
+    visibility: hidden;
+}
 
 .modal__profile .modal__content,
 .modal__archive .modal__content {
-    transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad);
+    transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad), visibility 0s var(--animate-out-segment);
     transform: scale(1.05);
     transform-origin: top;
 }
 
 #profile:target~#page .modal__profile .modal__content,
 #archive:target~#page .modal__archive .modal__content {
+    visibility: visible;
     transition: opacity var(--animate-in-segment) linear, transform var(--animate-in-segment) var(--ease-out-quad);
     opacity: 1;
     transform: scale(1);
@@ -279,12 +286,14 @@ svg.animate-face-icon path {
 /* Menu */
 
 #menu__dropdown {
+    visibility: hidden;
     opacity: 0;
     transform: translateY(calc(-1 * (var(--segment) / 8)));
-    transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-out-quad);
+    transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-out-quad), visibility 0s var(--animate-out-segment);
 }
 
 #menu:target>#menu__dropdown {
+    visibility: visible;
     pointer-events: auto;
     opacity: 1;
     transform: translateY(0px);
