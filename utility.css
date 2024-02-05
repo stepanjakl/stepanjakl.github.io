@@ -32,6 +32,13 @@
     display: none;
 }
 
+
+/* Visibility */
+
+.invisible {
+    visibility: hidden;
+}
+
 /* Flex */
 
 .flex-row {

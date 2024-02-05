@@ -23,6 +23,7 @@ body {
     animation: none !important;
 }
 
+
 /* Intro */
 
 .animate-fade-in-name span,
@@ -65,12 +66,6 @@ body {
     animation-timing-function: linear;
 }
 
-/* .animate-fade-in-triangle::after {
-    animation-duration: 6s;
-    animation-delay: calc((var(--delay-segment) * 7) + 0.1s);
-    animation-timing-function: linear;
-} */
-
 @keyframes fade-in {
     0% {
         opacity: 0;
@@ -80,6 +75,7 @@ body {
         opacity: 1;
     }
 }
+
 
 /* Triangle - Flicker */
 
@@ -129,10 +125,32 @@ body {
     }
 }
 
+/* Universal Text Higlight */
+.highlight {
+    transition-property: color;
+    transition-duration: 0.3s;
+    transition-timing-function: var(--ease-in-quad);
+    transition-delay: 0.6s;
+}
 
-/* TODO - maybe change all linear funcs to quad? */
+.highlight.active {
+    color: var(--highlight);
+    transition-timing-function: var(--ease-out-quad);
+    transition-delay: unset;
+}
 
-/* Intro - Title Highlight */
+@keyframes highlight {
+    0% {
+        color: var(--highlight);
+    }
+
+    100% {
+        color: inherit;
+    }
+}
+
+
+/* Intro - Title Text Highlight */
 
 .animate-fade-in-title span.highlight,
 .animate-fade-in-title span.highlight-alt {
@@ -246,8 +264,7 @@ svg.animate-face-icon path {
 
 #intro__left-column, #intro__right-column {
     transition: transform var(--animate-out-segment) var(--ease-in-quad);
-    transform-origin: center;
-    /* transform: scale(1); */
+    transform-origin: top;
 }
 
 #profile:target~#page #intro__left-column,
@@ -280,12 +297,12 @@ svg.animate-face-icon path {
 #underlay__menu,
 #underlay__modal {
     opacity: 0;
-    transition: opacity var(--animate-out-segment) linear var(--animate-out-segment);
+    transition: opacity var(--animate-out-segment) linear;
 }
 
 #underlay__menu {
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
 }
 
 #underlay__modal {
@@ -293,10 +310,15 @@ svg.animate-face-icon path {
     -webkit-backdrop-filter: blur(8px);
 }
 
-#debug:not(:checked)~#page div:target #underlay__menu,
+#debug:not(:checked)~#page div:target #underlay__menu {
+    pointer-events: auto;
+    opacity: 1;
+    transition: opacity var(--animate-in-segment) linear;
+}
+
 #debug:not(:checked)~#profile:target~#page #underlay__modal,
 #debug:not(:checked)~#archive:target~#page #underlay__modal {
     pointer-events: auto;
     opacity: 1;
-    transition: opacity var(--animate-in-segment) linear calc(2 * var(--animate-in-segment));
+    transition: opacity var(--animate-in-segment) linear;
 }

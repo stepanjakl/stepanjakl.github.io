@@ -1254,9 +1254,7 @@ body>input[type="checkbox"] {
     margin-left: -20px;
     margin-top: -20px;
     margin-bottom: -20px;
-    /* display: inline-block; */
     align-self: flex-start;
-    user-select: none;
 }
 
 @media (min-width: 720px) {
@@ -1267,7 +1265,7 @@ body>input[type="checkbox"] {
 
 #logo span {
     animation-name: logo-animation;
-    animation-duration: 500ms;
+    animation-duration: 0.5s;
     animation-timing-function: steps(30);
     animation-fill-mode: forwards;
     animation-play-state: paused;
@@ -1294,20 +1292,7 @@ body>input[type="checkbox"] {
 
 /* Side background shapes */
 
-#triangle-left,
-#triangle-right,
-#triangle-right-alt {
-    visibility: hidden;
-    position: fixed;
-    z-index: 0;
-    inset: 0;
-    overflow: hidden;
-    user-select: none;
-    pointer-events: none;
-}
-
 @media (min-width: 960px) {
-
     #triangle-left,
     #triangle-right,
     #triangle-right-alt {
