@@ -80,11 +80,23 @@
                 if (event.keyCode === 27) { // Escape key
                     document.location.hash = ''
                 } else if (event.keyCode === 80) { // P key
-                    document.location.hash = '#profile'
+                    if (document.location.hash === '#profile') {
+                        document.location.hash = ''
+                    } else {
+                        document.location.hash = '#profile'
+                    }
                 } else if (event.keyCode === 65) { // A key
-                    document.location.hash = '#archive'
+                    if (document.location.hash === '#archive') {
+                        document.location.hash = ''
+                    } else {
+                        document.location.hash = '#archive'
+                    }
                 } else if (event.keyCode === 77) { // M key
-                    document.location.hash = '#menu'
+                    if (document.location.hash === '#menu') {
+                        document.location.hash = ''
+                    } else {
+                        document.location.hash = '#menu'
+                    }
                 }
             })
         </script>
@@ -100,10 +112,10 @@
     </head>
 
     <body class="primary-font text-base overflow-auto">
-        <input type="checkbox" id="mode" hidden aria-hidden="true">
-        <input type="checkbox" id="debug" hidden aria-hidden="true">
-        <input type="hidden" id="profile" hidden aria-hidden="true">
-        <input type="hidden" id="archive" hidden aria-hidden="true">
+        <input id="mode" type="checkbox"  hidden aria-hidden="true">
+        <input id="debug" type="checkbox"  hidden aria-hidden="true">
+        <input id="profile" type="hidden"  hidden aria-hidden="true">
+        <input id="archive" type="hidden"  hidden aria-hidden="true">
         <!-- <div class="fixed inset-0" style="z-index: 2; background-image: linear-gradient(45deg, var(--blue-full-10), var(--blue-full-25));"></div> -->
         <div id="page"
              class="relative flex flex-col justify-content-between flex-grow w-full h-auto"
@@ -168,10 +180,10 @@
                                  onkeydown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@outlook.com')"
                                  tabindex="0"
                                  aria-label="Contact me via email">
-                                <svg class="icon"
+                                <svg style="color: var(--text-2)"
                                      xmlns="http://www.w3.org/2000/svg"
-                                     width="40"
-                                     height="40"
+                                     width="32"
+                                     height="32"
                                      viewBox="0 0 40 40"
                                      fill="currentColor">
                                     <path d="M10 23.375h13.125v-2.792H10Zm0-5.292h20v-2.791H10Zm0-5.291h20v-2.75H10ZM2.667 37.333V2.667h34.666v28h-28Z" />
@@ -188,16 +200,24 @@
                             <a href="#profile"
                                aria-label="Learn more about me"
                                rel="noreferrer"
-                               class="resume tooltip__wrapper">
-                                <svg class="icon animate-face-icon"
+                               class="tooltip__wrapper flex align-items-center"
+                               style="margin-right: 38px">
+                                <svg class="animate-face-icon"
+                                     style="color: var(--icon)"
                                      xmlns="http://www.w3.org/2000/svg"
-                                     height="40"
-                                     width="40"
+                                     height="32"
+                                     width="32"
                                      viewBox="0 0 40 40"
                                      fill="currentColor">
                                     <path d="M14.917 24c-.64 0-1.174-.215-1.605-.646-.43-.43-.645-.965-.645-1.604 0-.639.222-1.173.666-1.604.445-.43.986-.646 1.625-.646.64 0 1.167.215 1.584.646.417.43.625.965.625 1.604 0 .639-.215 1.173-.646 1.604-.43.43-.965.646-1.604.646Zm10.166 0c-.639 0-1.173-.215-1.604-.646-.43-.43-.646-.965-.646-1.604 0-.639.215-1.173.646-1.604.43-.43.965-.646 1.604-.646.64 0 1.181.215 1.625.646.445.43.667.965.667 1.604 0 .639-.222 1.173-.667 1.604a2.25 2.25 0 0 1-1.625.646ZM20 33.667c3.805 0 7.035-1.326 9.688-3.979 2.653-2.653 3.979-5.883 3.979-9.688 0-.695-.049-1.368-.146-2.021a9.868 9.868 0 0 0-.438-1.812 11.41 11.41 0 0 1-1.75.291c-.61.056-1.25.084-1.916.084-2.611 0-5.07-.535-7.375-1.604a16.598 16.598 0 0 1-5.917-4.605A16.73 16.73 0 0 1 12.208 16a18.409 18.409 0 0 1-5.833 3.75v.292c0 3.805 1.32 7.027 3.958 9.666 2.64 2.64 5.862 3.959 9.667 3.959Zm.042 3.666c-2.417 0-4.674-.458-6.771-1.375-2.097-.917-3.93-2.153-5.5-3.708-1.57-1.555-2.812-3.389-3.729-5.5-.917-2.111-1.375-4.361-1.375-6.75 0-2.389.458-4.639 1.375-6.75.917-2.111 2.16-3.945 3.729-5.5 1.57-1.555 3.403-2.791 5.5-3.708 2.097-.917 4.354-1.375 6.771-1.375 2.389 0 4.632.458 6.729 1.375 2.097.917 3.93 2.153 5.5 3.708 1.57 1.555 2.805 3.389 3.708 5.5s1.354 4.361 1.354 6.75c0 2.389-.451 4.639-1.354 6.75-.903 2.111-2.139 3.952-3.708 5.521-1.57 1.57-3.41 2.805-5.521 3.708-2.111.903-4.347 1.354-6.708 1.354Z" />
                                 </svg>
-                                <span class="label">Profile</span>
+                                <span class="text-sm select-none"
+                                      style="color: var(--text-2);
+                                             letter-spacing: 1.25px;
+                                             margin-left: 12px;
+                                             padding-top: 3px;
+                                             padding-bottom: 6px;
+                                             border-bottom: solid 3px var(--highlight)">Profile</span>
                                 <span class="tooltip tooltip-bottom">
                                     <span>Learn more about me</span>
                                 </span>
@@ -205,21 +225,32 @@
                             <a href="#archive"
                                aria-label="Explore repository of past work"
                                rel="noreferrer"
-                               class="tooltip__wrapper no-underline">
-                                <svg class="icon"
+                               class="tooltip__wrapper flex align-items-center"
+                               style="margin-right: 24px">
+                                <svg style="color: var(--icon)"
                                      xmlns="http://www.w3.org/2000/svg"
-                                     height="40"
-                                     width="40"
+                                     height="32"
+                                     width="32"
                                      viewBox="0 0 40 40"
                                      fill="currentColor">
                                     <path d="M30.542 33.75V6.25h3.416v27.5ZM4.125 37.125V2.875h22.542v34.25Zm33.708-6.833V9.667h2.25v20.625Z" />
                                 </svg>
-                                <span class="label"><u>A</u>rchive</span>
+                                <span class="text-sm select-none"
+                                      style="color: var(--text-2);
+                                             letter-spacing: 1.25px;
+                                             margin-left: 12px;
+                                             padding-top: 3px;
+                                             padding-bottom: 6px">
+                                    <u style="text-decoration-thickness: 2px;
+                                              text-decoration-style: dotted;
+                                              text-decoration-color: var(--text-3);
+                                              text-underline-position: from-font;
+                                              text-underline-offset: 2px">A</u>rchive</span>
                                 <span class="tooltip tooltip-bottom">
                                     <span>Explore snippets of my past work</span>
                                 </span>
                             </a>
-                            <div id="menu">
+                            <div id="menu" class="relative flex align-items-center">
                                 <!-- <div class="absolute z-2 inset-0" style="background-color: blue;"></div> -->
                                 <a href="#menu"
                                    class="z-2 inset-0"
@@ -229,42 +260,54 @@
                                    class="z-2 inset-0"
                                    style="position: absolute"
                                    aria-label="Close dropdown menu"></a>
-                                <button type="button"
-                                        id="menu__button"
-                                        class="pointer-events-none"
+                                <button id="menu__button"
+                                        type="button"
+                                        class="relative z-1 inline-flex align-items-center pointer-events-none"
                                         tabindex="-1">
-                                    <svg class="icon open"
-                                         xmlns="http://www.w3.org/2000/svg"
-                                         height="40"
-                                         width="40"
-                                         viewBox="0 0 40 40"
-                                         fill="currentColor">
-                                        <path d="m20 35.625-8.167-8.167 2.625-2.666L20 30.333l5.542-5.541 2.625 2.666Zm-5.542-20.333-2.625-2.625L20 4.5l8.167 8.167-2.625 2.625L20 9.792Z" />
-                                    </svg>
-                                    <svg class="icon close"
-                                         xmlns="http://www.w3.org/2000/svg"
-                                         height="40"
-                                         width="40"
-                                         viewBox="0 0 40 40"
-                                         fill="currentColor">
-                                        <path d="m14.458 33.958-2.583-2.583L20 23.25l8.125 8.125-2.583 2.583L20 28.417ZM20 16.75l-8.125-8.125 2.583-2.583L20 11.583l5.542-5.541 2.583 2.583Z" />
-                                    </svg>
-                                    <span class="label"><u>M</u>ore</span>
+                                    <div style="width: 32px; height: 32px;">
+                                        <!-- opsz' 40, 'wght' 600, 'FILL' 1, 'GRAD' 0 -->
+                                        <svg id="menu__icon--open"
+                                             class="absolute inset-0"
+                                             style="color: var(--icon)"
+                                             xmlns="http://www.w3.org/2000/svg"
+                                             height="32"
+                                             width="32"
+                                             viewBox="0 0 40 40"
+                                             fill="currentColor">
+                                            <path d="m20 35.625-8.167-8.167 2.625-2.666L20 30.333l5.542-5.541 2.625 2.666Zm-5.542-20.333-2.625-2.625L20 4.5l8.167 8.167-2.625 2.625L20 9.792Z" />
+                                        </svg>
+                                        <svg id="menu__icon--close"
+                                             class="absolute inset-0"
+                                             style="color: var(--icon)"
+                                             xmlns="http://www.w3.org/2000/svg"
+                                             height="32"
+                                             width="32"
+                                             viewBox="0 0 40 40"
+                                             fill="currentColor">
+                                            <path d="m14.458 33.958-2.583-2.583L20 23.25l8.125 8.125-2.583 2.583L20 28.417ZM20 16.75l-8.125-8.125 2.583-2.583L20 11.583l5.542-5.541 2.583 2.583Z" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-sm select-none"
+                                          style="color: var(--text-2);
+                                                 letter-spacing: 1.25px;
+                                                 margin-left: 4px;
+                                                 padding-top: 3px;
+                                                 padding-bottom: 6px">
+                                        <u style="text-decoration-thickness: 2px;
+                                                  text-decoration-style: dotted;
+                                                  text-decoration-color: var(--text-3);
+                                                  text-underline-position: from-font;
+                                                  text-underline-offset: 2px">M</u>ore</span>
                                 </button>
                                 <div id="underlay__menu" class="fixed inset-0 pointer-events-none">
                                 </div>
                                 <div id="menu__dropdown" class="absolute z-1 px-1/2 pt-1/2">
                                     <div>
-                                        <!-- <a href="#about" aria-label="Find out more about me">
-                                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M5.85 17.1q1.275-.975 2.85-1.538Q10.275 15 12 15q1.725 0 3.3.562 1.575.563 2.85 1.538.875-1.025 1.363-2.325Q20 13.475 20 12q0-3.325-2.337-5.663Q15.325 4 12 4T6.338 6.337Q4 8.675 4 12q0 1.475.488 2.775.487 1.3 1.362 2.325ZM12 13q-1.475 0-2.488-1.012Q8.5 10.975 8.5 9.5t1.012-2.488Q10.525 6 12 6t2.488 1.012Q15.5 8.025 15.5 9.5t-1.012 2.488Q13.475 13 12 13Zm0 9q-2.075 0-3.9-.788-1.825-.787-3.175-2.137-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175 1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138 1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175-1.35 1.35-3.175 2.137Q14.075 22 12 22Z" />
-                                        </svg>
-                                        <span class="label">About</span>
-                                    </a> -->
                                         <a href="https://calendly.com/stepanjakl"
                                            target="_blank"
                                            aria-label="Schedule a call via Calendly"
                                            rel="noreferrer">
+                                            <!-- 'opsz' 24, 'wght' 400, 'FILL' 1, 'GRAD' 0 -->
                                             <svg class="icon"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="24"
@@ -274,7 +317,10 @@
                                                 <path d="M12 23v-2h7v-1h-4v-8h4v-1q0-2.9-2.05-4.95Q14.9 4 12 4 9.1 4 7.05 6.05 5 8.1 5 11v1h4v8H3v-9q0-1.85.712-3.488.713-1.637 1.938-2.862t2.862-1.938Q10.15 2 12 2t3.488.712q1.637.713 2.862 1.938t1.938 2.862Q21 9.15 21 11v12Z" />
                                             </svg>
                                             <span>Virtual meeting</span>
-                                            <svg class="icon secondary"
+                                            <!-- 'opsz' 20, 'wght' 200, 'FILL' 1, 'GRAD' 200 -->
+                                            <svg class="ml-auto box-content"
+                                                 style="color: var(--text-2);
+                                                        padding-left: 12px"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="20"
                                                  width="20"
@@ -286,9 +332,6 @@
                                         <a href="https://www.linkedin.com/in/stepanjakl"
                                            target="_blank"
                                            aria-label="Find out more about me on LinkedIn">
-                                            <!-- <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M2 21V6h6V2h8v4h6v15Zm8-15h4V4h-4Z" />
-                                        </svg> -->
                                             <svg class="icon"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="24"
@@ -298,7 +341,9 @@
                                                 <path d="M14 13.5h4V12h-4Zm0 3h4V15h-4ZM15 7h7v15H2V7h7V2h6Zm-4 2h2V4h-2Zm-2 6q.625 0 1.062-.438.438-.437.438-1.062t-.438-1.062Q9.625 12 9 12t-1.062.438Q7.5 12.875 7.5 13.5t.438 1.062Q8.375 15 9 15Zm-3 3h6v-.45q0-.425-.238-.788-.237-.362-.662-.562-.5-.225-1.012-.337Q9.575 15.75 9 15.75q-.575 0-1.087.113-.513.112-1.013.337-.425.2-.662.562Q6 17.125 6 17.55Z" />
                                             </svg>
                                             <span>LinkedIn profile</span>
-                                            <svg class="icon secondary"
+                                            <svg class="ml-auto box-content"
+                                                 style="color: var(--text-2);
+                                                        padding-left: 12px"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="20"
                                                  width="20"
@@ -320,7 +365,9 @@
                                                 <path d="M2 20V4h20v16Zm2-2h16V8H4Zm8-1v-2h6v2Zm-4.5 0-1.4-1.4L8.675 13l-2.6-2.6L7.5 9l4 4Z" />
                                             </svg>
                                             <span>GitHub profile</span>
-                                            <svg class="icon secondary"
+                                            <svg class="ml-auto box-content"
+                                                 style="color: var(--text-2);
+                                                        padding-left: 12px"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="20"
                                                  width="20"
@@ -340,7 +387,7 @@
                                                    transform: translateX(-1px);
                                                    overflow: visible">
                                         <label for="mode" class="light" tabindex="0">
-                                            <svg class="icon"
+                                            <svg style="color: var(--yellow)"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="24"
                                                  width="24"
@@ -351,7 +398,7 @@
                                             <span>Light mode</span>
                                         </label>
                                         <label for="mode" class="dark" tabindex="0">
-                                            <svg class="icon"
+                                            <svg style="color: var(--navy)"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="24"
                                                  width="24"
@@ -389,11 +436,6 @@
                     </div>
                     <div class="modal modal__profile" role="dialog" aria-modal="true">
                         <div class="modal__content">
-                            <!-- <div style="align-self: end;
-             position: sticky;
-             top: 0;
-             padding-top: var(--segment-quarter);
-             padding-right: var(--segment-quarter)"> -->
                             <a href="#" class="modal__close-icon" aria-label="Close modal">
                                 <svg class="icon"
                                      xmlns="http://www.w3.org/2000/svg"
@@ -404,9 +446,7 @@
                                     <path d="M6 15.708 4.333 14l3.979-4-3.979-4.021L6 4.271l4 4.021 4-4.021 1.667 1.708L11.688 10l3.979 4L14 15.708l-4-4.02Z" />
                                 </svg>
                             </a>
-                            <!-- </div> -->
                             <div class="information mr-1">
-                                <!-- h-full overflow-auto -->
                                 <dl>
                                     <div>
                                         <dt>
@@ -693,18 +733,17 @@
                      class="invisible fixed inset-0 z-0 overflow-hidden select-none pointer-events-none animate-flicker-triangle-light">
                 </div>
             </div>
-            <!-- TODO all ids come before class -->
-            <div id="footer">
+            <div id="footer" class="select-none">
                 <div class="px-1/2 pt-1 pb-1/2">
                     <div class="section">
-                        <span class="square" id="square-1"></span>
+                        <span id="square-1"></span>
                     </div>
                     <div class="section">
-                        <span class="square" id="square-2"></span>
-                        <span class="square" id="square-3"></span>
-                        <span class="square" id="square-4"></span>
+                        <span id="square-2"></span>
+                        <span id="square-3"></span>
+                        <span id="square-4"></span>
                     </div>
-                    <div class="rectangle">
+                    <div id="rectangle">
                     </div>
                 </div>
             </div>

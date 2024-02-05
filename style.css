@@ -369,36 +369,6 @@ body {
     background-color: var(--background);
 } */
 
-/* Intro */
-
-/* .intro {
-    overflow: scroll;
-} */
-
-/* svg * {
-    outline: none !important;
-} */
-
-/* .intro__wrapper {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    max-width: var(--breakpoint-xl);
-    margin: auto;
-    padding-top: 24px;
-    padding-bottom: 24px;
-    outline: none !important;
-} */
-
-/* .intro__background {
-    width: 100%;
-    height: 100%;
-    background-repeat: repeat;
-    background-position: 0 0;
-    background-origin: border-box;
-    background-image: var(--background-pattern);
-    padding-bottom: 32px;
-} */
 
 /* Intro */
 
@@ -452,11 +422,7 @@ body {
 } */
 
 
-
-
-
-
-
+/* Intro - Left Column */
 
 #intro__left-column {
     row-gap: calc(var(--segment) * 2.15);
@@ -486,7 +452,7 @@ body {
 
 #intro__left-column h2 > span::after {
     content: "";
-    margin-bottom: var(--text-md__after-margin-bottom);
+    margin-top: var(--text-md__after-margin-top);
     display: table;
 }
 
@@ -526,6 +492,9 @@ body {
     }
 }
 
+
+/* Intro - Right Column */
+
 #intro__right-column>h3 span {
     display: inline-block;
     padding-top: var(--segment-quarter);
@@ -547,10 +516,6 @@ body {
     margin-top: -0.325em;
     display: table;
 }
-
-/* #intro__right-column>h3 span.highlight {
-    color: var(--highlight);
-} */
 
 /* TODO defo simplify this selector */
 #intro__right-column>h3.h3-title--secondary span {
@@ -653,33 +618,6 @@ body {
     display: table;
 }
 
-.icon {
-    flex-shrink: 0;
-    box-sizing: content-box;
-}
-
-#intro__right-column .icon {
-    /* opsz' 40, 'wght' 600, 'FILL' 1, 'GRAD' 0 */
-    width: 32px;
-    height: 32px;
-    color: var(--icon);
-}
-
-#intro__right-column .icon.secondary {
-    /* 'opsz' 24, 'wght' 200, 'FILL' 1, 'GRAD' 200 */
-    margin-left: 6px;
-    width: 24px;
-    height: 24px;
-}
-
-#intro__links .menu .icon.secondary {
-    /* 'opsz' 20, 'wght' 200, 'FILL' 1, 'GRAD' 200 */
-    margin-left: auto;
-    padding-left: 12px;
-    width: 20px;
-    height: 20px;
-}
-
 #intro__email {
     display: flex;
     padding-top: 120px;
@@ -735,65 +673,6 @@ body {
     }
 }
 
-#intro__links>a {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-right: 24px;
-}
-
-#intro__links>a.resume {
-    margin-right: 38px;
-}
-
-#intro__links>a span.label {
-    color: var(--text-2);
-    margin-left: 12px;
-    font-size: 22.8571px;
-    line-height: 16px;
-    font-weight: 300;
-    letter-spacing: 1.25px;
-    border-bottom: solid 3px var(--highlight);
-    padding-bottom: 6px;
-    padding-top: 3px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-#intro__links>a span.label u,
-#menu__button>span.label u {
-    text-decoration-thickness: 2px;
-    text-decoration-style: dotted;
-    text-decoration-color: var(--text-3);
-    text-underline-position: from-font;
-    text-underline-offset: 2px;
-}
-
-#intro__links>a span.label::before {
-    content: "";
-    margin-bottom: -0.025em;
-    display: table;
-}
-
-#intro__links>a span.label::after {
-    content: "";
-    margin-top: 0.025em;
-    display: table;
-}
-
-#intro__links>a.no-underline span.label {
-    border-bottom: none;
-}
-
-#menu {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    outline: none;
-}
-
 #menu:target>a:first-of-type {
     visibility: hidden;
 }
@@ -806,41 +685,8 @@ body {
     visibility: visible;
 }
 
+
 /* Menu */
-
-body>input[type="checkbox"] {
-    display: none;
-}
-
-#menu__button {
-    position: relative;
-    z-index: 1;
-    display: inline-flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-#menu__button>span.label {
-    color: var(--text-2);
-    font-size: 22.8571px;
-    line-height: 16px;
-    font-weight: 300;
-    letter-spacing: 1.25px;
-    margin-left: 4px;
-    user-select: none;
-}
-
-#menu__button>span.label::before {
-    content: "";
-    margin-bottom: -0.025em;
-    display: table;
-}
-
-#menu__button>span.label::after {
-    content: "";
-    margin-top: 0.025em;
-    display: table;
-}
 
 #menu__button>span>img {
     margin-left: 6px;
@@ -866,18 +712,6 @@ body>input[type="checkbox"] {
     /* row-gap: 2px; */
 }
 
-#menu .icon.close {
-    display: none;
-}
-
-#menu:target .icon.close {
-    display: block !important;
-}
-
-#menu:target .icon.open {
-    display: none !important;
-}
-
 /* TODO change label to button ? and make sure other styles don't get applied where they shouldn't e.g. before/after of fonts - like the selector below */
 #menu__dropdown a,
 #menu__dropdown label {
@@ -897,56 +731,10 @@ body>input[type="checkbox"] {
     user-select: none;
 }
 
-/* this one */
-#menu__dropdown .icon {
-    /* 'opsz' 24, 'wght' 400, 'FILL' 1, 'GRAD' 0 */
-    width: 26px;
-    height: 26px;
-    color: var(--text-2);
-}
-
-#menu__dropdown label.light .icon {
-    color: var(--yellow);
-}
-
-#menu__dropdown label.dark .icon {
-    color: var(--navy);
-}
-
-/* #menu__dropdown>*:last-child {
-    padding-bottom: 12px;
-} */
-
 #menu__dropdown a span,
 #menu__dropdown label span {
     margin-left: 14px;
 }
-
-
-/* #menu__dropdown hr:before,
-#menu__dropdown hr:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 100%;
-    margin: 0;
-    border-top: solid 1px var(--context-border-outer);
-}
-
-#menu__dropdown hr:before {
-    transform: translateX(1px);
-}
-
-#menu__dropdown hr:after {
-    transform: translateX(-1px);
-} */
-
-
-/* #menu>a {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-} */
 
 #menu__dropdown>div>*:first-child {
     margin-top: 0;
@@ -965,6 +753,7 @@ body>input[type="checkbox"] {
     margin-top: 0.025em;
     display: table;
 }
+
 
 /* Modal */
 
@@ -1042,6 +831,7 @@ body>input[type="checkbox"] {
     }
 }
 
+
 /* Modal - Close button */
 
 .modal .modal__close-icon {
@@ -1070,10 +860,6 @@ body>input[type="checkbox"] {
     width: 20px;
     height: 20px;
 }
-
-
-
-
 
 .modal .information dl {
     padding: 0;
@@ -1232,6 +1018,7 @@ body>input[type="checkbox"] {
     display: table;
 }
 
+
 /* Logo animation */
 
 #logo {
@@ -1347,6 +1134,7 @@ body>input[type="checkbox"] {
     opacity: 0;
 }
 
+
 /* Tooltip */
 
 .tooltip__wrapper {
@@ -1411,14 +1199,6 @@ body>input[type="checkbox"] {
     margin-top: 10px;
 }
 
-/* .tooltip .tooltip u {
-    text-decoration-thickness: 1px;
-    text-decoration-style: dotted;
-    text-decoration-color: var(--text-3);
-    text-underline-position: from-font;
-    text-underline-offset: 2px;
-} */
-
 .tooltip::before {
     content: "";
     margin-bottom: -0.025em;
@@ -1433,14 +1213,6 @@ body>input[type="checkbox"] {
 
 
 /* Footer */
-
-#footer {
-    /* position: absolute;
-    z-index: 0;
-    inset: auto 0 0 0; */
-    user-select: none;
-    pointer-events: none;
-}
 
 #footer>div {
     display: flex;
@@ -1464,31 +1236,37 @@ body>input[type="checkbox"] {
     pointer-events: auto;
 }
 
-#footer>div .square#square-1 {
+[id^="square"] {
+    width: 12px;
+    height: 12px;
+}
+
+#square-1 {
     background-color: var(--footer-square-1);
 }
 
-#footer>div .square#square-1:hover {
+#square-1:hover {
     background-color: var(--footer-square-1-hover);
 }
 
-#footer>div .square#square-2 {
+#square-2 {
     background-color: var(--footer-square-2);
 }
 
-#footer>div .square#square-3 {
+#square-3 {
     background-color: var(--footer-square-3);
 }
 
-#footer>div .square#square-4 {
+#square-4 {
     background-color: var(--footer-square-4);
 }
 
-#footer>div .rectangle {
+#rectangle {
     width: 100%;
     height: 12px;
     background: repeating-linear-gradient(135deg, transparent, transparent 6px, var(--footer-rectangle) 6px, var(--footer-rectangle) 12px), linear-gradient(to bottom, transparent, transparent);
 }
+
 
 /* Media queries */
 

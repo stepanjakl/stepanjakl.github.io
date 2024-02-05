@@ -285,6 +285,34 @@ svg.animate-face-icon path {
 
 /* Menu */
 
+#menu__icon--close {
+    transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad), visibility 0s var(--animate-out-segment);
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(0.75);
+}
+
+#menu:target #menu__icon--close {
+    transition: opacity var(--animate-in-segment) linear, transform var(--animate-in-segment) var(--ease-out-quad);
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+}
+
+#menu__icon--open {
+    transition: opacity var(--animate-in-segment) linear, transform var(--animate-in-segment) var(--ease-out-quad);
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+}
+
+#menu:target #menu__icon--open {
+    transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad), visibility 0s var(--animate-out-segment);
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(0.75);
+}
+
 #menu__dropdown {
     visibility: hidden;
     opacity: 0;
