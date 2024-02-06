@@ -18,29 +18,37 @@
 }
 
 body {
-    --text-sm-font-weight: 300;
-    --text-sm-font-size: 22.8571px;
-    --text-sm-line-height: 16px;
+    --text-sm-font-weight: 400;
+    --text-sm-font-size: 17.1429px;
+    --text-sm-line-height: 12px;
+    --text-sm-letter-spacing: 0.5px;
     --text-sm__before-margin-bottom: -0.025em;
     --text-sm__after-margin-top: -0.025em;
 
-    --text-md-font-weight: 200;
-    --text-md-font-size: 45.7143px;
-    --text-md-line-height: 64px;
-    --text-md__before-margin-bottom: -0.375em;
-    --text-md__after-margin-top: -0.325em;
+    --text-md-font-weight: 300;
+    --text-md-font-size: 22.8571px;
+    --text-md-line-height: 16px;
+    --text-md__before-margin-bottom: -0.025em;
+    --text-md__after-margin-top: -0.025em;
 
     --text-lg-font-weight: 200;
-    --text-lg-font-size: 68.5714px;
-    --text-lg-line-height: 96px;
+    --text-lg-font-size: 45.7143px;
+    --text-lg-line-height: 64px;
     --text-lg__before-margin-bottom: -0.375em;
     --text-lg__after-margin-top: -0.325em;
+
+    --text-xl-font-weight: 200;
+    --text-xl-font-size: 68.5714px;
+    --text-xl-line-height: 96px;
+    --text-xl__before-margin-bottom: -0.375em;
+    --text-xl__after-margin-top: -0.325em;
 }
 
 .text-sm {
     font-weight: var(--text-sm-font-weight);
     font-size: var(--text-sm-font-size);
     line-height: var(--text-sm-line-height);
+    letter-spacing: var(--text-sm-letter-spacing);
 }
 
 .text-sm::before {
@@ -88,6 +96,24 @@ body {
 .text-lg::after {
     content: "";
     margin-top: var(--text-lg__after-margin-top);
+    display: table;
+}
+
+.text-xl {
+    font-weight: var(--text-xl-font-weight);
+    font-size: var(--text-xl-font-size);
+    line-height: var(--text-xl-line-height);
+}
+
+.text-xl::before {
+    content: "";
+    margin-bottom: var(--text-xl__before-margin-bottom);
+    display: table;
+}
+
+.text-xl::after {
+    content: "";
+    margin-top: var(--text-xl__after-margin-top);
     display: table;
 }
 
@@ -317,14 +343,20 @@ body {
 
 .select-none {
     user-select: none;
+    -webkit-user-select: none;
 }
 
 
 /* Cursor */
 
+.cursor-default {
+    cursor: default;
+}
+
 .cursor-pointer {
     cursor: pointer;
 }
+
 
 /* Pointer Events */
 .pointer-events-none {

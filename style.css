@@ -325,19 +325,19 @@ body {
     background-image: url(images/logo-animated-light.svg)
 }
 
-#mode:not(:checked)~#page #menu__dropdown label.light {
+#mode:not(:checked)~#page #menu__dropdown label#menu__dropdown__light-mode {
     display: flex;
 }
 
-#mode:checked~#page #menu__dropdown label.light {
+#mode:checked~#page #menu__dropdown label#menu__dropdown__light-mode {
     display: none;
 }
 
-#mode:not(:checked)~#page #menu__dropdown label.dark {
+#mode:not(:checked)~#page #menu__dropdown label#menu__dropdown__dark-mode {
     display: none;
 }
 
-#mode:checked~#page #menu__dropdown label.dark {
+#mode:checked~#page #menu__dropdown label#menu__dropdown__dark-mode {
     display: flex;
 }
 
@@ -433,24 +433,28 @@ body {
 /* TODO: add some padding on top and bottom? */
 #intro__left-column h2 {
     color: var(--text-1);
+    padding-top: var(--segment-third);
+    margin-top: calc(-1 * var(--segment-third));
+    padding-bottom: calc(var(--segment) / 5);
+    margin-bottom: calc(-1 * (var(--segment) / 5));
 }
 
 #intro__left-column h2>span {
     display: inline-block;
-    font-weight: var(--text-lg-font-weight);
-    font-size: var(--text-lg-font-size);
-    line-height: var(--text-lg-line-height);
+    font-weight: var(--text-xl-font-weight);
+    font-size: var(--text-xl-font-size);
+    line-height: var(--text-xl-line-height);
 }
 
 #intro__left-column h2>span::before {
     content: "";
-    margin-bottom: var(--text-lg__before-margin-bottom);
+    margin-bottom: var(--text-xl__before-margin-bottom);
     display: table;
 }
 
 #intro__left-column h2>span::after {
     content: "";
-    margin-top: var(--text-lg__after-margin-top);
+    margin-top: var(--text-xl__after-margin-top);
     display: table;
 }
 
@@ -497,20 +501,20 @@ body {
     display: inline-block;
     padding-top: var(--segment-quarter);
     color: var(--text-1);
-    font-weight: var(--text-md-font-weight);
-    font-size: var(--text-md-font-size);
-    line-height: var(--text-md-line-height);
+    font-weight: var(--text-lg-font-weight);
+    font-size: var(--text-lg-font-size);
+    line-height: var(--text-lg-line-height);
 }
 
 #intro__right-column__title--primary span::before {
     content: "";
-    margin-bottom: var(--text-md__before-margin-bottom);
+    margin-bottom: var(--text-lg__before-margin-bottom);
     display: table;
 }
 
 #intro__right-column__title--primary span::after {
     content: "";
-    margin-top: var(--text-md__after-margin-top);
+    margin-top: var(--text-lg__after-margin-top);
     display: table;
 }
 
@@ -695,23 +699,17 @@ body {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: 6px;
-    /* row-gap: 2px; */
 }
 
-/* TODO change label to button ? and make sure other styles don't get applied where they shouldn't e.g. before/after of fonts - like the selector below */
 #menu__dropdown a,
 #menu__dropdown label {
+    position: relative;
     display: flex;
-    white-space: nowrap;
     text-align: left;
     flex-direction: row;
     align-items: center;
     width: 100%;
     padding: 12px 18px 10px 16px;
-    font-size: 17.1429px;
-    line-height: 12px;
-    letter-spacing: 0.5px;
-    color: var(--text-2);
     box-shadow: 0 -1px 0 0 var(--context-border-inner);
     border-top: solid 1px var(--context-border-outer);
     user-select: none;
@@ -726,18 +724,6 @@ body {
     margin-top: 0;
     border-top-color: transparent;
     box-shadow: none;
-}
-
-#menu__dropdown>div>*::before {
-    content: "";
-    margin-bottom: -0.025em;
-    display: table;
-}
-
-#menu__dropdown>div>*::after {
-    content: "";
-    margin-top: 0.025em;
-    display: table;
 }
 
 
@@ -1411,19 +1397,8 @@ body {
     }
 }
 
-/* Accessibility */
 
-/* TODO only apply when motion-reduction is in place */
-a:active,
-button:active,
-[tabindex="0"]:active,
-a:focus-visible,
-button:focus-visible,
-[tabindex="0"]:focus-visible {
-    position: relative;
-    z-index: 10;
-    outline-color: var(--highlight);
-}
+/* Accessibility */
 
 a,
 button,
@@ -1433,3 +1408,15 @@ button,
     outline-width: 2px;
     outline-offset: 4px;
 }
+
+/* TODO only apply when motion-reduction is in place */
+/* a:active,
+button:active,
+[tabindex="0"]:active,
+a:focus-visible,
+button:focus-visible,
+[tabindex="0"]:focus-visible {
+    position: relative;
+    z-index: 10;
+    outline-color: var(--highlight);
+} */
