@@ -5,7 +5,7 @@
 # Inspired by: https://stackoverflow.com/a/73882805/11035513
 
 name: minify
-run-name: Minify JS/CSS/HTML [gh-pages branch]
+run-name: Minify HTML/CSS/JS/SVG [gh-pages branch]
 
 # Run on pushes to `release` branch
 on:
