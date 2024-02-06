@@ -54,25 +54,25 @@
             console.log('%cWould you like to work with me? Email me at %cstepan.jakl@outlook.com', 'color: #4e7bff; margin: 15px 0 15px 20px;', 'color: #4e7bff; text-decoration: underline;')
         </script>
         <script>
-            const activateHighlight = (element, tempInnerText) => {
-                const origInnerText = element.innerText
+            const activateHighlight = (elementToSwapText, elementToHighlight, tempInnerText) => {
+                const origInnerText = elementToSwapText.innerText
                 const activateHandler = () => {
-                    element.classList.remove('active')
-                    element.removeEventListener('transitionend', activateHandler)
-                    element.addEventListener('transitionend', deactivateHandler)
+                    elementToHighlight.classList.remove('active')
+                    elementToHighlight.removeEventListener('transitionend', activateHandler)
+                    elementToHighlight.addEventListener('transitionend', deactivateHandler)
                 }
                 const deactivateHandler = () => {
                     console.log('transitionend', this);
                     if (tempInnerText) {
-                        element.innerText = origInnerText
+                        elementToSwapText.innerText = origInnerText
                     }
-                    element.removeEventListener('transitionend', deactivateHandler)
+                    elementToHighlight.removeEventListener('transitionend', deactivateHandler)
                 }
                 if (tempInnerText) {
-                    element.innerText = tempInnerText
+                    elementToSwapText.innerText = tempInnerText
                 }
-                element.classList.toggle('active')
-                element.addEventListener('transitionend', activateHandler)
+                elementToHighlight.classList.toggle('active')
+                elementToHighlight.addEventListener('transitionend', activateHandler)
             }
         </script>
         <script>
@@ -92,10 +92,13 @@
                         document.location.hash = '#archive'
                     }
                 } else if (event.keyCode === 77) { // M key
-                    if (document.location.hash === '#menu') {
-                        document.location.hash = ''
-                    } else {
-                        document.location.hash = '#menu'
+                    if (document.querySelector('.animate-fade-in-cta-2').getAnimations().length === 0 || document.querySelector('.animate-fade-in-cta-2').getAnimations()[0].playState === 'finished') {
+                        if (document.location.hash === '#menu') {
+                            document.location.hash = ''
+                        } else {
+                            document.location.hash = '#menu'
+                            document.querySelector('[href="#menu"]').focus()
+                        }
                     }
                 }
             })
@@ -132,8 +135,9 @@
                     <div id="intro__left-column"
                          class="z-1 flex flex-col-reverse align-items-start">
                         <!-- Script to copy name on click -->
-                        <h2 class="animate-fade-in-name tooltip__wrapper select-none cursor-pointer"
-                            onclick="navigator.clipboard.writeText('Štěpán Jákl'); activateHighlight(this.querySelector('.highlight'), 'Copied to clipboard')">
+                        <h2 class="animate-fade-in-name tooltip__wrapper highlight select-none cursor-pointer"
+                            onclick="navigator.clipboard.writeText('Štěpán Jákl'); activateHighlight(this.querySelector('.tooltip span'), document.querySelector('h2.animate-fade-in-name'), 'Copied to the clipboard')"
+                            tabindex="0">
                             <span style="--i: 1;">Š</span><span style="--i: 2;">t</span><span style="--i: 3;">ě</span><span style="--i: 4;">p</span><span style="--i: 5;">á</span><span style="--i: 6;">n</span><span style="--i: 7;">&nbsp;</span><span style="--i: 8;">J</span><span style="--i: 9;">á</span><span style="--i: 10;">k</span><span style="--i: 11;">l</span>
                             <div class="tooltip tooltip-top">
                                 <p>
@@ -141,7 +145,7 @@
                                 </p>
                             </div>
                             <div class="tooltip tooltip-bottom">
-                                <span class="highlight">Click to copy</span>
+                                <span>Click to copy</span>
                             </div>
                         </h2>
                         <div id="logo" class="animate-fade-in-logo select-none">
@@ -149,23 +153,33 @@
                         </div>
                     </div>
                     <div id="intro__right-column" class="z-1 flex flex-col align-items-start">
-                        <h3 id="intro__right-column__title--primary" class="animate-fade-in-title inline-flex select-none">
+                        <h3 id="intro__right-column__title--primary"
+                            class="animate-fade-in-title inline-flex select-none">
                             <span style="--i: 1;">F</span><span style="--i: 2;">u</span><span style="--i: 3;">l</span><span style="--i: 4;">l</span><span style="--i: 5;">-</span><span style="--i: 6;">s</span><span style="--i: 7;">t</span><span style="--i: 8;">a</span><span style="--i: 9;">c</span><span style="--i: 10;">k</span><span style="--i: 11;">&nbsp;</span><span class="highlight" style="--i: 12;">d</span><span class="highlight" style="--i: 13;">e</span><span class="highlight" style="--i: 14;">v</span><span class="highlight" style="--i: 15;">e</span><span class="highlight" style="--i: 16;">l</span><span class="highlight" style="--i: 17;">o</span><span class="highlight" style="--i: 18;">p</span><span class="highlight" style="--i: 19;">e</span><span class="highlight" style="--i: 20;">r</span><span style="--i: 21;">&nbsp;</span>
                         </h3>
-                        <h3 id="intro__right-column__title--secondary" class="animate-fade-in-title inline-flex select-none pt-1/2"
+                        <h3 id="intro__right-column__title--secondary"
+                            class="animate-fade-in-title inline-flex select-none pt-1/2"
                             style="letter-spacing: 1.5px">
                             <span style="--i: 22;">&</span><span style="--i: 23;">&nbsp;</span><span style="--i: 24;">i</span><span style="--i: 25;">n</span><span style="--i: 26;">t</span><span style="--i: 27;">e</span><span style="--i: 28;">r</span><span style="--i: 29;">f</span><span style="--i: 30;">a</span><span style="--i: 31;">c</span><span style="--i: 32;">e</span><span style="--i: 33;">&nbsp;</span><span class="highlight-alt" style="--i: 34;">d</span><span class="highlight-alt" style="--i: 35;">e</span><span class="highlight-alt" style="--i: 36;">s</span><span class="highlight-alt" style="--i: 37;">i</span><span class="highlight-alt" style="--i: 38;">g</span><span class="highlight-alt" style="--i: 39;">n</span><span class="highlight-alt" style="--i: 40;">e</span><span class="highlight-alt" style="--i: 41;">r</span>
                         </h3>
-                        <div class="availability animate-fade-in-cta-1">
+                        <div id="availability" class="animate-fade-in-cta-1 relative">
                             <div class="tooltip__wrapper">
                                 <a href="https://calendly.com/stepanjakl"
                                    target="_blank"
                                    rel="noreferrer"
                                    aria-label="Open to new opportunities, book a virtual meeting"
-                                   class="badge">
-                                    <div>
-                                        <span class="dot"></span>
-                                        <span class="text whitespace-nowrap">Open to new opportunities</span>
+                                   class="relative z-0 flex overflow-hidden"
+                                   style="padding: 15px 17px;
+                                          background-color: var(--highlight);
+                                          border-radius: 6px">
+                                    <div class="tooltip__wrapper inline-flex align-items-center justify-content-center"
+                                         style="column-gap: 14px">
+                                        <span id="availability__dot"
+                                              class="relative"
+                                              style="width: 8px;
+                                                     height: 8px;
+                                                     border-radius: 100%"></span>
+                                        <span id="availability__text" class="whitespace-nowrap">Open to new opportunities</span>
                                     </div>
                                 </a>
                                 <div class="tooltip tooltip-bottom">
@@ -176,7 +190,7 @@
                         </div>
                         <div id="intro__email" class="animate-fade-in-cta-2">
                             <div class="tooltip__wrapper"
-                                 onmousedown="navigator.clipboard.writeText('stepan.jakl@outlook.com'); activateHighlight(this.querySelector('.highlight'), 'Copied to clipboard')"
+                                 onmousedown="navigator.clipboard.writeText('stepan.jakl@outlook.com'); activateHighlight(this.querySelector('.tooltip span'), this.querySelector('.highlight'), 'Copied to the clipboard')"
                                  onkeydown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@outlook.com')"
                                  tabindex="0"
                                  aria-label="Contact me via email">
@@ -188,7 +202,7 @@
                                      fill="currentColor">
                                     <path d="M10 23.375h13.125v-2.792H10Zm0-5.292h20v-2.791H10Zm0-5.291h20v-2.75H10ZM2.667 37.333V2.667h34.666v28h-28Z" />
                                 </svg>
-                                <span class="label">
+                                <span id="intro__email__text" class="label highlight">
                                     stepan.jakl@outlook.com
                                 </span>
                                 <div class="tooltip tooltip-top">
@@ -196,14 +210,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="intro__links" class="animate-fade-in-cta-2">
+                        <div id="intro__links" class="flex animate-fade-in-cta-2">
                             <a href="#profile"
                                aria-label="Learn more about me"
                                rel="noreferrer"
                                class="tooltip__wrapper flex align-items-center"
                                style="margin-right: 38px">
                                 <svg class="animate-face-icon"
-                                     style="color: var(--icon)"
                                      xmlns="http://www.w3.org/2000/svg"
                                      height="32"
                                      width="32"
@@ -212,8 +225,7 @@
                                     <path d="M14.917 24c-.64 0-1.174-.215-1.605-.646-.43-.43-.645-.965-.645-1.604 0-.639.222-1.173.666-1.604.445-.43.986-.646 1.625-.646.64 0 1.167.215 1.584.646.417.43.625.965.625 1.604 0 .639-.215 1.173-.646 1.604-.43.43-.965.646-1.604.646Zm10.166 0c-.639 0-1.173-.215-1.604-.646-.43-.43-.646-.965-.646-1.604 0-.639.215-1.173.646-1.604.43-.43.965-.646 1.604-.646.64 0 1.181.215 1.625.646.445.43.667.965.667 1.604 0 .639-.222 1.173-.667 1.604a2.25 2.25 0 0 1-1.625.646ZM20 33.667c3.805 0 7.035-1.326 9.688-3.979 2.653-2.653 3.979-5.883 3.979-9.688 0-.695-.049-1.368-.146-2.021a9.868 9.868 0 0 0-.438-1.812 11.41 11.41 0 0 1-1.75.291c-.61.056-1.25.084-1.916.084-2.611 0-5.07-.535-7.375-1.604a16.598 16.598 0 0 1-5.917-4.605A16.73 16.73 0 0 1 12.208 16a18.409 18.409 0 0 1-5.833 3.75v.292c0 3.805 1.32 7.027 3.958 9.666 2.64 2.64 5.862 3.959 9.667 3.959Zm.042 3.666c-2.417 0-4.674-.458-6.771-1.375-2.097-.917-3.93-2.153-5.5-3.708-1.57-1.555-2.812-3.389-3.729-5.5-.917-2.111-1.375-4.361-1.375-6.75 0-2.389.458-4.639 1.375-6.75.917-2.111 2.16-3.945 3.729-5.5 1.57-1.555 3.403-2.791 5.5-3.708 2.097-.917 4.354-1.375 6.771-1.375 2.389 0 4.632.458 6.729 1.375 2.097.917 3.93 2.153 5.5 3.708 1.57 1.555 2.805 3.389 3.708 5.5s1.354 4.361 1.354 6.75c0 2.389-.451 4.639-1.354 6.75-.903 2.111-2.139 3.952-3.708 5.521-1.57 1.57-3.41 2.805-5.521 3.708-2.111.903-4.347 1.354-6.708 1.354Z" />
                                 </svg>
                                 <span class="text-sm select-none"
-                                      style="color: var(--text-2);
-                                             letter-spacing: 1.25px;
+                                      style="letter-spacing: 1.25px;
                                              margin-left: 12px;
                                              padding-top: 3px;
                                              padding-bottom: 6px;
@@ -227,8 +239,7 @@
                                rel="noreferrer"
                                class="tooltip__wrapper flex align-items-center"
                                style="margin-right: 24px">
-                                <svg style="color: var(--icon)"
-                                     xmlns="http://www.w3.org/2000/svg"
+                                <svg xmlns="http://www.w3.org/2000/svg"
                                      height="32"
                                      width="32"
                                      viewBox="0 0 40 40"
@@ -236,8 +247,7 @@
                                     <path d="M30.542 33.75V6.25h3.416v27.5ZM4.125 37.125V2.875h22.542v34.25Zm33.708-6.833V9.667h2.25v20.625Z" />
                                 </svg>
                                 <span class="text-sm select-none"
-                                      style="color: var(--text-2);
-                                             letter-spacing: 1.25px;
+                                      style="letter-spacing: 1.25px;
                                              margin-left: 12px;
                                              padding-top: 3px;
                                              padding-bottom: 6px">
@@ -253,10 +263,13 @@
                             <div id="menu" class="relative flex align-items-center">
                                 <!-- <div class="absolute z-2 inset-0" style="background-color: blue;"></div> -->
                                 <a href="#menu"
+                                   tabindex="0"
+                                   onclick="event.preventDefault(); window.location.hash = 'menu'; this.focus()"
                                    class="z-2 inset-0"
                                    style="position: absolute"
                                    aria-label="Open dropdown menu"></a>
                                 <a href="#"
+                                   tabindex="0"
                                    class="z-2 inset-0"
                                    style="position: absolute"
                                    aria-label="Close dropdown menu"></a>
@@ -264,11 +277,10 @@
                                         type="button"
                                         class="relative z-1 inline-flex align-items-center"
                                         tabindex="-1">
-                                    <div style="width: 32px; height: 32px;">
+                                    <div class="relative" style="width: 32px; height: 32px;">
                                         <!-- opsz' 40, 'wght' 600, 'FILL' 1, 'GRAD' 0 -->
                                         <svg id="menu__icon--open"
                                              class="absolute inset-0"
-                                             style="color: var(--icon)"
                                              xmlns="http://www.w3.org/2000/svg"
                                              height="32"
                                              width="32"
@@ -278,7 +290,6 @@
                                         </svg>
                                         <svg id="menu__icon--close"
                                              class="absolute inset-0"
-                                             style="color: var(--icon)"
                                              xmlns="http://www.w3.org/2000/svg"
                                              height="32"
                                              width="32"
@@ -288,8 +299,7 @@
                                         </svg>
                                     </div>
                                     <span class="text-sm select-none"
-                                          style="color: var(--text-2);
-                                                 letter-spacing: 1.25px;
+                                          style="letter-spacing: 1.25px;
                                                  margin-left: 4px;
                                                  padding-top: 3px;
                                                  padding-bottom: 6px">

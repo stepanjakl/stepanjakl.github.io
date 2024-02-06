@@ -137,7 +137,7 @@ body {
 }
 
 .highlight.active {
-    color: var(--highlight);
+    color: var(--highlight) !important;
     transition-timing-function: var(--ease-out-quad);
     transition-delay: unset;
 }
@@ -283,6 +283,84 @@ svg.animate-face-icon path {
     transform: scale(0.95);
 }
 
+
+/* Availability */
+
+#availability #availability__dot::before {
+    transition: opacity calc(2 * var(--animate-out-segment)) linear, transform calc(2 * var(--animate-out-segment)) var(--ease-out-quad);
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--green);
+    border-radius: 9999px;
+}
+
+#availability a:hover #availability__dot::before {
+    transition: opacity calc(2 * var(--animate-in-segment)) linear, transform calc(2 * var(--animate-in-segment)) var(--ease-in-quad);
+    transform: scale(100);
+}
+
+#availability__dot {
+    transition: color var(--animate-out-segment) linear;
+}
+
+#availability a:hover #availability__dot {
+    transition: background-color var(--animate-in-segment) linear var(--animate-in-segment);
+    background-color: var(--cyan-full-5);
+}
+
+#availability__text {
+    transition: color var(--animate-out-segment) linear;
+}
+
+#availability a:hover #availability__text {
+    transition: color var(--animate-in-segment) linear var(--animate-in-segment);
+    color: var(--cyan-full-5);
+}
+
+
+/* Intro Links */
+
+#intro__links>a svg, #menu__button svg {
+    transition: color var(--animate-out-segment) linear;
+    color: var(--icon);
+}
+
+#intro__links>a, #menu__button>span {
+    transition: color var(--animate-out-segment) linear;
+    color: var(--text-2);
+}
+
+#intro__links>a:hover, #intro__links>a:hover svg, #menu>a:hover~#menu__button>span, #menu>a:hover~#menu__button svg {
+    transition: color var(--animate-in-segment) linear;
+    color: var(--text-1);
+}
+
+#intro__links>a::before, #menu__button::before {
+    transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad);
+    content: '';
+    opacity: 0;
+    transform: scale(0.9);
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--context-bg);
+    border-radius: 9999px;
+    backdrop-filter: blur(2px);
+}
+
+#intro__links>a:hover::before, #menu>a:hover~#menu__button::before {
+    transition: opacity var(--animate-in-segment) linear, transform var(--animate-in-segment) var(--ease-out-quad);
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+#intro__links>a:focus::before, #intro__links #menu>a:focus~#menu__button::before {
+    transition: opacity var(--animate-in-segment) linear, transform var(--animate-in-segment) var(--ease-out-quad);
+    opacity: 1;
+    transform: scale(1.1);
+}
 
 /* Menu */
 

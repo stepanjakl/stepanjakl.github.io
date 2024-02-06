@@ -430,9 +430,13 @@ body {
     }
 }
 
+/* TODO: add some padding on top and bottom? */
+#intro__left-column h2 {
+    color: var(--text-1);
+}
+
 #intro__left-column h2>span {
     display: inline-block;
-    color: var(--text-1);
     font-weight: var(--text-lg-font-weight);
     font-size: var(--text-lg-font-size);
     line-height: var(--text-lg-line-height);
@@ -510,6 +514,7 @@ body {
     display: table;
 }
 
+/* TODO HERE NOW */
 /* TODO defo simplify this selector */
 #intro__right-column__title--secondary span {
     display: inline-block;
@@ -540,14 +545,14 @@ body {
     padding-left: 33px;
 } */
 
-#intro .availability {
+#availability {
     padding-top: 64px;
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-#intro .availability>span {
+#availability>span {
     color: var(--text-2);
     font-size: 17.1429px;
     line-height: 12px;
@@ -556,40 +561,23 @@ body {
     padding-left: 16px;
 }
 
-#intro .availability>span:nth-of-type(2)::before {
+#availability>span:nth-of-type(2)::before {
     content: "";
     margin-bottom: -0.025em;
     display: table;
 }
 
-#intro .availability>span:nth-of-type(2)::after {
+#availability>span:nth-of-type(2)::after {
     content: "";
     margin-top: 0.025em;
     display: table;
 }
 
-#intro .badge {
-    display: flex;
-    padding: 15px 17px;
-    background-color: var(--highlight);
-    border-radius: 6px;
-}
-
-#intro .badge div {
-    display: inline-flex;
-    align-items: center;
-    justify-items: center;
-    column-gap: 14px;
-}
-
-#intro .badge span.dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 100%;
+#availability__dot {
     background-color: var(--green);
 }
 
-#intro .badge span.text {
+#availability__text {
     font-family: 'Chakra Petch', monospace;
     font-weight: 600;
     color: var(--blue-full-95);
@@ -599,17 +587,18 @@ body {
     line-height: 10px;
 }
 
-#intro .badge span.text::before {
+#availability__text::before {
     content: "";
     margin-bottom: 0.008em;
     display: table;
 }
 
-#intro .badge span.text::after {
+#availability__text::after {
     content: "";
     margin-top: -0.008em;
     display: table;
 }
+
 
 #intro__email {
     display: flex;
@@ -652,7 +641,6 @@ body {
 }
 
 #intro__links {
-    display: flex;
     flex-direction: column;
     align-items: flex-start;
     row-gap: var(--segment-third);
@@ -666,16 +654,21 @@ body {
     }
 }
 
+#intro__links>a, #menu button {
+    position: relative;
+    padding: 4px 4px 4px 0;
+}
+
 #menu:target>a:first-of-type {
-    visibility: hidden;
+    z-index: -1;
 }
 
 #menu>a:nth-of-type(2) {
-    visibility: hidden;
+    z-index: -1;
 }
 
 #menu:target>a:nth-of-type(2) {
-    visibility: visible;
+    z-index: 2;
 }
 
 
@@ -1420,6 +1413,7 @@ body {
 
 /* Accessibility */
 
+/* TODO only apply when motion-reduction is in place */
 a:active,
 button:active,
 [tabindex="0"]:active,
