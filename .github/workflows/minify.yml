@@ -32,7 +32,14 @@ jobs:
       # - run: terser ./js/file.js --compress --mangle -o ./js/file.js
       - run: csso ./reset.css -o ./reset.css
       - run: csso ./style.css -o ./style.css
-      - run: csso ./fonts.css -o ./fonts.css
+      # Get a list of CSS files starting with "font-"
+      - run: css_files=$(find . -name 'font-*.css')
+      # Loop through the files and run csso for each file
+      - run: |
+          for file in $css_files; do
+          echo "Minifying $file"
+          csso ./$file -o ./$file
+          done
       - run: html-minifier --collapse-boolean-attributes --collapse-whitespace --minify-css --minify-js --minify-urls --remove-attribute-quotes --remove-comments --remove-empty-attributes --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-style-link-type-attributes --remove-tag-whitespace --use-short-doctype -o index.html index.html
       - run: svgo -f ./ -o ./
       - run: svgo -f ./images -o ./images
