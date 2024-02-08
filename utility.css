@@ -357,6 +357,10 @@ body {
     cursor: pointer;
 }
 
+.cursor-text {
+    cursor: text;
+}
+
 
 /* Pointer Events */
 .pointer-events-none {

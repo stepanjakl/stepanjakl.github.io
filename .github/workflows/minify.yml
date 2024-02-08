@@ -33,10 +33,10 @@ jobs:
       - run: csso ./reset.css -o ./reset.css
       - run: csso ./style.css -o ./style.css
       # Get a list of CSS files starting with "font-"
-      - run: css_files=$(find . -name 'font-*.css')
+      - run: css_font_files=$(find . -name 'font-*.css')
       # Loop through the files and run csso for each file
       - run: |
-          for file in $css_files; do
+          for file in $css_font_files; do
           echo "Minifying $file"
           csso ./$file -o ./$file
           done

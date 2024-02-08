@@ -55,24 +55,27 @@
         </script>
         <script>
             const activateHighlight = (elementToSwapText, elementToHighlight, tempInnerText) => {
-                const origInnerText = elementToSwapText.innerText
-                const activateHandler = () => {
-                    elementToHighlight.classList.remove('active')
-                    elementToHighlight.removeEventListener('transitionend', activateHandler)
-                    elementToHighlight.addEventListener('transitionend', deactivateHandler)
-                }
-                const deactivateHandler = () => {
-                    console.log('transitionend', this);
-                    if (tempInnerText) {
-                        elementToSwapText.innerText = origInnerText
+                if (!event.target.getAttribute('data-copying')) {
+                    event.target.setAttribute('data-copying', '')
+                    const origInnerText = elementToSwapText.innerText
+                    const activateHandler = () => {
+                        elementToHighlight.classList.remove('active')
+                        elementToHighlight.removeEventListener('transitionend', activateHandler)
+                        elementToHighlight.addEventListener('transitionend', deactivateHandler)
                     }
-                    elementToHighlight.removeEventListener('transitionend', deactivateHandler)
+                    const deactivateHandler = () => {
+                        if (tempInnerText) {
+                            elementToSwapText.innerText = origInnerText
+                        }
+                        event.target.removeAttribute('data-copying')
+                        elementToHighlight.removeEventListener('transitionend', deactivateHandler)
+                    }
+                    if (tempInnerText) {
+                        elementToSwapText.innerText = tempInnerText
+                    }
+                    elementToHighlight.classList.toggle('active')
+                    elementToHighlight.addEventListener('transitionend', activateHandler)
                 }
-                if (tempInnerText) {
-                    elementToSwapText.innerText = tempInnerText
-                }
-                elementToHighlight.classList.toggle('active')
-                elementToHighlight.addEventListener('transitionend', activateHandler)
             }
         </script>
         <script>
@@ -202,7 +205,7 @@
                                      fill="currentColor">
                                     <path d="M10 23.375h13.125v-2.792H10Zm0-5.292h20v-2.791H10Zm0-5.291h20v-2.75H10ZM2.667 37.333V2.667h34.666v28h-28Z" />
                                 </svg>
-                                <span id="intro__email__text" class="label highlight">
+                                <span id="intro__email__text" class="label highlight cursor-text select-none">
                                     stepan.jakl@outlook.com
                                 </span>
                                 <div class="tooltip tooltip-top">
@@ -309,7 +312,9 @@
                                                   text-underline-position: from-font;
                                                   text-underline-offset: 2px">M</u>ore</span>
                                 </button>
-                                <a href="#" id="underlay__menu" class="fixed inset-0 pointer-events-none cursor-default">
+                                <a href="#"
+                                   id="underlay__menu"
+                                   class="fixed inset-0 pointer-events-none cursor-default">
                                 </a>
                                 <div id="menu__dropdown" class="absolute z-1 px-1/2 pt-1/2">
                                     <div>
@@ -458,6 +463,14 @@
                             </a>
                             <div class="information mr-1">
                                 <dl>
+                                    <div style="padding-bottom: var(--segment-third);">
+                                        <dt>
+                                            Photo:
+                                        </dt>
+                                        <dd>
+                                            <img src="./images/selfie.jpg" height="960" width="960" style="width: calc(4 * var(--segment)); height: auto; aspect-ratio: 1/1; margin: 0; border: none; border-radius: 9999px;">
+                                        </dd>
+                                    </div>
                                     <div>
                                         <dt>
                                             Full name:
@@ -468,17 +481,23 @@
                                     </div>
                                     <div class="profile">
                                         <dt>
-                                            Profile:
+                                            Summary:
                                         </dt>
                                         <dd>
                                             <p>
-                                                Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to producing high-quality results for projects with realistic and exciting propositions and tangible outcomes. Comfortable with working on both back-end and front-end, but with a preference for user-facing/browser-oriented development.
+                                                Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals. Proficient in both back-end and front-end development, with a focus on prioritizing user experience.
                                             </p>
                                             <p>
-                                                Coding and tweaking profesinally since 2014. In last few years, I've been especially focusing on developing sites built with <a href="#"><u>ApostropheCMS</u></a>.
+                                                DELETE - Experienced UI engineer skilled in creating intuitive digital solutions. Committed to delivering high-quality results for projects with realistic goals. Proficient in both back-end and front-end development, with a focus on prioritizing user experience.
                                             </p>
                                             <p>
-                                                Equally dedicated to code and design.
+                                                DELETE - Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to producing high-quality outcomes for projects with realistic and exciting propositions and tangible goals. Proficient in both back-end and front-end development, with a particular inclination towards creating features that prioritize user experience.
+                                            </p>
+                                            <p style="padding: var(--segment-third) 0;">
+                                                In recent years, my efforts have been devoted to building and overseeing a significant number of websites using the <a href="https://apostrophecms.com/" target="_blank"><u>ApostropheCMS</u></a> framework.
+                                            </p>
+                                            <p style="padding-bottom: var(--segment-third);">
+                                                I have been equally dedicated to code and design as a profesional since 2014.
                                             </p>
                                         </dd>
                                     </div>
@@ -530,7 +549,7 @@
                                             </span>
                                         </dd>
                                     </div>
-                                    <div class="timezone">
+                                    <div class="timezone" style="padding-bottom: var(--segment-third);">
                                         <dt>
                                             Timezone:
                                         </dt>
@@ -557,7 +576,7 @@
                                     </div>
                                     <div>
                                         <dt>
-                                            Deliverables:
+                                            Deliverables: (TODO IMPROVE)
                                         </dt>
                                         <dd style="margin-bottom: -10px;">
                                             <ul class="tags">
