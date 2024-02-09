@@ -141,14 +141,14 @@ body {
 }
 
 .highlight.active {
-    color: var(--highlight) !important;
+    color: var(--highlight-primary) !important;
     transition-timing-function: var(--ease-out-quad);
     transition-delay: unset;
 }
 
 @keyframes highlight {
     0% {
-        color: var(--highlight);
+        color: var(--highlight-primary);
     }
 
     100% {
@@ -173,7 +173,7 @@ body {
 
 @keyframes de-highlight {
     0% {
-        color: var(--highlight);
+        color: var(--highlight-primary);
     }
 
     100% {
@@ -290,7 +290,7 @@ svg.animate-face-icon path {
 
 /* Availability */
 
-#availability #availability__dot::before {
+#availability__dot::before {
     transition: opacity calc(2 * var(--animate-out-segment)) linear, transform calc(2 * var(--animate-out-segment)) var(--ease-out-quad);
     transform-origin: center;
     content: '';
@@ -301,7 +301,7 @@ svg.animate-face-icon path {
     border-radius: 9999px;
 }
 
-#availability a:hover #availability__dot::before {
+#availability__button a:hover #availability__dot::before {
     transition: opacity calc(2 * var(--animate-in-segment)) linear, transform calc(2 * var(--animate-in-segment)) var(--ease-in-quad);
     transform: scale(100);
 }
@@ -310,7 +310,7 @@ svg.animate-face-icon path {
     transition: color var(--animate-out-segment) linear;
 }
 
-#availability a:hover #availability__dot {
+#availability__button a:hover #availability__dot {
     transition: background-color var(--animate-in-segment) linear var(--animate-in-segment);
     background-color: var(--cyan-full-5);
 }
@@ -319,7 +319,7 @@ svg.animate-face-icon path {
     transition: color var(--animate-out-segment) linear;
 }
 
-#availability a:hover #availability__text {
+#availability__button a:hover #availability__text {
     transition: color var(--animate-in-segment) linear var(--animate-in-segment);
     color: var(--cyan-full-5);
 }
@@ -327,31 +327,39 @@ svg.animate-face-icon path {
 
 /* Intro Links */
 
-#intro__links>a svg {
+#menu__links>a svg {
     transition: color var(--animate-out-segment-2\/3) linear;
     color: var(--icon);
 }
 
-#intro__links>a, #menu__button>span {
-    transition: color var(--animate-out-segment-2\/3) linear;
+#menu__links>a {
+    transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear;
     color: var(--text-2);
 }
 
-#intro__links>a:hover, #intro__links>a:hover svg, #menu>a:hover~#menu__button>span {
-    transition: color var(--animate-in-segment-2\/3) linear;
+#menu__links>a:hover {
+    background-color: var(--highlight-secondary);
+}
+
+#menu__links>a[href="#profile"]:hover {
+    background-color: var(--highlight-primary);
+}
+
+#menu__links>a:hover, #menu__links>a:hover svg {
+    transition: color var(--animate-in-segment-2\/3) linear,  background-color var(--animate-in-segment-2\/3) linear;
     color: var(--text-1);
 }
 
-#intro__links>a u, #menu__button>span u {
+#menu__links>a u {
     transition: text-decoration var(--animate-out-segment-2\/3) linear;
 }
 
-#intro__links>a:hover u, #menu>a:hover~#menu__button>span u {
+#menu__links>a:hover u {
     transition: text-decoration var(--animate-in-segment-2\/3) linear;
     text-decoration-color: var(--text-2) !important;
 }
 
-#intro__links>a::before, #menu__button::before {
+/* #menu__links>a::before, #menu__button::before {
     transition: opacity var(--animate-out-segment-2\/3) linear, transform var(--animate-out-segment-2\/3) var(--ease-in-quad);
     content: '';
     opacity: 0;
@@ -364,22 +372,180 @@ svg.animate-face-icon path {
     backdrop-filter: blur(2px);
 }
 
-#intro__links>a:hover::before, #menu>a:hover~#menu__button::before {
+#menu__links>a:hover::before, #menu>a:hover~#menu__button::before {
     transition: opacity var(--animate-in-segment-2\/3) linear, transform var(--animate-in-segment-2\/3) var(--ease-out-quad);
     opacity: 1 !important;
     transform: scale(1.2) !important;
 }
 
-#intro__links>a:focus::before, #intro__links #menu>a:focus~#menu__button::before {
+#menu__links>a:focus::before, #menu__links #menu>a:focus~#menu__button::before {
     transition: opacity var(--animate-in-segment-2\/3) linear, transform var(--animate-in-segment-2\/3) var(--ease-out-quad);
     opacity: 0.75;
     transform: scale(1.1);
-}
+} */
 
 
 /* Menu Button */
 
-#menu__icon--close,
+#menu__button__wrapper:hover #menu__button {
+    background-color: var(--highlight-secondary);
+}
+
+#menu__button span {
+    will-change: transform;
+    animation-fill-mode: both;
+    animation-name: initial;
+    animation-duration: calc((var(--animate-in-segment) * 5));
+}
+
+#menu__button span:nth-child(1) {
+    animation-name: menu-top-left-reverse
+}
+
+#menu:target #menu__button span:nth-child(1) {
+    animation-name: menu-top-left;
+}
+
+#menu__button span:nth-child(2) {
+    animation-name: menu-top-right-reverse;
+}
+
+#menu:target #menu__button span:nth-child(2) {
+    animation-name: menu-top-right;
+}
+
+#menu__button span:nth-child(3) {
+    animation-name: menu-bottom-left-reverse;
+}
+
+#menu:target #menu__button span:nth-child(3) {
+    animation-name: menu-bottom-left;
+}
+
+#menu__button span:nth-child(4) {
+    animation-name: menu-bottom-right-reverse;
+}
+
+#menu:target #menu__button span:nth-child(4) {
+    animation-name: menu-bottom-right;
+}
+
+@keyframes initial {}
+
+@keyframes menu-top-left {
+    0% {
+        transform: translate(0px, 0px);
+        animation-timing-function: var(--ease-in-quad);
+    }
+    45%, 55% {
+        transform: translate(var(--menu-icon-radius), var(--menu-icon-radius));
+    }
+    85%, 100% {
+        animation-timing-function: var(--ease-out-quad);
+        transform: translate( var(--menu-icon-radius), calc(-1 * ((1.5 * var(--menu-icon-gap-between)) - (0.5 * var(--menu-icon-gap)) + var(--menu-icon-bit-size))));
+    }
+}
+
+@keyframes menu-top-left-reverse {
+    0% {
+        transform: translate( var(--menu-icon-radius), calc(-1 * ((1.5 * var(--menu-icon-gap-between)) - (0.5 * var(--menu-icon-gap)) + var(--menu-icon-bit-size))));
+        animation-timing-function: var(--ease-in-quad);
+    }
+    45%, 55% {
+        transform: translate(var(--menu-icon-radius), var(--menu-icon-radius));
+    }
+    100% {
+        transform: translate(0px, 0px);
+        animation-timing-function: var(--ease-out-quad);
+    }
+}
+
+@keyframes menu-top-right {
+    0%, 5% {
+        transform: translate(0px, 0px);
+        animation-timing-function: var(--ease-in-quad);
+    }
+    50%, 60% {
+        transform: translate(calc(-1 * var(--menu-icon-radius)), var(--menu-icon-radius));
+    }
+    90%, 100% {
+        transform: translate(calc(-1 * var(--menu-icon-radius)), calc(-1 * ((0.5 * var(--menu-icon-gap-between)) - (0.5 * (var(--menu-icon-gap))))));
+        animation-timing-function: var(--ease-out-quad);
+    }
+}
+
+@keyframes menu-top-right-reverse {
+    0% {
+        transform: translate(calc(-1 * var(--menu-icon-radius)), calc(-1 * ((0.5 * var(--menu-icon-gap-between)) - (0.5 * (var(--menu-icon-gap))))));
+        animation-timing-function: var(--ease-in-quad);
+    }
+    45%, 55% {
+        transform: translate(calc(-1 * var(--menu-icon-radius)), var(--menu-icon-radius));
+    }
+    100% {
+        transform: translate(0px, 0px);
+        animation-timing-function: var(--ease-out-quad);
+    }
+}
+
+@keyframes menu-bottom-left {
+    0%, 10% {
+        transform: translate(0px, 0px);
+        animation-timing-function: var(--ease-in-quad);
+    }
+    55%, 65% {
+        transform: translate(var(--menu-icon-radius), calc(-1 * var(--menu-icon-radius)));
+    }
+    95%, 100% {
+        transform: translate(var(--menu-icon-radius), calc((0.5 * (var(--menu-icon-gap-between))) - (0.5 * (var(--menu-icon-gap)))));
+        animation-timing-function: var(--ease-out-quad);
+    }
+}
+
+@keyframes menu-bottom-left-reverse {
+    0% {
+        transform: translate(var(--menu-icon-radius), calc((0.5 * (var(--menu-icon-gap-between))) - (0.5 * (var(--menu-icon-gap)))));
+        animation-timing-function: var(--ease-in-quad);
+    }
+    45%, 55% {
+        transform: translate(var(--menu-icon-radius), calc(-1 * var(--menu-icon-radius)));
+    }
+    100% {
+        transform: translate(0px, 0px);
+        animation-timing-function: var(--ease-out-quad);
+    }
+}
+
+@keyframes menu-bottom-right {
+    0%, 15% {
+        transform: translate(0px, 0px);
+        animation-timing-function: var(--ease-in-quad);
+    }
+    60%, 70% {
+        transform: translate(calc(-1 * var(--menu-icon-radius)), calc(-1 * var(--menu-icon-radius)));
+    }
+    100% {
+        transform: translate(calc(-1 * var(--menu-icon-radius)), calc((1.5 * var(--menu-icon-gap-between)) - (0.5 * (var(--menu-icon-gap))) + var(--menu-icon-bit-size)));
+        animation-timing-function: var(--ease-out-quad);
+    }
+}
+
+@keyframes menu-bottom-right-reverse {
+    0% {
+        transform: translate(calc(-1 * var(--menu-icon-radius)), calc((1.5 * var(--menu-icon-gap-between)) - (0.5 * (var(--menu-icon-gap))) + var(--menu-icon-bit-size)));
+        animation-timing-function: var(--ease-out-quad);
+    }
+    45%, 65% {
+        transform: translate(calc(-1 * var(--menu-icon-radius)), calc(-1 * var(--menu-icon-radius)));
+    }
+    100% {
+        transform: translate(0px, 0px);
+        animation-timing-function: var(--ease-in-quad);
+    }
+}
+
+
+/* #menu__icon--close,
 #menu__icon--open {
     color: var(--icon);
 }
@@ -415,7 +581,7 @@ svg.animate-face-icon path {
     visibility: hidden;
     opacity: 0;
     transform: scale(0.75);
-}
+} */
 
 
 /* Menu Dropdown */
@@ -427,7 +593,7 @@ svg.animate-face-icon path {
     transition: opacity var(--animate-out-segment-2\/3) linear, transform var(--animate-out-segment-2\/3) var(--ease-out-quad), visibility 0s var(--animate-out-segment-2\/3);
 }
 
-#menu:target>#menu__dropdown {
+#menu:target #menu__dropdown {
     visibility: visible;
     pointer-events: auto;
     opacity: 1;
@@ -453,7 +619,7 @@ svg.animate-face-icon path {
     inset: 9px 10px 10px 10px;
     /* inset: 3px 4px 4px 4px; */
     z-index: -1;
-    background-color: var(--highlight);
+    background-color: var(--highlight-primary);
     border-radius: 1.5px;
     /* backdrop-filter: blur(2px); */
 }
