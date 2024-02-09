@@ -247,6 +247,7 @@ body {
     --highlight-secondary: var(--cyan-full-45);
 
     --icon: var(--cyan-quarter-80);
+    --icon-hover: var(--cyan-quarter-85);
     --icon-bg: var(--cyan-quarter-45);
     --icon-fg: var(--cyan-quarter-85);
 
@@ -262,9 +263,8 @@ body {
     --modal-bg-blur: rgba(0, 66, 75, 0.65), rgba(0, 66, 75, 0.35);
     --modal-text: var(--cyan-full-95);
 
-    --modal-icon-bg: var(--cyan-half-45);
-    --modal-icon-fg: var(--cyan-half-95);
-    --modal-icon-outline: var(--cyan-half-70);
+    --modal-icon: var(--cyan-half-75);
+    --modal-icon-hover: var(--cyan-half-95);
 
     --modal-tag-bg: var(--cyan-three-quarters-45);
 
@@ -310,7 +310,7 @@ body {
     --modal-text: var(--cyan-full-5);
 
     --modal-icon-bg: var(--cyan-half-65);
-    --modal-icon-fg: var(--cyan-half-95);
+    --modal-icon: var(--cyan-half-95);
 
     --modal-tag-bg: var(--cyan-three-quarters-80);
 
@@ -617,7 +617,7 @@ body {
     grid-template-rows: auto;
     row-gap: 12px;
     column-gap: 24px;
-    margin-top: calc(1.5 * var(--segment));
+    margin-top: calc((1.5 * var(--segment)) + 8px);
     padding: 6px;
 }
 
@@ -688,17 +688,16 @@ body {
 #menu__button span {
     content: '';
     display: inline-flex;
-    background-color: var(--text-2);
     width: var(--menu-icon-bit-size);
     height: var(--menu-icon-bit-size);
     border-radius: 0.75px;
 }
 
 #menu__dropdown {
-    left: 0;
-    bottom: 100%;
-    margin-bottom: 12px;
-    margin-left: -14px;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 0px;
+    margin-right: 8px;
     pointer-events: none;
 }
 
@@ -729,6 +728,7 @@ body {
 
 #menu__dropdown a span,
 #menu__dropdown label span {
+    color: var(--text-1);
     margin-left: 14px;
 }
 
@@ -779,7 +779,7 @@ body {
 
     .modal .modal__content {
         border: solid 1px var(--modal-border-outer);
-        border-radius: var(--segment-eighth) var(--segment-half) var(--segment-eighth) var(--segment-eighth);
+        border-radius: var(--segment-eighth) calc((var(--modal-button-close-border-radius) + var(--modal-button-close-inset)) - 1px) var(--segment-eighth) var(--segment-eighth);
     }
 }
 
@@ -818,31 +818,34 @@ body {
 
 /* Modal - Close button */
 
-.modal .modal__close-icon {
+body {
+    --modal-button-close-size: 40px;
+    --modal-button-close-border-radius: 14px;
+    --modal-button-close-inset: 14px;
+}
+
+#modal__button-close {
     align-self: end;
     position: sticky;
     z-index: 1;
     top: 0px;
-    top: var(--segment-quarter);
+    /* top: var(--segment-quarter);
     margin-top: var(--segment-quarter);
-    margin-right: var(--segment-quarter);
+    margin-right: var(--segment-quarter); */
+    top: var(--modal-button-close-inset);
+    margin-top: var(--modal-button-close-inset);
+    margin-right: var(--modal-button-close-inset);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 100%;
-    background-color: var(--modal-icon-bg);
-}
-
-.modal .modal__close-icon svg {
-    color: var(--modal-icon-fg);
-}
-
-.modal .modal__close-icon .icon {
-    /* 'opsz' 20, 'wght' 600, 'FILL' 1, 'GRAD' 200 */
-    width: 20px;
-    height: 20px;
+    width: var(--modal-button-close-size);
+    height: var(--modal-button-close-size);
+    color: var(--modal-icon);
+    border-style: solid;
+    border-width: 1.5px;
+    border-color: var(--modal-icon);
+    border-radius: var(--modal-button-close-border-radius);
+    /* background-color: var(--modal-icon-bg); */
 }
 
 .modal .information dl {
@@ -881,7 +884,7 @@ body {
     height: 15px;
     margin-left: 8px;
     box-sizing: content-box;
-    border: 1px solid var(--modal-icon-outline);
+    /* border: 1px solid var(--modal-icon-outline); */
     border-radius: 2px;
 }
 
@@ -1352,9 +1355,9 @@ body {
         padding-top: 46px;
     } */
 
-    #menu__email__button {
+    /* #menu__email__button {
         padding-top: 106px;
-    }
+    } */
 
     .modal .modal__content .information dl div {
         padding-top: 20px;
