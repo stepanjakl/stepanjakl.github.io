@@ -709,7 +709,7 @@ svg.animate-face-icon path {
 
 /* Modals - Close Button */
 
-#modal__button-close {
+#modal__button-close, #modal__button-close svg {
     transition: color var(--animate-out-segment-2\/3) linear, border var(--animate-out-segment-2\/3) linear;
 }
 
@@ -717,6 +717,10 @@ svg.animate-face-icon path {
     transition: color var(--animate-in-segment-2\/3) linear, border var(--animate-in-segment-2\/3) linear;
     color: var(--modal-icon-hover);
     border-color: var(--modal-icon-hover);
+}
+
+#modal__button-close:hover svg {
+    color: var(--modal-icon-hover);
 }
 
 

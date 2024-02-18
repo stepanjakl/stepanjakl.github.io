@@ -4,6 +4,7 @@
  * Base64 embed fonts: https://amio.github.io/embedded-google-fonts/
  * SVG animation: https://shapeshifter.design/
  * Icons: https://fonts.google.com/icons?icon.style=Sharp
+ * Brand icons: https://simpleicons.org/
  */
 
 :root {
@@ -263,7 +264,8 @@ body {
     --modal-bg-blur: rgba(0, 66, 75, 0.65), rgba(0, 66, 75, 0.35);
     --modal-text: var(--cyan-full-95);
 
-    --modal-icon: var(--cyan-half-75);
+    --modal-icon-outer: var(--cyan-half-75);
+    --modal-icon-inner: var(--cyan-half-85);
     --modal-icon-hover: var(--cyan-half-95);
 
     --modal-tag-bg: var(--cyan-three-quarters-45);
@@ -309,8 +311,8 @@ body {
     --modal-bg-blur: rgba(0, 188, 210, 0.45), rgba(0, 188, 210, 0.15);
     --modal-text: var(--cyan-full-5);
 
-    --modal-icon-bg: var(--cyan-half-65);
-    --modal-icon: var(--cyan-half-95);
+    --modal-icon-outer-bg: var(--cyan-half-65);
+    --modal-icon-outer: var(--cyan-half-95);
 
     --modal-tag-bg: var(--cyan-three-quarters-80);
 
@@ -350,6 +352,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     height: auto;
+    overscroll-behavior: none;
 }
 
 @media (min-width: 960px) {
@@ -840,12 +843,16 @@ body {
     justify-content: center;
     width: var(--modal-button-close-size);
     height: var(--modal-button-close-size);
-    color: var(--modal-icon);
+    color: var(--modal-icon-outer);
     border-style: solid;
     border-width: 1.5px;
-    border-color: var(--modal-icon);
+    border-color: var(--modal-icon-outer);
     border-radius: var(--modal-button-close-border-radius);
-    /* background-color: var(--modal-icon-bg); */
+    /* background-color: var(--modal-icon-outer-bg); */
+}
+
+#modal__button-close svg {
+    color: var(--modal-icon-inner);
 }
 
 .modal .information dl {
@@ -884,7 +891,7 @@ body {
     height: 15px;
     margin-left: 8px;
     box-sizing: content-box;
-    /* border: 1px solid var(--modal-icon-outline); */
+    /* border: 1px solid var(--modal-icon-outer-outline); */
     border-radius: 2px;
 }
 
@@ -1425,14 +1432,20 @@ button,
     outline-offset: 4px;
 }
 
-/* TODO only apply when motion-reduction is in place */
-/* a:active,
-button:active,
-[tabindex="0"]:active,
-a:focus-visible,
-button:focus-visible,
-[tabindex="0"]:focus-visible {
-    position: relative;
-    z-index: 10;
-    outline-color: var(--highlight-primary);
-} */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    a:active,
+    button:active,
+    [tabindex="0"]:active,
+    a:focus-visible,
+    button:focus-visible,
+    [tabindex="0"]:focus-visible {
+        position: relative;
+        z-index: 10;
+        outline-color: var(--highlight-primary);
+    }
+}
