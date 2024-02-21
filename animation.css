@@ -37,7 +37,7 @@ body {
 .animate-fade-in-logo,
 .animate-fade-in-triangle::after {
     animation-name: fade-in;
-    animation-fill-mode: both;
+    animation-fill-mode: backwards;
     animation-duration: 2.5s;
     animation-timing-function: var(--ease-out-quad);
 }
@@ -249,36 +249,31 @@ svg.animate-face-icon path {
 
 /* Availability */
 
-#availability__dot::before {
+#availability__button__dot::before {
     transition: opacity calc(2 * var(--animate-out-segment)) var(--ease-out-quad), transform calc(2 * var(--animate-out-segment)) var(--ease-out-quad);
     transform-origin: center;
-    content: '';
-    position: absolute;
-    inset: 0;
     z-index: -1;
-    background-color: var(--green);
-    border-radius: 9999px;
 }
 
-#availability__button a:hover #availability__dot::before {
+#availability__button a:hover #availability__button__dot::before {
     transition: opacity calc(2 * var(--animate-in-segment)) var(--ease-in-quad), transform calc(2 * var(--animate-in-segment)) var(--ease-in-quad);
-    transform: scale(100);
+    transform: scale(115);
 }
 
-#availability__dot {
+#availability__button__dot {
     transition: color var(--animate-out-segment) linear;
 }
 
-#availability__button a:hover #availability__dot {
+#availability__button a:hover #availability__button__dot::after {
     transition: background-color var(--animate-in-segment) linear var(--animate-in-segment);
     background-color: var(--cyan-full-5);
 }
 
-#availability__text {
+#availability__button__text {
     transition: color var(--animate-out-segment) linear;
 }
 
-#availability__button a:hover #availability__text {
+#availability__button a:hover #availability__button__text {
     transition: color var(--animate-in-segment) linear var(--animate-in-segment);
     color: var(--cyan-full-5);
 }

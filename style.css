@@ -146,6 +146,7 @@
 
     /* 125, 100, 85 */
     --green: #49f400;
+    --green-opacity: rgba(73, 244, 0, 0.25);
 
     /* 300, 100, 25 */
     --navy: #6b0076;
@@ -585,11 +586,33 @@ body {
     display: table;
 }
 
-#availability__dot {
+#availability__button__dot {
+    z-index: -1;
+    width: 18px;
+    height: 18px;
+    border-radius: 9999px;
+    background-color: var(--green-opacity);
+}
+
+#availability__button__dot::before {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 9999px;
     background-color: var(--green);
 }
 
-#availability__text {
+#availability__button__dot::after {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 9999px;
+    background-color: transparent;
+}
+
+#availability__button__text {
     font-family: 'Chakra Petch', monospace;
     font-weight: 600;
     color: var(--blue-full-95);
@@ -599,13 +622,13 @@ body {
     line-height: 10px;
 }
 
-#availability__text::before {
+#availability__button__text::before {
     content: "";
     margin-bottom: 0.008em;
     display: table;
 }
 
-#availability__text::after {
+#availability__button__text::after {
     content: "";
     margin-top: -0.008em;
     display: table;
