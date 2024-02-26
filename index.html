@@ -18,33 +18,33 @@
               content="black-translucent">
         <!-- Favicon -->
         <meta name="theme-color" content=" #ffffff">
-        <link rel="icon" href="favicon.svg">
-        <link rel="mask-icon" href="mask-icon.svg" color="#4e7bff">
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <link rel="icon" href="images/favicon.svg">
+        <link rel="mask-icon" href="images/mask-icon.svg" color="#4e7bff">
+        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
         <link rel="manifest" href="manifest.json">
-        <meta name="theme-color" content="#ffffff">
         <!-- Fonts -->
         <link rel="preload"
-              href="font-bai-jamjuree.css"
+              href="styles/font-bai-jamjuree.css"
               as="style"
               onload="this.rel='stylesheet'">
         <link rel="preload"
-              href="font-chakra-petch.css"
+              href="styles/font-chakra-petch.css"
               as="style"
               onload="this.rel='stylesheet'">
         <link rel="preload"
-              href="font-newsreader.css"
+              href="styles/font-newsreader.css"
               as="style"
               onload="this.rel='stylesheet'">
         <!-- Styles -->
-        <link rel="stylesheet" href="reset.css">
-        <link rel="stylesheet" href="utility.css">
-        <link rel="stylesheet" href="style.css">
-        <link rel="stylesheet" href="state.css">
+        <link rel="stylesheet" href="styles/reset.css">
+        <link rel="stylesheet" href="styles/utility.css">
+        <link rel="stylesheet" href="styles/style.css">
+        <link rel="stylesheet" href="styles/state.css">
         <link rel="preload"
-              href="animation.css"
+              href="styles/animation.css"
               as="style"
               onload="this.rel='stylesheet'">
+        <script src="scripts/timeline.js"></script>
         <script>
             console.log('%cŠtěpán Jákl | Full-stack developer & interface designer', `border: 1px solid #4e7bff; border-radius: 2px; color: #4e7bff; font-size: 12.5px; padding: 22.5px 35px 20px 35px; margin: 20px 20px; /* padding: 29.75px 30px 29.75px 84px; background-image: url("data:image/svg+xml,%3Csvg width='100%' height='100%' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 40V10.033L10.033 0H40V30L30 40H0ZM10 30V25H22.5L25 22.5H10V17.5H30V25L25 30H10ZM15 10H30V15H10L15 10Z' fill='%234e7bff'/%3E%3C/svg%3E%0A"); background-repeat: no-repeat; background-position: 20px 50%; background-size: 40px 40px */`)
             console.log('%cThis website was created with HTML, CSS and sprinkled with a bit of vanilla JavaScript.', 'color: #4e7bff; margin: 15px 0 15px 20px;')
@@ -117,13 +117,22 @@
         </script>
         <script>
             window.addEventListener('wheel', () => {
-                let deltaY, deltaX, verticalScrollDirection, horizontalScrollDirection
+                let verticalScrollDirection, horizontalScrollDirection
+                let deltaX = Math.abs(event.deltaX)
+                let deltaY = Math.abs(event.deltaY)
                 if (window.location.hash === '#profile') {
-                    const modalProfileElement = document.querySelector('.modal__profile')
+                    const modalProfileElement = document.querySelector('#modal_profile')
                     scrollPositionTop = modalProfileElement.scrollTop
-                    deltaY = Math.abs(event.deltaY)
-                    deltaX = Math.abs(event.deltaX)
-                    if (deltaY > deltaX) {
+                    if (deltaY > deltaX && deltaY > 5) {
+                        verticalScrollDirection = event.deltaY > 0 ? 'down' : 'up'
+                        if (verticalScrollDirection === 'up' && scrollPositionTop === 0) {
+                            window.location.hash = '#'
+                        }
+                    }
+                } else if (window.location.hash === '#archive') {
+                    const modalProfileElement = document.querySelector('#modal_archive')
+                    scrollPositionTop = modalProfileElement.scrollTop
+                    if (deltaY > deltaX && deltaY > 5) {
                         verticalScrollDirection = event.deltaY > 0 ? 'down' : 'up'
                         if (verticalScrollDirection === 'up' && scrollPositionTop === 0) {
                             window.location.hash = '#'
@@ -134,16 +143,14 @@
                     scrollPositionY = window.scrollY || window.pageYOffset
                     totalHeight = document.documentElement.scrollHeight
                     totalWidth = document.documentElement.scrollWidth
-                    deltaY = Math.abs(event.deltaY)
-                    deltaX = Math.abs(event.deltaX)
-                    if (deltaY > deltaX) {
+                    if (deltaY > deltaX && deltaY > 5) {
                         verticalScrollDirection = event.deltaY > 0 ? 'down' : 'up'
                         if (verticalScrollDirection === 'down' && scrollPositionX + window.innerHeight >= totalHeight) {
                             if (window.location.hash === '') {
                                 window.location.hash = '#profile'
                             }
                         } else if (verticalScrollDirection === 'up' && scrollPositionX === 0) {}
-                    } else if (deltaX > deltaY) {
+                    } else if (deltaX > deltaY && deltaX > 5) {
                         if (document.querySelector('.animate-fade-in-cta-2').getAnimations().length === 0 || document.querySelector('.animate-fade-in-cta-2').getAnimations()[0].playState === 'finished') {
                             horizontalScrollDirection = event.deltaX > 0 ? 'right' : 'left'
                             if (horizontalScrollDirection === 'right' && scrollPositionY + window.innerWidth >= totalWidth) {
@@ -162,16 +169,16 @@
         </script>
     </head>
 
-    <body class="primary-font text-base overflow-auto">
+    <body class="text-base overflow-auto primary-font">
         <input id="mode" type="checkbox"  hidden aria-hidden="true">
         <input id="debug" type="checkbox"  hidden aria-hidden="true">
         <input id="profile" type="hidden"  hidden aria-hidden="true">
         <input id="archive" type="hidden"  hidden aria-hidden="true">
         <!-- <div class="fixed inset-0" style="z-index: 2; background-image: linear-gradient(45deg, var(--blue-full-10), var(--blue-full-25));"></div> -->
         <div id="page"
-             class="relative flex flex-col justify-content-between flex-grow w-full h-auto"
+             class="relative flex flex-col flex-grow justify-content-between w-full h-auto"
              style="background-color: var(--background)">
-            <div class="relative h-full w-full max-w-xl pt-1/2"
+            <div class="relative pt-1/2 w-full max-w-xl h-full"
                  style="padding-bottom: calc(var(--segment-half) + 1px)">
                 <div class="absolute inset-0"
                      style="background-repeat: repeat;
@@ -180,19 +187,19 @@
                             background-image: var(--background-pattern)">
                 </div>
                 <div id="intro">
-                    <div id="intro__left-column"
+                    <div id="intro_left-column"
                          class="z-1 flex flex-col-reverse align-items-start">
                         <!-- Script to copy name on click -->
-                        <h2 class="animate-fade-in-name tooltip__wrapper highlight select-none cursor-pointer"
+                        <h2 class="animate-fade-in-name cursor-pointer select-none highlight tooltip_wrapper"
                             onclick="navigator.clipboard.writeText('Štěpán Jákl'); activateHighlight(this.querySelector('.tooltip span'), document.querySelector('h2.animate-fade-in-name'), 'Copied to the clipboard')"
                             tabindex="0">
                             <span style="--i: 1;">Š</span><span style="--i: 2;">t</span><span style="--i: 3;">ě</span><span style="--i: 4;">p</span><span style="--i: 5;">á</span><span style="--i: 6;">n</span><span style="--i: 7;">&nbsp;</span><span style="--i: 8;">J</span><span style="--i: 9;">á</span><span style="--i: 10;">k</span><span style="--i: 11;">l</span>
-                            <div class="tooltip tooltip-top">
+                            <div class="tooltip-top tooltip">
                                 <p>
                                     Pronounced: shteh-PAHN YAH-kl
                                 </p>
                             </div>
-                            <div class="tooltip tooltip-bottom">
+                            <div class="tooltip-bottom tooltip">
                                 <span>Click to copy</span>
                             </div>
                         </h2>
@@ -200,18 +207,18 @@
                             <span></span>
                         </div>
                     </div>
-                    <div id="intro__right-column" class="z-1 flex flex-col align-items-start">
-                        <h3 id="intro__right-column__title--primary"
-                            class="animate-fade-in-title inline-flex select-none">
+                    <div id="intro_right-column" class="z-1 flex flex-col align-items-start">
+                        <h3 id="intro_right-column_title--primary"
+                            class="inline-flex animate-fade-in-title select-none">
                             <span style="--i: 1;">F</span><span style="--i: 2;">u</span><span style="--i: 3;">l</span><span style="--i: 4;">l</span><span style="--i: 5;">-</span><span style="--i: 6;">s</span><span style="--i: 7;">t</span><span style="--i: 8;">a</span><span style="--i: 9;">c</span><span style="--i: 10;">k</span><span style="--i: 11;">&nbsp;</span><span class="highlight" style="--i: 12;">d</span><span class="highlight" style="--i: 13;">e</span><span class="highlight" style="--i: 14;">v</span><span class="highlight" style="--i: 15;">e</span><span class="highlight" style="--i: 16;">l</span><span class="highlight" style="--i: 17;">o</span><span class="highlight" style="--i: 18;">p</span><span class="highlight" style="--i: 19;">e</span><span class="highlight" style="--i: 20;">r</span><span style="--i: 21;">&nbsp;</span>
                         </h3>
-                        <h3 id="intro__right-column__title--secondary"
-                            class="animate-fade-in-title inline-flex select-none pt-1/2"
+                        <h3 id="intro_right-column_title--secondary"
+                            class="inline-flex pt-1/2 animate-fade-in-title select-none"
                             style="letter-spacing: 1.5px">
                             <span style="--i: 22;">&</span><span style="--i: 23;">&nbsp;</span><span style="--i: 24;">i</span><span style="--i: 25;">n</span><span style="--i: 26;">t</span><span style="--i: 27;">e</span><span style="--i: 28;">r</span><span style="--i: 29;">f</span><span style="--i: 30;">a</span><span style="--i: 31;">c</span><span style="--i: 32;">e</span><span style="--i: 33;">&nbsp;</span><span class="highlight-alt" style="--i: 34;">d</span><span class="highlight-alt" style="--i: 35;">e</span><span class="highlight-alt" style="--i: 36;">s</span><span class="highlight-alt" style="--i: 37;">i</span><span class="highlight-alt" style="--i: 38;">g</span><span class="highlight-alt" style="--i: 39;">n</span><span class="highlight-alt" style="--i: 40;">e</span><span class="highlight-alt" style="--i: 41;">r</span>
                         </h3>
-                        <div id="availability__button" class="animate-fade-in-cta-1 relative">
-                            <div class="tooltip__wrapper">
+                        <div id="availability_button" class="relative animate-fade-in-cta-1">
+                            <div class="tooltip_wrapper">
                                 <a href="https://calendly.com/stepanjakl"
                                    target="_blank"
                                    rel="noreferrer"
@@ -220,22 +227,22 @@
                                    style="padding: 11px 15px;
                                           background-color: var(--highlight-primary);
                                           border-radius: 8px">
-                                    <div class="tooltip__wrapper inline-flex align-items-center justify-content-center"
+                                    <div class="inline-flex align-items-center justify-content-center tooltip_wrapper"
                                          style="column-gap: 14px">
-                                        <span id="availability__button__dot"
+                                        <span id="availability_button_dot"
                                               class="relative flex align-items-center justify-content-center"></span>
-                                        <span id="availability__button__text" class="whitespace-nowrap">Open to new opportunities</span>
+                                        <span id="availability_button_text" class="whitespace-nowrap">Open to new opportunities</span>
                                     </div>
                                 </a>
-                                <div class="tooltip tooltip-bottom">
+                                <div class="tooltip-bottom tooltip">
                                     <span>Book a virtual meeting via Calendly</span>
                                 </div>
                             </div>
                             <!-- <span>in Q2-Q4/2023</span> -->
                         </div>
-                        <div id="menu" class="animate-fade-in-cta-2 relative">
-                            <div id="menu__email__button"
-                                 class="tooltip__wrapper inline-flex"
+                        <div id="menu" class="relative animate-fade-in-cta-2">
+                            <div id="menu_email_button"
+                                 class="inline-flex tooltip_wrapper"
                                  style="place-self: self-start">
                                 <div class="inline-flex align-items-center"
                                      onmousedown="navigator.clipboard.writeText('stepan.jakl@outlook.com'); activateHighlight(this.querySelector('.tooltip span'), this.querySelector('.highlight-hover'), 'Copied to the clipboard')"
@@ -255,21 +262,21 @@
                                             <path d="M2.188 16.813v-4.209l7.145-2.646-7.146-2.625V3.125l16.834 6.854-16.834 6.834Z" />
                                         </svg>
                                     </span>
-                                    <span class="button-label text-sm highlight-hover cursor-text select-none"
+                                    <span class="text-sm cursor-text select-none button-label highlight-hover"
                                           style="padding: 0px 24px 0px 16px;
                                                  letter-spacing: 1.25px">
                                         stepan.jakl@outlook.com
                                     </span>
-                                    <div class="tooltip tooltip-top">
+                                    <div class="tooltip-top tooltip">
                                         <span>Click to copy</span>
                                     </div>
                                 </div>
                             </div>
-                            <div id="menu__links" class="flex">
+                            <div id="menu_links" class="flex">
                                 <a href="#profile"
                                    aria-label="Learn more about me"
                                    rel="noreferrer"
-                                   class="tooltip__wrapper flex align-items-center">
+                                   class="flex align-items-center tooltip_wrapper">
                                     <span class="inline-flex"
                                           style="padding: 9.5px;
                                                  border-radius: 9999px;
@@ -284,7 +291,7 @@
                                         </svg>
                                     </span>
                                     <span style="padding: 0px 12px 0px 8px; margin-top: -1.25px;">
-                                        <span class="button-label text-xs select-none uppercase"
+                                        <span class="text-xs uppercase select-none button-label"
                                               style="letter-spacing: 2px;
                                                      border-bottom: solid 2px var(--highlight-primary)">
                                             <u style="text-decoration-thickness: 2px;
@@ -294,14 +301,14 @@
                                                       text-underline-offset: 2px">P</u>rofile
                                         </span>
                                     </span>
-                                    <span class="tooltip tooltip-bottom">
+                                    <span class="tooltip-bottom tooltip">
                                         <span>Learn more about me</span>
                                     </span>
                                 </a>
                                 <a href="#archive"
                                    aria-label="Explore repository of past work"
                                    rel="noreferrer"
-                                   class="tooltip__wrapper flex align-items-center"
+                                   class="flex align-items-center tooltip_wrapper"
                                    style="margin-right: 24px">
                                     <span class="inline-flex"
                                           style="padding: 10.5px;
@@ -315,7 +322,7 @@
                                             <path d="M13.937 15.73V4.27h2.354v11.46h-2.354ZM.771 18.582V1.417h11.666v17.166H.771Zm17.02-4.729v-7.75h1.438v7.75H17.79Z" />
                                         </svg>
                                     </span>
-                                    <span class="button-label text-xs select-none uppercase"
+                                    <span class="text-xs uppercase select-none button-label"
                                           style="padding: 0px 12px 0px 8px;
                                                  margin-top: -1.25px;
                                                  letter-spacing: 2px">
@@ -324,12 +331,12 @@
                                                   text-decoration-color: var(--text-3);
                                                   text-underline-position: from-font;
                                                   text-underline-offset: 2px">A</u>rchive</span>
-                                    <span class="tooltip tooltip-bottom">
+                                    <span class="tooltip-bottom tooltip">
                                         <span>Explore snippets of my past work</span>
                                     </span>
                                 </a>
                             </div>
-                            <div id="menu__button__wrapper"
+                            <div id="menu_button_wrapper"
                                  class="relative flex"
                                  style="grid-row: span 3 / span 3">
                                 <a href="#menu"
@@ -343,7 +350,7 @@
                                    class="z-2 inset-0"
                                    style="position: absolute"
                                    aria-label="Close dropdown menu"></a>
-                                <button id="menu__button"
+                                <button id="menu_button"
                                         type="button"
                                         class="relative z-1 inline-flex align-items-center"
                                         aria-label="Toggle dropdown menu"
@@ -354,10 +361,10 @@
                                     <span></span>
                                 </button>
                                 <a href="#"
-                                   id="underlay__menu"
-                                   class="fixed inset-0 pointer-events-none cursor-default">
+                                   id="underlay_menu"
+                                   class="fixed inset-0 cursor-default pointer-events-none">
                                 </a>
-                                <div id="menu__dropdown" class="absolute z-1 px-1/2 pt-1/2">
+                                <div id="menu_dropdown" class="z-1 absolute px-1/2 pt-1/2">
                                     <div>
                                         <a href="https://calendly.com/stepanjakl"
                                            target="_blank"
@@ -437,7 +444,7 @@
                                                    box-sizing: content-box;
                                                    transform: translateX(-1px);
                                                    overflow: visible">
-                                        <label id="menu__dropdown__light-mode" for="mode" tabindex="0">
+                                        <label id="menu_dropdown_light-mode" for="mode" tabindex="0">
                                             <svg style="color: var(--yellow)"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="24"
@@ -448,7 +455,7 @@
                                             </svg>
                                             <span class="text-sm whitespace-nowrap">Light mode</span>
                                         </label>
-                                        <label id="menu__dropdown__dark-mode" for="mode" tabindex="0">
+                                        <label id="menu_dropdown_dark-mode" for="mode" tabindex="0">
                                             <svg style="color: var(--navy)"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="24"
@@ -459,8 +466,8 @@
                                             </svg>
                                             <span class="text-sm whitespace-nowrap">Dark mode</span>
                                         </label>
-                                        <label id="menu__dropdown__debug" for="debug" tabindex="0">
-                                            <svg class="icon flex debug-checked:hidden"
+                                        <label id="menu_dropdown_debug" for="debug" tabindex="0">
+                                            <svg class="flex icon debug-checked:hidden"
                                                  description="enable debug mode"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="24"
@@ -469,7 +476,7 @@
                                                  fill="currentColor">
                                                 <path d="M12 16q1.875 0 3.188-1.312Q16.5 13.375 16.5 11.5q0-1.875-1.312-3.188Q13.875 7 12 7q-1.875 0-3.188 1.312Q7.5 9.625 7.5 11.5q0 1.875 1.312 3.188Q10.125 16 12 16Zm0-1.8q-1.125 0-1.912-.788Q9.3 12.625 9.3 11.5t.788-1.913Q10.875 8.8 12 8.8t1.913.787q.787.788.787 1.913t-.787 1.912q-.788.788-1.913.788Zm0 4.8q-3.65 0-6.65-2.038-3-2.037-4.35-5.462 1.35-3.425 4.35-5.463Q8.35 4 12 4q3.65 0 6.65 2.037 3 2.038 4.35 5.463-1.35 3.425-4.35 5.462Q15.65 19 12 19Z" />
                                             </svg>
-                                            <svg class="icon hidden debug-checked:flex"
+                                            <svg class="debug-checked:flex hidden icon"
                                                  description="disable debug mode"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="24"
@@ -485,9 +492,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal modal__profile" role="dialog" aria-modal="true">
-                        <div class="modal__content">
-                            <a href="#" id="modal__button-close" aria-label="Close modal">
+                    <div id="modal_profile" class="modal" role="dialog" aria-modal="true">
+                        <div class="overflow-clip modal_content">
+                            <a href="#" id="modal_button-close" aria-label="Close modal">
                                 <!-- 'opsz' 20, 'wght' 600, 'FILL' 1, 'GRAD' 200 -->
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                      height="18"
@@ -497,7 +504,7 @@
                                     <path d="M6 15.708 4.333 14l3.979-4-3.979-4.021L6 4.271l4 4.021 4-4.021 1.667 1.708L11.688 10l3.979 4L14 15.708l-4-4.02Z" />
                                 </svg>
                             </a>
-                            <div class="information mr-1">
+                            <div class="mr-1 information">
                                 <dl>
                                     <div style="padding-bottom: var(--segment-third);">
                                         <dt>
@@ -651,13 +658,34 @@
                                         <dd style="margin-bottom: -10px;">
                                             <ul class="tags">
                                                 <li>
-                                                    <svg role="img" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Apostrophe</title><path d="M15.674 0c-.795.001-1.794.095-3.167.313l-4.6.729c-3.138.497-4.224 1.003-5.274 1.798a6.485 6.485 0 00-2.24 3.082c-.43 1.245-.577 2.434-.08 5.571l.729 4.6c.497 3.138 1.003 4.22 1.798 5.273a6.485 6.485 0 003.082 2.24c1.245.431 2.434.578 5.571.081l4.6-.729c3.138-.497 4.22-1.003 5.273-1.799a6.477 6.477 0 002.24-3.081c.431-1.245.578-2.434.082-5.571l-.73-4.6c-.497-3.138-1.003-4.224-1.799-5.274a6.477 6.477 0 00-3.081-2.24C17.378.152 16.695 0 15.674 0zm-5.319 4.566a.52.52 0 01.003 0 .52.52 0 01.52.444l.77 4.865a.52.52 0 01-.435.6l-4.859.77a.52.52 0 01-.602-.436l-.77-4.866a.52.52 0 01.435-.6l4.86-.77a.52.52 0 01.078-.007zM9.92 5.692l-3.823.605.612 3.83 3.813-.605zm6.504 2.91a3.274 3.274 0 01.497 6.513 3.258 3.258 0 01-3.713-2.726 3.274 3.274 0 013.216-3.787zm-.054 1.058a2.226 2.226 0 10.388 4.42 2.208 2.208 0 001.818-2.541 2.226 2.226 0 00-2.206-1.879zm-6.45 3a.52.52 0 01.424.208l3.824 4.964a.52.52 0 01-.333.839l-5.932.937a.52.52 0 01-.576-.695l2.108-5.901a.52.52 0 01.486-.352zm.18 1.611L8.61 18.438l4.186-.664z"/></svg>
+                                                    <svg role="img"
+                                                         width="14"
+                                                         height="14"
+                                                         viewBox="0 0 24 24"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <title>Apostrophe</title>
+                                                        <path d="M15.674 0c-.795.001-1.794.095-3.167.313l-4.6.729c-3.138.497-4.224 1.003-5.274 1.798a6.485 6.485 0 00-2.24 3.082c-.43 1.245-.577 2.434-.08 5.571l.729 4.6c.497 3.138 1.003 4.22 1.798 5.273a6.485 6.485 0 003.082 2.24c1.245.431 2.434.578 5.571.081l4.6-.729c3.138-.497 4.22-1.003 5.273-1.799a6.477 6.477 0 002.24-3.081c.431-1.245.578-2.434.082-5.571l-.73-4.6c-.497-3.138-1.003-4.224-1.799-5.274a6.477 6.477 0 00-3.081-2.24C17.378.152 16.695 0 15.674 0zm-5.319 4.566a.52.52 0 01.003 0 .52.52 0 01.52.444l.77 4.865a.52.52 0 01-.435.6l-4.859.77a.52.52 0 01-.602-.436l-.77-4.866a.52.52 0 01.435-.6l4.86-.77a.52.52 0 01.078-.007zM9.92 5.692l-3.823.605.612 3.83 3.813-.605zm6.504 2.91a3.274 3.274 0 01.497 6.513 3.258 3.258 0 01-3.713-2.726 3.274 3.274 0 013.216-3.787zm-.054 1.058a2.226 2.226 0 10.388 4.42 2.208 2.208 0 001.818-2.541 2.226 2.226 0 00-2.206-1.879zm-6.45 3a.52.52 0 01.424.208l3.824 4.964a.52.52 0 01-.333.839l-5.932.937a.52.52 0 01-.576-.695l2.108-5.901a.52.52 0 01.486-.352zm.18 1.611L8.61 18.438l4.186-.664z" />
+                                                    </svg>
                                                     <span>ApostropheCMS</span>
                                                 </li>
                                                 <li>
-                                                    <svg role="img" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Alpine.js</title><path d="m24 12-5.72 5.746-5.724-5.741 5.724-5.75L24 12zM5.72 6.254 0 12l5.72 5.746h11.44L5.72 6.254z"/></svg>
+                                                    <svg role="img"
+                                                         width="14"
+                                                         height="14"
+                                                         viewBox="0 0 24 24"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <title>Alpine.js</title>
+                                                        <path d="m24 12-5.72 5.746-5.724-5.741 5.724-5.75L24 12zM5.72 6.254 0 12l5.72 5.746h11.44L5.72 6.254z" />
+                                                    </svg>
                                                     <span>AlpineJS</span>
-                                                    <svg role="img" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Vue.js</title><path d="M24,1.61H14.06L12,5.16,9.94,1.61H0L12,22.39ZM12,14.08,5.16,2.23H9.59L12,6.41l2.41-4.18h4.43Z"/></svg>
+                                                    <svg role="img"
+                                                         width="14"
+                                                         height="14"
+                                                         viewBox="0 0 24 24"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <title>Vue.js</title>
+                                                        <path d="M24,1.61H14.06L12,5.16,9.94,1.61H0L12,22.39ZM12,14.08,5.16,2.23H9.59L12,6.41l2.41-4.18h4.43Z" />
+                                                    </svg>
                                                     <span>VueJS/ReactJS</span>
                                                 </li>
                                                 <li>
@@ -670,9 +698,23 @@
                                                     <span>JavaScript</span>
                                                 </li>
                                                 <li>
-                                                    <svg role="img" width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Jamstack</title><path d="M12 0C5.365 0 0 5.364 0 12s5.365 12 12 12 12-5.364 12-12V0zm.496 3.318h8.17v8.17h-8.17zm-9.168 9.178h8.16v8.149c-4.382-.257-7.904-3.767-8.16-8.149zm9.168.016h8.152a8.684 8.684 0 01-8.152 8.148z"/></svg>
+                                                    <svg role="img"
+                                                         width="16"
+                                                         height="16"
+                                                         viewBox="0 0 24 24"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <title>Jamstack</title>
+                                                        <path d="M12 0C5.365 0 0 5.364 0 12s5.365 12 12 12 12-5.364 12-12V0zm.496 3.318h8.17v8.17h-8.17zm-9.168 9.178h8.16v8.149c-4.382-.257-7.904-3.767-8.16-8.149zm9.168.016h8.152a8.684 8.684 0 01-8.152 8.148z" />
+                                                    </svg>
                                                     <span>JAMstack</span>
-                                                    <svg role="img" width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Astro</title><path d="M8.358 20.162c-1.186-1.07-1.532-3.316-1.038-4.944.856 1.026 2.043 1.352 3.272 1.535 1.897.283 3.76.177 5.522-.678.202-.098.388-.229.608-.36.166.473.209.95.151 1.437-.14 1.185-.738 2.1-1.688 2.794-.38.277-.782.525-1.175.787-1.205.804-1.531 1.747-1.078 3.119l.044.148a3.158 3.158 0 0 1-1.407-1.188 3.31 3.31 0 0 1-.544-1.815c-.004-.32-.004-.642-.048-.958-.106-.769-.472-1.113-1.161-1.133-.707-.02-1.267.411-1.415 1.09-.012.053-.028.104-.045.165h.002zm-5.961-4.445s3.24-1.575 6.49-1.575l2.451-7.565c.092-.366.36-.614.662-.614.302 0 .57.248.662.614l2.45 7.565c3.85 0 6.491 1.575 6.491 1.575L16.088.727C15.93.285 15.663 0 15.303 0H8.697c-.36 0-.615.285-.784.727l-5.516 14.99z"/></svg>
+                                                    <svg role="img"
+                                                         width="16"
+                                                         height="16"
+                                                         viewBox="0 0 24 24"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <title>Astro</title>
+                                                        <path d="M8.358 20.162c-1.186-1.07-1.532-3.316-1.038-4.944.856 1.026 2.043 1.352 3.272 1.535 1.897.283 3.76.177 5.522-.678.202-.098.388-.229.608-.36.166.473.209.95.151 1.437-.14 1.185-.738 2.1-1.688 2.794-.38.277-.782.525-1.175.787-1.205.804-1.531 1.747-1.078 3.119l.044.148a3.158 3.158 0 0 1-1.407-1.188 3.31 3.31 0 0 1-.544-1.815c-.004-.32-.004-.642-.048-.958-.106-.769-.472-1.113-1.161-1.133-.707-.02-1.267.411-1.415 1.09-.012.053-.028.104-.045.165h.002zm-5.961-4.445s3.24-1.575 6.49-1.575l2.451-7.565c.092-.366.36-.614.662-.614.302 0 .57.248.662.614l2.45 7.565c3.85 0 6.491 1.575 6.491 1.575L16.088.727C15.93.285 15.663 0 15.303 0H8.697c-.36 0-.615.285-.784.727l-5.516 14.99z" />
+                                                    </svg>
                                                     <span>Astro</span>
                                                 </li>
                                                 <li>
@@ -699,9 +741,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal modal__archive" role="dialog" aria-modal="true">
-                        <div class="modal__content" style="border-radius: 8px 32px 32px 8px;">
-                            <a href="#" id="modal__button-close" aria-label="Close modal">
+                    <div id="modal_archive" class="modal" role="dialog" aria-modal="true">
+                        <div class="overflow-clip modal_content">
+                            <a href="#" id="modal_button-close" aria-label="Close modal">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                      height="20"
                                      width="20"
@@ -716,15 +758,58 @@
                                             padding-top: 48px;
                                             padding-left: 48px;
                                             padding-right: 96px">
-                                    <div style="display: flex; flex-direction: column; column-gap: 24px;">
-                                        <div style="display: grid;
-                                                    grid-auto-flow: column;
-                                                    grid-auto-columns: 240px 800px;
-                                                    column-gap: 48px">
-                                            <div style="display: flex; flex-direction: column; outline: 1px solid red">
-                                                <div style="display: flex;
-                                                            flex-direction: column;
-                                                            align-items: flex-end;
+                                    <div class="flex flex-col" style="column-gap: 24px;">
+                                        <div class="grid" style="grid-auto-flow: row;
+                                                    grid-template-columns: minmax(240px, max-content) auto;
+                                                    gap: 48px">
+                                            <div data-timeline-section="2023" class="flex flex-col" style="outline: 1px solid red">
+                                                <div class="sticky flex flex-col align-items-end"
+                                                style="row-gap: 20px;
+                                                            top: 20px;
+                                                            padding-bottom: 20px">
+                                                    <hr style="display: inline-flex;
+                                                               width: 100%;
+                                                               margin: 0;
+                                                               border: none;
+                                                               height: 1px;
+                                                               background-color: white" />
+                                                    <span style="display: inline-flex;
+                                                                 text-align: right;
+                                                                 font-family: 'Chakra Petch', monospace;
+                                                                 font-size: 34.2857px;
+                                                                 line-height: 24px;
+                                                                 font-weight: 400">2023</span>
+                                                </div>
+                                            </div>
+                                            <div style="height: 400px; outline: 1px solid red;">
+                                                <div class="flex flex-col justify-content-between w-full"
+                                                style="height: 20px">
+                                                    <hr style="display: inline-flex;
+                                                               width: 100%;
+                                                               margin: 0;
+                                                               border: none;
+                                                               height: 1px;
+                                                               background-color: white" />
+                                                    <hr style="display: inline-flex;
+                                                               width: 100%;
+                                                               margin: 0;
+                                                               border: none;
+                                                               height: 1px;
+                                                               background-color: white" />
+                                                    <hr style="display: inline-flex;
+                                                               width: 100%;
+                                                               margin: 0;
+                                                               border: none;
+                                                               height: 1px;
+                                                               background-color: white" />
+                                                </div>
+                                                <div style="margin-top: 64px">
+                                                    <span>AHOJ</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col" style="outline: 1px solid red">
+                                                <div class="flex flex-col align-items-end"
+                                                style="
                                                             row-gap: 20px;
                                                             position: sticky;
                                                             top: 20px;
@@ -744,11 +829,8 @@
                                                 </div>
                                             </div>
                                             <div style="height: 400px; outline: 1px solid red;">
-                                                <div style="display: flex;
-                                                            flex-direction: column;
-                                                            justify-content: space-between;
-                                                            width: 100%;
-                                                            height: 20px">
+                                                <div class="flex flex-col justify-content-between w-full"
+                                                style="height: 20px">
                                                     <hr style="display: inline-flex;
                                                                width: 100%;
                                                                margin: 0;
@@ -775,11 +857,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div style="position: sticky; inset: auto 0 24px 0;">
+                                <div class="sticky" style="bottom: calc(-1 * var(--segment))">
+
                                     <div style="margin-left: calc(48px + 48px + 240px );
                                                 width: 800px;
-                                                outline: 1px solid red">
-                                        <div style="margin: 0 64px;
+                                                /* outline: 1px solid red */">
+
+                                        <horizontal-timeline labels="[2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014]"></horizontal-timeline>
+
+
+                                        <!-- <div style="margin: 0 64px;
                                                     border: white 1px solid;
                                                     border-radius: 9999px">
                                             <div style="display: grid;
@@ -798,23 +885,24 @@
                                                     2020
                                                 </button>
                                             </div>
-                                        </div>
+                                        </div> -->
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="underlay__modal" class="fixed inset-0 z-1 pointer-events-none">
+                    <div id="underlay_modal" class="z-1 fixed inset-0 pointer-events-none">
                     </div>
                 </div>
                 <div id="triangle-left"
-                     class="invisible fixed inset-0 z-0 overflow-hidden select-none pointer-events-none">
+                     class="z-0 fixed inset-0 invisible overflow-hidden pointer-events-none select-none">
                 </div>
                 <div id="triangle-right"
-                     class="invisible fixed inset-0 z-0 overflow-hidden select-none pointer-events-none animate-flicker-triangle-shadow">
+                     class="z-0 fixed inset-0 animate-flicker-triangle-shadow invisible overflow-hidden pointer-events-none select-none">
                 </div>
                 <div id="triangle-right-alt"
-                     class="invisible fixed inset-0 z-0 overflow-hidden select-none pointer-events-none animate-flicker-triangle-light">
+                     class="z-0 fixed inset-0 animate-flicker-triangle-light invisible overflow-hidden pointer-events-none select-none">
                 </div>
             </div>
             <div id="footer" class="select-none">

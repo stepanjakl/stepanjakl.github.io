@@ -1,0 +1,422 @@
+/*
+ * Utility Classes
+ */
+
+
+/* Font */
+
+.primary-font {
+    font-family: 'Bai Jamjuree', sans-serif;
+}
+
+
+/* Typography */
+
+.text-base {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+body {
+    --text-xs-font-weight: 500;
+    --text-xs-font-size: 14.2857px;
+    --text-xs-line-height: 16px;
+    --text-xs-letter-spacing: 2.5px;
+    --text-xs_before-margin-bottom: -0.235em;
+    --text-xs_after-margin-top: -0.185em;
+
+    --text-sm-font-weight: 400;
+    --text-sm-font-size: 17.1429px;
+    --text-sm-line-height: 20px;
+    --text-sm-letter-spacing: 0.5px;
+    --text-sm_before-margin-bottom: -0.2583em;
+    --text-sm_after-margin-top: -0.2083em;
+
+    --text-md-font-weight: 300;
+    --text-md-font-size: 22.8571px;
+    --text-md-line-height: 28px;
+    --text-md-letter-spacing: 1.25px;
+    --text-md_before-margin-bottom: -0.2875em;
+    --text-md_after-margin-top: -0.2375em;;
+
+    --text-lg-font-weight: 200;
+    --text-lg-font-size: 45.7143px;
+    --text-lg-line-height: 64px;
+    --text-lg_before-margin-bottom: -0.375em;
+    --text-lg_after-margin-top: -0.325em;
+
+    --text-xl-font-weight: 200;
+    --text-xl-font-size: 68.5714px;
+    --text-xl-line-height: 96px;
+    --text-xl_before-margin-bottom: -0.375em;
+    --text-xl_after-margin-top: -0.325em;
+}
+
+.text-xs {
+    font-weight: var(--text-xs-font-weight);
+    font-size: var(--text-xs-font-size);
+    line-height: var(--text-xs-line-height);
+    letter-spacing: var(--text-xs-letter-spacing);
+}
+
+.text-xs::before {
+    content: "";
+    margin-bottom: var(--text-xs_before-margin-bottom);
+    display: table;
+}
+
+.text-xs::after {
+    content: "";
+    margin-top: var(--text-xs_after-margin-top);
+    display: table;
+}
+
+.text-sm {
+    font-weight: var(--text-sm-font-weight);
+    font-size: var(--text-sm-font-size);
+    line-height: var(--text-sm-line-height);
+    letter-spacing: var(--text-sm-letter-spacing);
+}
+
+.text-sm::before {
+    content: "";
+    margin-bottom: var(--text-sm_before-margin-bottom);
+    display: table;
+}
+
+.text-sm::after {
+    content: "";
+    margin-top: var(--text-sm_after-margin-top);
+    display: table;
+}
+
+.text-md {
+    font-weight: var(--text-md-font-weight);
+    font-size: var(--text-md-font-size);
+    line-height: var(--text-md-line-height);
+    letter-spacing: var(--text-md-letter-spacing);
+}
+
+.text-md::before {
+    content: "";
+    margin-bottom: var(--text-md_before-margin-bottom);
+    display: table;
+}
+
+.text-md::after {
+    content: "";
+    margin-top: var(--text-md_after-margin-top);
+    display: table;
+}
+
+.text-lg {
+    font-weight: var(--text-lg-font-weight);
+    font-size: var(--text-lg-font-size);
+    line-height: var(--text-lg-line-height);
+}
+
+.text-lg::before {
+    content: "";
+    margin-bottom: var(--text-lg_before-margin-bottom);
+    display: table;
+}
+
+.text-lg::after {
+    content: "";
+    margin-top: var(--text-lg_after-margin-top);
+    display: table;
+}
+
+.text-xl {
+    font-weight: var(--text-xl-font-weight);
+    font-size: var(--text-xl-font-size);
+    line-height: var(--text-xl-line-height);
+}
+
+.text-xl::before {
+    content: "";
+    margin-bottom: var(--text-xl_before-margin-bottom);
+    display: table;
+}
+
+.text-xl::after {
+    content: "";
+    margin-top: var(--text-xl_after-margin-top);
+    display: table;
+}
+
+
+/* Display */
+
+.inline-block {
+    display: inline-block;
+}
+
+.flex {
+    display: flex;
+}
+
+.inline-flex {
+    display: inline-flex;
+}
+
+.grid {
+    display: grid;
+}
+
+.hidden {
+    display: none;
+}
+
+
+/* Visibility */
+
+.invisible {
+    visibility: hidden;
+}
+
+
+/* Flex */
+
+.flex-row {
+    flex-direction: row;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.flex-col-reverse {
+    flex-direction: column-reverse;
+}
+
+
+/* Align Items */
+
+.align-items-start {
+    align-items: start;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.align-items-end {
+    align-items: end;
+}
+
+
+/* Justify Content */
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}
+
+
+/* Flex Grow */
+
+.flex-grow {
+    flex-grow: 1;
+}
+
+
+/* Oveflow */
+
+.overflow-auto {
+    overflow: auto;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.overflow-clip {
+    overflow: clip;
+}
+
+
+/* Position */
+
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.fixed {
+    position: fixed;
+}
+
+.sticky {
+    position: sticky;
+}
+
+
+/* Width */
+
+.w-auto {
+    width: auto;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.h-auto {
+    height: auto;
+}
+
+.h-full {
+    height: 100%;
+}
+
+
+/* Margin */
+
+.ml-auto {
+    margin-left: auto;
+}
+
+.mr-1 {
+    margin-right: var(--segment);
+}
+
+
+/* Padding */
+
+.pt-1 {
+    padding-top: var(--segment);
+}
+
+.pb-1 {
+    padding-bottom: var(--segment);
+}
+
+.pt-1\/2 {
+    padding-top: calc(var(--segment) / 2);
+}
+
+.pb-1\/2 {
+    padding-bottom: calc(var(--segment) / 2);
+}
+
+.px-1\/2 {
+    padding-left: calc(var(--segment) / 2);
+    padding-right: calc(var(--segment) / 2);
+}
+
+/* @media (var(--breakpoint-sm)) {
+    .pt-24-sm {
+        padding-top: 24px;
+    }
+
+    .pb-24-sm {
+        padding-bottom: 24px;
+    }
+
+} */
+
+
+/* Max Width */
+
+.max-w-xs {
+    max-width: var(--width-xs);
+}
+
+.max-w-sm {
+    max-width: var(--width-sm);
+}
+
+.max-w-md {
+    max-width: var(--width-md);
+}
+
+.max-w-lg {
+    max-width: var(--width-lg);
+}
+
+.max-w-xl {
+    max-width: var(--width-xl);
+}
+
+.max-w-2xl {
+    max-width: var(--width-2xl);
+}
+
+
+/* Z-Index */
+
+.z-0 {
+    z-index: 0;
+}
+
+.z-1 {
+    z-index: 1;
+}
+
+.z-2 {
+    z-index: 2;
+}
+
+
+/* Inset */
+
+.inset-0 {
+    inset: 0;
+}
+
+
+/* Box Sizing */
+
+.box-content {
+    box-sizing: content-box;
+}
+
+
+/* User Select */
+
+.select-none {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+
+/* Cursor */
+
+.cursor-default {
+    cursor: default;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.cursor-text {
+    cursor: text;
+}
+
+
+/* Pointer Events */
+.pointer-events-none {
+    pointer-events: none;
+}
+
+
+/* Whitespace */
+
+.whitespace-nowrap {
+    white-space: nowrap;
+}
+
+
+/* Text Transform */
+
+.uppercase {
+    text-transform: uppercase;
+}

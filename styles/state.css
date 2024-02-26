@@ -1,0 +1,35 @@
+/*
+ * State
+ */
+
+/* Debug */
+
+#debug:checked~.page .debug-checked\:flex {
+    display: flex;
+}
+
+#debug:checked~.page .debug-checked\:hidden {
+    display: none;
+}
+
+/* TODO move all checked and target selectors here? */
+
+/* Modal - Profile */
+
+#profile:target~#page #modal_profile {
+    overflow: auto;
+}
+
+#profile:target~#page #modal_profile .modal_content {
+    pointer-events: auto;
+}
+
+/* Modal - Archive */
+
+#archive:target~#page #modal_archive {
+    overflow: auto;
+}
+
+#archive:target~#page #modal_archive .modal_content {
+    pointer-events: auto;
+}
