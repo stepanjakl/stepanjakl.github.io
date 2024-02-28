@@ -774,6 +774,7 @@ body {
     pointer-events: none;
     overflow: hidden;
     padding: var(--segment);
+    scroll-behavior: smooth;
 }
 
 .modal .modal_content {
