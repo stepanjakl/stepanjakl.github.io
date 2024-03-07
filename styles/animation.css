@@ -656,7 +656,8 @@ svg.animate-face-icon path {
     color: var(--icon-hover);
 }
 
-#menu_dropdown label#menu_dropdown_light-mode:hover span {
+#menu_dropdown label#menu_dropdown_light-mode:hover span,
+#menu_dropdown label#menu_dropdown_light-mode:hover svg {
     color: var(--cyan-full-10);
 }
 
@@ -707,13 +708,14 @@ svg.animate-face-icon path {
 /* Modals - Close Button */
 
 #modal_button-close, #modal_button-close svg {
-    transition: color var(--animate-out-segment-2\/3) linear, border var(--animate-out-segment-2\/3) linear;
+    transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, border var(--animate-out-segment-2\/3) linear;
 }
 
 #modal_button-close:hover {
-    transition: color var(--animate-in-segment-2\/3) linear, border var(--animate-in-segment-2\/3) linear;
+    transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border var(--animate-in-segment-2\/3) linear;
     color: var(--modal-icon-hover);
-    border-color: var(--modal-icon-hover);
+    background-color: var(--highlight-secondary);
+    /* border-color: var(--modal-icon-hover); */
 }
 
 #modal_button-close:hover svg {

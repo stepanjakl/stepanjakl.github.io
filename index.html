@@ -55,10 +55,12 @@
         </script>
         <script>
             const activateHighlight = (elementToSwapText, elementToHighlight, tempInnerText) => {
+                let timeout
                 if (!event.target.getAttribute('data-copying')) {
                     event.target.setAttribute('data-copying', '')
                     const origInnerText = elementToSwapText.innerText
                     const activateHandler = () => {
+                        clearTimeout(timeout)
                         elementToHighlight.classList.remove('active')
                         elementToHighlight.removeEventListener('transitionend', activateHandler)
                         elementToHighlight.addEventListener('transitionend', deactivateHandler)
@@ -74,6 +76,7 @@
                         elementToSwapText.innerText = tempInnerText
                     }
                     elementToHighlight.classList.toggle('active')
+                    timeout = setTimeout(activateHandler, 1000)
                     elementToHighlight.addEventListener('transitionend', activateHandler)
                 }
             }
@@ -227,10 +230,10 @@
                                    style="padding: 11px 15px;
                                           background-color: var(--highlight-primary);
                                           border-radius: 8px">
-                                    <div class="inline-flex align-items-center justify-content-center tooltip_wrapper"
+                                    <div class="inline-flex justify-content-center align-items-center tooltip_wrapper"
                                          style="column-gap: 14px">
                                         <span id="availability_button_dot"
-                                              class="relative flex align-items-center justify-content-center"></span>
+                                              class="relative flex justify-content-center align-items-center"></span>
                                         <span id="availability_button_text" class="whitespace-nowrap">Open to new opportunities</span>
                                     </div>
                                 </a>
@@ -352,7 +355,7 @@
                                    aria-label="Close dropdown menu"></a>
                                 <button id="menu_button"
                                         type="button"
-                                        class="relative z-1 inline-flex align-items-center"
+                                        class="inline-flex relative z-1 align-items-center"
                                         aria-label="Toggle dropdown menu"
                                         tabindex="-1">
                                     <span></span>
@@ -380,7 +383,7 @@
                                             </svg>
                                             <span class="text-sm whitespace-nowrap">Virtual meeting</span>
                                             <!-- 'opsz' 20, 'wght' 200, 'FILL' 1, 'GRAD' 200 -->
-                                            <svg class="ml-auto box-content"
+                                            <svg class="box-content ml-auto"
                                                  style="padding-left: 12px"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="20"
@@ -401,7 +404,7 @@
                                                 <path d="M14 13.5h4V12h-4Zm0 3h4V15h-4ZM15 7h7v15H2V7h7V2h6Zm-4 2h2V4h-2Zm-2 6q.625 0 1.062-.438.438-.437.438-1.062t-.438-1.062Q9.625 12 9 12t-1.062.438Q7.5 12.875 7.5 13.5t.438 1.062Q8.375 15 9 15Zm-3 3h6v-.45q0-.425-.238-.788-.237-.362-.662-.562-.5-.225-1.012-.337Q9.575 15.75 9 15.75q-.575 0-1.087.113-.513.112-1.013.337-.425.2-.662.562Q6 17.125 6 17.55Z" />
                                             </svg>
                                             <span class="text-sm whitespace-nowrap">LinkedIn profile</span>
-                                            <svg class="ml-auto box-content"
+                                            <svg class="box-content ml-auto"
                                                  style="padding-left: 12px"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="20"
@@ -423,7 +426,7 @@
                                                 <path d="M2 20V4h20v16Zm2-2h16V8H4Zm8-1v-2h6v2Zm-4.5 0-1.4-1.4L8.675 13l-2.6-2.6L7.5 9l4 4Z" />
                                             </svg>
                                             <span class="text-sm whitespace-nowrap">GitHub profile</span>
-                                            <svg class="ml-auto box-content"
+                                            <svg class="box-content ml-auto"
                                                  style="padding-left: 12px"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="20"
@@ -445,7 +448,7 @@
                                                    transform: translateX(-1px);
                                                    overflow: visible">
                                         <label id="menu_dropdown_light-mode" for="mode" tabindex="0">
-                                            <svg style="color: var(--yellow)"
+                                            <svg
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="24"
                                                  width="24"
@@ -467,7 +470,7 @@
                                             <span class="text-sm whitespace-nowrap">Dark mode</span>
                                         </label>
                                         <label id="menu_dropdown_debug" for="debug" tabindex="0">
-                                            <svg class="flex icon debug-checked:hidden"
+                                            <svg class="flex debug-checked:hidden icon"
                                                  description="enable debug mode"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  height="24"
@@ -807,7 +810,7 @@
                                                     <span>AHOJ</span>
                                                 </div>
                                             </div>
-                                            <div data-timeline-section="2022" class="flex flex-col" style="outline: 1px solid red">
+                                            <div data-timeline-section="2018" class="flex flex-col" style="outline: 1px solid red">
                                                 <div class="flex flex-col align-items-end"
                                                 style="
                                                             row-gap: 20px;
@@ -825,7 +828,7 @@
                                                                  font-family: 'Chakra Petch', monospace;
                                                                  font-size: 34.2857px;
                                                                  line-height: 24px;
-                                                                 font-weight: 400">2022</span>
+                                                                 font-weight: 400">2018</span>
                                                 </div>
                                             </div>
                                             <div style="height: 400px; outline: 1px solid red;">
