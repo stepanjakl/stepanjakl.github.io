@@ -220,7 +220,8 @@
                             style="letter-spacing: 1.5px">
                             <span style="--i: 22;">&</span><span style="--i: 23;">&nbsp;</span><span style="--i: 24;">i</span><span style="--i: 25;">n</span><span style="--i: 26;">t</span><span style="--i: 27;">e</span><span style="--i: 28;">r</span><span style="--i: 29;">f</span><span style="--i: 30;">a</span><span style="--i: 31;">c</span><span style="--i: 32;">e</span><span style="--i: 33;">&nbsp;</span><span class="highlight-alt" style="--i: 34;">d</span><span class="highlight-alt" style="--i: 35;">e</span><span class="highlight-alt" style="--i: 36;">s</span><span class="highlight-alt" style="--i: 37;">i</span><span class="highlight-alt" style="--i: 38;">g</span><span class="highlight-alt" style="--i: 39;">n</span><span class="highlight-alt" style="--i: 40;">e</span><span class="highlight-alt" style="--i: 41;">r</span>
                         </h3>
-                        <div id="availability_button" class="relative animate-fade-in-cta-1">
+                        <div id="availability_button"
+                             class="relative flex align-items-center animate-fade-in-cta-1">
                             <div class="tooltip_wrapper">
                                 <a href="https://calendly.com/stepanjakl"
                                    target="_blank"
@@ -233,17 +234,16 @@
                                     <div class="inline-flex justify-content-center align-items-center tooltip_wrapper"
                                          style="column-gap: 14px">
                                         <span id="availability_button_dot"
-                                              class="relative flex justify-content-center align-items-center"></span>
-                                        <span id="availability_button_text" class="whitespace-nowrap">Open to new opportunities</span>
+                                              class="relative flex justify-content-center align-items-center rounded-full"></span>
+                                        <span id="availability_button_text" class="uppercase whitespace-nowrap">Open to new opportunities</span>
                                     </div>
                                 </a>
                                 <div class="tooltip-bottom tooltip">
                                     <span>Book a virtual meeting via Calendly</span>
                                 </div>
                             </div>
-                            <!-- <span>in Q2-Q4/2023</span> -->
                         </div>
-                        <div id="menu" class="relative animate-fade-in-cta-2">
+                        <div id="menu" class="relative grid animate-fade-in-cta-2">
                             <div id="menu_email_button"
                                  class="inline-flex tooltip_wrapper"
                                  style="place-self: self-start">
@@ -252,10 +252,9 @@
                                      onkeydown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@outlook.com')"
                                      tabindex="0"
                                      aria-label="Contact me via email">
-                                    <span class="inline-flex"
+                                    <span class="inline-flex rounded-full"
                                           style="padding: 10px;
-                                                 border-radius: 9999px;
-                                                 background-color: rgba(0, 0, 0, 0.25)">
+                                                 background-color: var(--inner-bg-dark-1)">
                                         <!-- 'opsz' 20, 'wght' 700, 'FILL' 1, 'GRAD' 200 -->
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              width="18"
@@ -275,15 +274,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="menu_links" class="flex">
+                            <div id="menu_links" class="flex flex-col align-items-start">
                                 <a href="#profile"
                                    aria-label="Learn more about me"
                                    rel="noreferrer"
                                    class="flex align-items-center tooltip_wrapper">
-                                    <span class="inline-flex"
+                                    <span class="inline-flex rounded-full"
                                           style="padding: 9.5px;
-                                                 border-radius: 9999px;
-                                                 background-color: rgba(0, 0, 0, 0.25)">
+                                                 background-color: var(--inner-bg-dark-1)">
                                         <svg class="animate-face-icon"
                                              xmlns="http://www.w3.org/2000/svg"
                                              height="19"
@@ -313,10 +311,9 @@
                                    rel="noreferrer"
                                    class="flex align-items-center tooltip_wrapper"
                                    style="margin-right: 24px">
-                                    <span class="inline-flex"
+                                    <span class="inline-flex rounded-full"
                                           style="padding: 10.5px;
-                                                 border-radius: 9999px;
-                                                 background-color: rgba(0, 0, 0, 0.25)">
+                                                 background-color: var(--inner-bg-dark-1)">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              width="17"
                                              height="17"
@@ -355,7 +352,7 @@
                                    aria-label="Close dropdown menu"></a>
                                 <button id="menu_button"
                                         type="button"
-                                        class="inline-flex relative z-1 align-items-center"
+                                        class="relative z-1 grid"
                                         aria-label="Toggle dropdown menu"
                                         tabindex="-1">
                                     <span></span>
@@ -448,8 +445,7 @@
                                                    transform: translateX(-1px);
                                                    overflow: visible">
                                         <label id="menu_dropdown_light-mode" for="mode" tabindex="0">
-                                            <svg
-                                                 xmlns="http://www.w3.org/2000/svg"
+                                            <svg xmlns="http://www.w3.org/2000/svg"
                                                  height="24"
                                                  width="24"
                                                  viewBox="0 0 24 24"
@@ -497,7 +493,10 @@
                     </div>
                     <div id="modal_profile" class="modal" role="dialog" aria-modal="true">
                         <div class="overflow-clip modal_content">
-                            <a href="#" id="modal_button-close" aria-label="Close modal">
+                            <a href="#"
+                               id="modal_button-close"
+                               class="flex justify-content-center align-items-center"
+                               aria-label="Close modal">
                                 <!-- 'opsz' 20, 'wght' 600, 'FILL' 1, 'GRAD' 200 -->
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                      height="18"
@@ -507,112 +506,104 @@
                                     <path d="M6 15.708 4.333 14l3.979-4-3.979-4.021L6 4.271l4 4.021 4-4.021 1.667 1.708L11.688 10l3.979 4L14 15.708l-4-4.02Z" />
                                 </svg>
                             </a>
-                            <div class="mr-1 information">
+                            <div class="information">
                                 <dl>
-                                    <div style="padding-bottom: var(--segment-third);">
-                                        <dt>
-                                            Photo:
-                                        </dt>
-                                        <dd>
-                                            <img src="./images/selfie.jpg"
-                                                 alt="Profile photo"
-                                                 height="960"
-                                                 width="960"
-                                                 style="width: calc(4 * var(--segment));
-                                                        height: auto;
-                                                        aspect-ratio: 1/1;
-                                                        margin: 0;
-                                                        border: none;
-                                                        border-radius: 9999px">
-                                        </dd>
-                                    </div>
-                                    <div>
-                                        <dt>
-                                            Full name:
-                                        </dt>
-                                        <dd>
-                                            <span>Štěpán Jákl</span>
-                                        </dd>
-                                    </div>
-                                    <div class="profile">
-                                        <dt>
-                                            Summary:
-                                        </dt>
-                                        <dd>
-                                            <p>
-                                                Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals. Proficient in both back-end and front-end development, with a focus on prioritizing user experience.
-                                            </p>
-                                            <p>
-                                                custom-tailored designs and user experience, intuitive interface features that surprise and spark joy (TODO: look at inspire list)
-                                                TODO: copy to console log and readme
-                                            </p>
-                                            <p style="padding: var(--segment-third) 0;">
-                                                In recent years, my efforts have been devoted to building and overseeing a significant number of websites using the <a href="https://apostrophecms.com/" target="_blank"><u>ApostropheCMS</u></a> framework.
-                                            </p>
-                                            <p style="padding-bottom: var(--segment-third);">
-                                                I have been equally dedicated to code and design as a profesional since 2014.
-                                            </p>
-                                        </dd>
-                                    </div>
-                                    <div>
-                                        <dt>
-                                            Year of birth:
-                                        </dt>
-                                        <dd>
-                                            <span>1995</span>
-                                        </dd>
-                                    </div>
-                                    <div>
-                                        <dt>
-                                            Nationality:
-                                        </dt>
-                                        <dd>
-                                            <span>
-                                                <a href="https://www.google.com/maps/place/Czechia"
-                                                   target="_blank"
-                                                   aria-label="See where I am from"
-                                                   rel="noreferrer">
-                                                    <span>Czech</span>
-                                                    <img alt="czech-flag"
-                                                         src="images/cs-2.svg"
-                                                         width="20"
-                                                         height="15"
-                                                         loading="lazy">
-                                                </a>
-                                            </span>
-                                        </dd>
-                                    </div>
-                                    <div>
-                                        <dt>
-                                            Place of residence:
-                                        </dt>
-                                        <dd>
-                                            <span>
-                                                <a href="https://www.google.com/maps/place/Manchester"
-                                                   target="_blank"
-                                                   aria-label="See where I currently live"
-                                                   rel="noreferrer">
-                                                    <span>Manchester, United Kingdom</span>
-                                                    <img alt="united-kingdom-flag"
-                                                         src="images/gb-2.svg"
-                                                         width="20"
-                                                         height="15"
-                                                         loading="lazy">
-                                                </a>
-                                            </span>
-                                        </dd>
-                                    </div>
-                                    <div class="timezone" style="padding-bottom: var(--segment-third);">
-                                        <dt>
-                                            Timezone:
-                                        </dt>
-                                        <dd>
-                                            <span>Europe/London</span>
-                                            <span id="live-timezone-time"></span>
-                                            <script>
-                                                const liveTimezoneTime = () => {
-                                                    document.querySelector('#live-timezone-time').innerHTML =
-                                                        `(${new Intl.DateTimeFormat([], {
+                                    <!-- <div style="padding-bottom: var(--segment-third);"> -->
+                                    <dt>
+                                        Photo:
+                                    </dt>
+                                    <dd>
+                                        <img src="./images/selfie.jpg"
+                                             alt="Profile photo"
+                                             height="960"
+                                             width="960"
+                                             class="rounded-full"
+                                             style="width: calc(4 * var(--segment));
+                                                    height: auto;
+                                                    aspect-ratio: 1/1;
+                                                    margin: 0;
+                                                    border: none">
+                                    </dd>
+                                    <dt>
+                                        Full name:
+                                    </dt>
+                                    <dd>
+                                        <span>Štěpán Jákl</span>
+                                    </dd>
+                                    <!-- <div class="profile"> -->
+                                    <dt>
+                                        Summary:
+                                    </dt>
+                                    <dd id="modal_profile_text">
+                                        <p>
+                                            Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals. Proficient in both back-end and front-end development, with a focus on prioritizing user experience.
+                                        </p>
+                                        <p>
+                                            custom-tailored designs and user experience, intuitive interface features that surprise and spark joy (TODO: look at inspire list)
+                                            TODO: copy to console log and readme
+                                        </p>
+                                        <p style="padding: var(--segment-third) 0;">
+                                            In recent years, my efforts have been devoted to building and overseeing a significant number of websites using the <a href="https://apostrophecms.com/" target="_blank"><u>ApostropheCMS</u></a> framework.
+                                        </p>
+                                        <p style="padding-bottom: var(--segment-third);">
+                                            I have been equally dedicated to code and design as a profesional since 2014.
+                                        </p>
+                                    </dd>
+                                    <dt>
+                                        Year of birth:
+                                    </dt>
+                                    <dd>
+                                        <span>1995</span>
+                                    </dd>
+                                    <dt>
+                                        Nationality:
+                                    </dt>
+                                    <dd>
+                                        <span>
+                                            <a href="https://www.google.com/maps/place/Czechia"
+                                               target="_blank"
+                                               aria-label="See where I am from"
+                                               rel="noreferrer">
+                                                <span>Czech</span>
+                                                <img alt="czech-flag"
+                                                     src="images/cs-2.svg"
+                                                     width="20"
+                                                     height="15"
+                                                     loading="lazy"
+                                                     style="border-radius: 2px">
+                                            </a>
+                                        </span>
+                                    </dd>
+                                    <dt>
+                                        Place of residence:
+                                    </dt>
+                                    <dd>
+                                        <span>
+                                            <a href="https://www.google.com/maps/place/Manchester"
+                                               target="_blank"
+                                               aria-label="See where I currently live"
+                                               rel="noreferrer">
+                                                <span>Manchester, United Kingdom</span>
+                                                <img alt="united-kingdom-flag"
+                                                     src="images/gb-2.svg"
+                                                     width="20"
+                                                     height="15"
+                                                     loading="lazy"
+                                                     style="border-radius: 2px">
+                                            </a>
+                                        </span>
+                                    </dd>
+                                    <!-- <div class="timezone" style="padding-bottom: var(--segment-third);"> -->
+                                    <dt>
+                                        Timezone:
+                                    </dt>
+                                    <dd id="modal_profile_timezone">
+                                        <span>Europe/London</span>
+                                        <span id="live-timezone-time"></span>
+                                        <script>
+                                            const liveTimezoneTime = () => {
+                                                document.querySelector('#live-timezone-time').innerHTML =
+                                                    `(${new Intl.DateTimeFormat([], {
                                                         timeZone: 'Europe/London',
                                                         timeZoneName: 'short',
                                                         year: 'numeric',
@@ -621,118 +612,194 @@
                                                         hour: 'numeric',
                                                         minute: 'numeric'
                                                     }).format(new Date())})`
-                                                }
-                                                liveTimezoneTime()
-                                                setInterval(liveTimezoneTime, 15000)
-                                            </script>
-                                        </dd>
-                                    </div>
-                                    <div>
-                                        <dt>
-                                            Deliverables:
-                                        </dt>
-                                        <dd style="margin-bottom: -10px;">
-                                            <ul class="tags">
-                                                <li>
-                                                    <span>Dashboard SPA??? app</span>
-                                                </li>
-                                                <li>
-                                                    <span>Landing page</span>
-                                                </li>
-                                                <li>
-                                                    <span>Mockup/Prototype</span>
-                                                </li>
-                                                <li>
-                                                    <span>SaaS app</span>
-                                                </li>
-                                                <li>
-                                                    <span>Styleguide</span>
-                                                </li>
-                                                <li>
-                                                    <span>Wireframe</span>
-                                                </li>
-                                            </ul>
-                                        </dd>
-                                    </div>
-                                    <div>
-                                        <dt>
-                                            Tools & Languages:
-                                        </dt>
-                                        <dd style="margin-bottom: -10px;">
-                                            <ul class="tags">
-                                                <li>
-                                                    <svg role="img"
-                                                         width="14"
-                                                         height="14"
-                                                         viewBox="0 0 24 24"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <title>Apostrophe</title>
-                                                        <path d="M15.674 0c-.795.001-1.794.095-3.167.313l-4.6.729c-3.138.497-4.224 1.003-5.274 1.798a6.485 6.485 0 00-2.24 3.082c-.43 1.245-.577 2.434-.08 5.571l.729 4.6c.497 3.138 1.003 4.22 1.798 5.273a6.485 6.485 0 003.082 2.24c1.245.431 2.434.578 5.571.081l4.6-.729c3.138-.497 4.22-1.003 5.273-1.799a6.477 6.477 0 002.24-3.081c.431-1.245.578-2.434.082-5.571l-.73-4.6c-.497-3.138-1.003-4.224-1.799-5.274a6.477 6.477 0 00-3.081-2.24C17.378.152 16.695 0 15.674 0zm-5.319 4.566a.52.52 0 01.003 0 .52.52 0 01.52.444l.77 4.865a.52.52 0 01-.435.6l-4.859.77a.52.52 0 01-.602-.436l-.77-4.866a.52.52 0 01.435-.6l4.86-.77a.52.52 0 01.078-.007zM9.92 5.692l-3.823.605.612 3.83 3.813-.605zm6.504 2.91a3.274 3.274 0 01.497 6.513 3.258 3.258 0 01-3.713-2.726 3.274 3.274 0 013.216-3.787zm-.054 1.058a2.226 2.226 0 10.388 4.42 2.208 2.208 0 001.818-2.541 2.226 2.226 0 00-2.206-1.879zm-6.45 3a.52.52 0 01.424.208l3.824 4.964a.52.52 0 01-.333.839l-5.932.937a.52.52 0 01-.576-.695l2.108-5.901a.52.52 0 01.486-.352zm.18 1.611L8.61 18.438l4.186-.664z" />
-                                                    </svg>
-                                                    <span>ApostropheCMS</span>
-                                                </li>
-                                                <li>
-                                                    <svg role="img"
-                                                         width="14"
-                                                         height="14"
-                                                         viewBox="0 0 24 24"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <title>Alpine.js</title>
-                                                        <path d="m24 12-5.72 5.746-5.724-5.741 5.724-5.75L24 12zM5.72 6.254 0 12l5.72 5.746h11.44L5.72 6.254z" />
-                                                    </svg>
-                                                    <span>AlpineJS</span>
-                                                    <svg role="img"
-                                                         width="14"
-                                                         height="14"
-                                                         viewBox="0 0 24 24"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <title>Vue.js</title>
-                                                        <path d="M24,1.61H14.06L12,5.16,9.94,1.61H0L12,22.39ZM12,14.08,5.16,2.23H9.59L12,6.41l2.41-4.18h4.43Z" />
-                                                    </svg>
-                                                    <span>VueJS/ReactJS</span>
-                                                </li>
-                                                <li>
-                                                    <span>Figma/Sketch</span>
-                                                </li>
-                                                <li>
-                                                    <span>HTML/CSS/TailwindCSS</span>
-                                                </li>
-                                                <li>
-                                                    <span>JavaScript</span>
-                                                </li>
-                                                <li>
-                                                    <svg role="img"
-                                                         width="16"
-                                                         height="16"
-                                                         viewBox="0 0 24 24"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <title>Jamstack</title>
-                                                        <path d="M12 0C5.365 0 0 5.364 0 12s5.365 12 12 12 12-5.364 12-12V0zm.496 3.318h8.17v8.17h-8.17zm-9.168 9.178h8.16v8.149c-4.382-.257-7.904-3.767-8.16-8.149zm9.168.016h8.152a8.684 8.684 0 01-8.152 8.148z" />
-                                                    </svg>
-                                                    <span>JAMstack</span>
-                                                    <svg role="img"
-                                                         width="16"
-                                                         height="16"
-                                                         viewBox="0 0 24 24"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <title>Astro</title>
-                                                        <path d="M8.358 20.162c-1.186-1.07-1.532-3.316-1.038-4.944.856 1.026 2.043 1.352 3.272 1.535 1.897.283 3.76.177 5.522-.678.202-.098.388-.229.608-.36.166.473.209.95.151 1.437-.14 1.185-.738 2.1-1.688 2.794-.38.277-.782.525-1.175.787-1.205.804-1.531 1.747-1.078 3.119l.044.148a3.158 3.158 0 0 1-1.407-1.188 3.31 3.31 0 0 1-.544-1.815c-.004-.32-.004-.642-.048-.958-.106-.769-.472-1.113-1.161-1.133-.707-.02-1.267.411-1.415 1.09-.012.053-.028.104-.045.165h.002zm-5.961-4.445s3.24-1.575 6.49-1.575l2.451-7.565c.092-.366.36-.614.662-.614.302 0 .57.248.662.614l2.45 7.565c3.85 0 6.491 1.575 6.491 1.575L16.088.727C15.93.285 15.663 0 15.303 0H8.697c-.36 0-.615.285-.784.727l-5.516 14.99z" />
-                                                    </svg>
-                                                    <span>Astro</span>
-                                                </li>
-                                                <li>
-                                                    <span>MongoDB</span>
-                                                </li>
-                                                <li>
-                                                    <span>Motion One/Framer Motion</span>
-                                                </li>
-                                                <li>
-                                                    <span>& other</span>
-                                                </li>
-                                            </ul>
-                                        </dd>
-                                    </div>
-                                    <!-- <div>
+                                            }
+                                            liveTimezoneTime()
+                                            setInterval(liveTimezoneTime, 15000)
+                                        </script>
+                                    </dd>
+                                    <dt style="padding-top: 10px;">
+                                        Deliverables:
+                                    </dt>
+                                    <dd id="modal_profile_tags">
+                                        <ul>
+                                            <li>
+                                                <span>Dashboard SPA??? app</span>
+                                            </li>
+                                            <li>
+                                                <span>Landing page</span>
+                                            </li>
+                                            <li>
+                                                <span>Mockup/Prototype</span>
+                                            </li>
+                                            <li>
+                                                <span>SaaS app</span>
+                                            </li>
+                                            <li>
+                                                <span>Styleguide</span>
+                                            </li>
+                                            <li>
+                                                <span>Wireframe</span>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                    <dt style="padding-top: 10px;">
+                                        Tools & Languages:
+                                    </dt>
+                                    <dd id="modal_profile_tags">
+                                        <ul>
+                                            <li>
+                                                <svg role="img"
+                                                     width="14"
+                                                     height="14"
+                                                     viewBox="0 0 24 24"
+                                                     fill="currentColor"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <title>Apostrophe</title>
+                                                    <path d="M15.674 0c-.795.001-1.794.095-3.167.313l-4.6.729c-3.138.497-4.224 1.003-5.274 1.798a6.485 6.485 0 00-2.24 3.082c-.43 1.245-.577 2.434-.08 5.571l.729 4.6c.497 3.138 1.003 4.22 1.798 5.273a6.485 6.485 0 003.082 2.24c1.245.431 2.434.578 5.571.081l4.6-.729c3.138-.497 4.22-1.003 5.273-1.799a6.477 6.477 0 002.24-3.081c.431-1.245.578-2.434.082-5.571l-.73-4.6c-.497-3.138-1.003-4.224-1.799-5.274a6.477 6.477 0 00-3.081-2.24C17.378.152 16.695 0 15.674 0zm-5.319 4.566a.52.52 0 01.003 0 .52.52 0 01.52.444l.77 4.865a.52.52 0 01-.435.6l-4.859.77a.52.52 0 01-.602-.436l-.77-4.866a.52.52 0 01.435-.6l4.86-.77a.52.52 0 01.078-.007zM9.92 5.692l-3.823.605.612 3.83 3.813-.605zm6.504 2.91a3.274 3.274 0 01.497 6.513 3.258 3.258 0 01-3.713-2.726 3.274 3.274 0 013.216-3.787zm-.054 1.058a2.226 2.226 0 10.388 4.42 2.208 2.208 0 001.818-2.541 2.226 2.226 0 00-2.206-1.879zm-6.45 3a.52.52 0 01.424.208l3.824 4.964a.52.52 0 01-.333.839l-5.932.937a.52.52 0 01-.576-.695l2.108-5.901a.52.52 0 01.486-.352zm.18 1.611L8.61 18.438l4.186-.664z" />
+                                                </svg>
+                                                <span>ApostropheCMS</span>
+                                            </li>
+                                            <li>
+                                                <svg role="img"
+                                                     width="14"
+                                                     height="14"
+                                                     viewBox="0 0 24 24"
+                                                     fill="currentColor"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <title>Alpine.js</title>
+                                                    <path d="m24 12-5.72 5.746-5.724-5.741 5.724-5.75L24 12zM5.72 6.254 0 12l5.72 5.746h11.44L5.72 6.254z" />
+                                                </svg>
+                                                <span>AlpineJS</span>
+                                                <svg role="img"
+                                                     width="14"
+                                                     height="14"
+                                                     viewBox="0 0 24 24"
+                                                     fill="currentColor"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <title>Vue.js</title>
+                                                    <path d="M24,1.61H14.06L12,5.16,9.94,1.61H0L12,22.39ZM12,14.08,5.16,2.23H9.59L12,6.41l2.41-4.18h4.43Z" />
+                                                </svg>
+                                                <span>VueJS</span>
+                                                <svg role="img"
+                                                     width="14"
+                                                     height="14"
+                                                     viewBox="0 0 24 24"
+                                                     fill="currentColor"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <title>React</title>
+                                                    <path d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.02 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38-.318-.184-.688-.277-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44-.96-.236-2.006-.417-3.107-.534-.66-.905-1.345-1.727-2.035-2.447 1.592-1.48 3.087-2.292 4.105-2.295zm-9.77.02c1.012 0 2.514.808 4.11 2.28-.686.72-1.37 1.537-2.02 2.442-1.107.117-2.154.298-3.113.538-.112-.49-.195-.964-.254-1.42-.23-1.868.054-3.32.714-3.707.19-.09.4-.127.563-.132zm4.882 3.05c.455.468.91.992 1.36 1.564-.44-.02-.89-.034-1.345-.034-.46 0-.915.01-1.36.034.44-.572.895-1.096 1.345-1.565zM12 8.1c.74 0 1.477.034 2.202.093.406.582.802 1.203 1.183 1.86.372.64.71 1.29 1.018 1.946-.308.655-.646 1.31-1.013 1.95-.38.66-.773 1.288-1.18 1.87-.728.063-1.466.098-2.21.098-.74 0-1.477-.035-2.202-.093-.406-.582-.802-1.204-1.183-1.86-.372-.64-.71-1.29-1.018-1.946.303-.657.646-1.313 1.013-1.954.38-.66.773-1.286 1.18-1.868.728-.064 1.466-.098 2.21-.098zm-3.635.254c-.24.377-.48.763-.704 1.16-.225.39-.435.782-.635 1.174-.265-.656-.49-1.31-.676-1.947.64-.15 1.315-.283 2.015-.386zm7.26 0c.695.103 1.365.23 2.006.387-.18.632-.405 1.282-.66 1.933-.2-.39-.41-.783-.64-1.174-.225-.392-.465-.774-.705-1.146zm3.063.675c.484.15.944.317 1.375.498 1.732.74 2.852 1.708 2.852 2.476-.005.768-1.125 1.74-2.857 2.475-.42.18-.88.342-1.355.493-.28-.958-.646-1.956-1.1-2.98.45-1.017.81-2.01 1.085-2.964zm-13.395.004c.278.96.645 1.957 1.1 2.98-.45 1.017-.812 2.01-1.086 2.964-.484-.15-.944-.318-1.37-.5-1.732-.737-2.852-1.706-2.852-2.474 0-.768 1.12-1.742 2.852-2.476.42-.18.88-.342 1.356-.494zm11.678 4.28c.265.657.49 1.312.676 1.948-.64.157-1.316.29-2.016.39.24-.375.48-.762.705-1.158.225-.39.435-.788.636-1.18zm-9.945.02c.2.392.41.783.64 1.175.23.39.465.772.705 1.143-.695-.102-1.365-.23-2.006-.386.18-.63.406-1.282.66-1.933zM17.92 16.32c.112.493.2.968.254 1.423.23 1.868-.054 3.32-.714 3.708-.147.09-.338.128-.563.128-1.012 0-2.514-.807-4.11-2.28.686-.72 1.37-1.536 2.02-2.44 1.107-.118 2.154-.3 3.113-.54zm-11.83.01c.96.234 2.006.415 3.107.532.66.905 1.345 1.727 2.035 2.446-1.595 1.483-3.092 2.295-4.11 2.295-.22-.005-.406-.05-.553-.132-.666-.38-.955-1.834-.73-3.703.054-.46.142-.944.25-1.438zm4.56.64c.44.02.89.034 1.345.034.46 0 .915-.01 1.36-.034-.44.572-.895 1.095-1.345 1.565-.455-.47-.91-.993-1.36-1.565z" />
+                                                </svg>
+                                                <span>ReactJS</span>
+                                            </li>
+                                            <li>
+                                                <svg role="img"
+                                                     width="14"
+                                                     height="14"
+                                                     viewBox="0 0 24 24"
+                                                     fill="currentColor"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <title>Figma</title>
+                                                    <path d="M15.852 8.981h-4.588V0h4.588c2.476 0 4.49 2.014 4.49 4.49s-2.014 4.491-4.49 4.491zM12.735 7.51h3.117c1.665 0 3.019-1.355 3.019-3.019s-1.355-3.019-3.019-3.019h-3.117V7.51zm0 1.471H8.148c-2.476 0-4.49-2.014-4.49-4.49S5.672 0 8.148 0h4.588v8.981zm-4.587-7.51c-1.665 0-3.019 1.355-3.019 3.019s1.354 3.02 3.019 3.02h3.117V1.471H8.148zm4.587 15.019H8.148c-2.476 0-4.49-2.014-4.49-4.49s2.014-4.49 4.49-4.49h4.588v8.98zM8.148 8.981c-1.665 0-3.019 1.355-3.019 3.019s1.355 3.019 3.019 3.019h3.117V8.981H8.148zM8.172 24c-2.489 0-4.515-2.014-4.515-4.49s2.014-4.49 4.49-4.49h4.588v4.441c0 2.503-2.047 4.539-4.563 4.539zm-.024-7.51a3.023 3.023 0 0 0-3.019 3.019c0 1.665 1.365 3.019 3.044 3.019 1.705 0 3.093-1.376 3.093-3.068v-2.97H8.148zm7.704 0h-.098c-2.476 0-4.49-2.014-4.49-4.49s2.014-4.49 4.49-4.49h.098c2.476 0 4.49 2.014 4.49 4.49s-2.014 4.49-4.49 4.49zm-.097-7.509c-1.665 0-3.019 1.355-3.019 3.019s1.355 3.019 3.019 3.019h.098c1.665 0 3.019-1.355 3.019-3.019s-1.355-3.019-3.019-3.019h-.098z" />
+                                                </svg>
+                                                <span>Figma/Sketch</span>
+                                            </li>
+                                            <li>
+                                                <svg width="14"
+                                                     height="14"
+                                                     viewBox="0 0 14 21"
+                                                     role="img"
+                                                     fill="currentColor"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M0 0h14v7H7zm0 7h7l7 7H7v7l-7-7z">
+                                                    </path>
+                                                </svg>
+                                                <span>Framer Motion/Motion One</span>
+                                            </li>
+                                            <li>
+                                                <svg role="img"
+                                                     width="14"
+                                                     height="14"
+                                                     viewBox="0 0 24 24"
+                                                     fill="currentColor"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <title>HTML5</title>
+                                                    <path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.23-2.622L5.412 4.41l.698 8.01h9.126l-.326 3.426-2.91.804-2.955-.81-.188-2.11H6.248l.33 4.171L12 19.351l5.379-1.443.744-8.157H8.531z" />
+                                                </svg>
+                                                <span>HTML</span>
+                                                <svg role="img"
+                                                     width="14"
+                                                     height="14"
+                                                     viewBox="0 0 24 24"
+                                                     fill="currentColor"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <title>CSS3</title>
+                                                    <path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.565-2.438L1.5 0zm17.09 4.413L5.41 4.41l.213 2.622 10.125.002-.255 2.716h-6.64l.24 2.573h6.182l-.366 3.523-2.91.804-2.956-.81-.188-2.11h-2.61l.29 3.855L12 19.288l5.373-1.53L18.59 4.414z" />
+                                                </svg>
+                                                <span>CSS</span>
+                                                <svg role="img"
+                                                     width="14"
+                                                     height="14"
+                                                     viewBox="0 0 24 24"
+                                                     fill="currentColor"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <title>Tailwind CSS</title>
+                                                    <path d="M12.001,4.8c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 C13.666,10.618,15.027,12,18.001,12c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C16.337,6.182,14.976,4.8,12.001,4.8z M6.001,12c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 c1.177,1.194,2.538,2.576,5.512,2.576c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C10.337,13.382,8.976,12,6.001,12z" />
+                                                </svg>
+                                                <span>TailwindCSS</span>
+                                            </li>
+                                            <li>
+                                                <svg role="img"
+                                                     width="14"
+                                                     height="14"
+                                                     viewBox="0 0 24 24"
+                                                     fill="currentColor"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <title>Jamstack</title>
+                                                    <path d="M12 0C5.365 0 0 5.364 0 12s5.365 12 12 12 12-5.364 12-12V0zm.496 3.318h8.17v8.17h-8.17zm-9.168 9.178h8.16v8.149c-4.382-.257-7.904-3.767-8.16-8.149zm9.168.016h8.152a8.684 8.684 0 01-8.152 8.148z" />
+                                                </svg>
+                                                <span>JAMstack</span>
+                                                <svg role="img"
+                                                     width="14"
+                                                     height="14"
+                                                     viewBox="0 0 24 24"
+                                                     fill="currentColor"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <title>Astro</title>
+                                                    <path d="M8.358 20.162c-1.186-1.07-1.532-3.316-1.038-4.944.856 1.026 2.043 1.352 3.272 1.535 1.897.283 3.76.177 5.522-.678.202-.098.388-.229.608-.36.166.473.209.95.151 1.437-.14 1.185-.738 2.1-1.688 2.794-.38.277-.782.525-1.175.787-1.205.804-1.531 1.747-1.078 3.119l.044.148a3.158 3.158 0 0 1-1.407-1.188 3.31 3.31 0 0 1-.544-1.815c-.004-.32-.004-.642-.048-.958-.106-.769-.472-1.113-1.161-1.133-.707-.02-1.267.411-1.415 1.09-.012.053-.028.104-.045.165h.002zm-5.961-4.445s3.24-1.575 6.49-1.575l2.451-7.565c.092-.366.36-.614.662-.614.302 0 .57.248.662.614l2.45 7.565c3.85 0 6.491 1.575 6.491 1.575L16.088.727C15.93.285 15.663 0 15.303 0H8.697c-.36 0-.615.285-.784.727l-5.516 14.99z" />
+                                                </svg>
+                                                <span>Astro</span>
+                                            </li>
+                                            <li>
+                                                <svg role="img"
+                                                     width="14"
+                                                     height="14"
+                                                     viewBox="0 0 24 24"
+                                                     fill="currentColor"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <title>JavaScript</title>
+                                                    <path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.404-.601-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65l.046.067zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.138 2.711-.33.689-1.18.601-1.566.48-.396-.196-.597-.466-.83-.855-.063-.105-.11-.196-.127-.196l-1.825 1.125c.305.63.75 1.172 1.324 1.517.855.51 2.004.675 3.207.405.783-.226 1.458-.691 1.811-1.411.51-.93.402-2.07.397-3.346.012-2.054 0-4.109 0-6.179l.004-.056z" />
+                                                </svg>
+                                                <span>JavaScript</span>
+                                            </li>
+                                            <li>
+                                                <svg role="img"
+                                                     width="14"
+                                                     height="14"
+                                                     viewBox="0 0 24 24"
+                                                     fill="currentColor"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <title>MongoDB</title>
+                                                    <path d="M17.193 9.555c-1.264-5.58-4.252-7.414-4.573-8.115-.28-.394-.53-.954-.735-1.44-.036.495-.055.685-.523 1.184-.723.566-4.438 3.682-4.74 10.02-.282 5.912 4.27 9.435 4.888 9.884l.07.05A73.49 73.49 0 0111.91 24h.481c.114-1.032.284-2.056.51-3.07.417-.296.604-.463.85-.693a11.342 11.342 0 003.639-8.464c.01-.814-.103-1.662-.197-2.218zm-5.336 8.195s0-8.291.275-8.29c.213 0 .49 10.695.49 10.695-.381-.045-.765-1.76-.765-2.405z" />
+                                                </svg>
+                                                <span>MongoDB</span>
+                                            </li>
+                                            <li>
+                                                <span>& other</span>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </div>
+                                <!-- <div>
                                 <dt>Hourly rate range:</dt>
                                 <dd><span>50 ~ 80 £/€/$</span></dd>
                             </div>
@@ -740,13 +807,15 @@
                                 <dt>Annual salary range:</dt>
                                 <dd>65,000+ £/€/$</dd>
                             </div> -->
-                                </dl>
-                            </div>
+                            </dl>
                         </div>
                     </div>
                     <div id="modal_archive" class="modal" role="dialog" aria-modal="true">
                         <div class="overflow-clip modal_content">
-                            <a href="#" id="modal_button-close" aria-label="Close modal">
+                            <a href="#"
+                               id="modal_button-close"
+                               class="flex justify-content-center align-items-center"
+                               aria-label="Close modal">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                      height="20"
                                      width="20"
@@ -762,12 +831,15 @@
                                             padding-left: 48px;
                                             padding-right: 96px">
                                     <div class="flex flex-col" style="column-gap: 24px;">
-                                        <div class="grid" style="grid-auto-flow: row;
+                                        <div class="grid"
+                                             style="grid-auto-flow: row;
                                                     grid-template-columns: minmax(240px, max-content) auto;
                                                     gap: 48px">
-                                            <div data-timeline-section="2023" class="flex flex-col" style="outline: 1px solid red">
+                                            <div data-timeline-section="2023"
+                                                 class="flex flex-col"
+                                                 style="outline: 1px solid red">
                                                 <div class="sticky flex flex-col align-items-end"
-                                                style="row-gap: 20px;
+                                                     style="row-gap: 20px;
                                                             top: var(--modal-button-close-inset);
                                                             padding-bottom: 20px">
                                                     <hr style="display: inline-flex;
@@ -786,7 +858,7 @@
                                             </div>
                                             <div style="height: 600px; outline: 1px solid red;">
                                                 <div class="flex flex-col justify-content-between w-full"
-                                                style="height: 20px">
+                                                     style="height: 20px">
                                                     <hr style="display: inline-flex;
                                                                width: 100%;
                                                                margin: 0;
@@ -810,10 +882,11 @@
                                                     <span>AHOJ</span>
                                                 </div>
                                             </div>
-                                            <div data-timeline-section="2018" class="flex flex-col" style="outline: 1px solid red">
+                                            <div data-timeline-section="2018"
+                                                 class="flex flex-col"
+                                                 style="outline: 1px solid red">
                                                 <div class="flex flex-col align-items-end"
-                                                style="
-                                                            row-gap: 20px;
+                                                     style="row-gap: 20px;
                                                             position: sticky;
                                                             top: var(--modal-button-close-inset);
                                                             padding-bottom: 20px">
@@ -833,7 +906,7 @@
                                             </div>
                                             <div style="height: 400px; outline: 1px solid red;">
                                                 <div class="flex flex-col justify-content-between w-full"
-                                                style="height: 20px">
+                                                     style="height: 20px">
                                                     <hr style="display: inline-flex;
                                                                width: 100%;
                                                                margin: 0;
@@ -862,22 +935,17 @@
                                 </div>
                                 <div class="sticky" style="bottom: calc(-1 * var(--segment))">
 
-                                    <div class="absolute" style="bottom: 0px; margin-left: calc(48px + 48px + 240px );
+                                    <div class="absolute"
+                                         style="bottom: 0px;
+                                                margin-left: calc(48px + 48px + 240px );
                                                 width: 800px;
                                                 /* outline: 1px solid red */">
 
                                         <horizontal-timeline labels="[2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014]"></horizontal-timeline>
 
 
-                                        <!-- <div style="margin: 0 64px;
-                                                    border: white 1px solid;
-                                                    border-radius: 9999px">
-                                            <div style="display: grid;
-                                                        grid-auto-flow: column;
-                                                        grid-auto-columns: max-content;
-                                                        column-gap: 10px;
-                                                        padding: 10px 16px;
-                                                        font-size: 15px">
+                                        <!-- <div style="margin: 0 64px; border: white 1px solid; border-radius: 9999px">
+                                            <div style="display: grid; grid-auto-flow: column; grid-auto-columns: max-content; column-gap: 10px; padding: 10px 16px; font-size: 15px">
                                                 <button>
                                                     2022
                                                 </button>
