@@ -12,42 +12,42 @@
 
 /* Typography */
 
-.text-base {
+/* .text-base {
     font-size: 16px;
     font-weight: 400;
-}
+} */
 
 body {
     --text-xs-font-weight: 500;
-    --text-xs-font-size: 14.2857px;
-    --text-xs-line-height: 16px;
-    --text-xs-letter-spacing: 2.5px;
+    --text-xs-font-size: 0.89285625rem;
+    --text-xs-line-height: 1rem;
+    --text-xs-letter-spacing: 0.15625rem;
     --text-xs_before-margin-bottom: -0.235em;
     --text-xs_after-margin-top: -0.185em;
 
     --text-sm-font-weight: 400;
-    --text-sm-font-size: 17.1429px;
-    --text-sm-line-height: 20px;
-    --text-sm-letter-spacing: 0.5px;
+    --text-sm-font-size: 1.07143125rem;
+    --text-sm-line-height: 1.25rem;
+    --text-sm-letter-spacing: 0.03125rem;
     --text-sm_before-margin-bottom: -0.2583em;
     --text-sm_after-margin-top: -0.2083em;
 
     --text-md-font-weight: 300;
-    --text-md-font-size: 22.8571px;
-    --text-md-line-height: 28px;
-    --text-md-letter-spacing: 1.25px;
+    --text-md-font-size: 1.42856875rem;
+    --text-md-line-height: 1.75rem;
+    --text-md-letter-spacing: 0.078125rem;
     --text-md_before-margin-bottom: -0.2875em;
     --text-md_after-margin-top: -0.2375em;;
 
     --text-lg-font-weight: 200;
-    --text-lg-font-size: 45.7143px;
-    --text-lg-line-height: 64px;
+    --text-lg-font-size: 2.85714375rem;
+    --text-lg-line-height: 4rem;
     --text-lg_before-margin-bottom: -0.375em;
     --text-lg_after-margin-top: -0.325em;
 
     --text-xl-font-weight: 200;
-    --text-xl-font-size: 68.5714px;
-    --text-xl-line-height: 96px;
+    --text-xl-font-size: 4.2857125rem;
+    --text-xl-line-height: 6rem;
     --text-xl_before-margin-bottom: -0.375em;
     --text-xl_after-margin-top: -0.325em;
 }
@@ -306,18 +306,18 @@ body {
     padding-bottom: calc(var(--segment) / 2);
 }
 
-.px-1\/2 {
+NaNrem-1\/2 {
     padding-left: calc(var(--segment) / 2);
     padding-right: calc(var(--segment) / 2);
 }
 
 /* @media (var(--breakpoint-sm)) {
     .pt-24-sm {
-        padding-top: 24px;
+        padding-top: 1.5rem;
     }
 
     .pb-24-sm {
-        padding-bottom: 24px;
+        padding-bottom: 1.5rem;
     }
 
 } */
@@ -425,5 +425,5 @@ body {
 /* Border Radius */
 
 .rounded-full {
-    border-radius: 9999px;
+    border-radius: 999rem;
 }

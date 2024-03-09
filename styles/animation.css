@@ -334,8 +334,8 @@ svg.animate-face-icon path {
     inset: 0;
     z-index: -1;
     background-color: var(--context-bg);
-    border-radius: 9999px;
-    backdrop-filter: blur(2px);
+    border-radius: 999rem;
+    backdrop-filter: blur(0.125rem);
 }
 
 #menu_links>a:hover::before, #menu>a:hover~#menu_button::before {
@@ -415,7 +415,7 @@ svg.animate-face-icon path {
 
 @keyframes menu-top-left {
     0% {
-        transform: translate(0px, 0px);
+        transform: translate(0rem, 0rem);
         animation-timing-function: var(--ease-in-quad);
     }
     45%, 55% {
@@ -436,17 +436,17 @@ svg.animate-face-icon path {
         transform: translate(var(--menu-icon-radius), calc(-1 * ((1.5 * var(--menu-icon-gap-between)) - (0.5 * var(--menu-icon-gap)) + var(--menu-icon-bit-size)))) scale(0);
     }
     55% {
-        transform: translate(0px, 0px) scale(0);
+        transform: translate(0rem, 0rem) scale(0);
     }
     100% {
-        transform: translate(0px, 0px) scale(1);
+        transform: translate(0rem, 0rem) scale(1);
         animation-timing-function: var(--ease-out-quad);
     }
 }
 
 @keyframes menu-top-right {
     0% {
-        transform: translate(0px, 0px);
+        transform: translate(0rem, 0rem);
         animation-timing-function: var(--ease-in-quad);
     }
     45%, 55% {
@@ -467,17 +467,17 @@ svg.animate-face-icon path {
         transform: translate(calc(-1 * var(--menu-icon-radius)), calc(-1 * ((0.5 * var(--menu-icon-gap-between)) - (0.5 * (var(--menu-icon-gap)))))) scale(0);
     }
     55% {
-        transform: translate(0px, 0px) scale(0);
+        transform: translate(0rem, 0rem) scale(0);
     }
     100% {
-        transform: translate(0px, 0px) scale(1);
+        transform: translate(0rem, 0rem) scale(1);
         animation-timing-function: var(--ease-out-quad);
     }
 }
 
 @keyframes menu-bottom-left {
     0% {
-        transform: translate(0px, 0px);
+        transform: translate(0rem, 0rem);
         animation-timing-function: var(--ease-in-quad);
     }
     45%, 55% {
@@ -498,17 +498,17 @@ svg.animate-face-icon path {
         transform: translate(var(--menu-icon-radius), calc((0.5 * (var(--menu-icon-gap-between))) - (0.5 * (var(--menu-icon-gap))))) scale(0);
     }
     55% {
-        transform: translate(0px, 0px) scale(0);
+        transform: translate(0rem, 0rem) scale(0);
     }
     100% {
-        transform: translate(0px, 0px) scale(1);
+        transform: translate(0rem, 0rem) scale(1);
         animation-timing-function: var(--ease-out-quad);
     }
 }
 
 @keyframes menu-bottom-right {
     0% {
-        transform: translate(0px, 0px);
+        transform: translate(0rem, 0rem);
         animation-timing-function: var(--ease-in-quad);
     }
     45%, 55% {
@@ -529,10 +529,10 @@ svg.animate-face-icon path {
         transform: translate(calc(-1 * var(--menu-icon-radius)), calc((1.5 * var(--menu-icon-gap-between)) - (0.5 * (var(--menu-icon-gap))) + var(--menu-icon-bit-size))) scale(0);
     }
     55% {
-        transform: translate(0px, 0px) scale(0);
+        transform: translate(0rem, 0rem) scale(0);
     }
     100% {
-        transform: translate(0px, 0px) scale(1);
+        transform: translate(0rem, 0rem) scale(1);
         animation-timing-function: var(--ease-in-quad);
     }
 }
@@ -582,24 +582,30 @@ svg.animate-face-icon path {
 #menu_dropdown {
     visibility: hidden;
     opacity: 0;
-    transform: translateX(-4px);
+    transform: translateY(-0.25rem);
     transition: opacity calc(1.25 * var(--animate-out-segment)) var(--ease-in-quad), transform calc(1.25 * var(--animate-out-segment)) var(--ease-in-quad), visibility 0s calc(1.25 * var(--animate-out-segment));
+}
+
+@media (min-width: 45rem) {
+    #menu_dropdown {
+        transform: translateX(-0.25rem);
+    }
 }
 
 #menu:target #menu_dropdown {
     visibility: visible;
     pointer-events: auto;
     opacity: 1;
-    transform: translateY(0px);
+    transform: translate(0);
     transition: opacity calc(1.25 * var(--animate-in-segment)) var(--ease-out-quad), transform calc(1.25 * var(--animate-in-segment)) var(--ease-out-quad);
 }
 
 #menu_dropdown a:first-child:before {
-    border-radius: 3px 3px 1.5px 1.5px;
+    border-radius: 0.1875rem 0.1875rem 0.09375rem 0.09375rem;
 }
 
 #menu_dropdown label:last-child:before {
-    border-radius: 1.5px 1.5px 3px 3px;
+    border-radius: 0.09375rem 0.09375rem 0.1875rem 0.1875rem;
 }
 
 #menu_dropdown a::before,
@@ -609,19 +615,19 @@ svg.animate-face-icon path {
     opacity: 0;
     /* transform: scale(0.9); */
     position: absolute;
-    inset: 9px 10px 10px 10px;
-    /* inset: 3px 4px 4px 4px; */
+    inset: 0.5625rem 0.625rem 0.625rem 0.625rem;
+    /* inset: 0.1875rem 0.25rem 0.25rem 0.25rem; */
     z-index: 0;
     background-color: var(--highlight-secondary);
-    border-radius: 1.5px;
-    /* backdrop-filter: blur(2px); */
+    border-radius: 0.09375rem;
+    /* backdrop-filter: blur(0.125rem); */
 }
 
 #menu_dropdown a:hover::before,
 #menu_dropdown label:hover::before {
     transition: opacity var(--animate-in-segment-2\/3) linear, inset var(--animate-in-segment-2\/3) var(--ease-out-quad);
     opacity: 1;
-    inset: 3px 4px 4px 4px;
+    inset: 0.1875rem 0.25rem 0.25rem 0.25rem;
     /* transform: scale(1); */
 }
 
@@ -629,7 +635,7 @@ svg.animate-face-icon path {
 #menu_dropdown label:focus::before {
     transition: opacity var(--animate-in-segment-2\/3) linear, inset var(--animate-in-segment-2\/3) var(--ease-out-quad);
     opacity: 0.75;
-    inset: 6px 7px 7px 7px;
+    inset: 0.375rem 0.4375rem 0.4375rem 0.4375rem;
 }
 
 #menu_dropdown a span,
@@ -732,13 +738,13 @@ svg.animate-face-icon path {
 }
 
 #underlay_menu {
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(0.125rem);
+    -webkit-backdrop-filter: blur(0.125rem);
 }
 
 #underlay_modal {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(0.5rem);
+    -webkit-backdrop-filter: blur(0.5rem);
 }
 
 #debug:not(:checked)~#page div:target #underlay_menu {
