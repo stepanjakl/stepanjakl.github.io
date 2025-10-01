@@ -75,13 +75,9 @@
         <input id="archive" type="hidden" hidden aria-hidden="true">
         <main class="relative flex flex-col justify-content-between w-full"
               style="background-color: var(--background)">
-            <div class="absolute inset-0"
-                 style="background-repeat: repeat;
-                        background-origin: border-box;
-                        background-position: 0 0;
-                        background-image: var(--background-pattern)">
+            <div id="background-pattern" class="absolute inset-0">
             </div>
-            <div class="relative z-2 pt-1/2 w-full max-w-xl"
+            <div class="relative pt-1/2 w-full max-w-xl"
                  style="padding-bottom: var(--segment-half)">
                 <header id="intro">
                     <div id="intro_left-column"
@@ -93,7 +89,8 @@
                             role="button"
                             aria-label="Click to copy name to clipboard">
                             <div class="inline-flex flex-wrap select-none" aria-hidden="true">
-                                <span style="--i:1">Š</span><span style="--i:2">t</span><span style="--i:3">ě</span><span style="--i:4">p</span><span style="--i:5">á</span><span style="--i:6">n</span><span style="--i:7">&nbsp;</span><span style="--i:8">J</span><span style="--i:9">á</span><span style="--i:10">k</span><span style="--i:11">l</span>
+                                <p style="--i:1"><span style="--i:1">Š</span><span style="--i:2">t</span><span style="--i:3">ě</span><span style="--i:4">p</span><span style="--i:5">á</span><span style="--i:6">n</span></p>
+                                <p style="--i:2"><span style="--i:7">&nbsp;</span><span style="--i:8">J</span><span style="--i:9">á</span><span style="--i:10">k</span><span style="--i:11">l</span></p>
                             </div>
                             <abbr class="tooltip-top tooltip">
                                 <span aria-hidden="true">Pronounced: shteh-PAHN YAH-kl</span>
@@ -113,13 +110,15 @@
                     <div id="intro_right-column" class="z-1 flex flex-col">
                         <h3 id="intro_right-column_title--primary"
                             class="inline-flex animate-fade-in-title select-none">
-                            <span style="--i:1">F</span><span style="--i:2">u</span><span style="--i:3">l</span><span style="--i:4">l</span><span style="--i:5">-</span><span style="--i:6">s</span><span style="--i:7">t</span><span style="--i:8">a</span><span style="--i:9">c</span><span style="--i:10">k</span><span style="--i:11">&nbsp;</span><span class="highlight-load" style="--i:12">d</span><span class="highlight-load" style="--i:13">e</span><span class="highlight-load" style="--i:14">v</span><span class="highlight-load" style="--i:15">e</span><span class="highlight-load" style="--i:16">l</span><span class="highlight-load" style="--i:17">o</span><span class="highlight-load" style="--i:18">p</span><span class="highlight-load" style="--i:19">e</span><span class="highlight-load" style="--i:20">r</span>
+                            <p style="--i:3"><span style="--i:1">F</span><span style="--i:2">u</span><span style="--i:3">l</span><span style="--i:4">l</span><span style="--i:5">-</span><span style="--i:6">s</span><span style="--i:7">t</span><span style="--i:8">a</span><span style="--i:9">c</span><span style="--i:10">k</span></p>
+                            <p style="--i:4"><span style="--i:11">&nbsp;</span><span class="highlight-load" style="--i:12">d</span><span class="highlight-load" style="--i:13">e</span><span class="highlight-load" style="--i:14">v</span><span class="highlight-load" style="--i:15">e</span><span class="highlight-load" style="--i:16">l</span><span class="highlight-load" style="--i:17">o</span><span class="highlight-load" style="--i:18">p</span><span class="highlight-load" style="--i:19">e</span><span class="highlight-load" style="--i:20">r</span></p>
                             <!-- <span style="--i:21">&nbsp;</span> -->
                         </h3>
                         <h3 id="intro_right-column_title--secondary"
                             class="inline-flex animate-fade-in-title select-none"
                             style="letter-spacing: 0.09375rem">
-                            <span style="--i:22">&</span><span style="--i:23">&nbsp;</span><span style="--i:24">i</span><span style="--i:25">n</span><span style="--i:26">t</span><span style="--i:27">e</span><span style="--i:28">r</span><span style="--i:29">f</span><span style="--i:30">a</span><span style="--i:31">c</span><span style="--i:32">e</span><span style="--i:33">&nbsp;</span><span class="highlight-load-alt" style="--i:34">d</span><span class="highlight-load-alt" style="--i:35">e</span><span class="highlight-load-alt" style="--i:36">s</span><span class="highlight-load-alt" style="--i:37">i</span><span class="highlight-load-alt" style="--i:38">g</span><span class="highlight-load-alt" style="--i:39">n</span><span class="highlight-load-alt" style="--i:40">e</span><span class="highlight-load-alt" style="--i:41">r</span>
+                            <p style="--i:5"><span style="--i:22">&</span><span style="--i:23">&nbsp;</span><span style="--i:24">i</span><span style="--i:25">n</span><span style="--i:26">t</span><span style="--i:27">e</span><span style="--i:28">r</span><span style="--i:29">f</span><span style="--i:30">a</span><span style="--i:31">c</span><span style="--i:32">e</span></p>
+                            <p style="--i:6"><span style="--i:33">&nbsp;</span><span class="highlight-load-alt" style="--i:34">d</span><span class="highlight-load-alt" style="--i:35">e</span><span class="highlight-load-alt" style="--i:36">s</span><span class="highlight-load-alt" style="--i:37">i</span><span class="highlight-load-alt" style="--i:38">g</span><span class="highlight-load-alt" style="--i:39">n</span><span class="highlight-load-alt" style="--i:40">e</span><span class="highlight-load-alt" style="--i:41">r</span></p>
                         </h3>
                         <div id="availability_button"
                              class="relative flex align-items-center animate-fade-in-cta-1">
@@ -129,14 +128,14 @@
                                    onclick="handleTouchButtonClick(this, event, () => { window.open(this.getAttribute('href'), '_blank') }, true)"
                                    target="_blank"
                                    aria-label="Open to new opportunities, book a virtual meeting"
-                                   class="relative z-0 flex overflow-hidden"
+                                   class="z-0 relative flex overflow-hidden"
                                    style="padding: 0.6875rem 0.9375rem;
                                           background-color: var(--highlight-primary);
                                           border-radius: 0.5rem">
-                                    <div class="inline-flex justify-content-center align-items-center tooltip-wrapper"
+                                    <div class="inline-flex align-items-center justify-content-center tooltip-wrapper"
                                          style="column-gap: 0.875rem">
                                         <span id="availability_button_dot"
-                                              class="relative flex justify-content-center align-items-center rounded-full"></span>
+                                              class="relative flex align-items-center justify-content-center rounded-full"></span>
                                         <span id="availability_button_text"
                                               class="uppercase whitespace-nowrap select-none">Open to new opportunities</span>
                                     </div>
@@ -146,7 +145,7 @@
                                 </abbr>
                             </div>
                         </div>
-                        <nav id="menu" class="relative grid animate-fade-in-cta-2 align-self-start">
+                        <nav id="menu" class="relative align-self-start grid animate-fade-in-cta-2">
                             <div id="menu_email_button-wrapper"
                                  class="inline-flex tooltip-wrapper"
                                  style="place-self: self-start">
@@ -158,8 +157,8 @@
                                         class="inline-flex align-items-center"
                                         aria-label="Contact me via email">
                                     <span class="inline-flex rounded-full"
-                                          style="padding: 0.625rem;
-                                                 background-color: var(--inner-bg-dark-1)">
+                                          style="padding: 0.5625rem;
+                                                 background-color: var(--dark-3)">
                                         <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
                                             <use xlink:href="images/icons.svg#email"></use>
                                         </svg>
@@ -172,17 +171,17 @@
                                     </abbr>
                                 </button>
                             </div>
-                            <div id="menu_links" class="flex flex-col">
+                            <div id="menu_links" class="flex flex-col justify-content-between">
                                 <a href="#profile"
                                    id="menu_link_profile"
                                    tabindex="0"
                                    onclick="handleTouchButtonClick(this, event, () => { openDialog('modal_profile', this, null, 'profile') })"
                                    aria-label="Learn more about me"
-                                   class="z-4 flex align-items-center tooltip-wrapper">
+                                   class="flex align-items-center tooltip-wrapper">
                                     <span id="menu_link_icon"
                                           class="inline-flex rounded-full"
-                                          style="padding: 0.59375rem;
-                                                 background-color: var(--inner-bg-dark-1)">
+                                          style="padding: 0.53125rem;
+                                                 background-color: var(--dark-3)">
                                         <svg class="animate-face-icon"
                                              style="width: 1.1875rem;
                                                     height: 1.1875rem"
@@ -213,11 +212,11 @@
                                    tabindex="0"
                                    onclick="handleTouchButtonClick(this, event, () => { openDialog('modal_archive', this, null, 'archive') })"
                                    aria-label="Explore snippets of my past work"
-                                   class="z-3 flex align-items-center tooltip-wrapper">
+                                   class="flex align-items-center tooltip-wrapper">
                                     <span id="menu_link_icon"
                                           class="inline-flex rounded-full"
-                                          style="padding: 0.65625rem;
-                                                 background-color: var(--inner-bg-dark-1)">
+                                          style="padding: 0.59375rem;
+                                                 background-color: var(--dark-3)">
                                         <svg class="fill-current" style="width: 1.0625rem; height: 1.0625rem">
                                             <use xlink:href="images/icons.svg#archive"></use>
                                         </svg>
@@ -242,7 +241,7 @@
                                    tabindex="0"
                                    onclick="event.preventDefault(); openDialog('menu_button-wrapper', this, 'menu_button--close', 'menu');"
                                    id="menu_button--open"
-                                   class="z-2 inset-0"
+                                   class="inset-0"
                                    style="position: absolute"
                                    aria-label="Open dropdown menu"></a>
                                 <a href="#"
@@ -254,7 +253,7 @@
                                    aria-label="Close dropdown menu"></a>
                                 <button id="menu_button"
                                         type="button"
-                                        class="relative z-1 flex flex-grow justify-content-center align-items-center"
+                                        class="relative flex flex-grow align-items-center justify-content-center"
                                         aria-hidden="true"
                                         tabindex="-1">
                                     <div>
@@ -326,7 +325,7 @@
                                                    margin: 0 max(1px, 0.0625rem);
                                                    border: 0;
                                                    background-color: rgba(0, 0, 0, 0.15);
-                                                   box-shadow: 0 min(-1px, -0.0625rem) 0 0 var(--context-border-light);
+                                                   box-shadow: 0 min(-1px, -0.0625rem) 0 0 var(--context-border-light-2);
                                                    box-sizing: content-box;
                                                    overflow: visible">
                                         <label id="menu_dropdown_light-mode"
@@ -354,12 +353,12 @@
                                                for="debug"
                                                tabindex="0"
                                                onkeypress="if(event.key === 'Enter') { document.getElementById('debug').click(); }">
-                                            <svg class="flex debug-checked:hidden fill-current"
+                                            <svg class="debug-checked:hidden flex fill-current"
                                                  style="width: 1.5rem;
                                                         height: 1.5rem">
                                                 <use xlink:href="images/icons.svg#debug"></use>
                                             </svg>
-                                            <svg class="debug-checked:flex hidden fill-current"
+                                            <svg class="hidden debug-checked:flex fill-current"
                                                  style="width: 1.5rem;
                                                         height: 1.5rem">
                                                 <use xlink:href="images/icons.svg#debug-off"></use>
@@ -376,7 +375,7 @@
                             <a href="#"
                                onclick="event.preventDefault(); closeDialog('#')"
                                id="modal_button-close"
-                               class="flex justify-content-center align-items-center"
+                               class="flex align-items-center justify-content-center"
                                aria-label="Close modal">
                                 <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
                                     <use xlink:href="images/icons.svg#close"></use>
@@ -629,7 +628,7 @@
                         <a href="#"
                            onclick="event.preventDefault(); closeDialog('#')"
                            id="modal_button-close"
-                           class="flex justify-content-center align-items-center"
+                           class="flex align-items-center justify-content-center"
                            aria-label="Close modal">
                             <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
                                 <use xlink:href="images/icons.svg#close"></use>
@@ -910,17 +909,17 @@
                 </div>
             </header>
             <div id="triangle-left"
-                 class="z-0 fixed inset-0 invisible overflow-hidden pointer-events-none select-none">
+                 class="invisible z-0 fixed inset-0 overflow-hidden pointer-events-none select-none">
             </div>
             <div id="triangle-right"
-                 class="z-0 fixed inset-0 animate-flicker-triangle-shadow invisible overflow-hidden pointer-events-none select-none">
+                 class="invisible z-0 fixed inset-0 overflow-hidden animate-flicker-triangle-shadow pointer-events-none select-none">
             </div>
             <div id="triangle-right-alt"
-                 class="z-0 fixed inset-0 animate-flicker-triangle-light invisible overflow-hidden pointer-events-none select-none">
+                 class="invisible z-0 fixed inset-0 overflow-hidden animate-flicker-triangle-light pointer-events-none select-none">
             </div>
         </div>
-        <footer class="z-1 select-none">
-            <div class="flex px-1/2 pb-1/2 w-full">
+        <footer class="z-1 fixed select-none">
+            <div class="flex px-1/2 py-1/2 w-full h-full">
                 <div class="flex" style="column-gap: 0.5rem">
                     <span id="square-1"></span>
                 </div>

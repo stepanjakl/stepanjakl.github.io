@@ -17,16 +17,22 @@ body {
     --ease-out-quad: cubic-bezier(0.5, 1, 0.89, 1);
     --ease-in-out-quad: cubic-bezier(0.11, 0, 0.5, 0);
 
+    /* TODO delete unused */
     --ease-in-cubic: cubic-bezier(0.32, 0, 0.67, 0);
     --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
+    --ease-in-out-cubic: cubic-bezier(0.32, 0, 0.67, 0);
     --ease-in-quint: cubic-bezier(0.64, 0, 0.78, 0);
     --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out-quint: cubic-bezier(0.64, 0, 0.78, 0);
     --ease-in-circ: cubic-bezier(0.55, 0, 1, 0.45);
     --ease-out-circ: cubic-bezier(0, 0.55, 0.45, 1);
+    --ease-in-out-circ: cubic-bezier(0.55, 0, 1, 0.45);
     --ease-in-quart: cubic-bezier(0.5, 0, 0.75, 0);
     --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-in-out-quart: cubic-bezier(0.5, 0, 0.75, 0);
     --ease-in-expo: cubic-bezier(0.7, 0, 0.84, 0);
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out-expo: cubic-bezier(0.7, 0, 0.84, 0);
 }
 
 .noanimation {
@@ -36,12 +42,72 @@ body {
 
 /* Intro */
 
-.animate-fade-in-name>div>span,
-.animate-fade-in-title>span,
+footer {
+    opacity: 0;
+    animation-name: footer-flicker, footer-reveal;
+    animation-fill-mode: forwards, backwards;
+    animation-duration: 1.5s, 0.9s;
+    animation-delay: 0.15s, 0.6s;
+    animation-timing-function: var(--ease-in-quad);
+}
+
+@keyframes footer-reveal {
+    0% {
+        height: 100vh;
+    }
+
+    100% {
+        height: calc(0.75rem + var(--segment));
+    }
+}
+
+@keyframes footer-flicker {
+    0%, 19.999%, 31%, 49.999%, 52%, 53.999%, 60%, 100% { /* 0%, 19.999%, 21%, 22.999%, 24%, 31.999%, 40%, 100% */
+        opacity: 1;
+    }
+
+        20%, 30.999%, 50%, 51.999%, 54%, 59.999% { /* 20%, 20.999%, 23%, 23.999%, 32%, 39.999% */
+        opacity: 0;
+    }
+}
+
+#rectangle {
+    --rectangle-corner-clip-path: polygon(0 0,calc(100% - var(--rectangle-corner-crop)) 0,100%    var(--rectangle-corner-crop),100% 100%,var(--rectangle-corner-crop) 100%,0 calc(100% - var(--rectangle-corner-crop)));
+    --rectangle-corner-crop: calc((20vw + 10vh) / 2);
+    clip-path: var(--rectangle-corner-clip-path);
+    animation-name: rectangle-clip-path;
+    animation-fill-mode: forwards;
+    animation-duration: 0.9s;
+    animation-delay: 0.6s;
+    animation-timing-function: var(--ease-in-quad);
+}
+
+@keyframes rectangle-clip-path {
+    0% {
+        clip-path: var(--rectangle-corner-clip-path);
+    }
+
+    100% {
+        clip-path: polygon(0 0,100% 0,100% 0,100% 100%, 0 100%, 0 100%);
+    }
+}
+
+#background-pattern {
+    opacity: 0;
+    animation-name: fade-in-opacity;
+    animation-fill-mode: forwards;
+    animation-duration: 2s;
+    animation-timing-function: var(--ease-out-quad);
+    animation-delay: calc((var(--delay-segment) * 3));
+}
+
+.animate-fade-in-name>div>p,
+.animate-fade-in-title>p,
 .animate-fade-in-cta-1,
 .animate-fade-in-cta-2,
 .animate-fade-in-logo {
-    animation-name: fade-in-opacity, fade-in-blur-2;
+    /* opacity: 0; */
+    animation-name: fade-in-opacity; /* fade-in-blur-2 */
     animation-fill-mode: backwards;
     animation-duration: 2.25s, 0.625s;
     animation-timing-function: var(--ease-out-quad);
@@ -49,35 +115,31 @@ body {
     transform-origin: left;
 }
 
-.animate-fade-in-name>div>span,
-.animate-fade-in-title>span {
-    --initial-delay: 0.3s;
-    animation-name: fade-in-opacity, fade-in-scale, fade-in-blur;
-    animation-duration: 2s, 0.25s, 0.75s;
+.animate-fade-in-name>div>p,
+.animate-fade-in-title>p {
+    --initial-delay: 0.7s;
+    animation-name: fade-in-opacity, fade-in-scale; /* fade-in-blur */
+    animation-duration: 2.5s, 0.225s; /* 0.775s */
+    animation-delay: calc(var(--initial-delay) + var(--i) * var(--delay-segment));
     animation-timing-function: var(--ease-out-quad), var(--ease-in-out-quad), var(--ease-out-quad);
     transform-origin: center;
     will-change: opacity, transform, filter;
 }
 
-.animate-fade-in-name>div>span {
-    animation-duration: 2.5s, 0.225s, 0.775s;
-    animation-delay: calc(var(--initial-delay) + var(--i) * 30ms);
-}
-
-.animate-fade-in-title>span {
-    animation-delay: calc(var(--initial-delay) + (var(--delay-segment) * 2) + var(--i) * 15ms);
-}
+/* .animate-fade-in-title>p {
+    animation-delay: calc(var(--initial-delay) + (var(--delay-segment) * 2) + var(--i) * 0.5s);
+} */
 
 .animate-fade-in-cta-1 {
-    animation-delay: calc((var(--delay-segment) * 6) + 0.15s);
+    animation-delay: calc((var(--delay-segment) * 10));
 }
 
 .animate-fade-in-cta-2 {
-    animation-delay: calc((var(--delay-segment) * 8) + 0.15s);
+    animation-delay: calc((var(--delay-segment) * 12));
 }
 
 .animate-fade-in-logo {
-    animation-delay: calc((var(--delay-segment) * 10) + 0.15s);
+    animation-delay: calc((var(--delay-segment) * 14));
 }
 
 @keyframes fade-in-opacity {
@@ -96,7 +158,10 @@ body {
     }
 }
 
-@keyframes fade-in-scale {
+
+/* TODO remove animation references */
+
+/* @keyframes fade-in-scale {
     0% {
         transform: scale(1.75) scaleY(0.15);
     }
@@ -126,7 +191,7 @@ body {
         transform: scale(1);
         filter: blur(0);
     }
-}
+} */
 
 
 /* Intro - Text Load Highlight */
@@ -134,14 +199,17 @@ body {
 .animate-fade-in-title span.highlight-load,
 .animate-fade-in-title span.highlight-load-alt {
     animation-fill-mode: both;
-    animation-duration: 2s, 0.25s, 0.75s, 1s;
-    animation-delay: calc(var(--initial-delay) + (var(--delay-segment) * 2) + var(--i) * 15ms), calc(var(--initial-delay) + (var(--delay-segment) * 2) + var(--i) * 15ms), calc(var(--initial-delay) + (var(--delay-segment) * 2) + var(--i) * 15ms), calc(var(--initial-delay) + (var(--delay-segment) * 3) + var(--i) * 20ms);
+    animation-duration: 1.25s; /* 2s, 0.25s, 0.75s, */
+    animation-delay: calc(var(--initial-delay) + (var(--delay-segment) * 8) + var(--i) * 50ms); /* calc(var(--initial-delay) + (var(--delay-segment) * 6) + var(--i) * 30ms),
+    calc(var(--initial-delay) + (var(--delay-segment) * 6) + var(--i) * 30ms),
+    calc(var(--initial-delay) + (var(--delay-segment) * 6) + var(--i) * 30ms), */
+    animation-timing-function: var(--ease-out-quad), var(--ease-in-out-quad), var(--ease-out-quad), var(--ease-out-quad);
     -webkit-font-smoothing: subpixel-antialiased;
 }
 
 .animate-fade-in-title span.highlight-load {
-    animation-name: fade-in-opacity, fade-in-scale, fade-in-blur, de-highlight-load;
-    animation-timing-function: var(--ease-out-quad), var(--ease-in-out-quad), var(--ease-out-quad), var(--ease-out-quad);
+    animation-duration: 2s, 0.25s, 0.75s, 2.25s;
+    animation-name: de-highlight-load; /* fade-in-opacity, fade-in-scale, fade-in-blur,  */
 }
 
 @keyframes de-highlight-load {
@@ -155,7 +223,7 @@ body {
 }
 
 .animate-fade-in-title span.highlight-load-alt {
-    animation-name: fade-in-opacity, fade-in-scale, fade-in-blur, de-highlight-load-alt;
+    animation-name: de-highlight-load-alt; /* fade-in-opacity, fade-in-scale, fade-in-blur, */
 }
 
 @keyframes de-highlight-load-alt {
@@ -169,6 +237,40 @@ body {
 }
 
 
+/* Intro - Footer */
+/* Move to style.css ? */
+footer {
+    height: calc(0.75rem + var(--segment));
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: linear-gradient(to top, var(--background), rgba(0, 20, 23, 0));
+    opacity: 0;
+    animation-name: fade-in-opacity;
+    animation-fill-mode: forwards;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-delay: calc((var(--delay-segment) * 4)); /* TODO adjust delay ? */
+}
+
+
+/* Triangle - Fade */
+
+    #triangle-left,
+    #triangle-right,
+    #triangle-right-alt {
+        animation-name: fade-in-opacity;
+        animation-fill-mode: forwards;
+        animation-duration: 2s;
+        animation-timing-function: var(--ease-out-quad);
+        animation-delay: calc((var(--delay-segment) * 4));
+    }
+
+
 /* Triangle - Flicker */
 
 .animate-flicker-triangle-light::after,
@@ -176,7 +278,7 @@ body {
     animation-duration: calc(var(--delay-segment) * 24);
     animation-timing-function: linear;
     animation-iteration-count: infinite;
-    animation-delay: calc(var(--delay-segment) * 10 + 0.1s);
+    animation-delay: calc(var(--delay-segment) * 10 + 0.1s); /* TODO time properly */
     will-change: transform;
 }
 
@@ -363,13 +465,15 @@ svg.animate-face-icon path {
 /* Intro Links */
 
 #menu_links>a {
-    transition: background-color var(--animate-out-segment-2\/3) linear;
+    transition: background-color var(--animate-out-segment-2\/3) linear, box-shadow var(--animate-out-segment-2\/3) linear;
     will-change: background-color;
 }
 
-#menu_links>a:hover, #menu_links>a:focus, #menu_links>a.tooltip-key--active, #menu_button--open:focus ~ #menu_button {
-    transition: background-color var(--animate-in-segment-2\/3) linear;
+#menu_links>a:hover, #menu_links>a:focus, #menu_links>a.tooltip-key--active { /* #menu_button--open:focus ~ #menu_button */
+    transition: background-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear;
     background-color: var(--highlight-secondary);
+    /* border-color: rgba(0, 0, 0, 1); */
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-3);
 }
 
 a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.tooltip-key--active {
@@ -411,21 +515,38 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 /* Menu Button */
 
-#menu_button {
-    transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear;
-    will-change: color, background-color;
-    color: var(--icon);
+
+#menu_button--open {
+    z-index: 3;
 }
 
 #menu_button--close {
-    z-index: -1;
+    /* z-index: -1; */
     visibility: hidden;
 }
 
+
+#menu:target #menu_button--close {
+    z-index: 7;
+}
+
+#menu_button {
+    transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, box-shadow var(--animate-out-segment-2\/3) linear, border-radius var(--animate-out-segment) var(--ease-in-quad);
+    will-change: color, background-color;
+    z-index: 2;
+    color: var(--icon);
+}
+
+#menu:target #menu_button {
+    box-shadow: 0 0 0 max(1px, 0.0625rem) var(--context-border-dark);
+    border-radius: 0.3125rem 1rem 1rem 0.3125rem;
+}
+
 #menu_button-wrapper:hover #menu_button, #menu_button-wrapper.tooltip-key--active #menu_button, #menu:target #menu_button {
-    transition: color var(--animate-in-segment-2\/3) linear,  background-color var(--animate-in-segment-2\/3) linear;
+    transition: color var(--animate-in-segment-2\/3) linear,  background-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear, border-radius var(--animate-in-segment) var(--ease-out-quad);
     color: var(--icon-hover);
     background-color: var(--highlight-secondary);
+    border-color: var(--light-3);
 }
 
 #menu_button span {
@@ -711,7 +832,9 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 #menu_dropdown label#menu_dropdown_light-mode:hover span,
 #menu_dropdown label#menu_dropdown_light-mode:hover svg,
 #menu_dropdown label#menu_dropdown_light-mode:focus span,
-#menu_dropdown label#menu_dropdown_light-mode:focus svg {
+#menu_dropdown label#menu_dropdown_light-mode:focus svg,
+#menu_dropdown label#menu_dropdown_light-mode:focus-within span,
+#menu_dropdown label#menu_dropdown_light-mode:focus-within svg {
     color: var(--cyan-full-10);
 }
 
@@ -759,6 +882,11 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
     transform-origin: center;
 }
 
+footer {
+    transition: transform var(--animate-out-segment) var(--ease-in-quad);
+    transform-origin: top;
+}
+
 @media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
     #intro_left-column, #intro_right-column {
         transform-origin: top;
@@ -767,13 +895,19 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 #profile:target~main #intro_left-column,
 #profile:target~main #intro_right-column,
+#profile:target~main footer,
 #archive:target~main #intro_left-column,
-#archive:target~main #intro_right-column {
+#archive:target~main #intro_right-column,
+#archive:target~main footer {
     transition: transform var(--animate-in-segment) var(--ease-out-quad);
     will-change: transform;
     transform: scale(0.95);
 }
 
+#profile:target~main footer,
+#archive:target~main footer {
+    transform: scale(0.9825);
+}
 
 /* Modals - Archive */
 
@@ -839,7 +973,7 @@ input[id^="timeline_section_year-"]:checked ~ #modal_archive-content [data-timel
     transition: background-color var(--animate-out-segment) linear;
     width: 0.5rem;
     height: 0.5rem;
-    background-color: var(--inner-bg-light-4);
+    background-color: var(--light-4);
 }
 
 [data-carousel-nav]:hover button {
@@ -850,12 +984,12 @@ input[id^="timeline_section_year-"]:checked ~ #modal_archive-content [data-timel
 
 [data-carousel-nav] button:hover, [data-carousel-nav] button:focus {
     transition: background-color var(--animate-out-segment-2\/3) linear;
-    background-color: var(--inner-bg-light-6);
+    background-color: var(--light-6);
 }
 
 [data-carousel-nav] button[aria-current] {
     pointer-events: none;
-    background-color: var(--inner-bg-light-6);
+    background-color: var(--light-6);
     width: 1.75rem;
 }
 
@@ -865,22 +999,22 @@ input[id^="timeline_section_year-"]:checked ~ #modal_archive-content [data-timel
 
 [data-carousel-arrows] li button {
     transition: background-color var(--animate-out-segment-2\/3) linear;
-    background-color: var(--inner-bg-light-3);
+    background-color: var(--light-3);
 }
 
 [data-carousel-arrows] li button:hover, [data-carousel-arrows] li button:focus {
     transition: background-color var(--animate-out-segment-2\/3) linear;
-    background-color: var(--inner-bg-light-4);
+    background-color: var(--light-4);
 }
 
 [data-carousel-arrows] li button::before {
     transition: background-color var(--animate-out-segment-2\/3) linear;
-    background-color: var(--inner-bg-light-5);
+    background-color: var(--light-5);
 }
 
 [data-carousel-arrows] li button:hover::before {
     transition: background-color var(--animate-in-segment-2\/3) linear;
-    background-color: var(--inner-bg-light-6);
+    background-color: var(--light-6);
 }
 
 
@@ -905,17 +1039,19 @@ input[id^="timeline_section_year-"]:checked ~ #modal_archive-content [data-timel
 
 #underlay_menu,
 #underlay_modal {
-    z-index: -1;
+    /* z-index: -1; */
     pointer-events: none;
     opacity: 0;
-    transition: opacity var(--animate-out-segment) linear, visibility 0s var(--animate-out-segment), z-index 0s var(--animate-out-segment);
+    transition: opacity var(--animate-out-segment) linear, visibility 0s var(--animate-out-segment); /* z-index 0s var(--animate-out-segment) */
     will-change: opacity;
 }
 
 #underlay_menu {
     visibility: hidden;
-    backdrop-filter: blur(0.125rem);
-    -webkit-backdrop-filter: blur(0.125rem);
+    /* backdrop-filter: blur(0.125rem);
+    -webkit-backdrop-filter: blur(0.125rem); */
+    backdrop-filter: blur(0.375rem);
+    -webkit-backdrop-filter: blur(0.375rem);
 }
 
 #underlay_modal {
@@ -925,7 +1061,7 @@ input[id^="timeline_section_year-"]:checked ~ #modal_archive-content [data-timel
 
 #debug:not(:checked)~main #menu:target #underlay_menu {
     visibility: visible;
-    z-index: 5;
+    z-index: 1;
     pointer-events: auto;
     opacity: 1;
     transition: opacity var(--animate-in-segment) linear;

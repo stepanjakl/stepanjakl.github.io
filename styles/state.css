@@ -120,16 +120,15 @@
 
 /* Menu Button */
 
-#menu:target #menu_button {
+/* #menu:target #menu_button {
     z-index: 6;
-}
+} */
 
 #menu:target #menu_button--open {
     visibility: hidden;
 }
 
 #menu:target #menu_button--close {
-    z-index: 7;
     visibility: visible;
 }
 
@@ -153,6 +152,11 @@
 #archive:target~main #modal_archive {
     pointer-events: auto;
     z-index: 2;
+}
+
+#profile:target~main footer,
+#archive:target~main footer {
+    z-index: 0;
 }
 
 
