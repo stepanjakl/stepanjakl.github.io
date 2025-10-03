@@ -13,9 +13,9 @@ body {
 
     --delay-segment-1\/3: calc(var(--delay-segment) * (1/3));
 
-    --ease-in-quad: cubic-bezier(0.11, 0, 0.5, 0);
-    --ease-out-quad: cubic-bezier(0.5, 1, 0.89, 1);
-    --ease-in-out-quad: cubic-bezier(0.11, 0, 0.5, 0);
+    --ease-in-quad: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+    --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ease-in-out-quad: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 
     /* TODO delete unused */
     --ease-in-cubic: cubic-bezier(0.32, 0, 0.67, 0);
@@ -936,7 +936,7 @@ input[id^="timeline_section_year-"]:checked ~ #modal_archive-content [data-timel
 
 /* Modals - Horizontal Timeline */
 
-#horizontal-timeline-wrapper {
+#horizontal_timeline {
     transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad), visibility 0s var(--animate-out-segment);
     visibility: hidden;
     transform: scale(0.95);
@@ -944,7 +944,7 @@ input[id^="timeline_section_year-"]:checked ~ #modal_archive-content [data-timel
     opacity: 0;
 }
 
-#archive:target~main #modal_archive #horizontal-timeline-wrapper {
+#archive:target~main #modal_archive #horizontal_timeline {
     visibility: visible;
     transition: opacity var(--animate-in-segment) linear var(--delay-segment), transform var(--animate-in-segment) var(--ease-out-quad) var(--delay-segment);
     transform: scale(1);
@@ -970,14 +970,14 @@ input[id^="timeline_section_year-"]:checked ~ #modal_archive-content [data-timel
 }
 
 [data-carousel-nav] button {
-    transition: background-color var(--animate-out-segment) linear;
+    transition: background-color var(--animate-out-segment) linear, width var(--animate-out-segment) var(--ease-in-quad), height var(--animate-out-segment) var(--ease-in-quad);
     width: 0.5rem;
     height: 0.5rem;
     background-color: var(--light-4);
 }
 
 [data-carousel-nav]:hover button {
-    transition: background-color var(--animate-in-segment) linear;
+    transition: background-color var(--animate-in-segment) linear, width var(--animate-in-segment) var(--ease-out-quad), height var(--animate-in-segment) var(--ease-out-quad);
     width: 0.75rem;
     height: 0.75rem;
 }
@@ -999,7 +999,7 @@ input[id^="timeline_section_year-"]:checked ~ #modal_archive-content [data-timel
 
 [data-carousel-arrows] li button {
     transition: background-color var(--animate-out-segment-2\/3) linear;
-    background-color: var(--light-3);
+    background-color: var(--light-2);
 }
 
 [data-carousel-arrows] li button:hover, [data-carousel-arrows] li button:focus {

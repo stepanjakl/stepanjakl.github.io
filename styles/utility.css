@@ -525,6 +525,7 @@ body {
 
 .rounded-full {
     border-radius: 999rem;
+    /* corner-shape: superellipse(1); */
 }
 
 

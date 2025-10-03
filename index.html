@@ -63,9 +63,9 @@
             console.log('%cŠtěpán Jákl | Full-stack developer & interface designer', `border: max(1px, 0.0625rem) solid #4e7bff; border-radius: 0.125rem; color: #4e7bff; font-size: 0.78125rem; padding: 1.40625rem 2.1875rem 1.25rem 2.1875rem; margin: 1.25rem 1.25rem; /* padding: 1.859375rem 1.875rem 1.859375rem 5.25rem; background-image: url('data:image/svg+xml,%3Csvg width='100%' height='100%' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 40V10.033L10.033 0H40V30L30 40H0ZM10 30V25H22.5L25 22.5H10V17.5H30V25L25 30H10ZM15 10H30V15H10L15 10Z' fill='%234e7bff'/%3E%3C/svg%3E%0A'); background-repeat: no-repeat; background-position: 1.25rem 50%; background-size: 2.5rem 2.5rem */`)
             console.log('%cThis website uses HTML, CSS, and optional JavaScript for accessibility and a better user experience.', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;')
             console.log('%cThe goal was to create a fast, pixel-perfect, and responsive site.', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;')
-            console.log('%cNo frameworks, no compilers, no site generators—just pure joy.', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;')
+            console.log('%cNo frameworks, no compilers, no site generators. Only pure joy.', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;')
             /* console.log('%cMade with tears, stress and anxiety. Just joking, of course it was crafted with love ;-)', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;') */
-            console.log('%cInterested in working together? Reach out to me via email at %cstepanjakl@outlook.com', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;', 'color: #4e7bff; text-decoration: underline;')
+            console.log('%cInterested in working together? Reach out to me via email at %cstepan.jakl@icloud.com', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;', 'color: #4e7bff; text-decoration: underline;')
         </script>
     </head>
     <body class="primary-font">
@@ -82,7 +82,7 @@
                 <header id="intro">
                     <div id="intro_left-column"
                          class="z-1 flex flex-col-reverse align-items-start">
-                        <h2 class="inline-flex tooltip-wrapper animate-fade-in-name select-none highlight-text"
+                        <h2 class="inline-flex animate-fade-in-name select-none tooltip-wrapper highlight-text"
                             tabindex="0"
                             onkeypress="this.click()"
                             onclick="handleTouchButtonClick(this, event, () => { if ((event.which && event.which == 3) || (event.button && event.button == 2)) { if ('speechSynthesis' in window) { let msg = new SpeechSynthesisUtterance(); msg.volume= 0.25; msg.lang = 'cs-CZ'; msg.voice = speechSynthesis.getVoices().filter(voice => voice.name === 'Zuzana')[0]; msg.text = 'Štěpán Jákl'; speechSynthesis.speak(msg) } } else { navigator?.clipboard?.writeText('Štěpán Jákl'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip-bottom span'), this, 'Copied to the clipboard') } }, true)"
@@ -149,11 +149,11 @@
                             <div id="menu_email_button-wrapper"
                                  class="inline-flex tooltip-wrapper"
                                  style="place-self: self-start">
-                                <!-- onmousedown="navigator.clipboard.writeText('stepanjakl@outlook.com'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip span'), this.querySelector('.highlight-text'), 'Copied to the clipboard')"
-                                     onkeydown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepanjakl@outlook.com')" -->
+                                <!-- onmousedown="navigator.clipboard.writeText('stepan.jakl@icloud.com'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip span'), this.querySelector('.highlight-text'), 'Copied to the clipboard')"
+                                     onkeydown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@icloud.com')" -->
                                 <button type="button"
                                         tabindex="0"
-                                        onclick="handleTouchButtonClick(this, event, () => { navigator?.clipboard?.writeText('stepanjakl@outlook.com'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip span'), this.querySelector('.highlight-text'), 'Copied to the clipboard') })"
+                                        onclick="handleTouchButtonClick(this, event, () => { navigator?.clipboard?.writeText('stepan.jakl@icloud.com'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip span'), this.querySelector('.highlight-text'), 'Copied to the clipboard') })"
                                         class="inline-flex align-items-center"
                                         aria-label="Contact me via email">
                                     <span class="inline-flex rounded-full"
@@ -165,7 +165,7 @@
                                     </span>
                                     <span class="text-sm cursor-text select-none button-label highlight-text"
                                           style="padding: 0 1.5rem 0 1rem;
-                                                 letter-spacing: 0.078125rem">stepanjakl@outlook.com</span>
+                                                 letter-spacing: 0.078125rem">stepan.jakl@icloud.com</span>
                                     <abbr class="tooltip-top tooltip">
                                         <span>Click to copy</span>
                                     </abbr>
@@ -388,6 +388,7 @@
                                     </dt>
                                     <dd>
                                         <img src="images/selfie.jpg"
+                                             id="profile_photo"
                                              alt="Profile photo"
                                              height="480"
                                              width="480"
@@ -660,50 +661,57 @@
                                         </div>
                                         <div id="modal_archive-content_section-content">
                                             <h1 class="font-bold text-lg" style="margin-bottom: 2.5rem">
-                                                Project #1
+                                                ApostropheCMS Stripe Extension
                                             </h1>
                                             <div class="relative" data-carousel>
                                                 <div data-carousel-slides-wrapper>
                                                     <div data-carousel-slides>
                                                         <figure data-value="slide-1">
-                                                            <a href="https://images.unsplash.com/photo-1566847438217-76e82d383f84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80g"
+                                                            <a href="projects/2024/apostrophe-stripe-extension/store-alpine-1.png"
                                                                target="_blank">
-                                                                <img src="https://images.unsplash.com/photo-1566847438217-76e82d383f84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&q=80g"
-                                                                     loading="lazy">
+                                                                <img src="projects/2024/apostrophe-stripe-extension/store-alpine-1.png"
+                                                                     class="bright" loading="lazy" width="2624" height="1462">
                                                             </a>
                                                         </figure>
                                                         <figure data-value="slide-2">
-                                                            <a href="https://images.unsplash.com/photo-1591017320663-dc3334ff1dcc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80g"
+                                                            <a href="projects/2024/apostrophe-stripe-extension/store-alpine-2.png"
                                                                target="_blank">
-                                                                <img src="https://images.unsplash.com/photo-1591017320663-dc3334ff1dcc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&q=80"
+                                                                <img src="projects/2024/apostrophe-stripe-extension/store-alpine-2.png"
                                                                      loading="lazy">
                                                             </a>
                                                         </figure>
                                                         <figure data-value="slide-3">
-                                                            <a href="https://images.unsplash.com/photo-1566847438217-76e82d383f84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80g"
+                                                            <a href="projects/2024/apostrophe-stripe-extension/store-alpine-3.png"
                                                                target="_blank">
-                                                                <img src="https://images.unsplash.com/photo-1595361498858-25993ca8fcb4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&q=80"
+                                                                <img src="projects/2024/apostrophe-stripe-extension/store-alpine-3.png"
                                                                      loading="lazy">
                                                             </a>
                                                         </figure>
                                                         <figure data-value="slide-4">
-                                                            <a href="https://images.unsplash.com/photo-1566847438217-76e82d383f84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80g"
+                                                            <a href="projects/2024/apostrophe-stripe-extension/store-alpine-checkout.png"
                                                                target="_blank">
-                                                                <img src="https://images.unsplash.com/photo-1566847438217-76e82d383f84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&q=80g"
+                                                                <img src="projects/2024/apostrophe-stripe-extension/store-alpine-checkout.png"
                                                                      loading="lazy">
                                                             </a>
                                                         </figure>
                                                         <figure data-value="slide-5">
-                                                            <a href="https://images.unsplash.com/photo-1566847438217-76e82d383f84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80g"
+                                                            <a href="projects/2024/apostrophe-stripe-extension/store-htmx-1.png"
                                                                target="_blank">
-                                                                <img src="https://images.unsplash.com/photo-1591017320663-dc3334ff1dcc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&q=80"
+                                                                <img src="projects/2024/apostrophe-stripe-extension/store-htmx-1.png"
                                                                      loading="lazy">
                                                             </a>
                                                         </figure>
                                                         <figure data-value="slide-6">
-                                                            <a href="https://images.unsplash.com/photo-1566847438217-76e82d383f84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80g"
+                                                            <a href="projects/2024/apostrophe-stripe-extension/store-htmx-2.png"
                                                                target="_blank">
-                                                                <img src="https://images.unsplash.com/photo-1595361498858-25993ca8fcb4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&q=80"
+                                                                <img src="projects/2024/apostrophe-stripe-extension/store-htmx-2.png"
+                                                                     loading="lazy">
+                                                            </a>
+                                                        </figure>
+                                                        <figure data-value="slide-7">
+                                                            <a href="projects/2024/apostrophe-stripe-extension/test.png"
+                                                               target="_blank">
+                                                                <img src="projects/2024/apostrophe-stripe-extension/test.png"
                                                                      loading="lazy">
                                                             </a>
                                                         </figure>
@@ -727,6 +735,10 @@
                                                 </div>
                                             </div>
                                             <p class="text-p" style="margin-top: 2.5rem;">
+                                                Video links
+                                                <br>
+                                                Link to repository
+                                                <br><br>
                                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
                                                 <br><br>
                                                 Vivamus et efficitur velit. Fusce tortor lectus, imperdiet eu scelerisque at, fermentum quis felis. Sed sit amet volutpat dolor, vel aliquet tortor. Aenean turpis risus, auctor et dui sed, egestas interdum tortor. Praesent vulputate pellentesque facilisis. Sed mollis fermentum libero id elementum. Morbi rutrum enim vel hendrerit congue. Nam efficitur ornare sollicitudin. Integer vestibulum augue et tortor congue, quis ullamcorper tortor finibus. Mauris bibendum sodales nulla efficitur tempus. Pellentesque porta convallis posuere.
@@ -890,12 +902,12 @@
 
                                 </div>
                             </div>
-                            <div class="z-50 sticky" style="bottom: calc(-1 * var(--segment-third))">
+                            <div id="horizontal_timeline-wrapper" class="z-50 sticky">
                                 <!-- <div class="absolute"
                                      style="bottom: 0;
                                             left: calc(3rem + 3rem + 15rem );
                                             right: calc(3rem + 3rem)"> -->
-                                    <div id="horizontal-timeline-wrapper">
+                                    <div id="horizontal_timeline">
                                     </div>
                                 <!-- </div> -->
                             </div>

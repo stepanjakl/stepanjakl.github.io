@@ -42,6 +42,6 @@ jobs:
       # (Force) push changes to `gh-pages` branch
       - run: |
           git config user.name stepanjakl
-          git config user.email stepanjakl@outlook.com
+          git config user.email stepan.jakl@outlook.com
           git commit -am "Automated minify of ${{ github.sha }}"
           git push --force -u origin release:gh-pages

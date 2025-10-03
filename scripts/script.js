@@ -337,6 +337,8 @@ class HorizontalDragScroll {
         this.element.addEventListener('mouseup', this.completeDrag.bind(this))
         this.element.addEventListener('mouseleave', this.completeDrag.bind(this))
         this.element.addEventListener('mousecancel', this.completeDrag.bind(this))
+        this.element.addEventListener('scrollend', this.completeDrag.bind(this))
+        // this.element.addEventListener('dragend', this.completeDrag.bind(this))
     }
 
     onMouseDown(event) {
@@ -349,7 +351,7 @@ class HorizontalDragScroll {
     onMouseMove(event) {
         if (!this.isMouseDown) return
 
-        event.preventDefault()
+        // event.preventDefault()
         /* this.element.setPointerCapture(event.pointerId) */
         this.element.classList.add('x-drag-scroll--dragging')
         const moveX = event.clientX - this.startX
@@ -357,21 +359,32 @@ class HorizontalDragScroll {
     }
 
     completeDrag(event) {
-        this.isMouseDown = false
+        console.log('completeDrag', event.type);
+            if (this.isMouseDown && event.type !== 'scrollend') {
+                this.element.dispatchEvent(new CustomEvent('drag-complete', {
+                    detail: {
+                        mouseDown: true,
+                        startX: this.startX,
+                        scrollLeft: this.scrollLeft
+                    }
+                }))
 
-        if (this.options.activeSlide) {
-            this.element.scrollTo({
-                left: this.options.activeSlide.get().offsetLeft,
-                behavior: 'smooth'
-            })
-        }
+                this.isMouseDown = false
 
-        this.element.classList.remove('x-drag-scroll--mouse-down')
+                this.element.classList.remove('x-drag-scroll--mouse-down')
 
-        setTimeout(() => {
-            this.element.classList.remove('x-drag-scroll--dragging')
-            /* this.element.releasePointerCapture(event.pointerId) */
-        }, 300)
+                setTimeout(() => {
+                    this.element.classList.remove('x-drag-scroll--dragging')
+                    /* this.element.releasePointerCapture(event.pointerId) */
+                }, 300)
+            }
+            else {
+                this.element.dispatchEvent(new CustomEvent('drag-complete', {
+                    detail: {
+                        mouseDown: false
+                    }
+                }))
+            }
     }
 }
 
@@ -534,26 +547,82 @@ class HorizontalEdgeScroller {
 
 class Popup {
     constructor() {
-        this.widthRatio = 0.8
-        this.heightRatio = 0.8
+        this.widthRatio = 0.9
+        this.heightRatio = 0.9
     }
 
-    open(element, event) {
+    async open(element, event) {
         event.preventDefault()
-
         const { href } = element
 
-        const width = screen.availWidth * this.widthRatio
-        const height = screen.availHeight * this.heightRatio
+        try {
+            const dimensions = await this.getImageDimensions(href)
+            if (!dimensions) return true
+
+            const { width, height, left, top } = this.calculateWindowSize(dimensions)
+
+            const popup = window.open(
+                href,
+                '_blank',
+                `toolbar=no, location=no, directories=no, status=no, menubar=no,
+                scrollbars=yes, resizable=yes, copyhistory=no,
+                width=${width}, height=${height}, top=${top}, left=${left}`
+            )
+
+            return popup === null
+        } catch (error) {
+            console.error('Error opening popup:', error)
+            return true
+        }
+    }
+
+    getImageDimensions(url) {
+        return new Promise((resolve) => {
+            const img = new Image()
+
+            img.onload = () => {
+                resolve({
+                    width: img.width,
+                    height: img.height
+                })
+            }
+
+            img.onerror = () => {
+                resolve(null)
+            }
+
+            img.src = url
+        })
+    }
+
+    calculateWindowSize(imageDimensions) {
+        const screenWidth = screen.availWidth * this.widthRatio
+        const screenHeight = screen.availHeight * this.heightRatio
+
+        const imageRatio = imageDimensions.width / imageDimensions.height
+
+        let width = imageDimensions.width
+        let height = imageDimensions.height
+
+        if (width > screenWidth) {
+            width = screenWidth
+            height = width / imageRatio
+        }
+
+        if (height > screenHeight) {
+            height = screenHeight
+            width = height * imageRatio
+        }
+
         const left = (screen.availWidth - width) / 2
         const top = (screen.availHeight - height) / 2
 
-        const popup = window.open(href, '_blank', `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=${width}, height=${height}, top=${top}, left=${left}`)
-
-        if (popup === null) {
-            return true
+        return {
+            width: Math.round(width),
+            height: Math.round(height),
+            left: Math.round(left),
+            top: Math.round(top)
         }
-        return false
     }
 }
 
@@ -580,54 +649,100 @@ class Carousel {
     init() {
         this.createNavigationDots()
         this.setupIntersectionObserver()
+        this.listenToDragComplete()
         this.enableHorizontalDragScroll()
-        this.enableHorizontalEdgeScroller()
+        /* this.enableHorizontalEdgeScroller() */
+        this.setupPseudoElsEventListeners()
         this.setupDotEventListeners()
         this.setupButtonEventListeners()
     }
 
     createNavigationDots() {
+        console.log(this.slideEls);
+
         this.navEl.innerHTML = this.slideEls.map((_, index) => `<button data-label-for="${this.slideEls[index].getAttribute('data-value')}"><span class="sr-only">Slide ${index + 1}</span></button>`).join('')
         this.dotEls = Array.from(this.navEl.querySelectorAll('button'))
+        this.dotEls[0].setAttribute('aria-current', 'true')
     }
 
     setupIntersectionObserver() {
+        /* window.getComputedStyle(this.slidesWrapperEl).getPropertyValue('column-gap') */
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
-                const target = entry.target
                 if (entry.isIntersecting) {
-                    console.log(entry.target)
+                    console.log('Intersecting:', entry.target);
 
-                    this.activeSlide.set(target)
-                    target.classList.add('active')
-                    this.dotEls.forEach((dotEl, i) => {
-                        const isCurrent = i === this.slideEls.indexOf(entry.target)
-                        dotEl.toggleAttribute('aria-current', isCurrent)
-                        /* if (isCurrent) {
-                            dotEl.focus()
-                        } */
-                    })
+                    this.activeSlide.set(entry.target)
+                    /* entry.target.classList.add('active') */
+                    /* console.log('Active slide set to:', this.activeSlide.get()); */
+
+                    // this.dotEls.forEach((dotEl, i) => {
+                    //     const isCurrent = i === this.slideEls.indexOf(entry.target)
+                    //     dotEl.toggleAttribute('aria-current', isCurrent)
+                    //     /* if (isCurrent) {
+                    //         dotEl.focus()
+                    //     } */
+                    // })
                 } else {
-                    target.classList.remove('active')
+                    entry.target.classList.remove('active')
                 }
             })
         }, {
             root: this.carouselEl,
-            rootMargin: `0% -50% 0% -${window.getComputedStyle(this.slidesWrapperEl).getPropertyValue('column-gap')}`,
+            rootMargin: `0%`,
             threshold: 0.5
         })
 
         this.slideEls.forEach(itemEl => observer.observe(itemEl))
     }
 
+    listenToDragComplete() {
+        this.slidesWrapperEl.addEventListener('drag-complete', event => {
+            console.log('Drag complete event received in Carousel', this.activeSlide.get(), event.detail);
+
+            // if (!event.detail.mouseDown) return
+
+            if (this.activeSlide?.get()) {
+
+                if(event.detail.mouseDown) {
+                this.scrollToSlide(this.activeSlide.get())
+                }
+
+                this.dotEls.forEach((dotEl, i) => {
+                        const isCurrent = i === this.slideEls.indexOf(this.activeSlide.get())
+                        dotEl.toggleAttribute('aria-current', isCurrent)
+                        /* if (isCurrent) {
+                            dotEl.focus()
+                        } */
+                    })
+            }
+        })
+    }
+
+    setupPseudoElsEventListeners() {
+        this.slidesWrapperEl.addEventListener('click', event => {
+            const slidesWrapperElRect = this.slidesWrapperEl.getBoundingClientRect()
+            const x = event.clientX - slidesWrapperElRect.left
+
+            if (x < slidesWrapperElRect.width * 0.25) {
+                // this.activeSlide.get()?.previousElementSibling && this.activeSlide.set(this.activeSlide.get().previousElementSibling)
+                this.scrollToSlide(this.activeSlide.get()?.previousElementSibling)
+            }
+            else if (x > slidesWrapperElRect.width * 0.75) {
+                // this.activeSlide.get()?.nextElementSibling && this.activeSlide.set(this.activeSlide.get().nextElementSibling)
+                this.scrollToSlide(this.activeSlide.get()?.nextElementSibling)
+            }
+        })
+    }
+
     setupDotEventListeners() {
         this.dotEls.forEach(dotEl => {
             dotEl.addEventListener('click', event => {
-                event.preventDefault()
-                const targetValue = event.target.getAttribute('data-label-for')
-                this.carouselEl.querySelector(`figure[data-value="${targetValue}"]`).scrollIntoView({
-                    behavior: 'smooth', block: 'nearest', inline: 'start'
-                })
+                const targetValue = event.currentTarget.getAttribute('data-label-for')
+                const targetSlide = this.carouselEl.querySelector(`figure[data-value="${targetValue}"]`)
+                if (targetSlide) {
+                    this.scrollToSlide(targetSlide)
+                }
             })
         })
     }
@@ -636,27 +751,40 @@ class Carousel {
         new HorizontalDragScroll({ element: this.slidesWrapperEl, activeSlide: this.activeSlide })
     }
 
-    enableHorizontalEdgeScroller() {
+    /* enableHorizontalEdgeScroller() {
         new HorizontalEdgeScroller({ id: this.options.id, element: this.slidesWrapperEl, maxSpeed: 1, edgeWidthRatio: 5, activeSlide: this.activeSlide })
-    }
+    } */
 
     setupButtonEventListeners() {
-        this.prevButtonEl.addEventListener('click', (event) => {
-            event.preventDefault()
-            this.activeSlide.get().previousElementSibling.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
-                inline: 'start'
-            })
+        this.prevButtonEl.addEventListener('click', event => {
+            this.navigateToSlide('prev')
         })
 
-        this.nextButtonEl.addEventListener('click', (event) => {
-            event.preventDefault()
-            this.activeSlide.get().nextElementSibling.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
-                inline: 'start'
-            })
+        this.nextButtonEl.addEventListener('click', event => {
+            this.navigateToSlide('next')
+        })
+    }
+
+    navigateToSlide(direction) {
+        const currentSlide = this.activeSlide.get()
+        if (!currentSlide) return
+
+        const targetSlide = direction === 'prev'
+            ? currentSlide.previousElementSibling
+            : currentSlide.nextElementSibling
+
+        if (targetSlide) {
+            this.scrollToSlide(targetSlide)
+        }
+    }
+
+    scrollToSlide(slide) {
+        console.log('scrollToSlide', slide);
+
+        slide.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'start'
         })
     }
 }
@@ -674,7 +802,7 @@ window.handleTouchButtonClick = (element, event, callback, focusAfterClick) => {
 
     if (!element.handleBlur) {
         element.handleBlur = (() => {
-            const handleBlur = (event) => {
+            const handleBlur = event => {
                 if (event.target !== document.activeElement) {
                     element.clickCount = 0
                     delete element.handleBlur
@@ -709,7 +837,7 @@ window, initializeTimeline = () => {
         2019, 2018, 2017, 2016, 2015, 2014
     ]))
 
-    document.querySelector('#horizontal-timeline-wrapper').appendChild(timelineEl)
+    document.querySelector('#horizontal_timeline').appendChild(timelineEl)
 
     new HorizontalEdgeScroller({ id: 'timeline', element: document.querySelector('#timeline-content') })
     new HorizontalDragScroll({ element: document.querySelector('#timeline-content') })
@@ -787,7 +915,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     initializeTimeline()
     timelineEl.startIntersectionObserver()
-    const positionTimeline = (event) => {
+    const positionTimeline = event => {
         if (event && event.currentTarget !== event.target) return
 
         const archiveWrapperEl = document.querySelector('#modal_archive-wrapper')
@@ -795,7 +923,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const timelineContentSectionEl = document.querySelector('#modal_archive-content_section')
         const timelineContentSectionRect = timelineContentSectionEl.getBoundingClientRect()
 
-        const timelineWrapperEl = document.querySelector('#horizontal-timeline-wrapper')
+        const timelineWrapperEl = document.querySelector('#horizontal_timeline')
         timelineWrapperEl.style.setProperty('left', `${timelineContentSectionRect.left - archiveWrapperRect.left}px`)
         timelineWrapperEl.style.setProperty('right', `${archiveWrapperRect.right - timelineContentSectionRect.right}px`)
     }
