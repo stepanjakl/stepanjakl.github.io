@@ -5,34 +5,17 @@
 body {
     --animate-in-segment: 0.15s;
     --animate-out-segment: 0.1s;
-    --delay-segment: 0.4s;
+    --anim-segment: 0.4s;
 
     --animate-in-segment-2\/3: calc(var(--animate-in-segment) * (2/3));
     --animate-out-segment-2\/3: calc(var(--animate-out-segment) * (2/3));
-    --delay-segment-2\/3: calc(var(--delay-segment) * (2/3));
+    --anim-segment-2\/3: calc(var(--anim-segment) * (2/3));
 
-    --delay-segment-1\/3: calc(var(--delay-segment) * (1/3));
+    --anim-segment-1\/3: calc(var(--anim-segment) * (1/3));
 
     --ease-in-quad: cubic-bezier(0.55, 0.085, 0.68, 0.53);
     --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --ease-in-out-quad: cubic-bezier(0.455, 0.03, 0.515, 0.955);
-
-    /* TODO delete unused */
-    --ease-in-cubic: cubic-bezier(0.32, 0, 0.67, 0);
-    --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
-    --ease-in-out-cubic: cubic-bezier(0.32, 0, 0.67, 0);
-    --ease-in-quint: cubic-bezier(0.64, 0, 0.78, 0);
-    --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
-    --ease-in-out-quint: cubic-bezier(0.64, 0, 0.78, 0);
-    --ease-in-circ: cubic-bezier(0.55, 0, 1, 0.45);
-    --ease-out-circ: cubic-bezier(0, 0.55, 0.45, 1);
-    --ease-in-out-circ: cubic-bezier(0.55, 0, 1, 0.45);
-    --ease-in-quart: cubic-bezier(0.5, 0, 0.75, 0);
-    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-    --ease-in-out-quart: cubic-bezier(0.5, 0, 0.75, 0);
-    --ease-in-expo: cubic-bezier(0.7, 0, 0.84, 0);
-    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-in-out-expo: cubic-bezier(0.7, 0, 0.84, 0);
 }
 
 .noanimation {
@@ -42,7 +25,7 @@ body {
 
 /* Intro */
 
-footer {
+/* footer {
     opacity: 0;
     animation-name: footer-flicker, footer-reveal;
     animation-fill-mode: forwards, backwards;
@@ -62,17 +45,17 @@ footer {
 }
 
 @keyframes footer-flicker {
-    0%, 19.999%, 31%, 49.999%, 52%, 53.999%, 60%, 100% { /* 0%, 19.999%, 21%, 22.999%, 24%, 31.999%, 40%, 100% */
+    0%, 19.999%, 31%, 49.999%, 52%, 53.999%, 60%, 100% {
         opacity: 1;
     }
 
-        20%, 30.999%, 50%, 51.999%, 54%, 59.999% { /* 20%, 20.999%, 23%, 23.999%, 32%, 39.999% */
+        20%, 30.999%, 50%, 51.999%, 54%, 59.999% {
         opacity: 0;
     }
 }
 
 #rectangle {
-    --rectangle-corner-clip-path: polygon(0 0,calc(100% - var(--rectangle-corner-crop)) 0,100%    var(--rectangle-corner-crop),100% 100%,var(--rectangle-corner-crop) 100%,0 calc(100% - var(--rectangle-corner-crop)));
+    --rectangle-corner-clip-path: polygon(0 0,calc(100% - var(--rectangle-corner-crop)) 0,100% var(--rectangle-corner-crop),100% 100%,var(--rectangle-corner-crop) 100%,0 calc(100% - var(--rectangle-corner-crop)));
     --rectangle-corner-crop: calc((20vw + 10vh) / 2);
     clip-path: var(--rectangle-corner-clip-path);
     animation-name: rectangle-clip-path;
@@ -90,26 +73,89 @@ footer {
     100% {
         clip-path: polygon(0 0,100% 0,100% 0,100% 100%, 0 100%, 0 100%);
     }
+} */
+
+/* Intro - Footer */
+
+@keyframes square-blink {
+    0%, 49.999% {
+        background-color: var(--footer-square-1);
+    }
+
+    50%, 100% {
+        background-color: var(--footer-square-1-hover);
+    }
 }
 
-#background-pattern {
-    opacity: 0;
-    animation-name: fade-in-opacity;
-    animation-fill-mode: forwards;
-    animation-duration: 2s;
-    animation-timing-function: var(--ease-out-quad);
-    animation-delay: calc((var(--delay-segment) * 3));
+#square-1 {
+    animation-name: square-blink;
+    animation-fill-mode: none;
+    animation-duration: 0.8s;
+    animation-timing-function: linear;
+    animation-direction: alternate-reverse;
+    animation-iteration-count: 12;
 }
+
+#square-2, #square-3, #square-4 {
+    animation-name: fade-in-opacity;
+    animation-fill-mode: backwards;
+    animation-duration: 0.2s;
+    animation-timing-function: linear;
+}
+
+#square-2 {
+    animation-delay: calc(var(--anim-segment) * 3);
+}
+
+#square-3 {
+    animation-delay: calc(var(--anim-segment) * 4);
+}
+
+#square-4 {
+    animation-delay: calc(var(--anim-segment) * 5);
+}
+
+@keyframes rectagle-animate {
+    0% {
+        background-position-x: 0%;
+    }
+
+    100% {
+        background-position-x: 100%;
+    }
+}
+
+#rectangle {
+    background-size: 200% 100%;
+    animation-name: fade-in-opacity, rectagle-animate;
+    animation-fill-mode: backwards, both;
+    animation-duration: 1.6s, 120s;
+    animation-timing-function: var(--ease-out-quad), linear;
+    animation-delay: calc((var(--anim-segment) * 6)), 0s;
+    animation-direction: normal, reverse;
+    animation-iteration-count: 1, infinite;
+}
+
+/* Intro - Background */
+
+#background-pattern {
+    animation-name: fade-in-opacity;
+    animation-fill-mode: backwards;
+    animation-duration: 10s;
+    animation-timing-function: var(--ease-out-quad);
+    animation-delay: calc((var(--anim-segment) * 6));
+}
+
+/* Intro - Text */
 
 .animate-fade-in-name>div>p,
 .animate-fade-in-title>p,
 .animate-fade-in-cta-1,
 .animate-fade-in-cta-2,
 .animate-fade-in-logo {
-    /* opacity: 0; */
-    animation-name: fade-in-opacity; /* fade-in-blur-2 */
+    animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
-    animation-duration: 2.25s, 0.625s;
+    animation-duration: 2s;
     animation-timing-function: var(--ease-out-quad);
     -webkit-font-smoothing: subpixel-antialiased;
     transform-origin: left;
@@ -117,29 +163,73 @@ footer {
 
 .animate-fade-in-name>div>p,
 .animate-fade-in-title>p {
-    --initial-delay: 0.7s;
-    animation-name: fade-in-opacity, fade-in-scale; /* fade-in-blur */
-    animation-duration: 2.5s, 0.225s; /* 0.775s */
-    animation-delay: calc(var(--initial-delay) + var(--i) * var(--delay-segment));
-    animation-timing-function: var(--ease-out-quad), var(--ease-in-out-quad), var(--ease-out-quad);
+    animation-name: fade-in-opacity;
+    animation-duration: 2s;
+    animation-timing-function: var(--ease-out-quad);
     transform-origin: center;
     will-change: opacity, transform, filter;
 }
 
-/* .animate-fade-in-title>p {
-    animation-delay: calc(var(--initial-delay) + (var(--delay-segment) * 2) + var(--i) * 0.5s);
-} */
+.animate-fade-in-name>div>p {
+    animation-delay: calc((var(--anim-segment) * 6) + (var(--anim-segment) * var(--i)));
+}
+
+.animate-fade-in-title>p {
+    animation-delay: calc((var(--anim-segment) * 6) + (var(--anim-segment) * var(--i)));
+}
+
+/* Intro - Text Load Highlight */
+
+.animate-fade-in-title span.highlight-load,
+.animate-fade-in-title span.highlight-load-alt {
+    animation-fill-mode: both;
+    animation-duration: 1.6s;
+    animation-timing-function: var(--ease-out-quad), var(--ease-in-out-quad), var(--ease-out-quad), var(--ease-out-quad);
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
+.animate-fade-in-title span.highlight-load {
+    animation-name: de-highlight-load;
+    animation-delay: calc((var(--anim-segment) * 10) + var(--i) * 0.1s);
+}
+
+@keyframes de-highlight-load {
+    0% {
+        color: var(--highlight-primary);
+    }
+
+    100% {
+        color: var(--text-1);
+    }
+}
+
+.animate-fade-in-title span.highlight-load-alt {
+    animation-name: de-highlight-load-alt;
+    animation-delay: calc((var(--anim-segment) * 12) + var(--i) * 0.1s);
+}
+
+@keyframes de-highlight-load-alt {
+    0% {
+        color: var(--yellow);
+    }
+
+    100% {
+        color: var(--text-1);
+    }
+}
+
+/* Intro - CTA Blocks */
 
 .animate-fade-in-cta-1 {
-    animation-delay: calc((var(--delay-segment) * 10));
+    animation-delay: calc(var(--anim-segment) * 15);
 }
 
 .animate-fade-in-cta-2 {
-    animation-delay: calc((var(--delay-segment) * 12));
+    animation-delay: calc(var(--anim-segment) * 17);
 }
 
 .animate-fade-in-logo {
-    animation-delay: calc((var(--delay-segment) * 14));
+    animation-delay: calc(var(--anim-segment) * 19);
 }
 
 @keyframes fade-in-opacity {
@@ -158,12 +248,9 @@ footer {
     }
 }
 
-
-/* TODO remove animation references */
-
-/* @keyframes fade-in-scale {
+@keyframes fade-in-scale {
     0% {
-        transform: scale(1.75) scaleY(0.15);
+        transform: scale(0.9775);
     }
 
     100% {
@@ -171,114 +258,84 @@ footer {
     }
 }
 
-@keyframes fade-in-blur {
-    0% {
-        filter: blur(0.75rem);
-    }
+/* Intro - Triangle */
 
-    100% {
-        filter: blur(0);
-    }
-}
-
-@keyframes fade-in-blur-2 {
-    0% {
-        transform: scale(0.9875);
-        filter: blur(0.25rem);
-    }
-
-    100% {
-        transform: scale(1);
-        filter: blur(0);
-    }
-} */
-
-
-/* Intro - Text Load Highlight */
-
-.animate-fade-in-title span.highlight-load,
-.animate-fade-in-title span.highlight-load-alt {
-    animation-fill-mode: both;
-    animation-duration: 1.25s; /* 2s, 0.25s, 0.75s, */
-    animation-delay: calc(var(--initial-delay) + (var(--delay-segment) * 8) + var(--i) * 50ms); /* calc(var(--initial-delay) + (var(--delay-segment) * 6) + var(--i) * 30ms),
-    calc(var(--initial-delay) + (var(--delay-segment) * 6) + var(--i) * 30ms),
-    calc(var(--initial-delay) + (var(--delay-segment) * 6) + var(--i) * 30ms), */
-    animation-timing-function: var(--ease-out-quad), var(--ease-in-out-quad), var(--ease-out-quad), var(--ease-out-quad);
-    -webkit-font-smoothing: subpixel-antialiased;
-}
-
-.animate-fade-in-title span.highlight-load {
-    animation-duration: 2s, 0.25s, 0.75s, 2.25s;
-    animation-name: de-highlight-load; /* fade-in-opacity, fade-in-scale, fade-in-blur,  */
-}
-
-@keyframes de-highlight-load {
-    0% {
-        color: var(--highlight-primary);
-    }
-
-    100% {
-        color: var(--text-1);
-    }
-}
-
-.animate-fade-in-title span.highlight-load-alt {
-    animation-name: de-highlight-load-alt; /* fade-in-opacity, fade-in-scale, fade-in-blur, */
-}
-
-@keyframes de-highlight-load-alt {
-    0% {
-        color: var(--yellow);
-    }
-
-    100% {
-        color: var(--text-1);
-    }
-}
-
-
-/* Intro - Footer */
-/* Move to style.css ? */
-footer {
-    height: calc(0.75rem + var(--segment));
-}
-
-footer::before {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    inset: 0;
-    background: linear-gradient(to top, var(--background), rgba(0, 20, 23, 0));
-    opacity: 0;
+#triangle-left,
+#triangle-right,
+#triangle-right-alt {
     animation-name: fade-in-opacity;
     animation-fill-mode: forwards;
-    animation-duration: 2s;
-    animation-timing-function: linear;
-    animation-delay: calc((var(--delay-segment) * 4)); /* TODO adjust delay ? */
+    animation-duration: 8s;
+    animation-timing-function: var(--ease-out-quad);
 }
 
+#triangle-left {
+    animation-delay: calc(var(--anim-segment) * 10);
+}
 
-/* Triangle - Fade */
+#triangle-right,
+#triangle-right-alt {
+    animation-delay: calc(var(--anim-segment) * 10);
+}
 
-    #triangle-left,
-    #triangle-right,
-    #triangle-right-alt {
-        animation-name: fade-in-opacity;
-        animation-fill-mode: forwards;
-        animation-duration: 2s;
-        animation-timing-function: var(--ease-out-quad);
-        animation-delay: calc((var(--delay-segment) * 4));
+#triangle-right::after,
+#triangle-right-alt::after {
+animation-fill-mode: forwards;
+    animation-duration: 8s, calc(var(--anim-segment) * 24);
+    animation-timing-function: var(--ease-out-quad), linear;
+    animation-delay: calc(var(--anim-segment) * 10), calc(var(--anim-segment) * 22);
+    animation-iteration-count: 1, infinite;
+    will-change: top, height, width, transform;
+}
+
+#triangle-right::after {
+    animation-name: triangle-after-animate, flicker-shadow;
+}
+
+#triangle-right-alt::after {
+    animation-name: triangle-after-animate, flicker-light;
+}
+
+#triangle-right::before {
+    animation-name: triangle-before-animate;
+    animation-fill-mode: forwards;
+    animation-duration: 8s;
+    animation-timing-function: var(--ease-out-quad);
+    animation-delay: calc(var(--anim-segment) * 10);
+}
+
+@keyframes triangle-after-animate {
+    0% {
+        top: calc(2 * 14.6446609406725vh);
+        height: calc(2 * 70.710678118655vh);
+        width: calc(2 * 70.710678118655vh);
     }
 
+    100% {
+        top: 14.6446609406725vh;
+        height: 70.710678118655vh;
+        width: 70.710678118655vh;
+    }
+}
+
+@keyframes triangle-before-animate {
+    0% {
+        height: calc(2 * 70.710678118655vh);
+    }
+
+    100% {
+        height: 70.710678118655vh;
+    }
+}
 
 /* Triangle - Flicker */
 
-.animate-flicker-triangle-light::after,
+/* .animate-flicker-triangle-light::after,
 .animate-flicker-triangle-shadow::after {
-    animation-duration: calc(var(--delay-segment) * 24);
+    animation-duration: calc(var(--anim-segment) * 24);
     animation-timing-function: linear;
     animation-iteration-count: infinite;
-    animation-delay: calc(var(--delay-segment) * 10 + 0.1s); /* TODO time properly */
+    animation-delay: calc(var(--anim-segment) * 22);
     will-change: transform;
 }
 
@@ -288,14 +345,14 @@ footer::before {
 
 .animate-flicker-triangle-shadow::after {
     animation-name: flicker-shadow;
-}
+} */
 
 @keyframes flicker-light {
     0%, 19.999%, 21%, 22.999%, 24%, 31.999%, 40%, 100% {
         opacity: 0;
     }
 
-        20%, 20.999%, 23%, 23.999%, 32%, 39.999% {
+    20%, 20.999%, 23%, 23.999%, 32%, 39.999% {
         opacity: 1;
     }
 }
@@ -343,10 +400,10 @@ svg.animate-face-icon path {
     will-change: d;
     animation-name: face-icon-animation;
     animation-fill-mode: both;
-    animation-duration: calc(var(--delay-segment) * 24);
+    animation-duration: calc(var(--anim-segment) * 24);
     animation-timing-function: linear;
     animation-iteration-count: infinite;
-    animation-delay: calc(var(--delay-segment) * 10 + 0.1s);
+    animation-delay: calc(var(--anim-segment) * 10 + 0.1s);
 }
 
 @keyframes face-icon-animation {
@@ -394,17 +451,21 @@ svg.animate-face-icon path {
     0% {
         opacity: 100%;
     }
+
     25% {
         opacity: 100%;
     }
+
     50% {
         opacity: 50%;
         animation-timing-function: var(--ease-out-quad);
     }
+
     75% {
         opacity: 100%;
         animation-timing-function: var(--ease-in-quad);
     }
+
     100% {
         opacity: 100%;
     }
@@ -417,7 +478,7 @@ svg.animate-face-icon path {
     animation-timing-function: linear;
     animation-duration: calc(var(--animate-in-segment) * 32);
     animation-iteration-count: infinite;
-    animation-delay: calc((var(--delay-segment) * 5) + 0.1s);
+    animation-delay: calc((var(--anim-segment) * 5) + 0.1s);
 }
 
 #availability_button a:hover #availability_button_dot, #availability_button a:focus #availability_button_dot {
@@ -469,7 +530,8 @@ svg.animate-face-icon path {
     will-change: background-color;
 }
 
-#menu_links>a:hover, #menu_links>a:focus, #menu_links>a.tooltip-key--active { /* #menu_button--open:focus ~ #menu_button */
+#menu_links>a:hover, #menu_links>a:focus, #menu_links>a.tooltip-key--active {
+    /* #menu_button--open:focus ~ #menu_button */
     transition: background-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear;
     background-color: var(--highlight-secondary);
     /* border-color: rgba(0, 0, 0, 1); */
@@ -543,7 +605,7 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 }
 
 #menu_button-wrapper:hover #menu_button, #menu_button-wrapper.tooltip-key--active #menu_button, #menu:target #menu_button {
-    transition: color var(--animate-in-segment-2\/3) linear,  background-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear, border-radius var(--animate-in-segment) var(--ease-out-quad);
+    transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear, border-radius var(--animate-in-segment) var(--ease-out-quad);
     color: var(--icon-hover);
     background-color: var(--highlight-secondary);
     border-color: var(--light-3);
@@ -603,9 +665,11 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
         transform: translate(0, 0);
         animation-timing-function: var(--ease-in-quad);
     }
+
     45%, 55% {
         transform: translate(var(--menu-icon-radius), var(--menu-icon-radius));
     }
+
     100% {
         transform: translate(var(--menu-icon-radius), calc(-1 * ((1.5 * var(--menu-icon-gap-between)) - (0.5 * var(--menu-icon-gap)) + var(--menu-icon-bit-size))));
         animation-timing-function: var(--ease-out-quad);
@@ -617,12 +681,15 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
         transform: translate(var(--menu-icon-radius), calc(-1 * ((1.5 * var(--menu-icon-gap-between)) - (0.5 * var(--menu-icon-gap)) + var(--menu-icon-bit-size)))) scale(1);
         animation-timing-function: var(--ease-in-quad);
     }
+
     45% {
         transform: translate(var(--menu-icon-radius), calc(-1 * ((1.5 * var(--menu-icon-gap-between)) - (0.5 * var(--menu-icon-gap)) + var(--menu-icon-bit-size)))) scale(0);
     }
+
     55% {
         transform: translate(0, 0) scale(0);
     }
+
     100% {
         transform: translate(0, 0) scale(1);
         animation-timing-function: var(--ease-out-quad);
@@ -634,9 +701,11 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
         transform: translate(0, 0);
         animation-timing-function: var(--ease-in-quad);
     }
+
     45%, 55% {
         transform: translate(calc(-1 * var(--menu-icon-radius)), var(--menu-icon-radius));
     }
+
     100% {
         transform: translate(calc(-1 * var(--menu-icon-radius)), calc(-1 * ((0.5 * var(--menu-icon-gap-between)) - (0.5 * (var(--menu-icon-gap))))));
         animation-timing-function: var(--ease-out-quad);
@@ -648,12 +717,15 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
         transform: translate(calc(-1 * var(--menu-icon-radius)), calc(-1 * ((0.5 * var(--menu-icon-gap-between)) - (0.5 * (var(--menu-icon-gap)))))) scale(1);
         animation-timing-function: var(--ease-in-quad);
     }
+
     45% {
         transform: translate(calc(-1 * var(--menu-icon-radius)), calc(-1 * ((0.5 * var(--menu-icon-gap-between)) - (0.5 * (var(--menu-icon-gap)))))) scale(0);
     }
+
     55% {
         transform: translate(0, 0) scale(0);
     }
+
     100% {
         transform: translate(0, 0) scale(1);
         animation-timing-function: var(--ease-out-quad);
@@ -665,9 +737,11 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
         transform: translate(0, 0);
         animation-timing-function: var(--ease-in-quad);
     }
+
     45%, 55% {
         transform: translate(var(--menu-icon-radius), calc(-1 * var(--menu-icon-radius)));
     }
+
     100% {
         transform: translate(var(--menu-icon-radius), calc((0.5 * (var(--menu-icon-gap-between))) - (0.5 * (var(--menu-icon-gap)))));
         animation-timing-function: var(--ease-out-quad);
@@ -679,12 +753,15 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
         transform: translate(var(--menu-icon-radius), calc((0.5 * (var(--menu-icon-gap-between))) - (0.5 * (var(--menu-icon-gap))))) scale(1);
         animation-timing-function: var(--ease-in-quad);
     }
+
     45% {
         transform: translate(var(--menu-icon-radius), calc((0.5 * (var(--menu-icon-gap-between))) - (0.5 * (var(--menu-icon-gap))))) scale(0);
     }
+
     55% {
         transform: translate(0, 0) scale(0);
     }
+
     100% {
         transform: translate(0, 0) scale(1);
         animation-timing-function: var(--ease-out-quad);
@@ -696,9 +773,11 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
         transform: translate(0, 0);
         animation-timing-function: var(--ease-in-quad);
     }
+
     45%, 55% {
         transform: translate(calc(-1 * var(--menu-icon-radius)), calc(-1 * var(--menu-icon-radius)));
     }
+
     100% {
         transform: translate(calc(-1 * var(--menu-icon-radius)), calc((1.5 * var(--menu-icon-gap-between)) - (0.5 * (var(--menu-icon-gap))) + var(--menu-icon-bit-size)));
         animation-timing-function: var(--ease-out-quad);
@@ -710,12 +789,15 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
         transform: translate(calc(-1 * var(--menu-icon-radius)), calc((1.5 * var(--menu-icon-gap-between)) - (0.5 * (var(--menu-icon-gap))) + var(--menu-icon-bit-size))) scale(1);
         animation-timing-function: var(--ease-out-quad);
     }
+
     45% {
         transform: translate(calc(-1 * var(--menu-icon-radius)), calc((1.5 * var(--menu-icon-gap-between)) - (0.5 * (var(--menu-icon-gap))) + var(--menu-icon-bit-size))) scale(0);
     }
+
     55% {
         transform: translate(0, 0) scale(0);
     }
+
     100% {
         transform: translate(0, 0) scale(1);
         animation-timing-function: var(--ease-in-quad);
@@ -765,7 +847,8 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
     position: absolute;
     inset: min(-1px, -0.0625rem) min(-1px, -0.0625rem) 0 min(-1px, -0.0625rem);
     z-index: 1;
-    background-image: linear-gradient(to right, rgba(0, 118, 132, 0.75), rgba(0, 118, 132, 0.15)); /* 210, 100, 45 */
+    background-image: linear-gradient(to right, rgba(0, 118, 132, 0.75), rgba(0, 118, 132, 0.15));
+    /* 210, 100, 45 */
 }
 
 #menu_dropdown a::after,
@@ -778,7 +861,8 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
     inset: min(-1px, -0.0625rem) min(-1px, -0.0625rem) 0 min(-1px, -0.0625rem);
     z-index: 1;
     border: max(1px, 0.0625rem) solid transparent;
-    background-image: linear-gradient(to right, rgba(0, 118, 132, 1), rgba(0, 118, 132, 0)); /* 210, 100, 45 */
+    background-image: linear-gradient(to right, rgba(0, 118, 132, 1), rgba(0, 118, 132, 0));
+    /* 210, 100, 45 */
     background-origin: border-box;
     background-clip: border-box;
     mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
@@ -798,7 +882,7 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 #menu_dropdown a:focus::after,
 #menu_dropdown label:focus::after,
 #menu_dropdown a:focus-within::after,
-#menu_dropdown label:focus-within::after  {
+#menu_dropdown label:focus-within::after {
     transition: opacity var(--animate-in-segment) linear, inset var(--animate-in-segment) var(--ease-out-quad);
     opacity: 1;
 }
@@ -839,19 +923,23 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 }
 
 #menu_dropdown label#menu_dropdown_light-mode::before {
-    background-image: linear-gradient(to right, rgba(238, 213, 0, 0.75), rgba(238, 213, 0, 0)); /* 75, 100, 85  */
+    background-image: linear-gradient(to right, rgba(238, 213, 0, 0.75), rgba(238, 213, 0, 0));
+    /* 75, 100, 85  */
 }
 
 #menu_dropdown label#menu_dropdown_light-mode::after {
-    background-image: linear-gradient(to right, rgba(238, 213, 0, 1), rgba(238, 213, 0, 0)); /* 75, 100, 85  */
+    background-image: linear-gradient(to right, rgba(238, 213, 0, 1), rgba(238, 213, 0, 0));
+    /* 75, 100, 85  */
 }
 
 #menu_dropdown label#menu_dropdown_debug::before {
-    background-image: linear-gradient(to right, rgba(0, 95, 241, 0.75), rgba(0, 95, 241, 0)); /* 260, 100, 45 */
+    background-image: linear-gradient(to right, rgba(0, 95, 241, 0.75), rgba(0, 95, 241, 0));
+    /* 260, 100, 45 */
 }
 
 #menu_dropdown label#menu_dropdown_debug::after {
-    background-image: linear-gradient(to right, rgba(0, 95, 241, 1), rgba(0, 95, 241, 0)); /* 260, 100, 45 */
+    background-image: linear-gradient(to right, rgba(0, 95, 241, 1), rgba(0, 95, 241, 0));
+    /* 260, 100, 45 */
 }
 
 
@@ -915,19 +1003,17 @@ footer {
     transition: opacity var(--animate-out-segment) linear, padding var(--animate-out-segment) var(--ease-in-quad), height var(--animate-out-segment) var(--ease-in-quad);
 }
 
-input[id^="timeline_section_year-"]:checked ~ #modal_archive-content [data-timeline-section] {
+input[id^="timeline_section_year-"]:checked~#modal_archive-content [data-timeline-section] {
     transition: opacity var(--animate-in-segment) linear, padding var(--animate-in-segment) var(--ease-out-quad), height var(--animate-in-segment) var(--ease-out-quad);
 }
 
-#modal_archive-content_section-title > div label:hover + div svg {
+#modal_archive-content_section-title>div label:hover+div svg {}
 
-}
-
-#modal_archive-content_section-title > div svg {
+#modal_archive-content_section-title>div svg {
     transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, border var(--animate-out-segment-2\/3) linear;
 }
 
-#modal_archive-content_section-title > div label:hover + div svg, #modal_archive-content_section-title > div label:focus + div svg {
+#modal_archive-content_section-title>div label:hover+div svg, #modal_archive-content_section-title>div label:focus+div svg {
     transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border var(--animate-in-segment-2\/3) linear;
     color: var(--modal-icon-hover);
     background-color: var(--highlight-secondary);
@@ -946,7 +1032,7 @@ input[id^="timeline_section_year-"]:checked ~ #modal_archive-content [data-timel
 
 #archive:target~main #modal_archive #horizontal_timeline {
     visibility: visible;
-    transition: opacity var(--animate-in-segment) linear var(--delay-segment), transform var(--animate-in-segment) var(--ease-out-quad) var(--delay-segment);
+    transition: opacity var(--animate-in-segment) linear var(--anim-segment), transform var(--animate-in-segment) var(--ease-out-quad) var(--anim-segment);
     transform: scale(1);
     opacity: 1;
 }
@@ -1042,7 +1128,8 @@ input[id^="timeline_section_year-"]:checked ~ #modal_archive-content [data-timel
     /* z-index: -1; */
     pointer-events: none;
     opacity: 0;
-    transition: opacity var(--animate-out-segment) linear, visibility 0s var(--animate-out-segment); /* z-index 0s var(--animate-out-segment) */
+    transition: opacity var(--animate-out-segment) linear, visibility 0s var(--animate-out-segment);
+    /* z-index 0s var(--animate-out-segment) */
     will-change: opacity;
 }
 
@@ -1086,7 +1173,7 @@ input[id^="timeline_section_year-"]:checked ~ #modal_archive-content [data-timel
 
 .tooltip-wrapper:hover:not(.tooltip-key--active) .tooltip:not(.tooltip--active), .tooltip-wrapper:focus-within:not(.tooltip-key--active):not([data-focus-after-click]) .tooltip:not(.tooltip--active),
 .tooltip-wrapper.tooltip-key--active .tooltip.tooltip--active, .tooltip-wrapper:focus-within.tooltip-key--active .tooltip.tooltip--active {
-    transition: var(--animate-in-segment-2\/3) linear var(--delay-segment-1\/3);
+    transition: var(--animate-in-segment-2\/3) linear var(--anim-segment-1\/3);
     opacity: 1;
 }
 

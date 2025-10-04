@@ -337,7 +337,7 @@ class HorizontalDragScroll {
         this.element.addEventListener('mouseup', this.completeDrag.bind(this))
         this.element.addEventListener('mouseleave', this.completeDrag.bind(this))
         this.element.addEventListener('mousecancel', this.completeDrag.bind(this))
-        this.element.addEventListener('scrollend', this.completeDrag.bind(this))
+        // this.element.addEventListener('scrollend', this.completeDrag.bind(this))
         // this.element.addEventListener('dragend', this.completeDrag.bind(this))
     }
 
@@ -360,14 +360,7 @@ class HorizontalDragScroll {
 
     completeDrag(event) {
         console.log('completeDrag', event.type);
-            if (this.isMouseDown && event.type !== 'scrollend') {
-                this.element.dispatchEvent(new CustomEvent('drag-complete', {
-                    detail: {
-                        mouseDown: true,
-                        startX: this.startX,
-                        scrollLeft: this.scrollLeft
-                    }
-                }))
+            if (this.isMouseDown) {
 
                 this.isMouseDown = false
 
@@ -377,13 +370,6 @@ class HorizontalDragScroll {
                     this.element.classList.remove('x-drag-scroll--dragging')
                     /* this.element.releasePointerCapture(event.pointerId) */
                 }, 300)
-            }
-            else {
-                this.element.dispatchEvent(new CustomEvent('drag-complete', {
-                    detail: {
-                        mouseDown: false
-                    }
-                }))
             }
     }
 }
@@ -439,6 +425,7 @@ class HorizontalEdgeScroller {
             inset: 0 auto 0 0;
             width: ${this.edgeWidth}px;
             cursor: w-resize;
+            user-select: none;
           }
 
           [data-edge-scroll-id="${this.options.id}"]::after {
@@ -449,6 +436,7 @@ class HorizontalEdgeScroller {
             inset: 0 0 0 auto;
             width: ${this.edgeWidth}px;
             cursor: e-resize;
+            user-select: none;
           }
         `
     }
@@ -649,9 +637,6 @@ class Carousel {
     init() {
         this.createNavigationDots()
         this.setupIntersectionObserver()
-        this.listenToDragComplete()
-        this.enableHorizontalDragScroll()
-        /* this.enableHorizontalEdgeScroller() */
         this.setupPseudoElsEventListeners()
         this.setupDotEventListeners()
         this.setupButtonEventListeners()
@@ -673,16 +658,16 @@ class Carousel {
                     console.log('Intersecting:', entry.target);
 
                     this.activeSlide.set(entry.target)
-                    /* entry.target.classList.add('active') */
-                    /* console.log('Active slide set to:', this.activeSlide.get()); */
+                    entry.target.classList.add('active')
+                    console.log('Active slide set to:', this.activeSlide.get());
 
-                    // this.dotEls.forEach((dotEl, i) => {
-                    //     const isCurrent = i === this.slideEls.indexOf(entry.target)
-                    //     dotEl.toggleAttribute('aria-current', isCurrent)
-                    //     /* if (isCurrent) {
-                    //         dotEl.focus()
-                    //     } */
-                    // })
+                    this.dotEls.forEach((dotEl, i) => {
+                        const isCurrent = i === this.slideEls.indexOf(entry.target)
+                        dotEl.toggleAttribute('aria-current', isCurrent)
+                        /* if (isCurrent) {
+                            dotEl.focus()
+                        } */
+                    })
                 } else {
                     entry.target.classList.remove('active')
                 }
@@ -694,29 +679,6 @@ class Carousel {
         })
 
         this.slideEls.forEach(itemEl => observer.observe(itemEl))
-    }
-
-    listenToDragComplete() {
-        this.slidesWrapperEl.addEventListener('drag-complete', event => {
-            console.log('Drag complete event received in Carousel', this.activeSlide.get(), event.detail);
-
-            // if (!event.detail.mouseDown) return
-
-            if (this.activeSlide?.get()) {
-
-                if(event.detail.mouseDown) {
-                this.scrollToSlide(this.activeSlide.get())
-                }
-
-                this.dotEls.forEach((dotEl, i) => {
-                        const isCurrent = i === this.slideEls.indexOf(this.activeSlide.get())
-                        dotEl.toggleAttribute('aria-current', isCurrent)
-                        /* if (isCurrent) {
-                            dotEl.focus()
-                        } */
-                    })
-            }
-        })
     }
 
     setupPseudoElsEventListeners() {
@@ -746,14 +708,6 @@ class Carousel {
             })
         })
     }
-
-    enableHorizontalDragScroll() {
-        new HorizontalDragScroll({ element: this.slidesWrapperEl, activeSlide: this.activeSlide })
-    }
-
-    /* enableHorizontalEdgeScroller() {
-        new HorizontalEdgeScroller({ id: this.options.id, element: this.slidesWrapperEl, maxSpeed: 1, edgeWidthRatio: 5, activeSlide: this.activeSlide })
-    } */
 
     setupButtonEventListeners() {
         this.prevButtonEl.addEventListener('click', event => {
