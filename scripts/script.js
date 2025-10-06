@@ -426,6 +426,7 @@ class HorizontalEdgeScroller {
             width: ${this.edgeWidth}px;
             cursor: w-resize;
             user-select: none;
+            -webkit-user-select: none;
           }
 
           [data-edge-scroll-id="${this.options.id}"]::after {
@@ -437,6 +438,7 @@ class HorizontalEdgeScroller {
             width: ${this.edgeWidth}px;
             cursor: e-resize;
             user-select: none;
+            -webkit-user-select: none;
           }
         `
     }
@@ -823,11 +825,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize the UI elements based on the current hash
     if (window.location.hash) {
-        document.querySelectorAll(
+        /* document.querySelectorAll(
             '.animate-fade-in-name span, .animate-fade-in-title span, .animate-fade-in-cta-1, .animate-fade-in-cta-2, .animate-fade-in-logo'
         ).forEach(element => {
             element.classList.add('noanimation')
-        })
+        }) */
         openDialogOnLoad()
     }
 

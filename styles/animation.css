@@ -23,58 +23,6 @@ body {
 }
 
 
-/* Intro */
-
-/* footer {
-    opacity: 0;
-    animation-name: footer-flicker, footer-reveal;
-    animation-fill-mode: forwards, backwards;
-    animation-duration: 1.5s, 0.9s;
-    animation-delay: 0.15s, 0.6s;
-    animation-timing-function: var(--ease-in-quad);
-}
-
-@keyframes footer-reveal {
-    0% {
-        height: 100vh;
-    }
-
-    100% {
-        height: calc(0.75rem + var(--segment));
-    }
-}
-
-@keyframes footer-flicker {
-    0%, 19.999%, 31%, 49.999%, 52%, 53.999%, 60%, 100% {
-        opacity: 1;
-    }
-
-        20%, 30.999%, 50%, 51.999%, 54%, 59.999% {
-        opacity: 0;
-    }
-}
-
-#rectangle {
-    --rectangle-corner-clip-path: polygon(0 0,calc(100% - var(--rectangle-corner-crop)) 0,100% var(--rectangle-corner-crop),100% 100%,var(--rectangle-corner-crop) 100%,0 calc(100% - var(--rectangle-corner-crop)));
-    --rectangle-corner-crop: calc((20vw + 10vh) / 2);
-    clip-path: var(--rectangle-corner-clip-path);
-    animation-name: rectangle-clip-path;
-    animation-fill-mode: forwards;
-    animation-duration: 0.9s;
-    animation-delay: 0.6s;
-    animation-timing-function: var(--ease-in-quad);
-}
-
-@keyframes rectangle-clip-path {
-    0% {
-        clip-path: var(--rectangle-corner-clip-path);
-    }
-
-    100% {
-        clip-path: polygon(0 0,100% 0,100% 0,100% 100%, 0 100%, 0 100%);
-    }
-} */
-
 /* Intro - Footer */
 
 @keyframes square-blink {
@@ -90,16 +38,16 @@ body {
 #square-1 {
     animation-name: square-blink;
     animation-fill-mode: none;
-    animation-duration: 0.8s;
+    animation-duration: calc(var(--anim-segment) * 2);
     animation-timing-function: linear;
     animation-direction: alternate-reverse;
-    animation-iteration-count: 12;
+    animation-iteration-count: 10;
 }
 
 #square-2, #square-3, #square-4 {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
-    animation-duration: 0.2s;
+    animation-duration: calc(var(--anim-segment) / 2);
     animation-timing-function: linear;
 }
 
@@ -129,22 +77,24 @@ body {
     background-size: 200% 100%;
     animation-name: fade-in-opacity, rectagle-animate;
     animation-fill-mode: backwards, both;
-    animation-duration: 1.6s, 120s;
+    animation-duration: calc(var(--anim-segment) * 4), 120s;
     animation-timing-function: var(--ease-out-quad), linear;
-    animation-delay: calc((var(--anim-segment) * 6)), 0s;
+    animation-delay: calc(var(--anim-segment) * 6), 0s;
     animation-direction: normal, reverse;
     animation-iteration-count: 1, infinite;
 }
+
 
 /* Intro - Background */
 
 #background-pattern {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
-    animation-duration: 10s;
+    animation-duration: calc(var(--anim-segment) * 25);
     animation-timing-function: var(--ease-out-quad);
-    animation-delay: calc((var(--anim-segment) * 6));
+    animation-delay: calc(var(--anim-segment) * 6);
 }
+
 
 /* Intro - Text */
 
@@ -155,19 +105,17 @@ body {
 .animate-fade-in-logo {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
-    animation-duration: 2s;
+    animation-duration: calc(var(--anim-segment) * 5);
     animation-timing-function: var(--ease-out-quad);
-    -webkit-font-smoothing: subpixel-antialiased;
     transform-origin: left;
 }
 
 .animate-fade-in-name>div>p,
 .animate-fade-in-title>p {
     animation-name: fade-in-opacity;
-    animation-duration: 2s;
+    animation-duration: calc(var(--anim-segment) * 5);
     animation-timing-function: var(--ease-out-quad);
     transform-origin: center;
-    will-change: opacity, transform, filter;
 }
 
 .animate-fade-in-name>div>p {
@@ -178,14 +126,14 @@ body {
     animation-delay: calc((var(--anim-segment) * 6) + (var(--anim-segment) * var(--i)));
 }
 
+
 /* Intro - Text Load Highlight */
 
 .animate-fade-in-title span.highlight-load,
 .animate-fade-in-title span.highlight-load-alt {
     animation-fill-mode: both;
-    animation-duration: 1.6s;
+    animation-duration: calc(var(--anim-segment) * 4);
     animation-timing-function: var(--ease-out-quad), var(--ease-in-out-quad), var(--ease-out-quad), var(--ease-out-quad);
-    -webkit-font-smoothing: subpixel-antialiased;
 }
 
 .animate-fade-in-title span.highlight-load {
@@ -217,6 +165,7 @@ body {
         color: var(--text-1);
     }
 }
+
 
 /* Intro - CTA Blocks */
 
@@ -258,6 +207,7 @@ body {
     }
 }
 
+
 /* Intro - Triangle */
 
 #triangle-left,
@@ -265,46 +215,40 @@ body {
 #triangle-right-alt {
     animation-name: fade-in-opacity;
     animation-fill-mode: forwards;
-    animation-duration: 8s;
     animation-timing-function: var(--ease-out-quad);
 }
 
 #triangle-left {
+    animation-duration: calc(var(--anim-segment) * 18);
     animation-delay: calc(var(--anim-segment) * 10);
 }
 
 #triangle-right,
 #triangle-right-alt {
-    animation-delay: calc(var(--anim-segment) * 10);
+    animation-duration: calc(var(--anim-segment) * 14);
+    animation-delay: calc(var(--anim-segment) * 12);
 }
 
 #triangle-right::after,
 #triangle-right-alt::after {
-animation-fill-mode: forwards;
-    animation-duration: 8s, calc(var(--anim-segment) * 24);
+    animation-fill-mode: forwards;
+    animation-duration: calc(var(--anim-segment) * 20), calc(var(--anim-segment) * 20);
+    animation-delay: calc(var(--anim-segment) * 10), calc(var(--anim-segment) * 20);
     animation-timing-function: var(--ease-out-quad), linear;
-    animation-delay: calc(var(--anim-segment) * 10), calc(var(--anim-segment) * 22);
-    animation-iteration-count: 1, infinite;
-    will-change: top, height, width, transform;
+    animation-direction: alternate, normal;
+    animation-iteration-count: infinite;
+    will-change: top, height, width, opacity;
 }
 
 #triangle-right::after {
-    animation-name: triangle-after-animate, flicker-shadow;
+    animation-name: triangle-after-pulse, flicker;
 }
 
 #triangle-right-alt::after {
-    animation-name: triangle-after-animate, flicker-light;
+    animation-name: triangle-after-pulse, flicker-alt;
 }
 
-#triangle-right::before {
-    animation-name: triangle-before-animate;
-    animation-fill-mode: forwards;
-    animation-duration: 8s;
-    animation-timing-function: var(--ease-out-quad);
-    animation-delay: calc(var(--anim-segment) * 10);
-}
-
-@keyframes triangle-after-animate {
+@keyframes triangle-after-pulse {
     0% {
         top: calc(2 * 14.6446609406725vh);
         height: calc(2 * 70.710678118655vh);
@@ -318,7 +262,35 @@ animation-fill-mode: forwards;
     }
 }
 
-@keyframes triangle-before-animate {
+@keyframes flicker {
+    0%, 19.999%, 21%, 22.999%, 24%, 31.999%, 40%, 100% {
+        opacity: 1;
+    }
+
+    20%, 20.999%, 23%, 23.999%, 32%, 39.999% {
+        opacity: 0;
+    }
+}
+
+@keyframes flicker-alt {
+    0%, 19.999%, 21%, 22.999%, 24%, 31.999%, 40%, 100% {
+        opacity: 0;
+    }
+
+    20%, 20.999%, 23%, 23.999%, 32%, 39.999% {
+        opacity: 1;
+    }
+}
+
+#triangle-right::before {
+    animation-name: triangle-before-pulse;
+    animation-fill-mode: forwards;
+    animation-duration: calc(var(--anim-segment) * 20);
+    animation-timing-function: var(--ease-out-quad);
+    animation-delay: calc(var(--anim-segment) * 10);
+}
+
+@keyframes triangle-before-pulse {
     0% {
         height: calc(2 * 70.710678118655vh);
     }
@@ -328,51 +300,8 @@ animation-fill-mode: forwards;
     }
 }
 
-/* Triangle - Flicker */
-
-/* .animate-flicker-triangle-light::after,
-.animate-flicker-triangle-shadow::after {
-    animation-duration: calc(var(--anim-segment) * 24);
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-delay: calc(var(--anim-segment) * 22);
-    will-change: transform;
-}
-
-.animate-flicker-triangle-light::after {
-    animation-name: flicker-light;
-}
-
-.animate-flicker-triangle-shadow::after {
-    animation-name: flicker-shadow;
-} */
-
-@keyframes flicker-light {
-    0%, 19.999%, 21%, 22.999%, 24%, 31.999%, 40%, 100% {
-        opacity: 0;
-    }
-
-    20%, 20.999%, 23%, 23.999%, 32%, 39.999% {
-        opacity: 1;
-    }
-}
-
-@keyframes flicker-shadow {
-    0%, 19.999%, 21%, 22.999%, 24%, 31.999%, 40%, 100% {
-        opacity: 1;
-    }
-
-    20%, 20.999%, 23%, 23.999%, 32%, 39.999% {
-        opacity: 0;
-    }
-}
-
 
 /* Text Higlight */
-
-.highlight-text {
-    will-change: color;
-}
 
 .highlight-text:focus {
     transition: color calc(2 * var(--animate-out-segment)) var(--ease-in-quad);
@@ -445,7 +374,7 @@ svg.animate-face-icon path {
 }
 
 
-/* Availability */
+/* Availability Button */
 
 @keyframes availability-dot-fade-animation {
     0% {
@@ -472,13 +401,12 @@ svg.animate-face-icon path {
 }
 
 #availability_button_dot {
-    will-change: opacity;
     animation-name: availability-dot-fade-animation;
     animation-fill-mode: both;
     animation-timing-function: linear;
     animation-duration: calc(var(--animate-in-segment) * 32);
     animation-iteration-count: infinite;
-    animation-delay: calc((var(--anim-segment) * 5) + 0.1s);
+    animation-delay: calc(var(--anim-segment) * 5);
 }
 
 #availability_button a:hover #availability_button_dot, #availability_button a:focus #availability_button_dot {
@@ -487,14 +415,12 @@ svg.animate-face-icon path {
 
 #availability_button_dot::before {
     transition: opacity calc(2 * var(--animate-out-segment)) var(--ease-out-quad), transform calc(2 * var(--animate-out-segment)) var(--ease-out-quad);
-    will-change: opacity, transform;
     transform-origin: center;
     z-index: -1;
 }
 
 #availability_button_dot::after {
     transition: background-color var(--animate-out-segment) linear;
-    will-change: background-color;
 }
 
 #availability_button a:hover #availability_button_dot::before, #availability_button a:focus #availability_button_dot::before {
@@ -508,13 +434,11 @@ svg.animate-face-icon path {
 
 #availability_button a:hover #availability_button_dot::after, #availability_button a:focus #availability_button_dot::after {
     transition: background-color var(--animate-in-segment) linear var(--animate-in-segment);
-    will-change: background-color;
     background-color: var(--cyan-full-5);
 }
 
 #availability_button_text {
     transition: color var(--animate-out-segment) linear;
-    will-change: color;
 }
 
 #availability_button a:hover #availability_button_text, #availability_button a:focus #availability_button_text {
@@ -527,14 +451,11 @@ svg.animate-face-icon path {
 
 #menu_links>a {
     transition: background-color var(--animate-out-segment-2\/3) linear, box-shadow var(--animate-out-segment-2\/3) linear;
-    will-change: background-color;
 }
 
 #menu_links>a:hover, #menu_links>a:focus, #menu_links>a.tooltip-key--active {
-    /* #menu_button--open:focus ~ #menu_button */
     transition: background-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear;
     background-color: var(--highlight-secondary);
-    /* border-color: rgba(0, 0, 0, 1); */
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-3);
 }
 
@@ -544,7 +465,6 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 #menu_links>a svg, #menu_email_button-wrapper>button svg {
     transition: color var(--animate-out-segment-2\/3) linear;
-    will-change: color;
     color: var(--icon);
 }
 
@@ -555,7 +475,6 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 #menu_links>a span.button-label, #menu_email_button-wrapper>button span.button-label {
     transition: color var(--animate-out-segment-2\/3) linear;
-    will-change: color;
     color: var(--text-2);
 }
 
@@ -566,7 +485,6 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 #menu_links>a span.button-label u {
     transition: text-decoration var(--animate-out-segment-2\/3) linear;
-    will-change: text-decoration;
 }
 
 #menu_links>a:hover span.button-label u, #menu_links>a:focus span.button-label u {
@@ -577,26 +495,27 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 /* Menu Button */
 
-
 #menu_button--open {
     z-index: 3;
 }
 
-#menu_button--close {
-    /* z-index: -1; */
-    visibility: hidden;
+#menu:target #menu_button--open {
+    pointer-events: none;
 }
 
+#menu_button--close {
+    z-index: 4;
+    pointer-events: none;
+}
 
 #menu:target #menu_button--close {
-    z-index: 7;
+    pointer-events: auto;
 }
 
 #menu_button {
-    transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, box-shadow var(--animate-out-segment-2\/3) linear, border-radius var(--animate-out-segment) var(--ease-in-quad);
-    will-change: color, background-color;
     z-index: 2;
     color: var(--icon);
+    transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, box-shadow var(--animate-out-segment-2\/3) linear, border-radius var(--animate-out-segment) var(--ease-in-quad);
 }
 
 #menu:target #menu_button {
@@ -613,52 +532,51 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 #menu_button span {
     background-color: currentColor;
-    will-change: transform;
     animation-fill-mode: both;
-    animation-name: initial;
+    /* animation-name: initial; */
 }
 
 #menu_button span:nth-child(1) {
-    animation-duration: calc((var(--animate-in-segment) * 3));
+    animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-top-left-reverse;
 }
 
 #menu:target #menu_button span:nth-child(1) {
-    animation-duration: calc((var(--animate-out-segment) * 3));
+    animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-top-left;
 }
 
 #menu_button span:nth-child(2) {
-    animation-duration: calc((var(--animate-in-segment) * 3));
+    animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-top-right-reverse;
 }
 
 #menu:target #menu_button span:nth-child(2) {
-    animation-duration: calc((var(--animate-out-segment) * 3));
+    animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-top-right;
 }
 
 #menu_button span:nth-child(3) {
-    animation-duration: calc((var(--animate-in-segment) * 3));
+    animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-bottom-left-reverse;
 }
 
 #menu:target #menu_button span:nth-child(3) {
-    animation-duration: calc((var(--animate-out-segment) * 3));
+    animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-bottom-left;
 }
 
 #menu_button span:nth-child(4) {
-    animation-duration: calc((var(--animate-in-segment) * 3));
+    animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-bottom-right-reverse;
 }
 
 #menu:target #menu_button span:nth-child(4) {
-    animation-duration: calc((var(--animate-out-segment) * 3));
+    animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-bottom-right;
 }
 
-@keyframes initial {}
+/* @keyframes initial {} */
 
 @keyframes menu-top-left {
     0% {
@@ -808,10 +726,9 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 /* Menu Dropdown */
 
 #menu_dropdown {
-    visibility: hidden;
     opacity: 0;
     transform: translateY(-0.25rem);
-    transition: opacity calc(1.25 * var(--animate-out-segment)) var(--ease-in-quad), transform calc(1.25 * var(--animate-out-segment)) var(--ease-in-quad), visibility 0s calc(1.25 * var(--animate-out-segment));
+    transition: opacity calc(1.25 * var(--animate-out-segment)) var(--ease-in-quad), transform calc(1.25 * var(--animate-out-segment)) var(--ease-in-quad);
 }
 
 @media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
@@ -821,7 +738,6 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 }
 
 #menu:target #menu_dropdown {
-    visibility: visible;
     pointer-events: auto;
     opacity: 1;
     transform: translate(0);
@@ -841,7 +757,6 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 #menu_dropdown a::before,
 #menu_dropdown label::before {
     transition: opacity var(--animate-out-segment) linear, inset var(--animate-out-segment) var(--ease-in-quad);
-    will-change: opacity, inset;
     content: "";
     opacity: 0;
     position: absolute;
@@ -854,7 +769,6 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 #menu_dropdown a::after,
 #menu_dropdown label::after {
     transition: opacity var(--animate-out-segment) linear, inset var(--animate-out-segment) var(--ease-in-quad);
-    will-change: opacity, inset;
     content: "";
     opacity: 0;
     position: absolute;
@@ -890,7 +804,6 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 #menu_dropdown a span,
 #menu_dropdown label span {
     transition: color var(--animate-out-segment) linear;
-    will-change: color;
     z-index: 1;
 }
 
@@ -902,7 +815,6 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 #menu_dropdown a svg,
 #menu_dropdown label svg {
     transition: color var(--animate-out-segment) linear;
-    will-change: color;
     color: var(--icon);
     z-index: 1;
 }
@@ -945,34 +857,24 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 /* Modals */
 
-.modal .modal-content {
-    visibility: hidden;
-}
-
-#modal_profile .modal-content,
-#modal_archive .modal-content {
-    transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad), visibility 0s var(--animate-out-segment);
-    /* will-change: opacity, transform; */
+.modal {
+    opacity: 0;
     transform: scale(1.05);
     transform-origin: top;
+    transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad);
+    contain: content;
 }
 
-#profile:target~main #modal_profile .modal-content,
-#archive:target~main #modal_archive .modal-content {
-    visibility: visible;
-    transition: opacity var(--animate-in-segment) linear, transform var(--animate-in-segment) var(--ease-out-quad);
+#profile:target~main #modal_profile,
+#archive:target~main #modal_archive {
     opacity: 1;
     transform: scale(1);
+    transition: opacity var(--animate-in-segment) linear, transform var(--animate-in-segment) var(--ease-out-quad);
 }
 
 #intro_left-column, #intro_right-column {
     transition: transform var(--animate-out-segment) var(--ease-in-quad);
     transform-origin: center;
-}
-
-footer {
-    transition: transform var(--animate-out-segment) var(--ease-in-quad);
-    transform-origin: top;
 }
 
 @media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
@@ -983,19 +885,23 @@ footer {
 
 #profile:target~main #intro_left-column,
 #profile:target~main #intro_right-column,
-#profile:target~main footer,
 #archive:target~main #intro_left-column,
-#archive:target~main #intro_right-column,
-#archive:target~main footer {
+#archive:target~main #intro_right-column {
     transition: transform var(--animate-in-segment) var(--ease-out-quad);
-    will-change: transform;
     transform: scale(0.95);
+}
+
+footer {
+    transition: transform var(--animate-out-segment) var(--ease-in-quad);
+    transform-origin: top;
 }
 
 #profile:target~main footer,
 #archive:target~main footer {
+    transition: transform var(--animate-in-segment) var(--ease-out-quad);
     transform: scale(0.9825);
 }
+
 
 /* Modals - Archive */
 
@@ -1007,7 +913,7 @@ input[id^="timeline_section_year-"]:checked~#modal_archive-content [data-timelin
     transition: opacity var(--animate-in-segment) linear, padding var(--animate-in-segment) var(--ease-out-quad), height var(--animate-in-segment) var(--ease-out-quad);
 }
 
-#modal_archive-content_section-title>div label:hover+div svg {}
+/* #modal_archive-content_section-title>div label:hover+div svg {} */
 
 #modal_archive-content_section-title>div svg {
     transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, border var(--animate-out-segment-2\/3) linear;
@@ -1023,15 +929,13 @@ input[id^="timeline_section_year-"]:checked~#modal_archive-content [data-timelin
 /* Modals - Horizontal Timeline */
 
 #horizontal_timeline {
-    transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad), visibility 0s var(--animate-out-segment);
-    visibility: hidden;
+    transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad);
     transform: scale(0.95);
     transform-origin: bottom;
     opacity: 0;
 }
 
 #archive:target~main #modal_archive #horizontal_timeline {
-    visibility: visible;
     transition: opacity var(--animate-in-segment) linear var(--anim-segment), transform var(--animate-in-segment) var(--ease-out-quad) var(--anim-segment);
     transform: scale(1);
     opacity: 1;
@@ -1125,18 +1029,12 @@ input[id^="timeline_section_year-"]:checked~#modal_archive-content [data-timelin
 
 #underlay_menu,
 #underlay_modal {
-    /* z-index: -1; */
-    pointer-events: none;
     opacity: 0;
-    transition: opacity var(--animate-out-segment) linear, visibility 0s var(--animate-out-segment);
-    /* z-index 0s var(--animate-out-segment) */
-    will-change: opacity;
+    pointer-events: none;
+    transition: opacity var(--animate-out-segment) linear;
 }
 
 #underlay_menu {
-    visibility: hidden;
-    /* backdrop-filter: blur(0.125rem);
-    -webkit-backdrop-filter: blur(0.125rem); */
     backdrop-filter: blur(0.375rem);
     -webkit-backdrop-filter: blur(0.375rem);
 }
@@ -1147,18 +1045,17 @@ input[id^="timeline_section_year-"]:checked~#modal_archive-content [data-timelin
 }
 
 #debug:not(:checked)~main #menu:target #underlay_menu {
-    visibility: visible;
     z-index: 1;
-    pointer-events: auto;
     opacity: 1;
+    pointer-events: auto;
     transition: opacity var(--animate-in-segment) linear;
 }
 
 #debug:not(:checked)~#profile:target~main #underlay_modal,
 #debug:not(:checked)~#archive:target~main #underlay_modal {
-    z-index: 1;
-    pointer-events: auto;
+    /* z-index: 1; */
     opacity: 1;
+    pointer-events: auto;
     transition: opacity var(--animate-in-segment) linear;
 }
 
@@ -1177,6 +1074,6 @@ input[id^="timeline_section_year-"]:checked~#modal_archive-content [data-timelin
     opacity: 1;
 }
 
-a:hover, button:hover, [tabindex="0"]:hover {
+/* a:hover, button:hover, [tabindex="0"]:hover {
     z-index: 20;
-}
+} */

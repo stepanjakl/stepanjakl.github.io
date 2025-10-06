@@ -949,15 +949,11 @@ body {
 }
 
 #menu_dropdown>div {
-    /* position: relative;
-    top: max(1px, 0.0625rem); */
     display: flex;
     flex-direction: column;
     background-color: var(--context-bg-2);
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--context-border-light-2);
     outline: solid max(1px, 0.0625rem) var(--dark-3);
-    /* backdrop-filter: blur(1.25rem);
-    -webkit-backdrop-filter: blur(1.25rem); */
     border-radius: 0.3125rem;
 }
 
@@ -974,6 +970,7 @@ body {
     box-shadow: 0 min(-1px, -0.0625rem) 0 0 var(--context-border-light-2);
     border-top: solid max(1px, 0.0625rem) var(--context-border-dark-2);
     user-select: none;
+    -webkit-user-select: none;
 }
 
 #menu_dropdown a span,
@@ -1002,10 +999,14 @@ body {
 
 /* Modal */
 
+.modal *div, .modal *::before, .modal *::after {
+    transform: translate3d(0, 0, 0); /* Fixes some rendering issues on Safari */
+}
+
 .modal {
     position: fixed;
     pointer-events: none;
-    z-index: -1;
+    z-index: 2;
     inset: 0;
     overflow: hidden;
     padding: calc(var(--segment) / 5);
@@ -1041,7 +1042,6 @@ body {
     border: solid max(1px, 0.0625rem) var(--modal-border-outer);
     border-radius: var(--segment-eighth) calc((var(--modal-button-close-border-radius) + var(--modal-button-close-inset)) + max(1px, 0.0625rem)) var(--segment-eighth) var(--segment-eighth);
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--modal-border-inner);
-    opacity: 0;
     padding-top: calc(var(--segment) / 5);
 }
 
@@ -1467,6 +1467,8 @@ body {
 
 [data-carousel-slides-wrapper] {
     position: relative;
+    overflow: clip;
+    contain: content;
 }
 
 [data-carousel-slides] {
@@ -1480,8 +1482,8 @@ body {
     width: 100%;
     column-gap: var(--slide-offset);
     border-radius: 0.5rem;
-    /* cursor: grab; */
     touch-action: pan-x;
+    /* cursor: grab; */
     /* mask-image: linear-gradient(90deg, rgba(0, 0, 0, 1) calc(100% - calc(var(--slide-offset) * 2)), rgba(0, 0, 0, 0) 100%); */
 }
 
@@ -1498,6 +1500,7 @@ body {
     width: 25%;
     cursor: w-resize;
     user-select: none;
+    -webkit-user-select: none;
 }
 
 [data-carousel-slides]::after {
@@ -1509,6 +1512,7 @@ body {
     width: 25%;
     cursor: e-resize;
     user-select: none;
+    -webkit-user-select: none;
 }
 
 [data-carousel-slides] figure {

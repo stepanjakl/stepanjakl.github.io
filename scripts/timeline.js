@@ -52,12 +52,13 @@ class timeline extends HTMLElement {
                 #timeline-wrapper {
                     transition: border-radius var(--animate-out-segment) var(--ease-in-quad), transform var(--animate-out-segment) var(--ease-in-quad);
                     position: relative;
+                    width: 100%;
                     border-radius: 0.75rem;
                     background-color: rgba(0, 91, 102, 0.75); /* 210, 100, 35 */
                     backdrop-filter: blur(0.375rem);
                     -webkit-backdrop-filter: blur(0.375rem);
                     overflow: clip;
-                    width: 100%;
+                    contain: content;
                 }
 
                 horizontal-timeline:hover #timeline-wrapper {
@@ -73,7 +74,6 @@ class timeline extends HTMLElement {
                     scroll-behavior: auto;
                     white-space: nowrap;
                     scrollbar-width: none;
-                    -webkit-overflow-scrolling: touch;
                     -ms-overflow-style: none;
                     cursor: grab;
                     padding: 0.5rem 1.5rem 0.25rem 1.5rem;
