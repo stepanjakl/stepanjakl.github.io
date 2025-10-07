@@ -15,8 +15,9 @@
     --highlight-primary: var(--blue-full-45);
 
     --icon: var(--cyan-quarter-60);
+    --icon-hover: var(--undefined-yet)
     --icon-bg: var(--cyan-quarter-75);
-    --icon-fg: var(--cyan-quarter-45);
+    /* --icon-fg: var(--cyan-quarter-45); */
 
     --context-border-dark: var(--cyan-quarter-95);
     --context-border-light: var(--cyan-quarter-75);

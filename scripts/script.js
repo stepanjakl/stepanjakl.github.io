@@ -64,9 +64,8 @@ class KeyHandler {
         document.addEventListener('keydown', this.handleKeydown.bind(this))
         document.addEventListener('keyup', this.handleKeyup.bind(this))
 
-        window.addEventListener('blur', () => {
-            this.toggleTooltipActiveClass('remove')
-        })
+        window.addEventListener('blur', () => { this.toggleTooltipActiveClass('remove') })
+        document.body.addEventListener('click', () => { this.toggleTooltipActiveClass('remove') })
     }
 
     handleKeydown(event) {
@@ -130,6 +129,7 @@ class KeyHandler {
     toggleMenu(event) {
         event.preventDefault()
         const menuElement = document.querySelector(this.menuElementSelector)
+        /* TODO - apply on all and/or cancel animation first */
         if (this.isAnimationFinished(menuElement)) {
             if (window.location.hash === '#menu') {
                 closeDialog('#')
@@ -337,8 +337,6 @@ class HorizontalDragScroll {
         this.element.addEventListener('mouseup', this.completeDrag.bind(this))
         this.element.addEventListener('mouseleave', this.completeDrag.bind(this))
         this.element.addEventListener('mousecancel', this.completeDrag.bind(this))
-        // this.element.addEventListener('scrollend', this.completeDrag.bind(this))
-        // this.element.addEventListener('dragend', this.completeDrag.bind(this))
     }
 
     onMouseDown(event) {
@@ -359,7 +357,6 @@ class HorizontalDragScroll {
     }
 
     completeDrag(event) {
-        console.log('completeDrag', event.type);
             if (this.isMouseDown) {
 
                 this.isMouseDown = false
@@ -645,8 +642,6 @@ class Carousel {
     }
 
     createNavigationDots() {
-        console.log(this.slideEls);
-
         this.navEl.innerHTML = this.slideEls.map((_, index) => `<button data-label-for="${this.slideEls[index].getAttribute('data-value')}"><span class="sr-only">Slide ${index + 1}</span></button>`).join('')
         this.dotEls = Array.from(this.navEl.querySelectorAll('button'))
         this.dotEls[0].setAttribute('aria-current', 'true')
@@ -657,11 +652,8 @@ class Carousel {
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    console.log('Intersecting:', entry.target);
-
                     this.activeSlide.set(entry.target)
                     entry.target.classList.add('active')
-                    console.log('Active slide set to:', this.activeSlide.get());
 
                     this.dotEls.forEach((dotEl, i) => {
                         const isCurrent = i === this.slideEls.indexOf(entry.target)
@@ -689,11 +681,9 @@ class Carousel {
             const x = event.clientX - slidesWrapperElRect.left
 
             if (x < slidesWrapperElRect.width * 0.25) {
-                // this.activeSlide.get()?.previousElementSibling && this.activeSlide.set(this.activeSlide.get().previousElementSibling)
                 this.scrollToSlide(this.activeSlide.get()?.previousElementSibling)
             }
             else if (x > slidesWrapperElRect.width * 0.75) {
-                // this.activeSlide.get()?.nextElementSibling && this.activeSlide.set(this.activeSlide.get().nextElementSibling)
                 this.scrollToSlide(this.activeSlide.get()?.nextElementSibling)
             }
         })
@@ -735,8 +725,6 @@ class Carousel {
     }
 
     scrollToSlide(slide) {
-        console.log('scrollToSlide', slide);
-
         slide.scrollIntoView({
             behavior: 'smooth',
             block: 'nearest',
@@ -799,7 +787,36 @@ window, initializeTimeline = () => {
     new HorizontalDragScroll({ element: document.querySelector('#timeline-content') })
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function initializeDialogs() {
+    // List all dialog IDs you want to initialize
+    const dialogIds = ['modal_profile', 'modal_archive', 'menu_button-wrapper']
+    dialogIds.forEach(dialogId => {
+        const dialogEl = document.getElementById(dialogId)
+        if (dialogEl) {
+            // Ensure ARIA role is set
+            if (!dialogEl.getAttribute('role')) {
+                dialogEl.setAttribute('role', 'dialog')
+            }
+            // Ensure backdrop is initialized
+            aria.addBackdrop(dialogId)
+        }
+    })
+}
+
+const applyNoAnimation = () => {
+        document.querySelectorAll(
+            `.animate-fade-in-name>div>p,
+            .animate-fade-in-title>p,
+            .animate-fade-in-title span.highlight-load,
+            .animate-fade-in-title span.highlight-load-alt,
+            .animate-fade-in-cta-1,
+            .animate-fade-in-cta-2,
+            .animate-fade-in-logo`
+        ).forEach(element => {
+            element.classList.add('quick-animation')
+        })
+    }
+
     const openDialogOnLoad = () => {
         switch (window.location.hash.split('?')[0]) {
             case '#profile':
@@ -818,6 +835,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+document.addEventListener('DOMContentLoaded', () => {
+
+    document.body.addEventListener('click', () => {
+        if(getComputedStyle(document.querySelector('#logo')).animationPlayState === 'running') {
+            applyNoAnimation()
+        }
+    }, { once: true })
+
+    initializeDialogs()
+
     // Detect touch device
     if (isTouchDevice) {
         document.body.classList.add('touch-device')
@@ -825,11 +852,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize the UI elements based on the current hash
     if (window.location.hash) {
-        /* document.querySelectorAll(
-            '.animate-fade-in-name span, .animate-fade-in-title span, .animate-fade-in-cta-1, .animate-fade-in-cta-2, .animate-fade-in-logo'
-        ).forEach(element => {
-            element.classList.add('noanimation')
-        }) */
+        applyNoAnimation()
         openDialogOnLoad()
     }
 
