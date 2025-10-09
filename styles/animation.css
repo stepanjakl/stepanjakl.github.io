@@ -27,62 +27,89 @@ body {
 
 @keyframes square-blink {
     0%, 49.999% {
-        background-color: var(--footer-square-1);
+        background-color: var(--footer-square-1-hover);
     }
 
     50%, 100% {
-        background-color: var(--footer-square-1-hover);
+        background-color: var(--footer-square-1);
     }
 }
 
 #square-1 {
-    animation-name: square-blink;
-    animation-fill-mode: none;
-    animation-duration: calc(var(--anim-segment) * 2);
+    animation-name: fade-in-opacity, square-blink;
+    animation-fill-mode: backwards;
+    animation-duration: calc(var(--anim-segment) * 0.5), calc(var(--anim-segment) * 2);
+    animation-delay: calc(var(--anim-segment) * 5), calc(var(--anim-segment) * 5.5);
     animation-timing-function: linear;
-    animation-direction: alternate-reverse;
-    animation-iteration-count: 10;
+    animation-direction: normal;
+    /* animation-iteration-count: 1, 2; */
 }
 
 #square-2, #square-3, #square-4 {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
-    animation-duration: calc(var(--anim-segment) / 2);
+    animation-duration: calc(var(--anim-segment) * 0.5);
     animation-timing-function: linear;
 }
 
 #square-2 {
-    animation-delay: calc(var(--anim-segment) * 3);
-}
-
-#square-3 {
     animation-delay: calc(var(--anim-segment) * 4);
 }
 
-#square-4 {
-    animation-delay: calc(var(--anim-segment) * 5);
+#square-3 {
+    animation-delay: calc(var(--anim-segment) * 3.5);
 }
 
-@keyframes rectagle-animate {
+#square-4 {
+    animation-delay: calc(var(--anim-segment) * 3);
+}
+
+@keyframes rectangle-bg-animate-init {
     0% {
-        background-position-x: 0%;
+        background-position: 0% 0%;
     }
 
     100% {
-        background-position-x: 100%;
+        background-position: 5% 0%;
+    }
+}
+
+@keyframes rectangle-bg-animate {
+    0% {
+        background-position: 5% 0%;
+    }
+
+    100% {
+        background-position: 105% 0%;
+    }
+}
+
+@keyframes rectangle-mask-animate {
+    0% {
+        mask-position: 0% 0%;
+    }
+
+    100% {
+        mask-position: 100% 0%;
+        /* animation-timing-function: var(--ease-out-quad); */
     }
 }
 
 #rectangle {
     background-size: 200% 100%;
-    animation-name: fade-in-opacity, rectagle-animate;
-    animation-fill-mode: backwards, both;
-    animation-duration: calc(var(--anim-segment) * 4), 120s;
-    animation-timing-function: var(--ease-out-quad), linear;
-    animation-delay: calc(var(--anim-segment) * 6), 0s;
-    animation-direction: normal, reverse;
-    animation-iteration-count: 1, infinite;
+    mask-size: 200% 100%;
+    mask-image: linear-gradient(to left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.011) 8.6%, rgba(0, 0, 0, 0.032) 16.29%, rgba(0, 0, 0, 0.063) 23.22%, rgba(0, 0, 0, 0.103) 29.53%, rgba(0, 0, 0, 0.151) 35.37%, rgba(0, 0, 0, 0.208) 40.89%, rgba(0, 0, 0, 0.272) 46.23%, rgba(0, 0, 0, 0.343) 50%, rgba(0, 0, 0, 0.272) 53.77%, rgba(0, 0, 0, 0.208) 59.11%, rgba(0, 0, 0, 0.151) 64.63%, rgba(0, 0, 0, 0.103) 70.47%, rgba(0, 0, 0, 0.063) 76.78%, rgba(0, 0, 0, 0.032) 83.71%, rgba(0, 0, 0, 0.011) 91.4%, rgba(0, 0, 0, 0) 100%);
+    animation-name: fade-in-opacity, rectangle-bg-animate-init, rectangle-mask-animate, rectangle-bg-animate;
+    animation-fill-mode: backwards, both, forwards, both;
+    animation-duration: calc(var(--anim-segment) * 6), calc(var(--anim-segment) * 12), calc(var(--anim-segment) * 3), 120s;
+    animation-timing-function: var(--ease-out-quad), linear, linear, linear;
+    animation-delay: 0, 0, calc(var(--anim-segment) * 3), calc(var(--anim-segment) * 10);
+    animation-direction: normal;
+    animation-iteration-count: 1, 1, 1, infinite;
+    animation-composition: replace, replace, replace, accumulate;
 }
+
+/* background: linear-gradient(to top in oklch, var(--background), rgba(0, 20, 23, 0)); */
 
 
 /* Intro - Background */
@@ -96,13 +123,38 @@ body {
 }
 
 
+/* Intro - Logo */
+
+.animate-fade-in-logo {
+    animation-name: logo-animate;
+    animation-duration: calc(var(--anim-segment) * 3);
+    /* animation-delay: calc(var(--anim-segment) * 15); */
+    animation-delay: calc(var(--anim-segment) * 7);
+    animation-timing-function: var(--ease-out-quad);
+    animation-fill-mode: backwards;
+    transform-origin: center;
+}
+
+@keyframes logo-animate {
+    0% {
+        /* opacity: 0.5; */
+        transform: scale(0.85) rotate3d(0.25, 1, 0, 90deg);
+    }
+
+    100% {
+        /* opacity: 1; */
+        transform: scale(1) rotate3d(0, 0, 0, 90deg);
+    }
+}
+
 /* Intro - Text */
 
 .animate-fade-in-name>div>p,
 .animate-fade-in-title>p,
 /* .animate-fade-in-cta-1, */
 .animate-fade-in-cta-2
-/* .animate-fade-in-logo */ {
+/* .animate-fade-in-logo */
+    {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
     animation-duration: calc(var(--anim-segment) * 5);
@@ -119,11 +171,11 @@ body {
 }
 
 .animate-fade-in-name>div>p {
-    animation-delay: calc((var(--anim-segment) * 6) + (var(--anim-segment) * var(--i)));
+    animation-delay: calc((var(--anim-segment) * 8) + (var(--anim-segment) * var(--i)));
 }
 
 .animate-fade-in-title>p {
-    animation-delay: calc((var(--anim-segment) * 6) + (var(--anim-segment) * var(--i)));
+    animation-delay: calc((var(--anim-segment) * 8) + (var(--anim-segment) * var(--i)));
 }
 
 @keyframes fade-in-opacity {
@@ -154,7 +206,7 @@ body {
 
 .animate-fade-in-title span.highlight-load {
     animation-name: de-highlight-load;
-    animation-delay: calc((var(--anim-segment) * 10) + var(--i) * 0.1s);
+    animation-delay: calc((var(--anim-segment) * 12.5) + var(--i) * 0.1s);
 }
 
 @keyframes de-highlight-load {
@@ -169,7 +221,7 @@ body {
 
 .animate-fade-in-title span.highlight-load-alt {
     animation-name: de-highlight-load-alt;
-    animation-delay: calc((var(--anim-segment) * 12) + var(--i) * 0.1s);
+    animation-delay: calc((var(--anim-segment) * 14.5) + var(--i) * 0.1s);
 }
 
 @keyframes de-highlight-load-alt {
@@ -222,28 +274,6 @@ body {
 
 .animate-fade-in-cta-2 {
     animation-delay: calc(var(--anim-segment) * 18.5);
-}
-
-.animate-fade-in-logo {
-    animation-name: logo-animate;
-    animation-duration: calc(var(--anim-segment) * 3);
-    /* animation-delay: calc(var(--anim-segment) * 15); */
-    animation-delay: calc(var(--anim-segment) * 21);
-    animation-timing-function: var(--ease-out-quad);
-    animation-fill-mode: backwards;
-    transform-origin: center;
-}
-
-@keyframes logo-animate {
-    0% {
-        /* opacity: 0.5; */
-        transform: scale(0.85) rotate3d(0.25, 1, 0, 90deg);
-    }
-
-    100% {
-        /* opacity: 1; */
-        transform: scale(1) rotate3d(0, 0, 0, 90deg);
-    }
 }
 
 
@@ -559,21 +589,27 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 }
 
 #menu:target #menu_button {
-    box-shadow: 0 0 0 max(1px, 0.0625rem) var(--context-border-dark);
-    border-radius: 0.3125rem 1rem 1rem 0.3125rem;
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) rgba(0, 0, 0, 0);
+    /* border-radius: 0.3125rem 1rem 1rem 0.3125rem; */
+}
+
+#menu_button-wrapper:hover #menu_button {
+    border-color: var(--light-2);
+}
+
+#menu:target #menu_button, #menu_button-wrapper.tooltip-key--active #menu_button {
+    border-color: var(--light-3);
 }
 
 #menu_button-wrapper:hover #menu_button, #menu:target #menu_button, #menu_button-wrapper.tooltip-key--active #menu_button {
-    transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear, border-radius var(--animate-in-segment) var(--ease-out-quad);
+    transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear, outline var(--animate-in-segment-2\/3) linear;
     color: var(--icon-hover);
     background-color: var(--highlight-secondary);
-    border-color: var(--light-3);
 }
 
 #menu_button span {
     background-color: currentColor;
     animation-fill-mode: forwards;
-    /* animation-name: initial; */
 }
 
 #menu_button span:nth-child(1) {
@@ -615,8 +651,6 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
     animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-bottom-right;
 }
-
-/* @keyframes initial {} */
 
 @keyframes menu-top-left {
     0% {
@@ -782,47 +816,6 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
     opacity: 1;
     transform: translate(0);
     transition: opacity calc(1.25 * var(--animate-in-segment)) var(--ease-out-quad), transform calc(1.25 * var(--animate-in-segment)) var(--ease-out-quad);
-}
-
-#menu_dropdown a:first-child:before,
-#menu_dropdown a:first-child:after {
-    border-radius: 0.3125rem 0.3125rem 0 0;
-}
-
-#menu_dropdown label:last-child:before,
-#menu_dropdown label:last-child:after {
-    border-radius: 0 0 0.3125rem 0.3125rem;
-}
-
-#menu_dropdown a::before,
-#menu_dropdown label::before {
-    transition: opacity var(--animate-out-segment) linear, inset var(--animate-out-segment) var(--ease-in-quad);
-    content: "";
-    opacity: 0;
-    position: absolute;
-    inset: min(-1px, -0.0625rem) min(-1px, -0.0625rem) 0 min(-1px, -0.0625rem);
-    z-index: 1;
-    background-image: linear-gradient(to right, rgba(0, 118, 132, 0.75), rgba(0, 118, 132, 0.15));
-    /* 210, 100, 45 */
-}
-
-#menu_dropdown a::after,
-#menu_dropdown label::after {
-    transition: opacity var(--animate-out-segment) linear, inset var(--animate-out-segment) var(--ease-in-quad);
-    content: "";
-    opacity: 0;
-    position: absolute;
-    inset: min(-1px, -0.0625rem) min(-1px, -0.0625rem) 0 min(-1px, -0.0625rem);
-    z-index: 1;
-    border: max(1px, 0.0625rem) solid transparent;
-    background-image: linear-gradient(to right, rgba(0, 118, 132, 1), rgba(0, 118, 132, 0));
-    /* 210, 100, 45 */
-    background-origin: border-box;
-    background-clip: border-box;
-    mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
-    mask-composite: destination-out;
-    mask-repeat: no-repeat;
-    mask-composite: exclude;
 }
 
 #menu_dropdown a:hover::before,
