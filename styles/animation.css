@@ -23,45 +23,20 @@ body {
 }
 
 
-/* Intro - Footer */
+/* Intro - Footer - Rectangle */
 
-@keyframes square-blink {
-    0%, 49.999% {
-        background-color: var(--footer-square-1-hover);
-    }
-
-    50%, 100% {
-        background-color: var(--footer-square-1);
-    }
-}
-
-#square-1 {
-    animation-name: fade-in-opacity, square-blink;
-    animation-fill-mode: backwards;
-    animation-duration: calc(var(--anim-segment) * 0.5), calc(var(--anim-segment) * 2);
-    animation-delay: calc(var(--anim-segment) * 5), calc(var(--anim-segment) * 5.5);
-    animation-timing-function: linear;
+#rectangle {
+    background-size: 200% 100%;
+    mask-size: 200% 100%;
+    mask-image: linear-gradient(to left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.011) 8.6%, rgba(0, 0, 0, 0.032) 16.29%, rgba(0, 0, 0, 0.063) 23.22%, rgba(0, 0, 0, 0.103) 29.53%, rgba(0, 0, 0, 0.151) 35.37%, rgba(0, 0, 0, 0.208) 40.89%, rgba(0, 0, 0, 0.272) 46.23%, rgba(0, 0, 0, 0.343) 50%, rgba(0, 0, 0, 0.272) 53.77%, rgba(0, 0, 0, 0.208) 59.11%, rgba(0, 0, 0, 0.151) 64.63%, rgba(0, 0, 0, 0.103) 70.47%, rgba(0, 0, 0, 0.063) 76.78%, rgba(0, 0, 0, 0.032) 83.71%, rgba(0, 0, 0, 0.011) 91.4%, rgba(0, 0, 0, 0) 100%);
+    animation-name: fade-in-opacity, rectangle-bg-animate-init, rectangle-mask-animate, rectangle-bg-animate;
+    animation-fill-mode: backwards, both, forwards, both;
+    animation-duration: calc(var(--anim-segment) * 6), calc(var(--anim-segment) * 12), calc(var(--anim-segment) * 3), 120s;
+    animation-timing-function: var(--ease-out-quad), linear, linear, linear;
+    animation-delay: 0, 0, calc(var(--anim-segment) * 3), calc(var(--anim-segment) * 10);
     animation-direction: normal;
-    /* animation-iteration-count: 1, 2; */
-}
-
-#square-2, #square-3, #square-4 {
-    animation-name: fade-in-opacity;
-    animation-fill-mode: backwards;
-    animation-duration: calc(var(--anim-segment) * 0.5);
-    animation-timing-function: linear;
-}
-
-#square-2 {
-    animation-delay: calc(var(--anim-segment) * 4);
-}
-
-#square-3 {
-    animation-delay: calc(var(--anim-segment) * 3.5);
-}
-
-#square-4 {
-    animation-delay: calc(var(--anim-segment) * 3);
+    animation-iteration-count: 1, 1, 1, infinite;
+    animation-composition: replace, replace, replace, accumulate;
 }
 
 @keyframes rectangle-bg-animate-init {
@@ -91,25 +66,50 @@ body {
 
     100% {
         mask-position: 100% 0%;
-        /* animation-timing-function: var(--ease-out-quad); */
     }
 }
 
-#rectangle {
-    background-size: 200% 100%;
-    mask-size: 200% 100%;
-    mask-image: linear-gradient(to left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.011) 8.6%, rgba(0, 0, 0, 0.032) 16.29%, rgba(0, 0, 0, 0.063) 23.22%, rgba(0, 0, 0, 0.103) 29.53%, rgba(0, 0, 0, 0.151) 35.37%, rgba(0, 0, 0, 0.208) 40.89%, rgba(0, 0, 0, 0.272) 46.23%, rgba(0, 0, 0, 0.343) 50%, rgba(0, 0, 0, 0.272) 53.77%, rgba(0, 0, 0, 0.208) 59.11%, rgba(0, 0, 0, 0.151) 64.63%, rgba(0, 0, 0, 0.103) 70.47%, rgba(0, 0, 0, 0.063) 76.78%, rgba(0, 0, 0, 0.032) 83.71%, rgba(0, 0, 0, 0.011) 91.4%, rgba(0, 0, 0, 0) 100%);
-    animation-name: fade-in-opacity, rectangle-bg-animate-init, rectangle-mask-animate, rectangle-bg-animate;
-    animation-fill-mode: backwards, both, forwards, both;
-    animation-duration: calc(var(--anim-segment) * 6), calc(var(--anim-segment) * 12), calc(var(--anim-segment) * 3), 120s;
-    animation-timing-function: var(--ease-out-quad), linear, linear, linear;
-    animation-delay: 0, 0, calc(var(--anim-segment) * 3), calc(var(--anim-segment) * 10);
+
+/* Intro - Footer - Squares */
+
+#square-1 {
+    animation-name: fade-in-opacity, square-blink;
+    animation-fill-mode: backwards;
+    animation-duration: calc(var(--anim-segment) * 0.5), calc(var(--anim-segment) * 2.5);
+    animation-delay: calc(var(--anim-segment) * 5.25), calc(var(--anim-segment) * 5.75);
+    animation-timing-function: linear;
     animation-direction: normal;
-    animation-iteration-count: 1, 1, 1, infinite;
-    animation-composition: replace, replace, replace, accumulate;
+    animation-iteration-count: 1;
 }
 
-/* background: linear-gradient(to top in oklch, var(--background), rgba(0, 20, 23, 0)); */
+#square-2, #square-3, #square-4 {
+    animation-name: fade-in-opacity;
+    animation-fill-mode: backwards;
+    animation-duration: calc(var(--anim-segment) * 0.5);
+    animation-timing-function: linear;
+}
+
+#square-2 {
+    animation-delay: calc(var(--anim-segment) * 4.25);
+}
+
+#square-3 {
+    animation-delay: calc(var(--anim-segment) * 3.5);
+}
+
+#square-4 {
+    animation-delay: calc((var(--anim-segment) * 3));
+}
+
+@keyframes square-blink {
+    0%, 49.999% {
+        background-color: var(--footer-square-1-hover);
+    }
+
+    50%, 100% {
+        background-color: var(--footer-square-1);
+    }
+}
 
 
 /* Intro - Background */
@@ -117,9 +117,9 @@ body {
 #background-pattern {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
-    animation-duration: calc(var(--anim-segment) * 25);
+    animation-duration: calc(var(--anim-segment) * 22);
     animation-timing-function: var(--ease-out-quad);
-    animation-delay: calc(var(--anim-segment) * 6);
+    animation-delay: calc(var(--anim-segment) * 5.75);
 }
 
 
@@ -127,9 +127,8 @@ body {
 
 .animate-fade-in-logo {
     animation-name: logo-animate;
-    animation-duration: calc(var(--anim-segment) * 3);
-    /* animation-delay: calc(var(--anim-segment) * 15); */
-    animation-delay: calc(var(--anim-segment) * 7);
+    animation-duration: calc(var(--anim-segment) * 2.75);
+    animation-delay: calc(var(--anim-segment) * 8.25);
     animation-timing-function: var(--ease-out-quad);
     animation-fill-mode: backwards;
     transform-origin: center;
@@ -137,24 +136,19 @@ body {
 
 @keyframes logo-animate {
     0% {
-        /* opacity: 0.5; */
         transform: scale(0.85) rotate3d(0.25, 1, 0, 90deg);
     }
 
     100% {
-        /* opacity: 1; */
         transform: scale(1) rotate3d(0, 0, 0, 90deg);
     }
 }
 
+
 /* Intro - Text */
 
 .animate-fade-in-name>div>p,
-.animate-fade-in-title>p,
-/* .animate-fade-in-cta-1, */
-.animate-fade-in-cta-2
-/* .animate-fade-in-logo */
-    {
+.animate-fade-in-title>p {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
     animation-duration: calc(var(--anim-segment) * 5);
@@ -171,11 +165,11 @@ body {
 }
 
 .animate-fade-in-name>div>p {
-    animation-delay: calc((var(--anim-segment) * 8) + (var(--anim-segment) * var(--i)));
+    animation-delay: calc((var(--anim-segment) * 9) + (var(--anim-segment) * var(--i)));
 }
 
 .animate-fade-in-title>p {
-    animation-delay: calc((var(--anim-segment) * 8) + (var(--anim-segment) * var(--i)));
+    animation-delay: calc((var(--anim-segment) * 9) + (var(--anim-segment) * var(--i)));
 }
 
 @keyframes fade-in-opacity {
@@ -195,21 +189,21 @@ body {
 }
 
 
-/* Intro - Text Load Highlight */
+/* Intro - Text De-Highlight */
 
-.animate-fade-in-title span.highlight-load,
-.animate-fade-in-title span.highlight-load-alt {
+.animate-fade-in-title span.de-highlight-anim,
+.animate-fade-in-title span.de-highlight-anim-alt {
     animation-fill-mode: both;
     animation-duration: calc(var(--anim-segment) * 4);
-    animation-timing-function: var(--ease-out-quad), var(--ease-in-out-quad), var(--ease-out-quad), var(--ease-out-quad);
+    animation-timing-function: var(--ease-out-quad);
 }
 
-.animate-fade-in-title span.highlight-load {
-    animation-name: de-highlight-load;
-    animation-delay: calc((var(--anim-segment) * 12.5) + var(--i) * 0.1s);
+.animate-fade-in-title span.de-highlight-anim {
+    animation-name: de-highlight-anim;
+    animation-delay: calc((var(--anim-segment) * 14) + var(--i) * 0.1s);
 }
 
-@keyframes de-highlight-load {
+@keyframes de-highlight-anim {
     0% {
         color: var(--highlight-primary);
     }
@@ -219,12 +213,12 @@ body {
     }
 }
 
-.animate-fade-in-title span.highlight-load-alt {
-    animation-name: de-highlight-load-alt;
-    animation-delay: calc((var(--anim-segment) * 14.5) + var(--i) * 0.1s);
+.animate-fade-in-title span.de-highlight-anim-alt {
+    animation-name: de-highlight-anim-alt;
+    animation-delay: calc((var(--anim-segment) * 15) + var(--i) * 0.1s);
 }
 
-@keyframes de-highlight-load-alt {
+@keyframes de-highlight-anim-alt {
     0% {
         color: var(--yellow);
     }
@@ -237,43 +231,75 @@ body {
 
 /* Intro - CTA Blocks */
 
-/* .animate-fade-in-cta-1 {
-    animation-delay: calc(var(--anim-segment) * 15);
-} */
-
 .animate-fade-in-cta-1 a::before {
-    animation-name: cta-1-animate;
-    animation-duration: calc(var(--anim-segment) * 2);
-    animation-delay: calc(var(--anim-segment) * 15.5);
+    animation-name: cta-1-animate-init;
+    animation-duration: calc(var(--anim-segment) * 1.5);
+    animation-delay: calc(var(--anim-segment) * 16);
     animation-timing-function: var(--ease-in-out-quad);
     animation-fill-mode: backwards;
     transform-origin: center;
 }
 
-@keyframes cta-1-animate {
-    0% {
-        opacity: 0.5;
-        width: 0%;
-        transform: scale(0.95);
-    }
-
-    100% {
-        opacity: 1;
-        width: 100%;
-        transform: scale(1);
-    }
-}
-
 .animate-fade-in-cta-1 a>div {
     animation-name: fade-in-opacity;
-    animation-duration: calc(2 * var(--anim-segment));
+    animation-duration: calc(1.5 * var(--anim-segment));
     animation-delay: calc(var(--anim-segment) * 17);
     animation-timing-function: var(--ease-out-quad);
     animation-fill-mode: backwards;
 }
 
-.animate-fade-in-cta-2 {
+@keyframes cta-1-animate-init {
+    0% {
+        opacity: 0;
+        width: 0%;
+        transform: scale(0.9);
+    }
+
+    25% {
+        opacity: 1;
+    }
+
+    100% {
+        width: 100%;
+        transform: scale(1);
+    }
+}
+
+.animate-fade-in-cta-2#menu::before {
+    animation-name: cta-2-animate-init;
+    animation-duration: calc(var(--anim-segment) * 2);
     animation-delay: calc(var(--anim-segment) * 18.5);
+    animation-timing-function: var(--ease-in-out-quad);
+    animation-fill-mode: backwards;
+    transform-origin: center;
+}
+
+.animate-fade-in-cta-2 #menu_email_button-wrapper,
+.animate-fade-in-cta-2 #menu_link_profile,
+.animate-fade-in-cta-2 #menu_link_archive,
+.animate-fade-in-cta-2 #menu_button-wrapper {
+    animation-name: fade-in-opacity;
+    animation-duration: calc(1.5 * var(--anim-segment));
+    animation-delay: calc((var(--anim-segment) * 19.5) + ((var(--anim-segment) * 0.75) * var(--i)));
+    animation-timing-function: var(--ease-out-quad);
+    animation-fill-mode: backwards;
+}
+
+@keyframes cta-2-animate-init {
+    0% {
+        opacity: 0;
+        width: 0%;
+        transform: scale(0.95);
+    }
+
+    25% {
+        opacity: 1;
+    }
+
+    100% {
+        width: 100%;
+        transform: scale(1);
+    }
 }
 
 
@@ -801,20 +827,22 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 #menu_dropdown {
     opacity: 0;
-    transform: translateY(-0.25rem);
+    transform: translateY(-0.25rem) scale(0.975);
+    transform-origin: bottom;
     transition: opacity calc(1.25 * var(--animate-out-segment)) var(--ease-in-quad), transform calc(1.25 * var(--animate-out-segment)) var(--ease-in-quad);
 }
 
 @media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
     #menu_dropdown {
-        transform: translateX(-0.25rem);
+        transform: translateX(-0.25rem) scale(0.975);
+        transform-origin: bottom right;
     }
 }
 
 #menu:target #menu_dropdown {
     pointer-events: auto;
     opacity: 1;
-    transform: translate(0);
+    transform: translate(0) scale(1);
     transition: opacity calc(1.25 * var(--animate-in-segment)) var(--ease-out-quad), transform calc(1.25 * var(--animate-in-segment)) var(--ease-out-quad);
 }
 
@@ -868,22 +896,22 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 }
 
 #menu_dropdown label#menu_dropdown_light-mode::before {
-    background-image: linear-gradient(to right, rgba(238, 213, 0, 0.75), rgba(238, 213, 0, 0));
+    background-image: linear-gradient(to right in oklch, rgba(238, 213, 0, 0.75), rgba(238, 213, 0, 0));
     /* 75, 100, 85  */
 }
 
 #menu_dropdown label#menu_dropdown_light-mode::after {
-    background-image: linear-gradient(to right, rgba(238, 213, 0, 1), rgba(238, 213, 0, 0));
+    background-image: linear-gradient(to right in oklch, rgba(238, 213, 0, 1), rgba(238, 213, 0, 0));
     /* 75, 100, 85  */
 }
 
 #menu_dropdown label#menu_dropdown_debug::before {
-    background-image: linear-gradient(to right, rgba(0, 95, 241, 0.75), rgba(0, 95, 241, 0));
+    background-image: linear-gradient(to right in oklch, rgba(0, 95, 241, 0.75), rgba(0, 95, 241, 0));
     /* 260, 100, 45 */
 }
 
 #menu_dropdown label#menu_dropdown_debug::after {
-    background-image: linear-gradient(to right, rgba(0, 95, 241, 1), rgba(0, 95, 241, 0));
+    background-image: linear-gradient(to right in oklch, rgba(0, 95, 241, 1), rgba(0, 95, 241, 0));
     /* 260, 100, 45 */
 }
 

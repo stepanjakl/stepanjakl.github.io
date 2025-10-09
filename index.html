@@ -118,7 +118,7 @@
                                 <span>F</span><span>u</span><span>l</span><span>l</span><span>-</span><span>s</span><span>t</span><span>a</span><span>c</span><span>k</span>
                             </p>
                             <p style="--i:4">
-                                <span>&nbsp;</span><span class="highlight-load" style="--i:1">d</span><span class="highlight-load" style="--i:2">e</span><span class="highlight-load" style="--i:3">v</span><span class="highlight-load" style="--i:4">e</span><span class="highlight-load" style="--i:5">l</span><span class="highlight-load" style="--i:6">o</span><span class="highlight-load" style="--i:7">p</span><span class="highlight-load" style="--i:8">e</span><span class="highlight-load" style="--i:9">r</span>
+                                <span>&nbsp;</span><span class="de-highlight-anim" style="--i:1">d</span><span class="de-highlight-anim" style="--i:2">e</span><span class="de-highlight-anim" style="--i:3">v</span><span class="de-highlight-anim" style="--i:4">e</span><span class="de-highlight-anim" style="--i:5">l</span><span class="de-highlight-anim" style="--i:6">o</span><span class="de-highlight-anim" style="--i:7">p</span><span class="de-highlight-anim" style="--i:8">e</span><span class="de-highlight-anim" style="--i:9">r</span>
                             </p>
                             <!-- <span style="--i:21">&nbsp;</span> -->
                         </h3>
@@ -129,7 +129,7 @@
                                 <span>&</span><span>&nbsp;</span><span>i</span><span>n</span><span>t</span><span>e</span><span>r</span><span>f</span><span>a</span><span>c</span><span>e</span>
                             </p>
                             <p style="--i:6">
-                                <span>&nbsp;</span><span class="highlight-load-alt" style="--i:1">d</span><span class="highlight-load-alt" style="--i:2">e</span><span class="highlight-load-alt" style="--i:3">s</span><span class="highlight-load-alt" style="--i:4">i</span><span class="highlight-load-alt" style="--i:5">g</span><span class="highlight-load-alt" style="--i:6">n</span><span class="highlight-load-alt" style="--i:7">e</span><span class="highlight-load-alt" style="--i:8">r</span>
+                                <span>&nbsp;</span><span class="de-highlight-anim-alt" style="--i:1">d</span><span class="de-highlight-anim-alt" style="--i:2">e</span><span class="de-highlight-anim-alt" style="--i:3">s</span><span class="de-highlight-anim-alt" style="--i:4">i</span><span class="de-highlight-anim-alt" style="--i:5">g</span><span class="de-highlight-anim-alt" style="--i:6">n</span><span class="de-highlight-anim-alt" style="--i:7">e</span><span class="de-highlight-anim-alt" style="--i:8">r</span>
                             </p>
                         </h3>
                         <div id="availability_button"
@@ -158,7 +158,7 @@
                              class="relative align-self-start grid animate-fade-in-cta-2">
                             <div id="menu_email_button-wrapper"
                                  class="inline-flex tooltip-wrapper"
-                                 style="place-self: self-start">
+                                 style="--i:1; place-self: self-start">
                                 <!-- onmousedown="navigator.clipboard.writeText('stepan.jakl@icloud.com'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip span'), this.querySelector('.highlight-text'), 'Copied to the clipboard')"
                                      onkeydown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@icloud.com')" -->
                                 <button type="button"
@@ -187,7 +187,8 @@
                                    tabindex="0"
                                    onclick="handleTouchButtonClick(this, event, () => { openDialog('modal_profile', this, null, 'profile') })"
                                    aria-label="Learn more about me"
-                                   class="flex align-items-center tooltip-wrapper">
+                                   class="flex align-items-center tooltip-wrapper"
+                                   style="--i:2">
                                     <span id="menu_link_icon"
                                           class="inline-flex rounded-full"
                                           style="padding: 0.53125rem;
@@ -222,7 +223,8 @@
                                    tabindex="0"
                                    onclick="handleTouchButtonClick(this, event, () => { openDialog('modal_archive', this, null, 'archive') })"
                                    aria-label="Explore snippets of my past work"
-                                   class="flex align-items-center tooltip-wrapper">
+                                   class="flex align-items-center tooltip-wrapper"
+                                   style="--i:3">
                                     <span id="menu_link_icon"
                                           class="inline-flex rounded-full"
                                           style="padding: 0.59375rem;
@@ -246,7 +248,8 @@
                             </div>
                             <div role="dialog"
                                  id="menu_button-wrapper"
-                                 class="relative flex tooltip-wrapper">
+                                 class="relative flex tooltip-wrapper"
+                                 style="--i:4">
                                 <a href="#menu"
                                    tabindex="0"
                                    onclick="event.preventDefault(); openDialog('menu_button-wrapper', this, 'menu_button--close', 'menu');"

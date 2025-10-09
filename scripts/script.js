@@ -807,8 +807,8 @@ const applyNoAnimation = () => {
         document.querySelectorAll(
             `.animate-fade-in-name>div>p,
             .animate-fade-in-title>p,
-            .animate-fade-in-title span.highlight-load,
-            .animate-fade-in-title span.highlight-load-alt,
+            .animate-fade-in-title span.de-highlight-anim,
+            .animate-fade-in-title span.de-highlight-anim-alt,
             .animate-fade-in-cta-1,
             .animate-fade-in-cta-2,
             .animate-fade-in-logo`
