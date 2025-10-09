@@ -100,9 +100,9 @@ body {
 
 .animate-fade-in-name>div>p,
 .animate-fade-in-title>p,
-.animate-fade-in-cta-1,
-.animate-fade-in-cta-2,
-.animate-fade-in-logo {
+/* .animate-fade-in-cta-1, */
+.animate-fade-in-cta-2
+/* .animate-fade-in-logo */ {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
     animation-duration: calc(var(--anim-segment) * 5);
@@ -124,6 +124,22 @@ body {
 
 .animate-fade-in-title>p {
     animation-delay: calc((var(--anim-segment) * 6) + (var(--anim-segment) * var(--i)));
+}
+
+@keyframes fade-in-opacity {
+    0% {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    25% {
+        pointer-events: none;
+    }
+
+    100% {
+        opacity: 1;
+        pointer-events: auto;
+    }
 }
 
 
@@ -169,41 +185,64 @@ body {
 
 /* Intro - CTA Blocks */
 
-.animate-fade-in-cta-1 {
+/* .animate-fade-in-cta-1 {
     animation-delay: calc(var(--anim-segment) * 15);
+} */
+
+.animate-fade-in-cta-1 a::before {
+    animation-name: cta-1-animate;
+    animation-duration: calc(var(--anim-segment) * 2);
+    animation-delay: calc(var(--anim-segment) * 15.5);
+    animation-timing-function: var(--ease-in-out-quad);
+    animation-fill-mode: backwards;
+    transform-origin: center;
 }
 
-.animate-fade-in-cta-2 {
-    animation-delay: calc(var(--anim-segment) * 17);
-}
-
-.animate-fade-in-logo {
-    animation-delay: calc(var(--anim-segment) * 19);
-}
-
-@keyframes fade-in-opacity {
+@keyframes cta-1-animate {
     0% {
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    25% {
-        pointer-events: none;
+        opacity: 0.5;
+        width: 0%;
+        transform: scale(0.95);
     }
 
     100% {
         opacity: 1;
-        pointer-events: auto;
+        width: 100%;
+        transform: scale(1);
     }
 }
 
-@keyframes fade-in-scale {
+.animate-fade-in-cta-1 a>div {
+    animation-name: fade-in-opacity;
+    animation-duration: calc(2 * var(--anim-segment));
+    animation-delay: calc(var(--anim-segment) * 17);
+    animation-timing-function: var(--ease-out-quad);
+    animation-fill-mode: backwards;
+}
+
+.animate-fade-in-cta-2 {
+    animation-delay: calc(var(--anim-segment) * 18.5);
+}
+
+.animate-fade-in-logo {
+    animation-name: logo-animate;
+    animation-duration: calc(var(--anim-segment) * 3);
+    /* animation-delay: calc(var(--anim-segment) * 15); */
+    animation-delay: calc(var(--anim-segment) * 21);
+    animation-timing-function: var(--ease-out-quad);
+    animation-fill-mode: backwards;
+    transform-origin: center;
+}
+
+@keyframes logo-animate {
     0% {
-        transform: scale(0.9775);
+        /* opacity: 0.5; */
+        transform: scale(0.85) rotate3d(0.25, 1, 0, 90deg);
     }
 
     100% {
-        transform: scale(1);
+        /* opacity: 1; */
+        transform: scale(1) rotate3d(0, 0, 0, 90deg);
     }
 }
 
@@ -514,8 +553,9 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 #menu_button {
     z-index: 2;
-    color: var(--icon);
     transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, box-shadow var(--animate-out-segment-2\/3) linear, border-radius var(--animate-out-segment) var(--ease-in-quad);
+    overflow: clip;
+    contain: content;
 }
 
 #menu:target #menu_button {
@@ -523,7 +563,7 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
     border-radius: 0.3125rem 1rem 1rem 0.3125rem;
 }
 
-#menu_button-wrapper:hover #menu_button, #menu_button-wrapper.tooltip-key--active #menu_button, #menu:target #menu_button {
+#menu_button-wrapper:hover #menu_button, #menu:target #menu_button, #menu_button-wrapper.tooltip-key--active #menu_button {
     transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear, border-radius var(--animate-in-segment) var(--ease-out-quad);
     color: var(--icon-hover);
     background-color: var(--highlight-secondary);
@@ -532,7 +572,7 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 #menu_button span {
     background-color: currentColor;
-    animation-fill-mode: both;
+    animation-fill-mode: forwards;
     /* animation-name: initial; */
 }
 
