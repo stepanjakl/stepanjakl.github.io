@@ -543,59 +543,78 @@ class Popup {
         const { href } = element
 
         try {
-            const dimensions = await this.getImageDimensions(href)
-            if (!dimensions) return true
+            if (this.isVideo(href)) {
+                const dimensions = await this.getVideoDimensions(href)
+                if (!dimensions) return true
 
-            const { width, height, left, top } = this.calculateWindowSize(dimensions)
+                const { width, height, left, top } = this.calculateWindowSize(dimensions)
+                const popup = window.open(
+                    href,
+                    '_blank',
+                    `toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=${width},height=${height},top=${top},left=${left}`
+                )
+                return popup === null
+            } else {
+                const dimensions = await this.getImageDimensions(href)
+                if (!dimensions) return true
 
-            const popup = window.open(
-                href,
-                '_blank',
-                `toolbar=no, location=no, directories=no, status=no, menubar=no,
-                scrollbars=yes, resizable=yes, copyhistory=no,
-                width=${width}, height=${height}, top=${top}, left=${left}`
-            )
-
-            return popup === null
+                const { width, height, left, top } = this.calculateWindowSize(dimensions)
+                const popup = window.open(
+                    href,
+                    '_blank',
+                    `toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=${width},height=${height},top=${top},left=${left}`
+                )
+                return popup === null
+            }
         } catch (error) {
             console.error('Error opening popup:', error)
             return true
         }
     }
 
+    isVideo(url) {
+        return /\.(mp4|webm|ogg)$/i.test(url)
+    }
+
     getImageDimensions(url) {
         return new Promise((resolve) => {
             const img = new Image()
-
             img.onload = () => {
-                resolve({
-                    width: img.width,
-                    height: img.height
-                })
+                resolve({ width: img.width, height: img.height })
             }
-
             img.onerror = () => {
                 resolve(null)
             }
-
             img.src = url
         })
     }
 
-    calculateWindowSize(imageDimensions) {
+    getVideoDimensions(url) {
+        return new Promise((resolve) => {
+            const video = document.createElement('video')
+            video.preload = 'metadata'
+            video.onloadedmetadata = () => {
+                resolve({ width: video.videoWidth, height: video.videoHeight })
+            }
+            video.onerror = () => {
+                resolve(null)
+            }
+            video.src = url
+        })
+    }
+
+    calculateWindowSize(dimensions) {
         const screenWidth = screen.availWidth * this.widthRatio
         const screenHeight = screen.availHeight * this.heightRatio
+        const imageRatio = dimensions.width / dimensions.height
 
-        const imageRatio = imageDimensions.width / imageDimensions.height
-
-        let width = imageDimensions.width
-        let height = imageDimensions.height
+        let width = dimensions.width
+        let height = dimensions.height
 
         if (width > screenWidth) {
             width = screenWidth
             height = width / imageRatio
         }
-
         if (height > screenHeight) {
             height = screenHeight
             width = height * imageRatio
@@ -805,13 +824,21 @@ function initializeDialogs() {
 
 const applyNoAnimation = () => {
         document.querySelectorAll(
-            `.animate-fade-in-name>div>p,
+            `#square-2,
+             #square-3,
+             #square-4,
+            .animate-fade-in-logo,
+            .animate-fade-in-name>div>p,
             .animate-fade-in-title>p,
             .animate-fade-in-title span.de-highlight-anim,
             .animate-fade-in-title span.de-highlight-anim-alt,
-            .animate-fade-in-cta-1,
-            .animate-fade-in-cta-2,
-            .animate-fade-in-logo`
+            .animate-fade-in-cta-1 #availability_button-bg,
+            .animate-fade-in-cta-1 a>div,
+            .animate-fade-in-cta-2 #menu-bg,
+            .animate-fade-in-cta-2 #menu_email_button-wrapper,
+            .animate-fade-in-cta-2 #menu_link_profile,
+            .animate-fade-in-cta-2 #menu_link_archive,
+            .animate-fade-in-cta-2 #menu_button-wrapper`
         ).forEach(element => {
             element.classList.add('quick-animation')
         })
@@ -838,7 +865,7 @@ const applyNoAnimation = () => {
 document.addEventListener('DOMContentLoaded', () => {
 
     document.body.addEventListener('click', () => {
-        if(getComputedStyle(document.querySelector('#logo')).animationPlayState === 'running') {
+        if(getComputedStyle(document.querySelector('.animate-fade-in-cta-1')).animationPlayState === 'running') {
             applyNoAnimation()
         }
     }, { once: true })
@@ -882,7 +909,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-carousel]').forEach((carouselEl, index) => new Carousel({ id: `carousel-${index + 1}`, element: carouselEl }))
 
     // Initialize popups
-    document.querySelectorAll('[data-carousel-slides] figure a').forEach(element => {
+    document.querySelectorAll('[data-carousel-slides] figure a, #modal_archive-content_section-content nav ul li a').forEach(element => {
         element.addEventListener('click', event => new Popup().open(element, event))
     })
 

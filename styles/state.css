@@ -119,16 +119,6 @@
 }
 
 
-/* Triangle - Flicker */
-/* leave here or move to animation? or move rest here? */
-#profile:target~main #triangle-right::after,
-#archive:target~main #triangle-right::after,
-#profile:target~main #triangle-right-alt::after,
-#archive:target~main #triangle-right-alt::after {
-    animation: none;
-}
-
-
 /* Modals */
 
 #profile:target~main #modal_profile,

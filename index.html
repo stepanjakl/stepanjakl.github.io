@@ -141,6 +141,7 @@
                                    target="_blank"
                                    aria-label="Open to new opportunities, book a virtual meeting"
                                    class="z-0 relative flex overflow-hidden">
+                                   <div id="availability_button-bg"></div>
                                     <div class="inline-flex align-items-center justify-content-center tooltip-wrapper"
                                          style="column-gap: 0.875rem">
                                         <span id="availability_button_dot"
@@ -156,9 +157,10 @@
                         </div>
                         <nav id="menu"
                              class="relative align-self-start grid animate-fade-in-cta-2">
+                             <div id="menu-bg"></div>
                             <div id="menu_email_button-wrapper"
                                  class="inline-flex tooltip-wrapper"
-                                 style="--i:1; place-self: self-start">
+                                 style="--i:0; place-self: self-start">
                                 <!-- onmousedown="navigator.clipboard.writeText('stepan.jakl@icloud.com'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip span'), this.querySelector('.highlight-text'), 'Copied to the clipboard')"
                                      onkeydown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@icloud.com')" -->
                                 <button type="button"
@@ -188,7 +190,7 @@
                                    onclick="handleTouchButtonClick(this, event, () => { openDialog('modal_profile', this, null, 'profile') })"
                                    aria-label="Learn more about me"
                                    class="flex align-items-center tooltip-wrapper"
-                                   style="--i:2">
+                                   style="--i:1">
                                     <span id="menu_link_icon"
                                           class="inline-flex rounded-full"
                                           style="padding: 0.53125rem;
@@ -224,7 +226,7 @@
                                    onclick="handleTouchButtonClick(this, event, () => { openDialog('modal_archive', this, null, 'archive') })"
                                    aria-label="Explore snippets of my past work"
                                    class="flex align-items-center tooltip-wrapper"
-                                   style="--i:3">
+                                   style="--i:2">
                                     <span id="menu_link_icon"
                                           class="inline-flex rounded-full"
                                           style="padding: 0.59375rem;
@@ -249,7 +251,7 @@
                             <div role="dialog"
                                  id="menu_button-wrapper"
                                  class="relative flex tooltip-wrapper"
-                                 style="--i:4">
+                                 style="--i:3">
                                 <a href="#menu"
                                    tabindex="0"
                                    onclick="event.preventDefault(); openDialog('menu_button-wrapper', this, 'menu_button--close', 'menu');"
@@ -787,8 +789,8 @@
                                             <nav>
                                                 <ul>
                                                     <li>Videos:</li>
-                                                    <li><a href="/file/path">Demo 1</a></li>
-                                                    <li><a href="/file/path">Demo 2</a></li>
+                                                    <li><a href="/projects/2024-25/apostrophe-stripe-extension/store-alpine-js-example-userflow.mp4" target="_blank">Demo 1</a></li>
+                                                    <li><a href="/projects/2024-25/apostrophe-stripe-extension/store-htmx-example-userflow.mp4" target="_blank">Demo 2</a></li>
                                                 </ul>
                                                 <ul>
                                                     <li>Repository:</li>
@@ -869,80 +871,15 @@
                                     <div id="modal_archive-content_section" data-timeline-section="2018">
                                         <div id="modal_archive-content_section-divider">
                                             <hr>
-                                            <hr>
+                              menu_email_button-wrapper              <hr>
                                             <hr>
                                         </div>
-                                        <div id="modal_archive-content_section-content" style="min-height: 200vh;">
+                                        <div id="modal_archive-content_section-content">
                                             <h1 class="font-bold text-lg" style="margin-bottom: 2.5rem">
                                                 Project #22
                                             </h1>
-                                            <div class="relative" data-carousel>
-                                                <div data-carousel-slides-wrapper>
-                                                    <div data-carousel-slides>
-                                                        <figure data-value="slide-1">
-                                                            <a href="https://images.unsplash.com/photo-1566847438217-76e82d383f84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80g"
-                                                               target="_blank">
-                                                                <img src="https://images.unsplash.com/photo-1566847438217-76e82d383f84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&q=80g"
-                                                                     loading="lazy">
-                                                            </a>
-                                                        </figure>
-                                                        <figure data-value="slide-2">
-                                                            <a href="https://images.unsplash.com/photo-1591017320663-dc3334ff1dcc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80g"
-                                                               target="_blank">
-                                                                <img src="https://images.unsplash.com/photo-1591017320663-dc3334ff1dcc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&q=80"
-                                                                     loading="lazy">
-                                                            </a>
-                                                        </figure>
-                                                        <figure data-value="slide-3">
-                                                            <a href="https://images.unsplash.com/photo-1566847438217-76e82d383f84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80g"
-                                                               target="_blank">
-                                                                <img src="https://images.unsplash.com/photo-1595361498858-25993ca8fcb4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&q=80"
-                                                                     loading="lazy">
-                                                            </a>
-                                                        </figure>
-                                                        <figure data-value="slide-4">
-                                                            <a href="https://images.unsplash.com/photo-1566847438217-76e82d383f84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80g"
-                                                               target="_blank">
-                                                                <img src="https://images.unsplash.com/photo-1566847438217-76e82d383f84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&q=80g"
-                                                                     loading="lazy">
-                                                            </a>
-                                                        </figure>
-                                                        <figure data-value="slide-5">
-                                                            <a href="https://images.unsplash.com/photo-1566847438217-76e82d383f84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80g"
-                                                               target="_blank">
-                                                                <img src="https://images.unsplash.com/photo-1591017320663-dc3334ff1dcc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&q=80"
-                                                                     loading="lazy">
-                                                            </a>
-                                                        </figure>
-                                                        <figure data-value="slide-6">
-                                                            <a href="https://images.unsplash.com/photo-1566847438217-76e82d383f84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80g"
-                                                               target="_blank">
-                                                                <img src="https://images.unsplash.com/photo-1595361498858-25993ca8fcb4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&q=80"
-                                                                     loading="lazy">
-                                                            </a>
-                                                        </figure>
-                                                    </div>
-                                                </div>
-                                                <div data-carousel-controls>
-                                                    <div data-carousel-nav-wrapper>
-                                                        <nav data-carousel-nav>
-                                                        </nav>
-                                                    </div>
-                                                    <ul data-carousel-arrows>
-                                                        <li>
-                                                            <button>
-                                                            </button>
-                                                        </li>
-                                                        <li>
-                                                            <button>
-                                                            </button>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                             <div id="horizontal_timeline-wrapper" class="z-50 sticky">
