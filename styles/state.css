@@ -60,6 +60,15 @@
     display: flex;
 }
 
+/* Fullscreen */
+
+#fullscreen:checked~main .fullscreen-checked\:flex {
+    display: flex;
+}
+
+#fullscreen:checked~main .fullscreen-checked\:hidden {
+    display: none;
+}
 
 /* Debug */
 

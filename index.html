@@ -69,10 +69,11 @@
         </script>
     </head>
     <body class="primary-font">
-        <input id="mode" type="checkbox" hidden aria-hidden="true">
-        <input id="debug" type="checkbox" hidden aria-hidden="true">
-        <input id="profile" type="hidden" hidden aria-hidden="true">
-        <input id="archive" type="hidden" hidden aria-hidden="true">
+        <input id="mode" type="checkbox" hidden aria-hidden="true" aria-label="Toggle light and dark mode">
+        <input id="debug" type="checkbox" hidden aria-hidden="true" aria-label="Toggle debug mode">
+        <input id="fullscreen" type="checkbox" hidden aria-hidden="true" aria-label="Toggle fullscreen mode">
+        <input id="profile" type="hidden" hidden aria-hidden="true" aria-label="Profile dialog">
+        <input id="archive" type="hidden" hidden aria-hidden="true" aria-label="Archive dialog">
         <main class="relative flex flex-col justify-content-between w-full"
               style="background-color: var(--background)">
             <div id="background-pattern" class="absolute inset-0">
@@ -141,7 +142,8 @@
                                    target="_blank"
                                    aria-label="Open to new opportunities, book a virtual meeting"
                                    class="z-0 relative flex overflow-hidden">
-                                   <div id="availability_button-bg"></div>
+                                    <div id="availability_button-bg">
+                                    </div>
                                     <div class="inline-flex align-items-center justify-content-center tooltip-wrapper"
                                          style="column-gap: 0.875rem">
                                         <span id="availability_button_dot"
@@ -157,10 +159,12 @@
                         </div>
                         <nav id="menu"
                              class="relative align-self-start grid animate-fade-in-cta-2">
-                             <div id="menu-bg"></div>
+                            <div id="menu-bg">
+                            </div>
                             <div id="menu_email_button-wrapper"
                                  class="inline-flex tooltip-wrapper"
-                                 style="--i:0; place-self: self-start">
+                                 style="--i:0;
+                                        place-self: self-start">
                                 <!-- onmousedown="navigator.clipboard.writeText('stepan.jakl@icloud.com'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip span'), this.querySelector('.highlight-text'), 'Copied to the clipboard')"
                                      onkeydown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@icloud.com')" -->
                                 <button type="button"
@@ -171,7 +175,10 @@
                                     <span class="inline-flex rounded-full"
                                           style="padding: 0.5625rem;
                                                  background-color: var(--dark-3)">
-                                        <svg class="fill-current" style="width: 1.125rem; height: 1.125rem; transform: rotate(-45deg) translate(0.078125rem, 0.046875rem);">
+                                        <svg class="fill-current"
+                                             style="width: 1.125rem;
+                                                    height: 1.125rem;
+                                                    transform: rotate(-45deg) translate(0.078125rem, 0.046875rem)">
                                             <use xlink:href="images/icons.svg#email"></use>
                                         </svg>
                                     </span>
@@ -326,6 +333,18 @@
                                                 <use xlink:href="images/icons.svg#new-tab"></use>
                                             </svg>
                                         </a>
+                                        <a href="https://codepen.io/stepj"
+                                           target="_blank"
+                                           tabindex="0"
+                                           aria-label="Visit my profile on CodePen">
+                                            <svg class="fill-current" style="width: 1.5rem; height: 1.5rem">
+                                                <use xlink:href="images/icons.svg#menu-codepen"></use>
+                                            </svg>
+                                            <span class="text-sm whitespace-nowrap">CodePen profile</span>
+                                            <svg class="align-self-start fill-current">
+                                                <use xlink:href="images/icons.svg#new-tab"></use>
+                                            </svg>
+                                        </a>
                                         <hr style="width: auto;
                                                    height: 0.5rem;
                                                    margin: 0 max(1px, 0.0625rem);
@@ -334,6 +353,12 @@
                                                    box-shadow: 0 min(-1px, -0.0625rem) 0 0 var(--context-border-light-2);
                                                    box-sizing: content-box;
                                                    overflow: visible">
+                                        <!-- <a href="#" onclick="event.preventDefault(); toggleFullscreen()" tabindex="0" aria-label="Fullscreen mode">
+                                            <svg class="fill-current" style="width: 1.3125rem; height: 1.3125rem; padding: 0.09375rem; box-sizing: content-box;">
+                                                <use xlink:href="images/icons.svg#menu-fullscreen"></use>
+                                            </svg>
+                                            <span class="text-sm whitespace-nowrap">Fullscreen mode</span>
+                                        </a> -->
                                         <label id="menu_dropdown_light-mode"
                                                for="mode"
                                                tabindex="0"
@@ -355,6 +380,27 @@
                                             </svg>
                                             <span class="text-sm whitespace-nowrap">Dark mode</span>
                                         </label>
+                                        <label id="menu_dropdown_fullscreen"
+                                               for="fullscreen"
+                                               tabindex="0"
+                                               onclick="toggleFullscreen()"
+                                               onkeypress="if(event.key === 'Enter') { document.getElementById('fullscreen').click(); }">
+                                            <svg class="fullscreen-checked:hidden flex fill-current"
+                                                 style="width: 1.375rem;
+                                                        height: 1.375rem;
+                                                        padding: max(1px, 0.0625rem);
+                                                        box-sizing: content-box">
+                                                <use xlink:href="images/icons.svg#menu-fullscreen"></use>
+                                            </svg>
+                                            <svg class="hidden fullscreen-checked:flex fill-current"
+                                                 style="width: 1.375rem;
+                                                        height: 1.375rem;
+                                                        padding: max(1px, 0.0625rem);
+                                                        box-sizing: content-box">
+                                                <use xlink:href="images/icons.svg#menu-fullscreen-off"></use>
+                                            </svg>
+                                            <span class="text-sm whitespace-nowrap">Fullscreen</span>
+                                        </label>
                                         <label id="menu_dropdown_debug"
                                                for="debug"
                                                tabindex="0"
@@ -362,12 +408,12 @@
                                             <svg class="debug-checked:hidden flex fill-current"
                                                  style="width: 1.5rem;
                                                         height: 1.5rem">
-                                                <use xlink:href="images/icons.svg#debug"></use>
+                                                <use xlink:href="images/icons.svg#menu-debug"></use>
                                             </svg>
                                             <svg class="hidden debug-checked:flex fill-current"
                                                  style="width: 1.5rem;
                                                         height: 1.5rem">
-                                                <use xlink:href="images/icons.svg#debug-off"></use>
+                                                <use xlink:href="images/icons.svg#menu-debug-off"></use>
                                             </svg>
                                             <span class="text-sm whitespace-nowrap">Debug</span>
                                         </label>
@@ -378,15 +424,17 @@
                     </div>
                     <dialog id="modal_profile" class="modal" role="dialog" aria-modal="true">
                         <div class="overflow-clip modal-content">
-                            <a href="#"
-                               onclick="event.preventDefault(); closeDialog('#')"
-                               id="modal_button-close"
-                               class="flex align-items-center justify-content-center"
-                               aria-label="Close modal">
-                                <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
-                                    <use xlink:href="images/icons.svg#close"></use>
-                                </svg>
-                            </a>
+                            <div id="modal_button-wrapper">
+                                <a href="#"
+                                   onclick="event.preventDefault(); closeDialog('#')"
+                                   id="modal_button-close"
+                                   class="flex align-items-center justify-content-center"
+                                   aria-label="Close modal">
+                                    <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
+                                        <use xlink:href="images/icons.svg#close"></use>
+                                    </svg>
+                                </a>
+                            </div>
                             <div id="modal_profile_content">
                                 <dl>
                                     <dt>
@@ -428,77 +476,73 @@
                                         <!-- <p>
                                             In recent years, my efforts have been devoted to building and overseeing a
                                             significant number of websites using the&nbsp;<a href="https://apostrophecms.com/" target="_blank"><u>ApostropheCMS</u>
-                                            <svg class="fill-current"
-                                                 style="margin-left: 0.1em;
-                                                        margin-top: -0.65em;
-                                                        width: 0.85rem;
-                                                        height: 0.85rem">
+                                            <svg class="fill-current" style="margin-left: 0.1em; margin-top: -0.65em; width: 0.85rem; height: 0.85rem">
                                                 <use xlink:href="images/icons.svg#new-tab"></use>
                                             </svg>
 
                                         </a>&nbsp;framework.
                                     </p> -->
-                                    <p style="padding-bottom: var(--segment-third)">
-                                        I have been equally dedicated to code and design as a profesional since 2014.
-                                    </p>
-                                </dd>
-                                <dt>
-                                    Decade of birth:
-                                </dt>
-                                <dd>
-                                    <span>90s</span>
-                                </dd>
-                                <dt>
-                                    Nationality:
-                                </dt>
-                                <dd>
-                                    <span>
-                                        <a href="https://www.google.com/maps/place/Czechia"
-                                           class="hover:underline"
-                                           target="_blank"
-                                           aria-label="See where I am from">
-                                            <span>Czech</span>
-                                            <img alt="czech-flag"
-                                                 src="images/cs-2.svg"
-                                                 width="20"
-                                                 height="15"
-                                                 loading="lazy"
-                                                 style="border-radius: 0.125rem;
-                                                        width: 1.25rem;
-                                                        height: 0.9375rem">
-                                        </a>
-                                    </span>
-                                </dd>
-                                <dt>
-                                    Place of residence:
-                                </dt>
-                                <dd>
-                                    <span>
-                                        <a href="https://www.google.com/maps/place/Manchester"
-                                           class="hover:underline"
-                                           target="_blank"
-                                           aria-label="See where I currently live">
-                                            <span>Manchester, United Kingdom</span>
-                                            <img alt="united-kingdom-flag"
-                                                 src="images/gb-2.svg"
-                                                 width="20"
-                                                 height="15"
-                                                 loading="lazy"
-                                                 style="border-radius: 0.125rem;
-                                                        width: 1.25rem;
-                                                        height: 0.9375rem">
-                                        </a>
-                                    </span>
-                                </dd>
-                                <dt>
-                                    Timezone:
-                                </dt>
-                                <dd id="modal_profile_timezone">
-                                    <span>Europe/London</span>
-                                    <span id="modal_profile_timezone_live-time"></span>
-                                    <script>
-                                        const liveTimezoneTime = () => {
-                                            document.querySelector('#modal_profile_timezone_live-time').innerHTML = `(${new Intl.DateTimeFormat([], {
+                                        <p style="padding-bottom: var(--segment-third)">
+                                            I have been equally dedicated to code and design as a profesional since 2014.
+                                        </p>
+                                    </dd>
+                                    <dt>
+                                        Decade of birth:
+                                    </dt>
+                                    <dd>
+                                        <span>90s</span>
+                                    </dd>
+                                    <dt>
+                                        Nationality:
+                                    </dt>
+                                    <dd>
+                                        <span>
+                                            <a href="https://www.google.com/maps/place/Czechia"
+                                               class="hover:underline"
+                                               target="_blank"
+                                               aria-label="See where I am from">
+                                                <span>Czech</span>
+                                                <img alt="czech-flag"
+                                                     src="images/cs-2.svg"
+                                                     width="20"
+                                                     height="15"
+                                                     loading="lazy"
+                                                     style="border-radius: 0.125rem;
+                                                            width: 1.25rem;
+                                                            height: 0.9375rem">
+                                            </a>
+                                        </span>
+                                    </dd>
+                                    <dt>
+                                        Place of residence:
+                                    </dt>
+                                    <dd>
+                                        <span>
+                                            <a href="https://www.google.com/maps/place/Manchester"
+                                               class="hover:underline"
+                                               target="_blank"
+                                               aria-label="See where I currently live">
+                                                <span>Manchester, United Kingdom</span>
+                                                <img alt="united-kingdom-flag"
+                                                     src="images/gb-2.svg"
+                                                     width="20"
+                                                     height="15"
+                                                     loading="lazy"
+                                                     style="border-radius: 0.125rem;
+                                                            width: 1.25rem;
+                                                            height: 0.9375rem">
+                                            </a>
+                                        </span>
+                                    </dd>
+                                    <dt>
+                                        Timezone:
+                                    </dt>
+                                    <dd id="modal_profile_timezone">
+                                        <span>Europe/London</span>
+                                        <span id="modal_profile_timezone_live-time"></span>
+                                        <script>
+                                            const liveTimezoneTime = () => {
+                                                document.querySelector('#modal_profile_timezone_live-time').innerHTML = `(${new Intl.DateTimeFormat([], {
 											timeZone: 'Europe/London',
 											timeZoneName: 'short',
 											year: 'numeric',
@@ -507,119 +551,119 @@
 											hour: 'numeric',
 											minute: 'numeric'
 										}).format(new Date())})`
-                                        }
-                                        liveTimezoneTime()
-                                        setInterval(liveTimezoneTime, 15000)
-                                    </script>
-                                </dd>
-                                <dt style="padding-top: 0.625rem">
-                                    Deliverables:
-                                </dt>
-                                <dd id="modal_profile_tags">
-                                    <ul>
-                                        <li>
-                                            <span>Dashboard/Single-page app</span>
-                                        </li>
-                                        <li>
-                                            <span>Landing page</span>
-                                        </li>
-                                        <li>
-                                            <span>Mockup/Prototype</span>
-                                        </li>
-                                        <li>
-                                            <span>SaaS app</span>
-                                        </li>
-                                        <li>
-                                            <span>Styleguide</span>
-                                        </li>
-                                        <li>
-                                            <span>Wireframe</span>
-                                        </li>
-                                        <li>
-                                            <span>& other</span>
-                                        </li>
-                                    </ul>
-                                </dd>
-                                <dt style="padding-top: 0.625rem">
-                                    Tools & Languages:
-                                </dt>
-                                <dd id="modal_profile_tags">
-                                    <ul>
-                                        <li>
-                                            <svg class="fill-current">
-                                                <use xlink:href="images/logos.svg#apostrophe"></use>
-                                            </svg>
-                                            <span>ApostropheCMS</span>
-                                        </li>
-                                        <li>
-                                            <svg class="fill-current">
-                                                <use xlink:href="images/logos.svg#alpine"></use>
-                                            </svg>
-                                            <span>AlpineJS</span>
-                                            <svg class="fill-current">
-                                                <use xlink:href="images/logos.svg#vue"></use>
-                                            </svg>
-                                            <span>VueJS</span>
-                                            <svg class="fill-current">
-                                                <use xlink:href="images/logos.svg#react"></use>
-                                            </svg>
-                                            <span>ReactJS</span>
-                                        </li>
-                                        <li>
-                                            <svg class="fill-current">
-                                                <use xlink:href="images/logos.svg#figma"></use>
-                                            </svg>
-                                            <span>Figma/Sketch</span>
-                                        </li>
-                                        <li>
-                                            <svg class="fill-current">
-                                                <use xlink:href="images/logos.svg#framer"></use>
-                                            </svg>
-                                            <span>Framer Motion/Motion One</span>
-                                        </li>
-                                        <li>
-                                            <svg class="fill-current">
-                                                <use xlink:href="images/logos.svg#html5"></use>
-                                            </svg>
-                                            <span>HTML</span>
-                                            <svg class="fill-current">
-                                                <use xlink:href="images/logos.svg#css3"></use>
-                                            </svg>
-                                            <span>CSS</span>
-                                            <svg class="fill-current">
-                                                <use xlink:href="images/logos.svg#tailwindcss"></use>
-                                            </svg>
-                                            <span>TailwindCSS</span>
-                                        </li>
-                                        <li>
-                                            <svg class="fill-current">
-                                                <use xlink:href="images/logos.svg#jamstack"></use>
-                                            </svg>
-                                            <span>JAMstack</span>
-                                            <svg class="fill-current">
-                                                <use xlink:href="images/logos.svg#astro"></use>
-                                            </svg>
-                                            <span>Astro</span>
-                                        </li>
-                                        <li>
-                                            <svg class="fill-current">
-                                                <use xlink:href="images/logos.svg#javascript"></use>
-                                            </svg>
-                                            <span>JavaScript</span>
-                                        </li>
-                                        <li>
-                                            <svg class="fill-current">
-                                                <use xlink:href="images/logos.svg#mongodb"></use>
-                                            </svg>
-                                            <span>MongoDB</span>
-                                        </li>
-                                        <li>
-                                            <span>& other</span>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </div>
-                            <!-- <div>
+                                            }
+                                            liveTimezoneTime()
+                                            setInterval(liveTimezoneTime, 15000)
+                                        </script>
+                                    </dd>
+                                    <dt style="padding-top: 0.625rem">
+                                        Deliverables:
+                                    </dt>
+                                    <dd id="modal_profile_tags">
+                                        <ul>
+                                            <li>
+                                                <span>Dashboard/Single-page app</span>
+                                            </li>
+                                            <li>
+                                                <span>Landing page</span>
+                                            </li>
+                                            <li>
+                                                <span>Mockup/Prototype</span>
+                                            </li>
+                                            <li>
+                                                <span>SaaS app</span>
+                                            </li>
+                                            <li>
+                                                <span>Styleguide</span>
+                                            </li>
+                                            <li>
+                                                <span>Wireframe</span>
+                                            </li>
+                                            <li>
+                                                <span>& other</span>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                    <dt style="padding-top: 0.625rem">
+                                        Tools & Languages:
+                                    </dt>
+                                    <dd id="modal_profile_tags">
+                                        <ul>
+                                            <li>
+                                                <svg class="fill-current">
+                                                    <use xlink:href="images/logos.svg#apostrophe"></use>
+                                                </svg>
+                                                <span>ApostropheCMS</span>
+                                            </li>
+                                            <li>
+                                                <svg class="fill-current">
+                                                    <use xlink:href="images/logos.svg#alpine"></use>
+                                                </svg>
+                                                <span>AlpineJS</span>
+                                                <svg class="fill-current">
+                                                    <use xlink:href="images/logos.svg#vue"></use>
+                                                </svg>
+                                                <span>VueJS</span>
+                                                <svg class="fill-current">
+                                                    <use xlink:href="images/logos.svg#react"></use>
+                                                </svg>
+                                                <span>ReactJS</span>
+                                            </li>
+                                            <li>
+                                                <svg class="fill-current">
+                                                    <use xlink:href="images/logos.svg#figma"></use>
+                                                </svg>
+                                                <span>Figma/Sketch</span>
+                                            </li>
+                                            <li>
+                                                <svg class="fill-current">
+                                                    <use xlink:href="images/logos.svg#framer"></use>
+                                                </svg>
+                                                <span>Framer Motion/Motion One</span>
+                                            </li>
+                                            <li>
+                                                <svg class="fill-current">
+                                                    <use xlink:href="images/logos.svg#html5"></use>
+                                                </svg>
+                                                <span>HTML</span>
+                                                <svg class="fill-current">
+                                                    <use xlink:href="images/logos.svg#css3"></use>
+                                                </svg>
+                                                <span>CSS</span>
+                                                <svg class="fill-current">
+                                                    <use xlink:href="images/logos.svg#tailwindcss"></use>
+                                                </svg>
+                                                <span>TailwindCSS</span>
+                                            </li>
+                                            <li>
+                                                <svg class="fill-current">
+                                                    <use xlink:href="images/logos.svg#jamstack"></use>
+                                                </svg>
+                                                <span>JAMstack</span>
+                                                <svg class="fill-current">
+                                                    <use xlink:href="images/logos.svg#astro"></use>
+                                                </svg>
+                                                <span>Astro</span>
+                                            </li>
+                                            <li>
+                                                <svg class="fill-current">
+                                                    <use xlink:href="images/logos.svg#javascript"></use>
+                                                </svg>
+                                                <span>JavaScript</span>
+                                            </li>
+                                            <li>
+                                                <svg class="fill-current">
+                                                    <use xlink:href="images/logos.svg#mongodb"></use>
+                                                </svg>
+                                                <span>MongoDB</span>
+                                            </li>
+                                            <li>
+                                                <span>& other</span>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </div>
+                                <!-- <div>
                 <dt>Hourly rate range:</dt>
                 <dd><span>50 ~ 80 £/€/$</span></dd>
             </div>
@@ -627,312 +671,354 @@
                 <dt>Annual salary range:</dt>
                 <dd>65,000+ £/€/$</dd>
             </div> -->
-                        </dl>
-                    </div>
-                </dialog>
-                <dialog id="modal_archive" class="modal" role="dialog" aria-modal="true">
-                    <div class="overflow-clip modal-content">
-                        <a href="#"
-                           onclick="event.preventDefault(); closeDialog('#')"
-                           id="modal_button-close"
-                           class="flex align-items-center justify-content-center"
-                           aria-label="Close modal">
-                            <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
-                                <use xlink:href="images/icons.svg#close"></use>
-                            </svg>
-                        </a>
-                        <div style="position: relative;
-                                    height: 100%;
-                                    padding-bottom: var(--segment-half)">
-                            <div id="modal_archive-wrapper">
-                                <input type="checkbox" id="timeline_section_year-2024" checked>
-                                <input type="checkbox" id="timeline_section_year-2018">
-                                <div id="modal_archive-content">
-                                    <!-- 2024 -->
-                                    <div id="modal_archive-content_section-title" data-timeline-section="2024">
-                                        <div>
-                                            <label for="timeline_section_year-2024" tabindex="0">
-                                                2024
-                                            </label>
-                                            <div class="flex align-items-center"
-                                                 style="column-gap: 1rem;
-                                                        justify-content: start">
-                                                <svg>
-                                                    <use xlink:href="images/icons.svg#plus"></use>
-                                                </svg>
-                                                <svg>
-                                                    <use xlink:href="images/icons.svg#minus"></use>
-                                                </svg>
-                                                <span>2024<sub>/21</sub></span>
+                            </dl>
+                        </div>
+                    </dialog>
+                    <dialog id="modal_archive" class="modal" role="dialog" aria-modal="true">
+                        <div class="overflow-clip modal-content">
+                            <div id="modal_button-wrapper">
+                                <a href="#"
+                                   onclick="event.preventDefault(); closeDialog('#')"
+                                   id="modal_button-close"
+                                   class="flex align-items-center justify-content-center"
+                                   aria-label="Close modal">
+                                    <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
+                                        <use xlink:href="images/icons.svg#close"></use>
+                                    </svg>
+                                </a>
+                                <label for="fullscreen"
+                                               tabindex="0"
+                                               onclick="toggleFullscreen()"
+                                               onkeypress="if(event.key === 'Enter') { document.getElementById('fullscreen').click(); }"
+                                   id="modal_button-fullscreen"
+                                   class="flex align-items-center justify-content-center">
+                                    <svg class="fullscreen-checked:hidden flex fill-current"
+                                         style="width: 1.125rem;
+                                                height: 1.125rem">
+                                        <use xlink:href="images/icons.svg#fullscreen"></use>
+                                    </svg>
+                                    <svg class="hidden fullscreen-checked:flex fill-current"
+                                         style="width: 1.125rem;
+                                                height: 1.125rem">
+                                        <use xlink:href="images/icons.svg#fullscreen-off"></use>
+                                    </svg>
+                                </>
+                            </div>
+
+                            <div style="position: relative;
+                                        height: 100%;
+                                        padding-bottom: var(--segment-half)">
+                                <div id="modal_archive-wrapper">
+                                    <input type="checkbox" id="timeline_section_year-2024" checked>
+                                    <input type="checkbox" id="timeline_section_year-2018">
+                                    <div id="modal_archive-content">
+                                        <!-- 2024 -->
+                                        <div id="modal_archive-content_section-title" data-timeline-section="2024">
+                                            <div>
+                                                <label for="timeline_section_year-2024" tabindex="0">
+                                                    2024
+                                                </label>
+                                                <div class="flex align-items-center"
+                                                     style="column-gap: 1rem;
+                                                            justify-content: start">
+                                                    <svg>
+                                                        <use xlink:href="images/icons.svg#plus"></use>
+                                                    </svg>
+                                                    <svg>
+                                                        <use xlink:href="images/icons.svg#minus"></use>
+                                                    </svg>
+                                                    <span>2024<sub>/21</sub></span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div id="modal_archive-content_section" data-timeline-section="2024">
-                                        <div id="modal_archive-content_section-divider">
-                                            <hr>
-                                            <hr>
-                                            <hr>
-                                        </div>
-                                        <div id="modal_archive-content_section-content">
-                                            <h1 class="font-bold text-lg">
-                                                ApostropheCMS Fleet of Sites
-                                            </h1>
-                                            <p class="text-p">
-                                                Client: CloudRaker, Altavia, TFP, Truffl
-                                            </p>
-                                            <p class="text-p">
-                                                Video links
-                                                <br>
-                                                Link to repository
-                                            </p>
-                                            <p class="text-p">
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
-                                            </p>
-                                        </div>
-                                        <div id="modal_archive-content_section-divider">
-                                            <hr>
-                                            <hr>
-                                            <hr>
-                                        </div>
-                                        <div id="modal_archive-content_section-content">
-                                            <h1 class="font-bold text-lg">
-                                                ApostropheCMS Extensions
-                                            </h1>
-                                            <p class="text-p">
-                                                Apostrophe Template, Library, Sync, Stripe
-                                                <br><br>
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
-                                            </p>
+                                        <div id="modal_archive-content_section" data-timeline-section="2024">
                                             <div id="modal_archive-content_section-divider">
                                                 <hr>
-                                            </div>
-                                            <h2 class="font-bold text-md">ApostropheCMS Module Library</h2>
-                                            <p class="text-p">
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
-                                            </p>
-                                            <div id="modal_archive-content_section-divider">
+                                                <hr>
                                                 <hr>
                                             </div>
-                                            <h2 class="font-bold text-md">ApostropheCMS Stripe Extension</h2>
-                                            <div class="relative" data-carousel>
-                                                <div data-carousel-slides-wrapper>
-                                                    <div data-carousel-slides>
-                                                        <figure data-value="slide-1">
-                                                            <a href="projects/2024-25/apostrophe-stripe-extension/store-alpine-1.png"
-                                                               target="_blank">
-                                                                <img src="projects/2024-25/apostrophe-stripe-extension/store-alpine-1.png"
-                                                                     class="bright"
-                                                                     loading="lazy"
-                                                                     width="2624"
-                                                                     height="1462">
-                                                            </a>
-                                                        </figure>
-                                                        <figure data-value="slide-2">
-                                                            <a href="projects/2024-25/apostrophe-stripe-extension/store-alpine-2.png"
-                                                               target="_blank">
-                                                                <img src="projects/2024-25/apostrophe-stripe-extension/store-alpine-2.png"
-                                                                     loading="lazy">
-                                                            </a>
-                                                        </figure>
-                                                        <figure data-value="slide-3">
-                                                            <a href="projects/2024-25/apostrophe-stripe-extension/store-alpine-3.png"
-                                                               target="_blank">
-                                                                <img src="projects/2024-25/apostrophe-stripe-extension/store-alpine-3.png"
-                                                                     loading="lazy">
-                                                            </a>
-                                                        </figure>
-                                                        <figure data-value="slide-4">
-                                                            <a href="projects/2024-25/apostrophe-stripe-extension/store-alpine-checkout.png"
-                                                               target="_blank">
-                                                                <img src="projects/2024-25/apostrophe-stripe-extension/store-alpine-checkout.png"
-                                                                     loading="lazy">
-                                                            </a>
-                                                        </figure>
-                                                        <figure data-value="slide-5">
-                                                            <a href="projects/2024-25/apostrophe-stripe-extension/store-htmx-1.png"
-                                                               target="_blank">
-                                                                <img src="projects/2024-25/apostrophe-stripe-extension/store-htmx-1.png"
-                                                                     loading="lazy">
-                                                            </a>
-                                                        </figure>
-                                                        <figure data-value="slide-6">
-                                                            <a href="projects/2024-25/apostrophe-stripe-extension/store-htmx-2.png"
-                                                               target="_blank">
-                                                                <img src="projects/2024-25/apostrophe-stripe-extension/store-htmx-2.png"
-                                                                     loading="lazy">
-                                                            </a>
-                                                        </figure>
-                                                        <figure data-value="slide-7">
-                                                            <a href="projects/test.png" target="_blank">
-                                                                <img src="projects/test.png" loading="lazy">
-                                                            </a>
-                                                        </figure>
+                                            <div id="modal_archive-content_section-content">
+                                                <h1 class="font-bold text-lg">
+                                                    ApostropheCMS Fleet of Sites
+                                                </h1>
+                                                <p class="text-p">
+                                                    Client: CloudRaker, Altavia, TFP, Truffl
+                                                </p>
+                                                <p class="text-p">
+                                                    Video links
+                                                    <br>
+                                                    Link to repository
+                                                </p>
+                                                <p class="text-p">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
+                                                </p>
+                                            </div>
+                                            <div id="modal_archive-content_section-divider">
+                                                <hr>
+                                                <hr>
+                                                <hr>
+                                            </div>
+                                            <div id="modal_archive-content_section-content">
+                                                <h1 class="font-bold text-lg">
+                                                    ApostropheCMS Extensions
+                                                </h1>
+                                                <p class="text-p">
+                                                    Apostrophe Template, Library, Sync, Stripe
+                                                    <br>
+                                                    <br>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
+                                                </p>
+                                                <div id="modal_archive-content_section-divider">
+                                                    <hr>
+                                                </div>
+                                                <h2 class="font-bold text-md">
+                                                    ApostropheCMS Module Library
+                                                </h2>
+                                                <p class="text-p">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
+                                                </p>
+                                                <div id="modal_archive-content_section-divider">
+                                                    <hr>
+                                                </div>
+                                                <h2 class="font-bold text-md">
+                                                    ApostropheCMS Stripe Extension
+                                                </h2>
+                                                <div class="relative" data-carousel>
+                                                    <div data-carousel-slides-wrapper>
+                                                        <div data-carousel-slides>
+                                                            <figure data-value="slide-1">
+                                                                <a href="projects/2024-25/apostrophe-stripe-extension/store-alpine-1.png"
+                                                                   target="_blank">
+                                                                    <img src="projects/2024-25/apostrophe-stripe-extension/store-alpine-1.png"
+                                                                         class="bright"
+                                                                         loading="lazy"
+                                                                         width="2624"
+                                                                         height="1462">
+                                                                </a>
+                                                            </figure>
+                                                            <figure data-value="slide-2">
+                                                                <a href="projects/2024-25/apostrophe-stripe-extension/store-alpine-2.png"
+                                                                   target="_blank">
+                                                                    <img src="projects/2024-25/apostrophe-stripe-extension/store-alpine-2.png"
+                                                                         loading="lazy">
+                                                                </a>
+                                                            </figure>
+                                                            <figure data-value="slide-3">
+                                                                <a href="projects/2024-25/apostrophe-stripe-extension/store-alpine-3.png"
+                                                                   target="_blank">
+                                                                    <img src="projects/2024-25/apostrophe-stripe-extension/store-alpine-3.png"
+                                                                         loading="lazy">
+                                                                </a>
+                                                            </figure>
+                                                            <figure data-value="slide-4">
+                                                                <a href="projects/2024-25/apostrophe-stripe-extension/store-alpine-checkout.png"
+                                                                   target="_blank">
+                                                                    <img src="projects/2024-25/apostrophe-stripe-extension/store-alpine-checkout.png"
+                                                                         loading="lazy">
+                                                                </a>
+                                                            </figure>
+                                                            <figure data-value="slide-5">
+                                                                <a href="projects/2024-25/apostrophe-stripe-extension/store-htmx-1.png"
+                                                                   target="_blank">
+                                                                    <img src="projects/2024-25/apostrophe-stripe-extension/store-htmx-1.png"
+                                                                         loading="lazy">
+                                                                </a>
+                                                            </figure>
+                                                            <figure data-value="slide-6">
+                                                                <a href="projects/2024-25/apostrophe-stripe-extension/store-htmx-2.png"
+                                                                   target="_blank">
+                                                                    <img src="projects/2024-25/apostrophe-stripe-extension/store-htmx-2.png"
+                                                                         loading="lazy">
+                                                                </a>
+                                                            </figure>
+                                                            <figure data-value="slide-7">
+                                                                <a href="projects/test.png" target="_blank">
+                                                                    <img src="projects/test.png" loading="lazy">
+                                                                </a>
+                                                            </figure>
+                                                        </div>
+                                                    </div>
+                                                    <div data-carousel-controls>
+                                                        <div data-carousel-nav-wrapper>
+                                                            <nav data-carousel-nav>
+                                                            </nav>
+                                                        </div>
+                                                        <ul data-carousel-arrows>
+                                                            <li>
+                                                                <button>
+                                                                </button>
+                                                            </li>
+                                                            <li>
+                                                                <button>
+                                                                </button>
+                                                            </li>
+                                                        </ul>
                                                     </div>
                                                 </div>
-                                                <div data-carousel-controls>
-                                                    <div data-carousel-nav-wrapper>
-                                                        <nav data-carousel-nav>
-                                                        </nav>
-                                                    </div>
-                                                    <ul data-carousel-arrows>
+                                                <nav>
+                                                    <ul>
                                                         <li>
-                                                            <button>
-                                                            </button>
+                                                            Videos:
                                                         </li>
                                                         <li>
-                                                            <button>
-                                                            </button>
+                                                            <a href="/projects/2024-25/apostrophe-stripe-extension/store-alpine-js-example-userflow.mp4"
+                                                               target="_blank">Demo 1</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/projects/2024-25/apostrophe-stripe-extension/store-htmx-example-userflow.mp4"
+                                                               target="_blank">Demo 2</a>
                                                         </li>
                                                     </ul>
+                                                    <ul>
+                                                        <li>
+                                                            Repository:
+                                                        </li>
+                                                        <li>
+                                                            <a href="/file/path">stepanjakl/apostrophe-stripe (external link svg)</a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                                <p class="text-p">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
+                                                </p>
+                                                <h2 class="font-bold text-md">
+                                                    ApostropheCMS Template
+                                                </h2>
+                                                <p class="text-p">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
+                                                </p>
+                                                <h2 class="font-bold text-md">
+                                                    ApostropheCMS Sync Extension
+                                                </h2>
+                                                <p class="text-p">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
+                                                </p>
+                                            </div>
+                                            <div id="modal_archive-content_section-divider">
+                                                <hr>
+                                                <hr>
+                                                <hr>
+                                            </div>
+                                            <div id="modal_archive-content_section-content">
+                                                <h1 class="font-bold text-lg">
+                                                    ApostropheCMS Stripe Extension
+                                                </h1>
+                                                <p class="text-p">
+                                                    Video links
+                                                    <br>
+                                                    Link to repository
+                                                    <br>
+                                                    <br>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
+                                                    <br>
+                                                    <br>
+                                                    Vivamus et efficitur velit. Fusce tortor lectus, imperdiet eu scelerisque at, fermentum quis felis. Sed sit amet volutpat dolor, vel aliquet tortor. Aenean turpis risus, auctor et dui sed, egestas interdum tortor. Praesent vulputate pellentesque facilisis. Sed mollis fermentum libero id elementum. Morbi rutrum enim vel hendrerit congue. Nam efficitur ornare sollicitudin. Integer vestibulum augue et tortor congue, quis ullamcorper tortor finibus. Mauris bibendum sodales nulla efficitur tempus. Pellentesque porta convallis posuere.
+                                                </p>
+                                            </div>
+                                            <div id="modal_archive-content_section-divider">
+                                                <hr>
+                                                <hr>
+                                                <hr>
+                                            </div>
+                                            <div id="modal_archive-content_section-content">
+                                                <h1 class="font-bold text-lg">
+                                                    Project #2
+                                                </h1>
+                                                <p class="text-p">
+                                                    Video links
+                                                    <br>
+                                                    Link to repository
+                                                    <br>
+                                                    <br>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- 2018 -->
+                                        <div id="modal_archive-content_section-title" data-timeline-section="2018">
+                                            <div>
+                                                <label for="timeline_section_year-2018" tabindex="0">
+                                                    2018
+                                                </label>
+                                                <div class="flex align-items-center"
+                                                     style="column-gap: 1rem;
+                                                            justify-content: start">
+                                                    <svg>
+                                                        <use xlink:href="images/icons.svg#plus"></use>
+                                                    </svg>
+                                                    <svg>
+                                                        <use xlink:href="images/icons.svg#minus"></use>
+                                                    </svg>
+                                                    <span>2018</span>
                                                 </div>
                                             </div>
-                                            <nav>
-                                                <ul>
-                                                    <li>Videos:</li>
-                                                    <li><a href="/projects/2024-25/apostrophe-stripe-extension/store-alpine-js-example-userflow.mp4" target="_blank">Demo 1</a></li>
-                                                    <li><a href="/projects/2024-25/apostrophe-stripe-extension/store-htmx-example-userflow.mp4" target="_blank">Demo 2</a></li>
-                                                </ul>
-                                                <ul>
-                                                    <li>Repository:</li>
-                                                    <li><a href="/file/path">stepanjakl/apostrophe-stripe (external link svg)</a></li>
-                                                </ul>
-                                            </nav>
-                                            <p class="text-p">
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
-                                            </p>
-                                            <h2 class="font-bold text-md">ApostropheCMS Template</h2>
-                                            <p class="text-p">
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
-                                            </p>
-                                            <h2 class="font-bold text-md">ApostropheCMS Sync Extension</h2>
-                                            <p class="text-p">
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
-                                            </p>
                                         </div>
-                                        <div id="modal_archive-content_section-divider">
-                                            <hr>
-                                            <hr>
-                                            <hr>
-                                        </div>
-                                        <div id="modal_archive-content_section-content">
-                                            <h1 class="font-bold text-lg">
-                                                ApostropheCMS Stripe Extension
-                                            </h1>
-                                            <p class="text-p">
-                                                Video links
-                                                <br>
-                                                Link to repository
-                                                <br>
-                                                <br>
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
-                                                <br>
-                                                <br>
-                                                Vivamus et efficitur velit. Fusce tortor lectus, imperdiet eu scelerisque at, fermentum quis felis. Sed sit amet volutpat dolor, vel aliquet tortor. Aenean turpis risus, auctor et dui sed, egestas interdum tortor. Praesent vulputate pellentesque facilisis. Sed mollis fermentum libero id elementum. Morbi rutrum enim vel hendrerit congue. Nam efficitur ornare sollicitudin. Integer vestibulum augue et tortor congue, quis ullamcorper tortor finibus. Mauris bibendum sodales nulla efficitur tempus. Pellentesque porta convallis posuere.
-                                            </p>
-                                        </div>
-                                        <div id="modal_archive-content_section-divider">
-                                            <hr>
-                                            <hr>
-                                            <hr>
-                                        </div>
-                                        <div id="modal_archive-content_section-content">
-                                            <h1 class="font-bold text-lg">
-                                                Project #2
-                                            </h1>
-                                            <p class="text-p">
-                                                Video links
-                                                <br>
-                                                Link to repository
-                                                <br>
-                                                <br>
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- 2018 -->
-                                    <div id="modal_archive-content_section-title" data-timeline-section="2018">
-                                        <div>
-                                            <label for="timeline_section_year-2018" tabindex="0">
-                                                2018
-                                            </label>
-                                            <div class="flex align-items-center"
-                                                 style="column-gap: 1rem;
-                                                        justify-content: start">
-                                                <svg>
-                                                    <use xlink:href="images/icons.svg#plus"></use>
-                                                </svg>
-                                                <svg>
-                                                    <use xlink:href="images/icons.svg#minus"></use>
-                                                </svg>
-                                                <span>2018</span>
+                                        <div id="modal_archive-content_section" data-timeline-section="2018">
+                                            <div id="modal_archive-content_section-divider">
+                                                <hr>
+                                                menu_email_button-wrapper
+                                                <hr>
+                                                <hr>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div id="modal_archive-content_section" data-timeline-section="2018">
-                                        <div id="modal_archive-content_section-divider">
-                                            <hr>
-                              menu_email_button-wrapper              <hr>
-                                            <hr>
-                                        </div>
-                                        <div id="modal_archive-content_section-content">
-                                            <h1 class="font-bold text-lg" style="margin-bottom: 2.5rem">
-                                                Project #22
-                                            </h1>
+                                            <div id="modal_archive-content_section-content">
+                                                <h1 class="font-bold text-lg" style="margin-bottom: 2.5rem">
+                                                    Project #22
+                                                </h1>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="horizontal_timeline-wrapper" class="z-50 sticky">
-                                <div id="horizontal_timeline">
+                                <div id="horizontal_timeline-wrapper" class="z-50 sticky">
+                                    <div id="horizontal_timeline">
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </dialog>
+                    <div aria-hidden="true"
+                         tabindex="-1"
+                         id="underlay_modal"
+                         class="z-1 fixed inset-0 pointer-events-none">
                     </div>
-                </dialog>
-                <div aria-hidden="true"
-                     tabindex="-1"
-                     id="underlay_modal"
-                     class="z-1 fixed inset-0 pointer-events-none">
+                </header>
+                <div id="triangle-left"
+                     class="invisible z-0 fixed inset-0 overflow-hidden pointer-events-none select-none">
                 </div>
-            </header>
-            <div id="triangle-left"
-                 class="invisible z-0 fixed inset-0 overflow-hidden pointer-events-none select-none">
-            </div>
-            <div id="triangle-right"
-                 class="invisible z-0 fixed inset-0 overflow-hidden pointer-events-none select-none">
-            </div>
-            <div id="triangle-right-alt"
-                 class="invisible z-0 fixed inset-0 overflow-hidden pointer-events-none select-none">
-            </div>
-        </div>
-        <footer class="z-1 fixed select-none">
-            <div class="flex px-1/2 py-1/2 w-full h-full">
-                <div class="flex" style="column-gap: 0.5rem">
-                    <span id="square-1"></span>
+                <div id="triangle-right"
+                     class="invisible z-0 fixed inset-0 overflow-hidden pointer-events-none select-none">
                 </div>
-                <div class="flex" style="column-gap: 0.5rem">
-                    <span id="square-2"></span>
-                    <span id="square-3"></span>
-                    <span id="square-4"></span>
-                </div>
-                <div id="rectangle" class="flex-grow">
+                <div id="triangle-right-alt"
+                     class="invisible z-0 fixed inset-0 overflow-hidden pointer-events-none select-none">
                 </div>
             </div>
-        </footer>
-        <svg id="debug-grid"
-             width="100%"
-             height="100%"
-             xmlns="http://www.w3.org/2000/svg">
-            <defs>
-            <pattern id="debug-grid-fill" width="8" height="8" patternUnits="userSpaceOnUse">
-            <path d="M 8 0 L 0 0 0 8" fill="none" stroke="currentColor" stroke-width="0.5">
-            </pattern>
-            <pattern id="debug-grid-outline" width="80" height="80" patternUnits="userSpaceOnUse">
-            <rect width="80" height="80" fill="url(#debug-grid-fill)">
-            </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#debug-grid-outline)">
-        </svg>
-    </main>
-</body>
+            <footer class="z-1 fixed select-none">
+                <div class="flex px-1/2 py-1/2 w-full h-full">
+                    <div class="flex" style="column-gap: 0.5rem">
+                        <span id="square-1"></span>
+                    </div>
+                    <div class="flex" style="column-gap: 0.5rem">
+                        <span id="square-2"></span>
+                        <span id="square-3"></span>
+                        <span id="square-4"></span>
+                    </div>
+                    <div id="rectangle" class="flex-grow">
+                    </div>
+                </div>
+            </footer>
+            <svg id="debug-grid"
+                 width="100%"
+                 height="100%"
+                 xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                <pattern id="debug-grid-fill" width="8" height="8" patternUnits="userSpaceOnUse">
+                <path d="M 8 0 L 0 0 0 8" fill="none" stroke="currentColor" stroke-width="0.5">
+                </pattern>
+                <pattern id="debug-grid-outline" width="80" height="80" patternUnits="userSpaceOnUse">
+                <rect width="80" height="80" fill="url(#debug-grid-fill)">
+                </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#debug-grid-outline)">
+            </svg>
+        </main>
+    </body>
 </html>

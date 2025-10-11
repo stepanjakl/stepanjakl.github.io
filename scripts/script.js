@@ -1,6 +1,9 @@
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
 
-// const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+const isAnimationFinished = (selector) => {
+    const animations = document.querySelector(selector).getAnimations()
+    return animations.length === 0 || animations[0].playState === 'finished'
+}
 
 class TextHighlighter {
     constructor() {
@@ -56,7 +59,7 @@ class TextHighlighter {
 class KeyHandler {
     constructor() {
         this.tooltipSelectors = '#menu_link_profile, #menu_link_archive, #menu_button-wrapper'
-        this.menuElementSelector = '.animate-fade-in-cta-2'
+        this.menuElementSelector = '#menu'
         this.menuDropdownSelector = '#menu_dropdown'
         this.menuButtonOpenSelector = '#menu_button--open'
         this.menuButtonCloseSelector = '#menu_button--close'
@@ -69,26 +72,28 @@ class KeyHandler {
     }
 
     handleKeydown(event) {
-        switch (event.keyCode) {
-            case 27: // Escape key
-                if (aria.getCurrentDialog()) {
-                    closeDialog('#')
-                }
-                break
-            case 80: // P key
-                this.toggleProfile(event)
-                break
-            case 65: // A key
-                this.toggleArchive(event)
-                break
-            case 77: // M key
-                this.toggleMenu(event)
-                break
-            case 68: // D key
-                this.toggleDebug(event)
-                break
-            default:
-                break
+        if (isAnimationFinished('.animate-fade-in-cta-2 #menu-bg')) {
+            switch (event.keyCode) {
+                case 27: // Escape key
+                    if (aria.getCurrentDialog()) {
+                        closeDialog('#')
+                    }
+                    break
+                case 80: // P key
+                    this.toggleProfile(event)
+                    break
+                case 65: // A key
+                    this.toggleArchive(event)
+                    break
+                case 77: // M key
+                    this.toggleMenu(event)
+                    break
+                case 68: // D key
+                    this.toggleDebug(event)
+                    break
+                default:
+                    break
+            }
         }
 
         requestAnimationFrame(() => {
@@ -128,14 +133,10 @@ class KeyHandler {
 
     toggleMenu(event) {
         event.preventDefault()
-        const menuElement = document.querySelector(this.menuElementSelector)
-        /* TODO - apply on all and/or cancel animation first */
-        if (this.isAnimationFinished(menuElement)) {
-            if (window.location.hash === '#menu') {
-                closeDialog('#')
-            } else {
-                openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
-            }
+        if (window.location.hash === '#menu') {
+            closeDialog('#')
+        } else {
+            openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
         }
     }
 
@@ -143,11 +144,6 @@ class KeyHandler {
         event.preventDefault()
         const debugElement = document.getElementById('debug')
         debugElement.checked = !debugElement.checked
-    }
-
-    isAnimationFinished(element) {
-        const animations = element.getAnimations()
-        return animations.length === 0 || animations[0].playState === 'finished'
     }
 
     handleTooltipActiveClass(event) {
@@ -168,13 +164,15 @@ class WheelHandler {
     }
 
     handleWheelEvent(event) {
-        const deltaX = Math.abs(event.deltaX)
-        const deltaY = Math.abs(event.deltaY)
+        if (isAnimationFinished('.animate-fade-in-cta-2 #menu-bg')) {
+            const deltaX = Math.abs(event.deltaX)
+            const deltaY = Math.abs(event.deltaY)
 
-        if (deltaY > deltaX && deltaY > 5) {
-            this.handleVerticalScroll(event.deltaY)
-        } else if (deltaX > deltaY && deltaX > 5) {
-            this.handleHorizontalScroll(event.deltaX)
+            if (deltaY > deltaX && deltaY > 5) {
+                this.handleVerticalScroll(event.deltaY)
+            } else if (deltaX > deltaY && deltaX > 5) {
+                this.handleHorizontalScroll(event.deltaX)
+            }
         }
     }
 
@@ -185,7 +183,7 @@ class WheelHandler {
         if (currentHash === '#profile' || currentHash === '#archive') {
             this.handleModalVerticalScroll(verticalScrollDirection, currentHash)
         } else {
-            this.handlePageVerticalScroll(verticalScrollDirection)
+            this.handleVerticalPageScroll(verticalScrollDirection)
         }
     }
 
@@ -199,7 +197,7 @@ class WheelHandler {
         }
     }
 
-    handlePageVerticalScroll(verticalScrollDirection) {
+    handleVerticalPageScroll(verticalScrollDirection) {
         const scrollPositionY = window.scrollY || window.pageYOffset
         const totalHeight = document.body.scrollHeight
 
@@ -215,22 +213,15 @@ class WheelHandler {
         const scrollPositionX = window.scrollX || window.pageXOffset
         const totalWidth = document.body.scrollWidth
 
-        if (this.isAnimationFinished('.animate-fade-in-cta-2')) {
-            if (horizontalScrollDirection === 'right' && scrollPositionX + window.innerWidth >= totalWidth) {
-                if (window.location.hash === '') {
-                    openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
-                }
-            } else if (horizontalScrollDirection === 'left' && scrollPositionX === 0) {
-                if (window.location.hash === '#menu') {
-                    closeDialog('#')
-                }
+        if (horizontalScrollDirection === 'right' && scrollPositionX + window.innerWidth >= totalWidth) {
+            if (window.location.hash === '') {
+                openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
+            }
+        } else if (horizontalScrollDirection === 'left' && scrollPositionX === 0) {
+            if (window.location.hash === '#menu') {
+                closeDialog('#')
             }
         }
-    }
-
-    isAnimationFinished(selector) {
-        const animations = document.querySelector(selector).getAnimations()
-        return animations.length === 0 || animations[0].playState === 'finished'
     }
 }
 
@@ -253,15 +244,17 @@ class TouchHandler {
     }
 
     handleTouchMove(event) {
-        const touchEndX = event.touches[0].clientX
-        const touchEndY = event.touches[0].clientY
-        const deltaX = Math.abs(touchEndX - this.touchStartX)
-        const deltaY = Math.abs(touchEndY - this.touchStartY)
+        if (isAnimationFinished('.animate-fade-in-cta-2 #menu-bg')) {
+            const touchEndX = event.touches[0].clientX
+            const touchEndY = event.touches[0].clientY
+            const deltaX = Math.abs(touchEndX - this.touchStartX)
+            const deltaY = Math.abs(touchEndY - this.touchStartY)
 
-        if (deltaY > deltaX && deltaY > 5) {
-            this.handleVerticalScroll(touchEndY)
-        } else if (deltaX > deltaY && deltaX > 5) {
-            this.handleHorizontalScroll(touchEndX)
+            if (deltaY > deltaX && deltaY > 5) {
+                this.handleVerticalScroll(touchEndY)
+            } else if (deltaX > deltaY && deltaX > 5) {
+                this.handleHorizontalScroll(touchEndX)
+            }
         }
     }
 
@@ -272,7 +265,7 @@ class TouchHandler {
         if (currentHash === '#profile' || currentHash === '#archive') {
             this.handleModalScroll(verticalScrollDirection, currentHash)
         } else {
-            this.handlePageVerticalScroll(verticalScrollDirection)
+            this.handleVerticalPageScroll(verticalScrollDirection)
         }
     }
 
@@ -285,7 +278,7 @@ class TouchHandler {
         }
     }
 
-    handlePageVerticalScroll(verticalScrollDirection) {
+    handleVerticalPageScroll(verticalScrollDirection) {
         const scrollPositionY = window.scrollY || window.pageYOffset
         const totalHeight = document.body.scrollHeight
 
@@ -301,22 +294,15 @@ class TouchHandler {
         const scrollPositionX = window.scrollX
         const totalWidth = document.body.scrollWidth
 
-        if (this.isAnimationFinished('.animate-fade-in-cta-2')) {
-            if (horizontalScrollDirection === 'right' && scrollPositionX + window.innerWidth >= totalWidth) {
-                if (window.location.hash === '#menu') {
-                    closeDialog('#')
-                }
-            } else if (horizontalScrollDirection === 'left' && scrollPositionX === 0) {
-                if (window.location.hash === '') {
-                    openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
-                }
+        if (horizontalScrollDirection === 'right' && scrollPositionX + window.innerWidth >= totalWidth) {
+            if (window.location.hash === '#menu') {
+                closeDialog('#')
+            }
+        } else if (horizontalScrollDirection === 'left' && scrollPositionX === 0) {
+            if (window.location.hash === '') {
+                openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
             }
         }
-    }
-
-    isAnimationFinished(selector) {
-        const animations = document.querySelector(selector).getAnimations()
-        return animations.length === 0 || animations[0].playState === 'finished'
     }
 }
 
@@ -357,17 +343,17 @@ class HorizontalDragScroll {
     }
 
     completeDrag(event) {
-            if (this.isMouseDown) {
+        if (this.isMouseDown) {
 
-                this.isMouseDown = false
+            this.isMouseDown = false
 
-                this.element.classList.remove('x-drag-scroll--mouse-down')
+            this.element.classList.remove('x-drag-scroll--mouse-down')
 
-                setTimeout(() => {
-                    this.element.classList.remove('x-drag-scroll--dragging')
-                    /* this.element.releasePointerCapture(event.pointerId) */
-                }, 300)
-            }
+            setTimeout(() => {
+                this.element.classList.remove('x-drag-scroll--dragging')
+                /* this.element.releasePointerCapture(event.pointerId) */
+            }, 300)
+        }
     }
 }
 
@@ -667,7 +653,6 @@ class Carousel {
     }
 
     setupIntersectionObserver() {
-        /* window.getComputedStyle(this.slidesWrapperEl).getPropertyValue('column-gap') */
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -752,7 +737,6 @@ class Carousel {
     }
 }
 
-
 window.handleTouchButtonClick = (element, event, callback, focusAfterClick) => {
     event.preventDefault()
 
@@ -823,8 +807,8 @@ function initializeDialogs() {
 }
 
 const applyNoAnimation = () => {
-        document.querySelectorAll(
-            `#square-2,
+    document.querySelectorAll(
+        `#square-2,
              #square-3,
              #square-4,
             .animate-fade-in-logo,
@@ -839,33 +823,42 @@ const applyNoAnimation = () => {
             .animate-fade-in-cta-2 #menu_link_profile,
             .animate-fade-in-cta-2 #menu_link_archive,
             .animate-fade-in-cta-2 #menu_button-wrapper`
-        ).forEach(element => {
-            element.classList.add('quick-animation')
-        })
-    }
+    ).forEach(element => {
+        element.classList.add('quick-animation')
+    })
+}
 
-    const openDialogOnLoad = () => {
-        switch (window.location.hash.split('?')[0]) {
-            case '#profile':
-                openDialog('modal_profile', 'menu_link_profile', null, 'profile')
-                break
-            case '#archive':
-                const yearParam = window.location.hash.split('?year=')[1]
-                if (yearParam) {
-                    localStorage.setItem('archiveYear', yearParam)
-                }
-                openDialog('modal_archive', 'menu_link_archive', null, window.location.hash)
-                break
-            case '#menu':
-                openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
-                break
-        }
+const openDialogOnLoad = () => {
+    switch (window.location.hash.split('?')[0]) {
+        case '#profile':
+            openDialog('modal_profile', 'menu_link_profile', null, 'profile')
+            break
+        case '#archive':
+            const yearParam = window.location.hash.split('?year=')[1]
+            if (yearParam) {
+                localStorage.setItem('archiveYear', yearParam)
+            }
+            openDialog('modal_archive', 'menu_link_archive', null, window.location.hash)
+            break
+        case '#menu':
+            openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
+            break
     }
+}
+
+
+window.toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen()
+    } else if (document.exitFullscreen) {
+        document.exitFullscreen()
+    }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
 
     document.body.addEventListener('click', () => {
-        if(getComputedStyle(document.querySelector('.animate-fade-in-cta-1')).animationPlayState === 'running') {
+        if (!isAnimationFinished('.animate-fade-in-cta-2 #menu-bg')) {
             applyNoAnimation()
         }
     }, { once: true })

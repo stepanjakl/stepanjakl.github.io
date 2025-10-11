@@ -75,7 +75,7 @@ body {
 #square-1 {
     animation-name: square-blink;
     animation-fill-mode: backwards;
-    animation-duration: calc(var(--anim-segment) * 2.75);
+    animation-duration: calc(var(--anim-segment) * 3);
     animation-timing-function: linear;
     animation-direction: normal;
     animation-iteration-count: 3;
@@ -89,15 +89,15 @@ body {
 }
 
 #square-2 {
-    animation-delay: calc(var(--anim-segment) * 4.25);
+    animation-delay: calc(var(--anim-segment) * 7);
 }
 
 #square-3 {
-    animation-delay: calc(var(--anim-segment) * 3.5);
+    animation-delay: calc(var(--anim-segment) * 5.5);
 }
 
 #square-4 {
-    animation-delay: calc((var(--anim-segment) * 3));
+    animation-delay: calc(var(--anim-segment) * 4);
 }
 
 @keyframes square-blink {
@@ -116,9 +116,9 @@ body {
 #background-pattern {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
-    animation-duration: calc(var(--anim-segment) * 22);
+    animation-duration: calc(var(--anim-segment) * 15);
     animation-timing-function: var(--ease-out-quad);
-    animation-delay: calc(var(--anim-segment) * 5.75);
+    animation-delay: calc(var(--anim-segment) * 9);
 }
 
 
@@ -630,15 +630,18 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 #menu:target #menu_button--open {
     pointer-events: none;
+    visibility:hidden;
 }
 
 #menu_button--close {
     z-index: 4;
     pointer-events: none;
+    visibility: hidden;
 }
 
 #menu:target #menu_button--close {
     pointer-events: auto;
+    visibility: visible;
 }
 
 #menu_button {
@@ -650,7 +653,6 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 #menu:target #menu_button {
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) rgba(0, 0, 0, 0);
-    /* border-radius: 0.3125rem 1rem 1rem 0.3125rem; */
 }
 
 #menu_button-wrapper:hover #menu_button {
@@ -661,7 +663,7 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
     border-color: var(--light-3);
 }
 
-#menu_button-wrapper:hover #menu_button, #menu:target #menu_button, #menu_button-wrapper.tooltip-key--active #menu_button {
+#menu_button-wrapper:hover #menu_button, #menu_button-wrapper:focus-within #menu_button, #menu:target #menu_button, #menu_button-wrapper.tooltip-key--active #menu_button {
     transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear, outline var(--animate-in-segment-2\/3) linear;
     color: var(--icon-hover);
     background-color: var(--highlight-secondary);
@@ -860,10 +862,11 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 /* Menu Dropdown */
 
 #menu_dropdown {
+    visibility: hidden;
     opacity: 0;
     transform: translateY(-0.25rem) scale(0.975);
     transform-origin: bottom;
-    transition: opacity calc(1.25 * var(--animate-out-segment)) var(--ease-in-quad), transform calc(1.25 * var(--animate-out-segment)) var(--ease-in-quad);
+    transition: opacity calc(1.25 * var(--animate-out-segment)) var(--ease-in-quad), transform calc(1.25 * var(--animate-out-segment)) var(--ease-in-quad), visibility 0s calc(1.25 * var(--animate-out-segment));
 }
 
 @media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
@@ -874,7 +877,7 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 }
 
 #menu:target #menu_dropdown {
-    pointer-events: auto;
+    visibility: visible;
     opacity: 1;
     transform: translate(0) scale(1);
     transition: opacity calc(1.25 * var(--animate-in-segment)) var(--ease-out-quad), transform calc(1.25 * var(--animate-in-segment)) var(--ease-out-quad);
@@ -939,12 +942,14 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
     /* 75, 100, 85  */
 }
 
-#menu_dropdown label#menu_dropdown_debug::before {
+#menu_dropdown label#menu_dropdown_debug::before,
+#menu_dropdown label#menu_dropdown_fullscreen::before {
     background-image: linear-gradient(to right in oklch, rgba(0, 95, 241, 0.75), rgba(0, 95, 241, 0));
     /* 260, 100, 45 */
 }
 
-#menu_dropdown label#menu_dropdown_debug::after {
+#menu_dropdown label#menu_dropdown_debug::after,
+#menu_dropdown label#menu_dropdown_fullscreen::after {
     background-image: linear-gradient(to right in oklch, rgba(0, 95, 241, 1), rgba(0, 95, 241, 0));
     /* 260, 100, 45 */
 }
@@ -953,15 +958,17 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 /* Modals */
 
 .modal {
+    visibility: hidden;
     opacity: 0;
     transform: scale(1.05);
     transform-origin: top;
-    transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad);
+    transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad), visibility 0s var(--animate-out-segment);
     contain: content;
 }
 
 #profile:target~main #modal_profile,
 #archive:target~main #modal_archive {
+    visibility: visible;
     opacity: 1;
     transform: scale(1);
     transition: opacity var(--animate-in-segment) linear, transform var(--animate-in-segment) var(--ease-out-quad);
@@ -1105,17 +1112,20 @@ input[id^="timeline_section_year-"]:checked~#modal_archive-content [data-timelin
 
 /* Modals - Close Button */
 
-#modal_button-close, #modal_button-close svg {
+#modal_button-close, #modal_button-close svg,
+#modal_button-fullscreen, #modal_button-fullscreen svg {
     transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, border var(--animate-out-segment-2\/3) linear;
 }
 
-#modal_button-close:hover, #modal_button-close:focus {
+#modal_button-close:hover, #modal_button-close:focus,
+#modal_button-fullscreen:hover, #modal_button-fullscreen:focus {
     transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border var(--animate-in-segment-2\/3) linear;
     color: var(--modal-icon-hover);
     background-color: var(--highlight-secondary);
 }
 
-#modal_button-close:hover svg, #modal_button-close:focus svg {
+#modal_button-close:hover svg, #modal_button-close:focus svg,
+#modal_button-fullscreen:hover svg, #modal_button-fullscreen:focus svg {
     color: var(--modal-icon-hover);
 }
 
