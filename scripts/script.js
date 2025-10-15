@@ -777,12 +777,9 @@ window.handleTouchButtonClick = (element, event, callback, focusAfterClick) => {
     }
 }
 
-window, initializeTimeline = () => {
+window.initializeTimeline = () => {
     window.timelineEl = document.createElement('horizontal-timeline')
-    timelineEl.setAttribute('labels', JSON.stringify([
-        2025, 2024, 2023, 2022, 2021, 2020,
-        2019, 2018, 2017, 2016, 2015, 2014
-    ]))
+    timelineEl.labels = ['2024/21', '2021/19', '2019/18', 'Elsewhen']
 
     document.querySelector('#horizontal_timeline').appendChild(timelineEl)
 
@@ -812,10 +809,13 @@ const applyNoAnimation = () => {
              #square-3,
              #square-4,
             .animate-fade-in-logo,
+            .animate-fade-in-name,
             .animate-fade-in-name>div>p,
+            .animate-fade-in-title,
             .animate-fade-in-title>p,
             .animate-fade-in-title span.de-highlight-anim,
             .animate-fade-in-title span.de-highlight-anim-alt,
+            .animate-fade-in-cta-1,
             .animate-fade-in-cta-1 #availability_button-bg,
             .animate-fade-in-cta-1 a>div,
             .animate-fade-in-cta-2 #menu-bg,
@@ -919,7 +919,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const archiveWrapperEl = document.querySelector('#modal_archive-wrapper')
         const archiveWrapperRect = archiveWrapperEl.getBoundingClientRect()
-        const timelineContentSectionEl = document.querySelector('#modal_archive-content_section')
+        const timelineContentSectionEl = document.querySelector('#modal_archive-wrapper [data-timeline-section]')
         const timelineContentSectionRect = timelineContentSectionEl.getBoundingClientRect()
 
         const timelineWrapperEl = document.querySelector('#horizontal_timeline')

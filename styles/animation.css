@@ -163,19 +163,26 @@ body {
 }
 
 .animate-fade-in-name,
-.animate-fade-in-title {
+.animate-fade-in-title,
+.animate-fade-in-cta-1 {
     animation-name: change-pointer;
     animation-duration: 0;
     animation-timing-function: linear;
     animation-fill-mode: backwards;
 }
 
+
+/* TODO - correct these delay timings */
 .animate-fade-in-name {
     animation-delay: calc(var(--anim-segment) * 16);
 }
 
 .animate-fade-in-title {
     animation-delay: calc(var(--anim-segment) * 20);
+}
+
+.animate-fade-in-cta-1 {
+    animation-delay: calc(var(--anim-segment) * 18.25);
 }
 
 @keyframes fade-in-opacity {
@@ -260,13 +267,6 @@ body {
     animation-duration: calc(1.25 * var(--anim-segment));
     animation-delay: calc(var(--anim-segment) * 17);
     animation-timing-function: var(--ease-out-quad);
-    animation-fill-mode: backwards;
-}
-
-#availability_button {
-    animation-name: change-pointer;
-    animation-delay: calc(var(--anim-segment) * 18.25);
-    animation-timing-function: linear;
     animation-fill-mode: backwards;
 }
 
@@ -425,7 +425,9 @@ body {
 #profile:target~main footer #rectangle,
 #archive:target~main footer #rectangle,
 #profile:target~main footer #square-1,
-#archive:target~main footer #square-1 {
+#archive:target~main footer #square-1,
+#profile:target~main #availability_button_dot,
+#archive:target~main #availability_button_dot {
     animation-play-state: paused;
 }
 
@@ -444,6 +446,204 @@ body {
     transition: color calc(2 * var(--animate-in-segment)) var(--ease-out-quad) !important;
     color: var(--blue-full-65) !important;
 }
+
+
+/* Corner */
+.corner-wrapper {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity calc(var(--animate-out-segment) * 0.75) var(--ease-in-quad);
+}
+
+.corner {
+    position: absolute;
+    width: var(--corner-length);
+    height: var(--corner-length);
+    transform: scale(0.75);
+    transition: transform calc(var(--animate-out-segment) * 0.75) var(--ease-in-quad);
+    /* opacity: 0; */
+    /* animation: corner-hide;
+    animation-duration: var(--animate-out-segment);
+    animation-timing-function: var(--ease-in-quad);
+    animation-fill-mode: forwards; */
+}
+
+#intro_left-column h2>div:hover .corner-wrapper,
+#logo:hover .corner-wrapper {
+    opacity: 1;
+    transition: opacity calc(var(--animate-in-segment) * 0.75) var(--ease-out-quad);
+}
+
+
+/* TODO - add states for focus and active and similar - keyboard navigation */
+#intro_left-column h2>div:hover .corner,
+#logo:hover .corner {
+    animation: corner-flicker;
+    animation-timing-function: var(--ease-out-quad);
+    animation-fill-mode: forwards;
+    transform: scale(1);
+    transition: transform calc(var(--animate-in-segment) * 0.75) var(--ease-out-quad);
+}
+
+#intro_left-column h2>div:hover .corner {
+    animation-duration: calc(var(--animate-in-segment) * 3);
+}
+
+#logo:hover .corner {
+    animation-duration: calc(var(--animate-in-segment) * 4);
+}
+
+#intro_left-column h2>div:hover .corner::before,
+#intro_left-column h2>div:hover .corner::after,
+#logo:hover .corner::before,
+#logo:hover .corner::after {
+    animation: corner-color-change;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+#intro_left-column h2>div:hover .corner::before,
+#intro_left-column h2>div:hover .corner::after {
+    animation-duration: calc(var(--animate-in-segment) * 3);
+}
+
+#logo:hover .corner::before,
+#logo:hover .corner::after {
+    animation-duration: calc(var(--animate-in-segment) * 4);
+}
+
+@keyframes corner-flicker {
+    25%, 39.999%, 50%, 50.999%, 59%, 74.999% {
+        opacity: 0;
+    }
+
+    0%, 24.999%, 40%, 49.999%, 51%, 58.999%, 75%, 100% {
+        opacity: 1;
+    }
+}
+
+@keyframes corner-color-change {
+    0% {
+        background: var(--corner-color);
+    }
+
+    74.999% {
+        background: var(--corner-color);
+    }
+
+    75% {
+        background: var(--corner-color-active);
+    }
+
+    100% {
+        background: var(--corner-color-active);
+    }
+}
+
+/* @keyframes corner-show {
+    0% {
+        transform: scale(0.75);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes corner-hide {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+} */
+
+.corner::before,
+.corner::after {
+    content: '';
+    position: absolute;
+    background: var(--corner-color-active);
+}
+
+.corner.top-left {
+    top: 0;
+    left: 0;
+}
+
+.corner.top-left::before {
+    top: calc(var(--corner-offset-y) * -1);
+    left: calc(var(--corner-offset-x) * -1);
+    width: 100%;
+    height: var(--corner-width);
+}
+
+.corner.top-left::after {
+    top: calc(var(--corner-offset-y) * -1);
+    left: calc(var(--corner-offset-x) * -1);
+    width: var(--corner-width);
+    height: 100%;
+}
+
+.corner.top-right {
+    top: 0;
+    right: 0;
+}
+
+.corner.top-right::before {
+    top: calc(var(--corner-offset-y) * -1);
+    right: calc(var(--corner-offset-x) * -1);
+    width: 100%;
+    height: var(--corner-width);
+}
+
+.corner.top-right::after {
+    top: calc(var(--corner-offset-y) * -1);
+    right: calc(var(--corner-offset-x) * -1);
+    width: var(--corner-width);
+    height: 100%;
+}
+
+.corner.bottom-left {
+    bottom: 0;
+    left: 0;
+}
+
+.corner.bottom-left::before {
+    bottom: calc(var(--corner-offset-y) * -1);
+    left: calc(var(--corner-offset-x) * -1);
+    width: 100%;
+    height: var(--corner-width);
+}
+
+.corner.bottom-left::after {
+    bottom: calc(var(--corner-offset-y) * -1);
+    left: calc(var(--corner-offset-x) * -1);
+    width: var(--corner-width);
+    height: 100%;
+}
+
+.corner.bottom-right {
+    bottom: 0;
+    right: 0;
+}
+
+.corner.bottom-right::before {
+    bottom: calc(var(--corner-offset-y) * -1);
+    right: calc(var(--corner-offset-x) * -1);
+    width: 100%;
+    height: var(--corner-width);
+}
+
+.corner.bottom-right::after {
+    bottom: calc(var(--corner-offset-y) * -1);
+    right: calc(var(--corner-offset-x) * -1);
+    width: var(--corner-width);
+    height: 100%;
+}
+
 
 
 /* Face icon animation */
@@ -533,7 +733,7 @@ svg.animate-face-icon path {
     animation-name: availability-dot-fade-animation;
     animation-fill-mode: both;
     animation-timing-function: linear;
-    animation-duration: calc(var(--animate-in-segment) * 32);
+    animation-duration: calc(var(--animate-in-segment) * 16);
     animation-iteration-count: infinite;
     animation-delay: calc(var(--anim-segment) * 5);
 }
@@ -630,7 +830,7 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 #menu:target #menu_button--open {
     pointer-events: none;
-    visibility:hidden;
+    visibility: hidden;
 }
 
 #menu_button--close {
@@ -963,7 +1163,6 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
     transform: scale(1.05);
     transform-origin: top;
     transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad), visibility 0s var(--animate-out-segment);
-    contain: content;
 }
 
 #profile:target~main #modal_profile,

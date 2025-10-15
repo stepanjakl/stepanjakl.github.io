@@ -24,6 +24,7 @@ class timeline extends HTMLElement {
             <style>
                 horizontal-timeline {
                     display: flex;
+                    justify-content: center;
                     transition: margin var(--animate-out-segment) var(--ease-in-quad);
                     margin: 0 3rem;
                 }
@@ -52,7 +53,8 @@ class timeline extends HTMLElement {
                 #timeline-wrapper {
                     transition: border-radius var(--animate-out-segment) var(--ease-in-quad), transform var(--animate-out-segment) var(--ease-in-quad);
                     position: relative;
-                    width: 100%;
+                    width: auto;
+                    max-width: 100%;
                     border-radius: 0.75rem;
                     background-color: rgba(0, 91, 102, 0.75); /* 210, 100, 35 */
                     backdrop-filter: blur(0.375rem);
@@ -204,7 +206,7 @@ class timeline extends HTMLElement {
                     transition: padding var(--animate-out-segment) var(--ease-in-quad);
                     position: relative;
                     display: inline-flex;
-                    justify-self: center;
+                    justify-content: center;
                     cursor: pointer;
                     padding-top: 0.5rem;
                 }
@@ -213,6 +215,18 @@ class timeline extends HTMLElement {
                     row-gap var(--animate-in-segment) var(--ease-out-quad);
                     padding-top: calc(0.5rem + 0.375rem);
                 }
+
+                /* #timeline_labels button:not(:last-child)::before {
+                    content: "✦";
+                    position: absolute;
+                    right: 0;
+                    color: var(--text-2);
+                    text-align: center;
+                    font-family: 'Bai Jamjuree', sans-serif;
+                    font-size: 0.6875rem;
+                    line-height: 1.063125rem;
+                    transform: translateX(50%);
+                } */
 
                 #timeline_labels button>span {
                     position: relative;
@@ -225,6 +239,7 @@ class timeline extends HTMLElement {
                     font-size: 0.80356875rem;
                     line-height: 0.875rem;
                     letter-spacing: 0.125rem;
+                    text-transform: uppercase;
                 }
 
                 #timeline_labels button>span::before {
@@ -236,6 +251,23 @@ class timeline extends HTMLElement {
                 #timeline_labels button>span::after {
                     content: "";
                     margin-top: -0.2024em;
+                    display: table;
+                }
+
+                #timeline_labels button:last-child>span {
+                    font-size: 0.75892875rem;
+                    line-height: 0.84375rem;
+                }
+
+                #timeline_labels button:last-child>span::before {
+                    content: "";
+                    margin-bottom: -0.1986em;
+                    display: table;
+                }
+
+                #timeline_labels button:last-child>span::after {
+                    content: "";
+                    margin-top: -0.21455em;
                     display: table;
                 }
 

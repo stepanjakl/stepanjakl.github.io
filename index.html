@@ -78,7 +78,7 @@
               style="background-color: var(--background)">
             <div id="background-pattern" class="absolute inset-0">
             </div>
-            <div class="relative pt-1/2 w-full max-w-xl"
+            <figure class="relative pt-1/2 w-full max-w-xl"
                  style="padding-bottom: var(--segment-half)">
                 <header id="intro">
                     <div id="intro_left-column"
@@ -89,12 +89,18 @@
                             onclick="handleTouchButtonClick(this, event, () => { if ((event.which && event.which == 3) || (event.button && event.button == 2)) { if ('speechSynthesis' in window) { let msg = new SpeechSynthesisUtterance(); msg.volume= 0.25; msg.lang = 'cs-CZ'; msg.voice = speechSynthesis.getVoices().filter(voice => voice.name === 'Zuzana')[0]; msg.text = 'Štěpán Jákl'; speechSynthesis.speak(msg) } } else { navigator?.clipboard?.writeText('Štěpán Jákl'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip-bottom span'), this, 'Copied to the clipboard') } }, true)"
                             role="button"
                             aria-label="Click to copy name to clipboard">
-                            <div class="inline-flex flex-wrap select-none" aria-hidden="true">
+                            <div class="inline-flex flex-wrap select-none" style="--corner-length: 1.5rem; --corner-width: 0.125rem; --corner-offset-x: 1rem; --corner-offset-y: 0.5rem; --corner-color: var(--cyan-full-45); --corner-color-active: var(--cyan-full-85);" aria-hidden="true">
+                                <div class="corner-wrapper">
+                                <span class="top-left corner"></span>
+                                <span class="top-right corner"></span>
+                                <span class="bottom-left corner"></span>
+                                <span class="bottom-right corner"></span>
+                                </div>
                                 <p style="--i:1">
-                                    <span style="--i:1">Š</span><span style="--i:2">t</span><span style="--i:3">ě</span><span style="--i:4">p</span><span style="--i:5">á</span><span style="--i:6">n</span>
+                                    Štěpán<span>&nbsp;</span>
                                 </p>
                                 <p style="--i:2">
-                                    <span style="--i:7">&nbsp;</span><span style="--i:8">J</span><span style="--i:9">á</span><span style="--i:10">k</span><span style="--i:11">l</span>
+                                    Jákl
                                 </p>
                             </div>
                             <abbr class="tooltip-top tooltip">
@@ -109,7 +115,12 @@
                             </abbr>
                         </h2>
                         <div id="logo" class="animate-fade-in-logo select-none">
-                            <span></span>
+                            <span class="relative" style="--corner-length: 1rem; --corner-width: 0.125rem; --corner-offset-x: 0.5rem; --corner-offset-y: 0.5rem; --corner-color: var(--cyan-full-65); --corner-color-active: var(--yellow);">
+                                <div class="corner-wrapper">
+                                    <figure class="top-right corner"></figure>
+                            <figure class="bottom-left corner"></figure>
+                        </div>
+                            </span>
                         </div>
                     </div>
                     <div id="intro_right-column" class="z-1 flex flex-col">
@@ -333,7 +344,7 @@
                                                 <use xlink:href="images/icons.svg#new-tab"></use>
                                             </svg>
                                         </a>
-                                        <a href="https://codepen.io/stepj"
+                                        <a href="https://codepen.io/stepj/pens/public"
                                            target="_blank"
                                            tabindex="0"
                                            aria-label="Visit my profile on CodePen">
@@ -464,15 +475,16 @@
                                         Summary:
                                     </dt>
                                     <dd id="modal_profile_content_paragraph">
-                                        <p>
-                                            Experienced and detail-oriented user interface engineer who specialises in crafting
-                                            intuitive digital solutions. Committed to delivering high-quality results for
-                                            projects with exciting propositions and realistic goals. Proficient in both back-end
-                                            and front-end development, with a focus on prioritising user experience.
-                                        </p>
-                                        <p>
-                                            Eager to explore cutting-edge frameworks and tools while maintaining a solid foundation in web development essentials such as good semantics, cross-compatibility, and accessibility.
-                                        </p>
+
+    <p>
+    Experienced and detail-oriented user interface engineer who specialises in crafting digital solutions that balance clarity and creativity. Committed to delivering high-quality results for projects with exciting propositions and realistic goals. Proficient across both back-end and front-end development, with a strong emphasis on user-focused outcomes.
+</p>
+<p>
+    Eager to explore modern frameworks and emerging tools while maintaining a solid foundation in web development fundamentals such as clean semantics, cross-browser reliability, and accessibility best practices.
+</p>
+<p>
+    Dedicated to shaping engaging interfaces through purposeful design and seamless interactions.  I value precision in every aspect of the creative process, ensuring layouts feel balanced, transitions enhance flow, and visual elements contribute meaningfully to the overall experience. Each project is an opportunity to refine the connection between form and function.
+</p>
                                         <!-- <p>
                                             In recent years, my efforts have been devoted to building and overseeing a
                                             significant number of websites using the&nbsp;<a href="https://apostrophecms.com/" target="_blank"><u>ApostropheCMS</u>
@@ -590,72 +602,70 @@
                                     <dd id="modal_profile_tags">
                                         <ul>
                                             <li>
-                                                <svg class="fill-current">
-                                                    <use xlink:href="images/logos.svg#apostrophe"></use>
-                                                </svg>
-                                                <span>ApostropheCMS</span>
-                                            </li>
-                                            <li>
-                                                <svg class="fill-current">
-                                                    <use xlink:href="images/logos.svg#alpine"></use>
-                                                </svg>
-                                                <span>AlpineJS</span>
-                                                <svg class="fill-current">
-                                                    <use xlink:href="images/logos.svg#vue"></use>
-                                                </svg>
-                                                <span>VueJS</span>
-                                                <svg class="fill-current">
-                                                    <use xlink:href="images/logos.svg#react"></use>
-                                                </svg>
-                                                <span>ReactJS</span>
-                                            </li>
-                                            <li>
-                                                <svg class="fill-current">
-                                                    <use xlink:href="images/logos.svg#figma"></use>
-                                                </svg>
-                                                <span>Figma/Sketch</span>
-                                            </li>
-                                            <li>
-                                                <svg class="fill-current">
-                                                    <use xlink:href="images/logos.svg#framer"></use>
-                                                </svg>
-                                                <span>Framer Motion/Motion One</span>
-                                            </li>
-                                            <li>
-                                                <svg class="fill-current">
+                                                <svg>
                                                     <use xlink:href="images/logos.svg#html5"></use>
                                                 </svg>
                                                 <span>HTML</span>
-                                                <svg class="fill-current">
+                                                <svg>
                                                     <use xlink:href="images/logos.svg#css3"></use>
                                                 </svg>
                                                 <span>CSS</span>
-                                                <svg class="fill-current">
-                                                    <use xlink:href="images/logos.svg#tailwindcss"></use>
-                                                </svg>
-                                                <span>TailwindCSS</span>
-                                            </li>
-                                            <li>
-                                                <svg class="fill-current">
-                                                    <use xlink:href="images/logos.svg#jamstack"></use>
-                                                </svg>
-                                                <span>JAMstack</span>
-                                                <svg class="fill-current">
-                                                    <use xlink:href="images/logos.svg#astro"></use>
-                                                </svg>
-                                                <span>Astro</span>
-                                            </li>
-                                            <li>
-                                                <svg class="fill-current">
+                                                <svg>
                                                     <use xlink:href="images/logos.svg#javascript"></use>
                                                 </svg>
                                                 <span>JavaScript</span>
                                             </li>
                                             <li>
-                                                <svg class="fill-current">
+                                                <svg>
+                                                    <use xlink:href="images/logos.svg#react"></use>
+                                                </svg>
+                                                <span>ReactJS</span>
+                                                <svg>
+                                                    <use xlink:href="images/logos.svg#vue"></use>
+                                                </svg>
+                                                <span>VueJS</span>
+                                                <svg>
+                                                    <use xlink:href="images/logos.svg#alpine"></use>
+                                                </svg>
+                                                <span>AlpineJS</span>
+                                            </li>
+                                            <li>
+                                                <svg>
+                                                    <use xlink:href="images/logos.svg#tailwindcss"></use>
+                                                </svg>
+                                                <span>TailwindCSS</span>
+                                                <svg>
+                                                    <use xlink:href="images/logos.svg#jamstack"></use>
+                                                </svg>
+                                                <span>JAMstack</span>
+                                                <svg>
+                                                    <use xlink:href="images/logos.svg#astro"></use>
+                                                </svg>
+                                                <span>Astro</span>
+                                            </li>
+                                            <li>
+                                                <svg>
+                                                    <use xlink:href="images/logos.svg#apostrophe"></use>
+                                                </svg>
+                                                <span>ApostropheCMS</span>
+                                                <svg>
                                                     <use xlink:href="images/logos.svg#mongodb"></use>
                                                 </svg>
                                                 <span>MongoDB</span>
+                                            </li>
+                                            <li>
+                                                <svg>
+                                                    <use xlink:href="images/logos.svg#figma"></use>
+                                                </svg>
+                                                <span>Figma/Sketch</span>
+                                                <svg>
+                                                    <use xlink:href="images/logos.svg#framer"></use>
+                                                </svg>
+                                                <span>Framer</span>
+                                                <svg>
+                                                    <use xlink:href="images/logos.svg#motion"></use>
+                                                </svg>
+                                                <span>Motion</span>
                                             </li>
                                             <li>
                                                 <span>& other</span>
@@ -663,19 +673,71 @@
                                         </ul>
                                     </dd>
                                 </div>
-                                <!-- <div>
-                <dt>Hourly rate range:</dt>
-                <dd><span>50 ~ 80 £/€/$</span></dd>
-            </div>
-            <div>
-                <dt>Annual salary range:</dt>
-                <dd>65,000+ £/€/$</dd>
-            </div> -->
+                                <!-- <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const footerArtWrapper = document.querySelector('.modal-footer-art-wrapper');
+                                        const footerArt = document.querySelector('.modal-footer-art');
+                                        const modalProfile = document.getElementById('modal_profile');
+
+                                        if (!footerArt || !modalProfile) return;
+
+                                        function handleScroll() {
+                                            const rect = footerArtWrapper.getBoundingClientRect();
+                                            const modalRect = modalProfile.getBoundingClientRect();
+
+                                            // Calculate how much of the footerArtWrapper is revealed from the top to the bottom of modal
+                                            /* const visibleTop = Math.max(rect.top, modalRect.bottom);
+                                            const visibleBottom = Math.max(rect.bottom, modalRect.bottom);
+                                            const percent = Math.max(0, Math.min(1, (visibleBottom - rect.top) / rect.height));
+                                            footerArt.style.transform = `scaleY(${percent})`;
+ */
+
+
+
+                                            // const totalDistance = modalRect.height + rect.height;
+
+                                            // Calculate how much of that distance has been covered
+                                            const inViewDistance = Math.min(Math.max((modalRect.height + rect.height) - rect.bottom, 0), rect.height);
+
+                                            // Clamp between 0 and 1
+                                            const progress = Math.min(Math.max(inViewDistance / rect.height, 0), 1);
+
+                                            console.log(inViewDistance, progress);
+
+                                            footerArt.style.transform = `scaleY(${progress})`
+                                            /* RotateX instead? */
+
+
+
+                                            /* console.log(modalRect.bottom - rect.top , modalRect.bottom - rect.bottom);
+                                            console.log((modalRect.bottom - rect.top) - (modalRect.bottom - rect.bottom)); */
+
+
+                                        }
+
+                                        modalProfile.addEventListener('scroll', handleScroll, { passive: true });
+                                        window.addEventListener('resize', handleScroll);
+                                        handleScroll();
+                                    });
+                                </script>
+                                <div class="modal-footer-art-wrapper" style="position:relative; width: 100%; height: 50vh; transform: none;">
+                                <div class="modal-footer-art" style="position: absolute; inset:0; background: var(--highlight-primary); transform: scaleY(0); transform-origin: bottom;
+                                mask-image: radial-gradient(ellipse at bottom center, black, transparent 50%) /* linear-gradient(to top, black, transparent); */">
+                                </div> -->
+                                <!-- /*
+    linear-gradient(
+      to right,
+      transparent 0,
+      black 25%,
+      black calc(100% - 25%),
+      transparent 100%
+    ), */ -->
+                                </div>
                             </dl>
                         </div>
                     </dialog>
                     <dialog id="modal_archive" class="modal" role="dialog" aria-modal="true">
-                        <div class="overflow-clip modal-content">
+                        <figure class="overflow-clip modal-content">
                             <div id="modal_button-wrapper">
                                 <a href="#"
                                    onclick="event.preventDefault(); closeDialog('#')"
@@ -709,13 +771,13 @@
                                         height: 100%;
                                         padding-bottom: var(--segment-half)">
                                 <div id="modal_archive-wrapper">
-                                    <input type="checkbox" id="timeline_section_year-2024" checked>
+                                    <input type="checkbox" id="timeline_section_year-2024-21" checked>
                                     <input type="checkbox" id="timeline_section_year-2018">
                                     <div id="modal_archive-content">
                                         <!-- 2024 -->
-                                        <div id="modal_archive-content_section-title" data-timeline-section="2024">
+                                        <section data-timeline-section-title="2024">
                                             <div>
-                                                <label for="timeline_section_year-2024" tabindex="0">
+                                                <label for="timeline_section_year-2024-21" tabindex="0">
                                                     2024
                                                 </label>
                                                 <div class="flex align-items-center"
@@ -730,17 +792,27 @@
                                                     <span>2024<sub>/21</sub></span>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div id="modal_archive-content_section" data-timeline-section="2024">
-                                            <div id="modal_archive-content_section-divider">
+                                        </section>
+                                        <section data-timeline-section="2024">
+                                            <figure>
                                                 <hr>
                                                 <hr>
                                                 <hr>
-                                            </div>
-                                            <div id="modal_archive-content_section-content">
-                                                <h1 class="font-bold text-lg">
-                                                    ApostropheCMS Fleet of Sites
+                                            </figure>
+                                            <div>
+                                                <h1>
+                                                    <span>ApostropheCMS Fleet of Sites</span>
                                                 </h1>
+                                                <h1>
+                                                    <span class="spark">ApostropheCMS Fleet of Sites</span>
+                                                </h1>
+                                                <div class="hover-cards">
+                                                    <figure><div><img class="bright" src="/projects/2024-21/cloudraker-tfp/landing-hero-ovo.png"></div></figure>
+                                                    <figure><div><img class="bright" src="/projects/2024-21/cloudraker-tfp/landing-hero-olive.png"></div></figure>
+                                                    <figure><div><img class="bright" src="/projects/2024-21/cloudraker-tfp/landing-hero-heartland.png"></div></figure>
+                                                    <figure><div><img class="bright" src="/projects/2024-21/cloudraker-tfp/landing-hero-conceptia.png"></div></figure>
+                                                    <figure><div><img class="bright" src="/projects/2024-21/cloudraker-tfp/landing-hero-grace.png"></div></figure>
+                                                </div>
                                                 <p class="text-p">
                                                     Client: CloudRaker, Altavia, TFP, Truffl
                                                 </p>
@@ -750,17 +822,23 @@
                                                     Link to repository
                                                 </p>
                                                 <p class="text-p">
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
+                                                    Between 2021 and 2024, I worked with CloudRaker to build and maintain a network of websites for The Fertility Partners (TFP) — one of North America’s largest fertility clinic groups. Over this period, I led the planning, development, and ongoing maintenance of seven full marketing sites and several existing ones, totalling around 4,000 hours of work.
+                                                    <br><br>
+                                                    I was the main technical lead and point of contact between CloudRaker, TFP, and my own team at Bohemica Studio. My role went far beyond coding: I translated business needs into technical plans, coordinated designers and developers, and ensured every launch met high standards for accessibility, SEO, and performance.
+                                                    <br><br>
+                                                    All sites were built on ApostropheCMS (v2 and v3), where I created a system of reusable components and custom widgets to make content editing intuitive for non-technical users. I implemented multilingual content, CI/CD pipelines, analytics, and error monitoring (Raygun), while continuously improving load times, accessibility, and editor UX.
+                                                    <br><br>
+                                                    Post-launch, I maintained the full suite—handling updates, monitoring performance, and implementing improvements under a long-term support agreement. The result was a unified, scalable platform that empowered the client’s marketing teams to manage content independently.
                                                 </p>
                                             </div>
-                                            <div id="modal_archive-content_section-divider">
+                                            <figure>
                                                 <hr>
                                                 <hr>
                                                 <hr>
-                                            </div>
-                                            <div id="modal_archive-content_section-content">
-                                                <h1 class="font-bold text-lg">
-                                                    ApostropheCMS Extensions
+                                            </figure>
+                                            <div>
+                                                <h1>
+                                                    <span>ApostropheCMS Extensions</span>
                                                 </h1>
                                                 <p class="text-p">
                                                     Apostrophe Template, Library, Sync, Stripe
@@ -768,19 +846,13 @@
                                                     <br>
                                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
                                                 </p>
-                                                <div id="modal_archive-content_section-divider">
-                                                    <hr>
-                                                </div>
-                                                <h2 class="font-bold text-md">
+                                                <h2>
                                                     ApostropheCMS Module Library
                                                 </h2>
                                                 <p class="text-p">
                                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
                                                 </p>
-                                                <div id="modal_archive-content_section-divider">
-                                                    <hr>
-                                                </div>
-                                                <h2 class="font-bold text-md">
+                                                <h2>
                                                     ApostropheCMS Stripe Extension
                                                 </h2>
                                                 <div class="relative" data-carousel>
@@ -790,7 +862,6 @@
                                                                 <a href="projects/2024-25/apostrophe-stripe-extension/store-alpine-1.png"
                                                                    target="_blank">
                                                                     <img src="projects/2024-25/apostrophe-stripe-extension/store-alpine-1.png"
-                                                                         class="bright"
                                                                          loading="lazy"
                                                                          width="2624"
                                                                          height="1462">
@@ -881,26 +952,26 @@
                                                 <p class="text-p">
                                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
                                                 </p>
-                                                <h2 class="font-bold text-md">
+                                                <h2>
                                                     ApostropheCMS Template
                                                 </h2>
                                                 <p class="text-p">
                                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
                                                 </p>
-                                                <h2 class="font-bold text-md">
+                                                <h2>
                                                     ApostropheCMS Sync Extension
                                                 </h2>
                                                 <p class="text-p">
                                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
                                                 </p>
                                             </div>
-                                            <div id="modal_archive-content_section-divider">
+                                            <figure>
                                                 <hr>
                                                 <hr>
                                                 <hr>
-                                            </div>
-                                            <div id="modal_archive-content_section-content">
-                                                <h1 class="font-bold text-lg">
+                                            </figure>
+                                            <div>
+                                                <h1>
                                                     ApostropheCMS Stripe Extension
                                                 </h1>
                                                 <p class="text-p">
@@ -915,13 +986,13 @@
                                                     Vivamus et efficitur velit. Fusce tortor lectus, imperdiet eu scelerisque at, fermentum quis felis. Sed sit amet volutpat dolor, vel aliquet tortor. Aenean turpis risus, auctor et dui sed, egestas interdum tortor. Praesent vulputate pellentesque facilisis. Sed mollis fermentum libero id elementum. Morbi rutrum enim vel hendrerit congue. Nam efficitur ornare sollicitudin. Integer vestibulum augue et tortor congue, quis ullamcorper tortor finibus. Mauris bibendum sodales nulla efficitur tempus. Pellentesque porta convallis posuere.
                                                 </p>
                                             </div>
-                                            <div id="modal_archive-content_section-divider">
+                                            <figure>
                                                 <hr>
                                                 <hr>
                                                 <hr>
-                                            </div>
-                                            <div id="modal_archive-content_section-content">
-                                                <h1 class="font-bold text-lg">
+                                            </figure>
+                                            <div>
+                                                <h1>
                                                     Project #2
                                                 </h1>
                                                 <p class="text-p">
@@ -933,9 +1004,9 @@
                                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
                                                 </p>
                                             </div>
-                                        </div>
+                                        </section>
                                         <!-- 2018 -->
-                                        <div id="modal_archive-content_section-title" data-timeline-section="2018">
+                                        <section data-timeline-section-title="2018">
                                             <div>
                                                 <label for="timeline_section_year-2018" tabindex="0">
                                                     2018
@@ -952,20 +1023,19 @@
                                                     <span>2018</span>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div id="modal_archive-content_section" data-timeline-section="2018">
-                                            <div id="modal_archive-content_section-divider">
-                                                <hr>
-                                                menu_email_button-wrapper
+                                        </section>
+                                        <section data-timeline-section="2018">
+                                            <figure>
                                                 <hr>
                                                 <hr>
-                                            </div>
-                                            <div id="modal_archive-content_section-content">
-                                                <h1 class="font-bold text-lg" style="margin-bottom: 2.5rem">
+                                                <hr>
+                                            </figure>
+                                            <div>
+                                                <h1 style="margin-bottom: 2.5rem">
                                                     Project #22
                                                 </h1>
                                             </div>
-                                        </div>
+                                        </section>
                                     </div>
                                 </div>
                                 <div id="horizontal_timeline-wrapper" class="z-50 sticky">
