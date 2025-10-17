@@ -214,14 +214,28 @@ body {
 
 /* Intro - Text De-Highlight */
 
-.animate-fade-in-title span.de-highlight-anim,
-.animate-fade-in-title span.de-highlight-anim-alt {
-    animation-fill-mode: both;
-    animation-duration: calc(var(--anim-segment) * 4);
-    animation-timing-function: var(--ease-out-quad);
+.animate-fade-in-title .de-highlight-anim span:hover {
+    color: var(--highlight-primary) !important;
+    transition: color var(--animate-in-segment-2\/3) var(--ease-out-quad);
+    /* animation: none !important; */
 }
 
-.animate-fade-in-title span.de-highlight-anim {
+.animate-fade-in-title .de-highlight-anim-alt span:hover {
+    color: var(--yellow) !important;
+    transition: color var(--animate-in-segment-2\/3) var(--ease-out-quad);
+    /* animation: none !important; */
+}
+
+.animate-fade-in-title .de-highlight-anim span,
+.animate-fade-in-title .de-highlight-anim-alt span {
+    animation-fill-mode: backwards;
+    animation-duration: calc(var(--anim-segment) * 4);
+    animation-timing-function: var(--ease-out-quad);
+    animation-iteration-count: 1;
+    transition: color calc(var(--anim-segment) * 4) var(--ease-out-quad) calc(var(--anim-segment) * 2);
+}
+
+.animate-fade-in-title .de-highlight-anim span {
     animation-name: de-highlight-anim;
     animation-delay: calc((var(--anim-segment) * 14) + var(--i) * 0.1s);
 }
@@ -236,7 +250,7 @@ body {
     }
 }
 
-.animate-fade-in-title span.de-highlight-anim-alt {
+.animate-fade-in-title .de-highlight-anim-alt span {
     animation-name: de-highlight-anim-alt;
     animation-delay: calc((var(--anim-segment) * 15) + var(--i) * 0.1s);
 }
@@ -275,7 +289,6 @@ body {
         opacity: 0;
         width: 0%;
         border-radius: 0;
-        transform: scale(0.9);
     }
 
     25% {
@@ -284,7 +297,6 @@ body {
 
     100% {
         width: 100%;
-        transform: scale(1);
     }
 }
 

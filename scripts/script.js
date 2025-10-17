@@ -813,8 +813,8 @@ const applyNoAnimation = () => {
             .animate-fade-in-name>div>p,
             .animate-fade-in-title,
             .animate-fade-in-title>p,
-            .animate-fade-in-title span.de-highlight-anim,
-            .animate-fade-in-title span.de-highlight-anim-alt,
+            .animate-fade-in-title .de-highlight-anim span,
+            .animate-fade-in-title .de-highlight-anim-alt span,
             .animate-fade-in-cta-1,
             .animate-fade-in-cta-1 #availability_button-bg,
             .animate-fade-in-cta-1 a>div,
@@ -844,6 +844,34 @@ const openDialogOnLoad = () => {
             openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
             break
     }
+}
+
+
+const initializeModalFooterArt = () => {
+    const footerArtWrapper = document.querySelector('.modal-footer-art-wrapper')
+    const footerArt = document.querySelector('.modal-footer-art')
+    const modalProfile = document.getElementById('modal_profile')
+    if (!footerArtWrapper || !footerArt || !modalProfile) return
+
+    function handleScroll() {
+        const rect = footerArtWrapper.getBoundingClientRect()
+        const modalRect = modalProfile.getBoundingClientRect()
+        const inViewDistance = Math.min(Math.max((modalRect.height + rect.height) - rect.bottom, 0), rect.height)
+        const progress = Math.min(Math.max(inViewDistance / rect.height, 0), 1)
+        // footerArt.style.transform = `scaleY(${progress})`;
+        // footerArt.style.transform = `rotateX(${(1 - progress) * 90}deg)`;
+        // footerArt.style.transform = `rotateX(${(1 - progress) * 90}deg) scaleY(${progress})`;
+        footerArt.style.transform = `rotateX(${progress * 30}deg)`
+    }
+
+    console.log('ahoj')
+
+    console.log(typeof window.addEventListener)
+
+
+    modalProfile.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll)
+    handleScroll()
 }
 
 
@@ -906,6 +934,9 @@ document.addEventListener('DOMContentLoaded', () => {
         element.addEventListener('click', event => new Popup().open(element, event))
     })
 
+    // Initialize modal footer art
+    initializeModalFooterArt()
+
     // Initialize timeline
     aria.addBackdrop('modal_archive')
     requestAnimationFrame(() => {
@@ -929,4 +960,5 @@ document.addEventListener('DOMContentLoaded', () => {
     positionTimeline()
     document.querySelector('#modal_archive .modal-content').addEventListener('transitionend', positionTimeline)
     window.addEventListener('resize', positionTimeline)
+
 })

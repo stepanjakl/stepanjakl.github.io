@@ -147,8 +147,11 @@
     --yellow: #EED500;
 
     /* 125, 100, 85 */
-    --green: #49f400;
+    --green-lime: #49f400;
     --green-opacity: rgba(73, 244, 0, 0.25);
+
+    /* 110, 85, 65 */
+    --green-forest: #7dac3b;
 
     /* 300, 100, 25 */
     --navy: #6b0076;
@@ -725,7 +728,7 @@ body, main {
     width: 0.4375rem;
     height: 0.4375rem;
     border-radius: 999rem;
-    background-color: var(--green);
+    background-color: var(--green-lime);
 }
 
 #availability_button_dot::after {
@@ -1127,25 +1130,25 @@ body {
     height: auto;
     min-height: 100%;
     padding-top: calc(var(--segment) / 5);
-    padding-bottom: var(--segment-half);
+    /* TODO RELEASE padding-bottom: var(--segment-half); */
+    outline: solid max(1px, 0.0625rem) var(--modal-border-outer);
+    border: solid max(1px, 0.0625rem) var(--modal-border-inner);
+    border-radius: var(--segment-eighth) calc((var(--modal-button-border-radius) + var(--modal-button-inset)) + min(-1px, -0.0625rem)) var(--segment-eighth) var(--segment-eighth);
 }
 
 .modal .modal-content::before {
     content: "";
     position: absolute;
-    inset: max(1px, 0.0625rem);
+    inset: 0; /* inset: max(1px, 0.0625rem); */
     background-image: linear-gradient(to top right in oklch, var(--modal-bg-blur)), url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='13.25' y='13.25' width='1.5' height='1.5' fill='%23FFFF' fill-opacity='0.075'/%3E%3C/svg%3E%0A");
     background-repeat: repeat;
     background-origin: content-box;
     background-position: 100% 0%;
     backdrop-filter: blur(3rem);
     -webkit-backdrop-filter: blur(3rem);
-    outline: solid max(1px, 0.0625rem) var(--modal-border-outer);
-    border: solid max(1px, 0.0625rem) var(--modal-border-inner);
-    border-radius: var(--segment-eighth) calc((var(--modal-button-border-radius) + var(--modal-button-inset)) + min(-1px, -0.0625rem)) var(--segment-eighth) var(--segment-eighth);
 }
 
-.modal .modal-content::after {
+/*  TODO RELEASE .modal .modal-content::after {
     content: "";
     position: absolute;
     width: calc(var(--segment) * 3);
@@ -1154,12 +1157,13 @@ body {
     bottom: 0;
     background-size: contain;
     background-image: url("data:image/svg+xml,%3Csvg width='192' height='192' viewBox='0 0 192 192' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%23b0cbd2' stroke-width='1' vector-effect='non-scaling-stroke' d='M32 16v34.74L150.26 169H185'/%3E%3C/svg%3E%0A");
-}
+} */
 
 @supports (corner-shape: bevel) {
 
-    .modal .modal-content,
-    .modal .modal-content::before {
+    /* TODO RELEASE Change to #modal_profile */
+    .modal#modal_archive .modal-content,
+    .modal#modal_archive .modal-content::before {
         corner-bottom-left-shape: bevel;
         border-bottom-left-radius: calc(var(--segment) * 2);
     }
@@ -1237,7 +1241,7 @@ body {
 
 #modal_profile_content, #modal_archive-content {
     margin-right: calc(var(--modal-button-size) + var(--modal-button-inset) + (var(--segment) / 5));
-    padding-bottom: calc(var(--segment) + var(--segment-half));
+    /* TODO RELEASE padding-bottom: calc(var(--segment) + var(--segment-half)); */
 }
 
 
@@ -1526,6 +1530,14 @@ section[data-timeline-section]>div {
     border-top: solid max(1px, 0.0625rem) var(--icon);
 }
 
+section[data-timeline-section]>div figure {
+    margin-top: 2rem;
+}
+
+section[data-timeline-section]>div figure img {
+    border-radius: 0.5rem;
+}
+
 section[data-timeline-section]>div h1 {
     font-weight: var(--text-lg-font-weight);
     font-size: var(--text-lg-font-size);
@@ -1631,6 +1643,14 @@ section[data-timeline-section]>div>nav ul li:first-child::after {
     margin-top: 0.025em;
     display: table;
 }
+
+section[data-timeline-section]>div>nav ul li:first-child span::before {
+    content: "⬢";
+    display: inline-block;
+    margin-right: 0.75rem;
+    transform: translateY(-0.0625rem);
+}
+
 
 section[data-timeline-section]>div>nav ul li:not(:first-child) {
     padding: 0.609375rem 0.75rem 0.5rem;
@@ -2478,7 +2498,7 @@ footer>div {
 /* Images - Dark mode */
 
 @media (prefers-color-scheme: dark) {
-    [data-carousel-slides] img, .hover-cards img, img#profile_photo {
+    .modal-content img, .hover-cards img, img#profile_photo {
         filter: brightness(0.85);
         mix-blend-mode: multiply;
     }

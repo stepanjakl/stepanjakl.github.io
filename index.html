@@ -69,17 +69,37 @@
         </script>
     </head>
     <body class="primary-font">
-        <input id="mode" type="checkbox" hidden aria-hidden="true" aria-label="Toggle light and dark mode">
-        <input id="debug" type="checkbox" hidden aria-hidden="true" aria-label="Toggle debug mode">
-        <input id="fullscreen" type="checkbox" hidden aria-hidden="true" aria-label="Toggle fullscreen mode">
-        <input id="profile" type="hidden" hidden aria-hidden="true" aria-label="Profile dialog">
-        <input id="archive" type="hidden" hidden aria-hidden="true" aria-label="Archive dialog">
+        <input id="mode"
+               type="checkbox"
+               hidden
+               aria-hidden="true"
+               aria-label="Toggle light and dark mode">
+        <input id="debug"
+               type="checkbox"
+               hidden
+               aria-hidden="true"
+               aria-label="Toggle debug mode">
+        <input id="fullscreen"
+               type="checkbox"
+               hidden
+               aria-hidden="true"
+               aria-label="Toggle fullscreen mode">
+        <input id="profile"
+               type="hidden"
+               hidden
+               aria-hidden="true"
+               aria-label="Profile dialog">
+        <input id="archive"
+               type="hidden"
+               hidden
+               aria-hidden="true"
+               aria-label="Archive dialog">
         <main class="relative flex flex-col justify-content-between w-full"
               style="background-color: var(--background)">
             <div id="background-pattern" class="absolute inset-0">
             </div>
             <figure class="relative pt-1/2 w-full max-w-xl"
-                 style="padding-bottom: var(--segment-half)">
+                    style="padding-bottom: var(--segment-half)">
                 <header id="intro">
                     <div id="intro_left-column"
                          class="z-1 flex flex-col-reverse align-items-start">
@@ -89,12 +109,19 @@
                             onclick="handleTouchButtonClick(this, event, () => { if ((event.which && event.which == 3) || (event.button && event.button == 2)) { if ('speechSynthesis' in window) { let msg = new SpeechSynthesisUtterance(); msg.volume= 0.25; msg.lang = 'cs-CZ'; msg.voice = speechSynthesis.getVoices().filter(voice => voice.name === 'Zuzana')[0]; msg.text = 'Štěpán Jákl'; speechSynthesis.speak(msg) } } else { navigator?.clipboard?.writeText('Štěpán Jákl'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip-bottom span'), this, 'Copied to the clipboard') } }, true)"
                             role="button"
                             aria-label="Click to copy name to clipboard">
-                            <div class="inline-flex flex-wrap select-none" style="--corner-length: 1.5rem; --corner-width: 0.125rem; --corner-offset-x: 1rem; --corner-offset-y: 0.5rem; --corner-color: var(--cyan-full-45); --corner-color-active: var(--cyan-full-85);" aria-hidden="true">
+                            <div class="inline-flex flex-wrap select-none"
+                                 style="--corner-length: 1.5rem;
+                                        --corner-width: 0.125rem;
+                                        --corner-offset-x: 1rem;
+                                        --corner-offset-y: 0.5rem;
+                                        --corner-color: var(--cyan-full-45);
+                                        --corner-color-active: var(--cyan-full-85)"
+                                 aria-hidden="true">
                                 <div class="corner-wrapper">
-                                <span class="top-left corner"></span>
-                                <span class="top-right corner"></span>
-                                <span class="bottom-left corner"></span>
-                                <span class="bottom-right corner"></span>
+                                    <span class="top-left corner"></span>
+                                    <span class="top-right corner"></span>
+                                    <span class="bottom-left corner"></span>
+                                    <span class="bottom-right corner"></span>
                                 </div>
                                 <p style="--i:1">
                                     Štěpán<span>&nbsp;</span>
@@ -115,11 +142,19 @@
                             </abbr>
                         </h2>
                         <div id="logo" class="animate-fade-in-logo select-none">
-                            <span class="relative" style="--corner-length: 1rem; --corner-width: 0.125rem; --corner-offset-x: 0.5rem; --corner-offset-y: 0.5rem; --corner-color: var(--cyan-full-65); --corner-color-active: var(--yellow);">
+                            <span class="relative"
+                                  style="--corner-length: 1rem;
+                                         --corner-width: 0.125rem;
+                                         --corner-offset-x: 0.5rem;
+                                         --corner-offset-y: 0.5rem;
+                                         --corner-color: var(--cyan-full-65);
+                                         --corner-color-active: var(--yellow)">
                                 <div class="corner-wrapper">
-                                    <figure class="top-right corner"></figure>
-                            <figure class="bottom-left corner"></figure>
-                        </div>
+                                    <figure class="top-right corner">
+                                    </figure>
+                                    <figure class="bottom-left corner">
+                                    </figure>
+                                </div>
                             </span>
                         </div>
                     </div>
@@ -129,8 +164,8 @@
                             <p style="--i:3">
                                 <span>F</span><span>u</span><span>l</span><span>l</span><span>-</span><span>s</span><span>t</span><span>a</span><span>c</span><span>k</span>
                             </p>
-                            <p style="--i:4">
-                                <span>&nbsp;</span><span class="de-highlight-anim" style="--i:1">d</span><span class="de-highlight-anim" style="--i:2">e</span><span class="de-highlight-anim" style="--i:3">v</span><span class="de-highlight-anim" style="--i:4">e</span><span class="de-highlight-anim" style="--i:5">l</span><span class="de-highlight-anim" style="--i:6">o</span><span class="de-highlight-anim" style="--i:7">p</span><span class="de-highlight-anim" style="--i:8">e</span><span class="de-highlight-anim" style="--i:9">r</span>
+                            <p class="de-highlight-anim" style="--i:4">
+                                <span>&nbsp;</span><span style="--i:1">d</span><span style="--i:2">e</span><span style="--i:3">v</span><span style="--i:4">e</span><span style="--i:5">l</span><span style="--i:6">o</span><span style="--i:7">p</span><span style="--i:8">e</span><span style="--i:9">r</span>
                             </p>
                             <!-- <span style="--i:21">&nbsp;</span> -->
                         </h3>
@@ -140,8 +175,8 @@
                             <p style="--i:5">
                                 <span>&</span><span>&nbsp;</span><span>i</span><span>n</span><span>t</span><span>e</span><span>r</span><span>f</span><span>a</span><span>c</span><span>e</span>
                             </p>
-                            <p style="--i:6">
-                                <span>&nbsp;</span><span class="de-highlight-anim-alt" style="--i:1">d</span><span class="de-highlight-anim-alt" style="--i:2">e</span><span class="de-highlight-anim-alt" style="--i:3">s</span><span class="de-highlight-anim-alt" style="--i:4">i</span><span class="de-highlight-anim-alt" style="--i:5">g</span><span class="de-highlight-anim-alt" style="--i:6">n</span><span class="de-highlight-anim-alt" style="--i:7">e</span><span class="de-highlight-anim-alt" style="--i:8">r</span>
+                            <p class="de-highlight-anim-alt" style="--i:6">
+                                <span>&nbsp;</span><span style="--i:1">d</span><span style="--i:2">e</span><span style="--i:3">s</span><span style="--i:4">i</span><span style="--i:5">g</span><span style="--i:6">n</span><span style="--i:7">e</span><span style="--i:8">r</span>
                             </p>
                         </h3>
                         <div id="availability_button"
@@ -476,15 +511,15 @@
                                     </dt>
                                     <dd id="modal_profile_content_paragraph">
 
-    <p>
-    Experienced and detail-oriented user interface engineer who specialises in crafting digital solutions that balance clarity and creativity. Committed to delivering high-quality results for projects with exciting propositions and realistic goals. Proficient across both back-end and front-end development, with a strong emphasis on user-focused outcomes.
-</p>
-<p>
-    Eager to explore modern frameworks and emerging tools while maintaining a solid foundation in web development fundamentals such as clean semantics, cross-browser reliability, and accessibility best practices.
-</p>
-<p>
-    Dedicated to shaping engaging interfaces through purposeful design and seamless interactions.  I value precision in every aspect of the creative process, ensuring layouts feel balanced, transitions enhance flow, and visual elements contribute meaningfully to the overall experience. Each project is an opportunity to refine the connection between form and function.
-</p>
+                                        <p>
+                                            Experienced and detail-oriented user interface engineer who specialises in crafting digital solutions that balance clarity and creativity. Committed to delivering high-quality results for projects with exciting propositions and realistic goals. Proficient across both back-end and front-end development, with a strong emphasis on user-focused outcomes.
+                                        </p>
+                                        <p>
+                                            Eager to explore modern frameworks and emerging tools while maintaining a solid foundation in web development fundamentals such as clean semantics, cross-browser reliability, and accessibility best practices.
+                                        </p>
+                                        <p>
+                                            Dedicated to shaping engaging interfaces through purposeful design and seamless interactions.  I value precision in every aspect of the creative process, ensuring layouts feel balanced, transitions enhance flow, and visual elements contribute meaningfully to the overall experience. Each project is an opportunity to refine the connection between form and function.
+                                        </p>
                                         <!-- <p>
                                             In recent years, my efforts have been devoted to building and overseeing a
                                             significant number of websites using the&nbsp;<a href="https://apostrophecms.com/" target="_blank"><u>ApostropheCMS</u>
@@ -673,97 +708,53 @@
                                         </ul>
                                     </dd>
                                 </div>
-                                <!-- <script>
-                                    document.addEventListener('DOMContentLoaded', function () {
-                                        const footerArtWrapper = document.querySelector('.modal-footer-art-wrapper');
-                                        const footerArt = document.querySelector('.modal-footer-art');
-                                        const modalProfile = document.getElementById('modal_profile');
-
-                                        if (!footerArt || !modalProfile) return;
-
-                                        function handleScroll() {
-                                            const rect = footerArtWrapper.getBoundingClientRect();
-                                            const modalRect = modalProfile.getBoundingClientRect();
-
-                                            // Calculate how much of the footerArtWrapper is revealed from the top to the bottom of modal
-                                            /* const visibleTop = Math.max(rect.top, modalRect.bottom);
-                                            const visibleBottom = Math.max(rect.bottom, modalRect.bottom);
-                                            const percent = Math.max(0, Math.min(1, (visibleBottom - rect.top) / rect.height));
-                                            footerArt.style.transform = `scaleY(${percent})`;
- */
-
-
-
-                                            // const totalDistance = modalRect.height + rect.height;
-
-                                            // Calculate how much of that distance has been covered
-                                            const inViewDistance = Math.min(Math.max((modalRect.height + rect.height) - rect.bottom, 0), rect.height);
-
-                                            // Clamp between 0 and 1
-                                            const progress = Math.min(Math.max(inViewDistance / rect.height, 0), 1);
-
-                                            console.log(inViewDistance, progress);
-
-                                            footerArt.style.transform = `scaleY(${progress})`
-                                            /* RotateX instead? */
-
-
-
-                                            /* console.log(modalRect.bottom - rect.top , modalRect.bottom - rect.bottom);
-                                            console.log((modalRect.bottom - rect.top) - (modalRect.bottom - rect.bottom)); */
-
-
-                                        }
-
-                                        modalProfile.addEventListener('scroll', handleScroll, { passive: true });
-                                        window.addEventListener('resize', handleScroll);
-                                        handleScroll();
-                                    });
-                                </script>
-                                <div class="modal-footer-art-wrapper" style="position:relative; width: 100%; height: 50vh; transform: none;">
-                                <div class="modal-footer-art" style="position: absolute; inset:0; background: var(--highlight-primary); transform: scaleY(0); transform-origin: bottom;
-                                mask-image: radial-gradient(ellipse at bottom center, black, transparent 50%) /* linear-gradient(to top, black, transparent); */">
-                                </div> -->
-                                <!-- /*
-    linear-gradient(
-      to right,
-      transparent 0,
-      black 25%,
-      black calc(100% - 25%),
-      transparent 100%
-    ), */ -->
+                                <div class="modal-footer-art-wrapper"
+                                     style="position:relative;
+                                            width: 100%;
+                                            height: 50vh;
+                                            transform: none;
+                                            margin-top: calc(var(--segment) * -1)">
+                                    <div class="modal-footer-art"
+                                         style="position: absolute;
+                                                inset:0;
+                                                background: radial-gradient(ellipse 75% 50% at 50% 100% in oklch, rgba(0,0,0,0.75), rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%), radial-gradient(ellipse 25% 25% at 50% 50% in oklch, rgba(125, 172, 59, 1), rgba(125, 172, 59, 1) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 100% at bottom center in oklch, rgba(125, 172, 59, 1), rgba(125, 172, 59, 1) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 75% at bottom left in oklch, rgba(125, 172, 59, 0.5), rgba(125, 172, 59, 0.5) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 75% at bottom right in oklch, rgba(125, 172, 59, 0.5), rgba(125, 172, 59, 0.5) 50%, rgba(125, 172, 59, 0) 100%), linear-gradient(to top in oklch, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 75%);
+                                                filter: blur(4rem);
+                                                transform: scaleY(0);
+                                                transform-origin: bottom">
+                                    </div>
                                 </div>
-                            </dl>
-                        </div>
-                    </dialog>
-                    <dialog id="modal_archive" class="modal" role="dialog" aria-modal="true">
-                        <figure class="overflow-clip modal-content">
-                            <div id="modal_button-wrapper">
-                                <a href="#"
-                                   onclick="event.preventDefault(); closeDialog('#')"
-                                   id="modal_button-close"
-                                   class="flex align-items-center justify-content-center"
-                                   aria-label="Close modal">
-                                    <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
-                                        <use xlink:href="images/icons.svg#close"></use>
-                                    </svg>
-                                </a>
-                                <label for="fullscreen"
-                                               tabindex="0"
-                                               onclick="toggleFullscreen()"
-                                               onkeypress="if(event.key === 'Enter') { document.getElementById('fullscreen').click(); }"
+                            </div>
+                        </dl>
+                    </div>
+                </dialog>
+                <dialog id="modal_archive" class="modal" role="dialog" aria-modal="true">
+                    <figure class="overflow-clip modal-content">
+                        <div id="modal_button-wrapper">
+                            <a href="#"
+                               onclick="event.preventDefault(); closeDialog('#')"
+                               id="modal_button-close"
+                               class="flex align-items-center justify-content-center"
+                               aria-label="Close modal">
+                                <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
+                                    <use xlink:href="images/icons.svg#close"></use>
+                                </svg>
+                            </a>
+                            <label for="fullscreen"
+                                   tabindex="0"
+                                   onclick="toggleFullscreen()"
+                                   onkeypress="if(event.key === 'Enter') { document.getElementById('fullscreen').click(); }"
                                    id="modal_button-fullscreen"
                                    class="flex align-items-center justify-content-center">
-                                    <svg class="fullscreen-checked:hidden flex fill-current"
-                                         style="width: 1.125rem;
-                                                height: 1.125rem">
-                                        <use xlink:href="images/icons.svg#fullscreen"></use>
-                                    </svg>
-                                    <svg class="hidden fullscreen-checked:flex fill-current"
-                                         style="width: 1.125rem;
-                                                height: 1.125rem">
-                                        <use xlink:href="images/icons.svg#fullscreen-off"></use>
-                                    </svg>
+                                <svg class="fullscreen-checked:hidden flex fill-current"
+                                     style="width: 1.125rem;
+                                            height: 1.125rem">
+                                    <use xlink:href="images/icons.svg#fullscreen"></use>
+                                </svg>
+                                <svg class="hidden fullscreen-checked:flex fill-current"
+                                     style="width: 1.125rem;
+                                            height: 1.125rem">
+                                    <use xlink:href="images/icons.svg#fullscreen-off"></use>
+                                </svg>
                                 </>
                             </div>
 
@@ -772,10 +763,12 @@
                                         padding-bottom: var(--segment-half)">
                                 <div id="modal_archive-wrapper">
                                     <input type="checkbox" id="timeline_section_year-2024-21" checked>
+                                    <input type="checkbox" id="timeline_section_year-2021-19">
                                     <input type="checkbox" id="timeline_section_year-2018">
+                                    <input type="checkbox" id="timeline_section_year-elsewhen">
                                     <div id="modal_archive-content">
-                                        <!-- 2024 -->
-                                        <section data-timeline-section-title="2024">
+                                        <!-- 2024/21 -->
+                                        <section data-timeline-section-title="2024/21">
                                             <div>
                                                 <label for="timeline_section_year-2024-21" tabindex="0">
                                                     2024
@@ -807,11 +800,31 @@
                                                     <span class="spark">ApostropheCMS Fleet of Sites</span>
                                                 </h1>
                                                 <div class="hover-cards">
-                                                    <figure><div><img class="bright" src="/projects/2024-21/cloudraker-tfp/landing-hero-ovo.png"></div></figure>
-                                                    <figure><div><img class="bright" src="/projects/2024-21/cloudraker-tfp/landing-hero-olive.png"></div></figure>
-                                                    <figure><div><img class="bright" src="/projects/2024-21/cloudraker-tfp/landing-hero-heartland.png"></div></figure>
-                                                    <figure><div><img class="bright" src="/projects/2024-21/cloudraker-tfp/landing-hero-conceptia.png"></div></figure>
-                                                    <figure><div><img class="bright" src="/projects/2024-21/cloudraker-tfp/landing-hero-grace.png"></div></figure>
+                                                    <figure>
+                                                        <div>
+                                                            <img src="/projects/2024-21/cloudraker-tfp/landing-hero-ovo.png">
+                                                        </div>
+                                                    </figure>
+                                                    <figure>
+                                                        <div>
+                                                            <img src="/projects/2024-21/cloudraker-tfp/landing-hero-olive.png">
+                                                        </div>
+                                                    </figure>
+                                                    <figure>
+                                                        <div>
+                                                            <img src="/projects/2024-21/cloudraker-tfp/landing-hero-heartland.png">
+                                                        </div>
+                                                    </figure>
+                                                    <figure>
+                                                        <div>
+                                                            <img src="/projects/2024-21/cloudraker-tfp/landing-hero-conceptia.png">
+                                                        </div>
+                                                    </figure>
+                                                    <figure>
+                                                        <div>
+                                                            <img src="/projects/2024-21/cloudraker-tfp/landing-hero-grace.png">
+                                                        </div>
+                                                    </figure>
                                                 </div>
                                                 <p class="text-p">
                                                     Client: CloudRaker, Altavia, TFP, Truffl
@@ -823,11 +836,14 @@
                                                 </p>
                                                 <p class="text-p">
                                                     Between 2021 and 2024, I worked with CloudRaker to build and maintain a network of websites for The Fertility Partners (TFP) — one of North America’s largest fertility clinic groups. Over this period, I led the planning, development, and ongoing maintenance of seven full marketing sites and several existing ones, totalling around 4,000 hours of work.
-                                                    <br><br>
+                                                    <br>
+                                                    <br>
                                                     I was the main technical lead and point of contact between CloudRaker, TFP, and my own team at Bohemica Studio. My role went far beyond coding: I translated business needs into technical plans, coordinated designers and developers, and ensured every launch met high standards for accessibility, SEO, and performance.
-                                                    <br><br>
+                                                    <br>
+                                                    <br>
                                                     All sites were built on ApostropheCMS (v2 and v3), where I created a system of reusable components and custom widgets to make content editing intuitive for non-technical users. I implemented multilingual content, CI/CD pipelines, analytics, and error monitoring (Raygun), while continuously improving load times, accessibility, and editor UX.
-                                                    <br><br>
+                                                    <br>
+                                                    <br>
                                                     Post-launch, I maintained the full suite—handling updates, monitoring performance, and implementing improvements under a long-term support agreement. The result was a unified, scalable platform that empowered the client’s marketing teams to manage content independently.
                                                 </p>
                                             </div>
@@ -841,9 +857,6 @@
                                                     <span>ApostropheCMS Extensions</span>
                                                 </h1>
                                                 <p class="text-p">
-                                                    Apostrophe Template, Library, Sync, Stripe
-                                                    <br>
-                                                    <br>
                                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
                                                 </p>
                                                 <h2>
@@ -929,7 +942,7 @@
                                                 <nav>
                                                     <ul>
                                                         <li>
-                                                            Videos:
+                                                            <span>Videos:</span>
                                                         </li>
                                                         <li>
                                                             <a href="/projects/2024-25/apostrophe-stripe-extension/store-alpine-js-example-userflow.mp4"
@@ -942,7 +955,7 @@
                                                     </ul>
                                                     <ul>
                                                         <li>
-                                                            Repository:
+                                                            <span>Repository:</span>
                                                         </li>
                                                         <li>
                                                             <a href="/file/path">stepanjakl/apostrophe-stripe (external link svg)</a>
@@ -1005,6 +1018,82 @@
                                                 </p>
                                             </div>
                                         </section>
+                                        <!-- 2021/19 -->
+                                        <section data-timeline-section-title="2021/19">
+                                            <div>
+                                                <label for="timeline_section_year-2021-19" tabindex="0">
+                                                    2021/19
+                                                </label>
+                                                <div class="flex align-items-center"
+                                                     style="column-gap: 1rem;
+                                                            justify-content: start">
+                                                    <svg>
+                                                        <use xlink:href="images/icons.svg#plus"></use>
+                                                    </svg>
+                                                    <svg>
+                                                        <use xlink:href="images/icons.svg#minus"></use>
+                                                    </svg>
+                                                    <span>2021/19</span>
+                                                </div>
+                                            </div>
+                                        </section>
+                                        <section data-timeline-section="2021/19">
+                                            <figure>
+                                                <hr>
+                                                <hr>
+                                                <hr>
+                                            </figure>
+                                            <div>
+                                                <h1>
+                                                    <span>Bohemica Studio</span>
+                                                </h1>
+                                                <figure>
+                                                    <img src="/projects/2021-19/bohemica-studio/bohemica-studio-hero.png">
+                                                </figure>
+                                                <p class="text-p">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
+                                                </p>
+                                                <h2>
+                                                    Bohemica Signage
+                                                </h2>
+                                                <p class="text-p">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
+                                                </p>
+                                                <h2>
+                                                    Bohemica Store
+                                                </h2>
+                                                <p class="text-p">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
+                                                </p>
+                                            </div>
+                                            <figure>
+                                                <hr>
+                                                <hr>
+                                                <hr>
+                                            </figure>
+                                            <div>
+                                                <h1>
+                                                    <span>MMT Company Web Identity</span>
+                                                </h1>
+                                                <figure>
+                                                    <img src="/projects/2021-19/mmt/mmt-logo-hero.svg">
+                                                </figure>
+                                                <nav>
+                                                    <ul>
+                                                        <li>
+                                                            <span>Mock-ups:</span>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/projects/2021-19/mmt/mmt-landing-page-mockup.png"
+                                                               target="_blank">Landing page</a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                                <p class="text-p">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
+                                                </p>
+                                            </div>
+                                        </section>
                                         <!-- 2018 -->
                                         <section data-timeline-section-title="2018">
                                             <div>
@@ -1031,10 +1120,16 @@
                                                 <hr>
                                             </figure>
                                             <div>
-                                                <h1 style="margin-bottom: 2.5rem">
-                                                    Project #22
+                                                <h1>
+                                                    Project #2
                                                 </h1>
+                                                <p class="text-p">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
+                                                </p>
                                             </div>
+                                        </section>
+                                        <!-- Elsewhen -->
+                                        <section data-timeline-section="elsewhen">
                                         </section>
                                     </div>
                                 </div>
