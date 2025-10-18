@@ -1239,15 +1239,18 @@ body {
 }
 
 
-#modal_profile_content, #modal_archive-content {
+#modal_profile-content, #modal_archive-content {
     margin-right: calc(var(--modal-button-size) + var(--modal-button-inset) + (var(--segment) / 5));
     /* TODO RELEASE padding-bottom: calc(var(--segment) + var(--segment-half)); */
+
+    /* opacity: 0; */
+    /* transition: opacity var(--animate-out-segment) linear; */
 }
 
 
 /* Modal - Profile */
 
-#modal_profile_content dl {
+#modal_profile-content dl {
     padding: var(--segment-quarter) 0 var(--segment-quarter) var(--segment-quarter);
     display: grid;
     grid-template-columns: 1fr;
@@ -1256,60 +1259,60 @@ body {
 }
 
 @media (min-width: 60rem) {
-    #modal_profile_content dl {
+    #modal_profile-content dl {
         padding: calc(var(--segment) * (3/4)) calc(var(--segment) * (3/4)) var(--segment-half) calc(var(--segment) * (3/4));
     }
 }
 
 @media (min-width: 75rem) {
-    #modal_profile_content dl {
+    #modal_profile-content dl {
         padding: var(--segment) var(--segment) var(--segment-quarter) var(--segment);
     }
 }
 
-#modal_profile_content dl dt:nth-child(2n-1) {
+#modal_profile-content dl dt:nth-child(2n-1) {
     margin-top: calc(var(--segment) * (3/4));
     margin-bottom: var(--segment-half);
 }
 
 @media (min-width: 45rem) {
-    #modal_profile_content dl {
+    #modal_profile-content dl {
         padding: var(--segment-third) 0 var(--segment-third) var(--segment-third);
     }
 }
 
 @media (min-width: 60rem) {
-    #modal_profile_content dl {
+    #modal_profile-content dl {
         padding: var(--segment-half) 0 var(--segment-half) var(--segment-half);
         grid-template-columns: auto 1fr;
         grid-row-gap: calc(var(--segment) * (3/4));
         grid-column-gap: calc(var(--segment) * (3/4));
     }
 
-    #modal_profile_content dl dt {
+    #modal_profile-content dl dt {
         margin: 0 !important;
     }
 }
 
-#modal_profile_content dl dt:first-of-type,
-#modal_profile_content dl dd:first-of-type {
+#modal_profile-content dl dt:first-of-type,
+#modal_profile-content dl dd:first-of-type {
     margin-top: var(--segment-half);
     margin-bottom: var(--segment-half);
 }
 
-#modal_profile_content dl a {
+#modal_profile-content dl a {
     height: 0.75rem;
     display: inline-flex;
     align-items: center;
 }
 
-#modal_profile_content dl img {
+#modal_profile-content dl img {
     height: 0.9375rem;
     margin-left: 0.5rem;
     box-sizing: content-box;
 }
 
-#modal_profile_content dl dt {
+#modal_profile-content dl dt {
     font-family: 'Chakra Petch', monospace;
     text-transform: uppercase;
     font-weight: 600;
@@ -1319,25 +1322,25 @@ body {
     padding-top: 0.109375rem;
 }
 
-#modal_profile_content dl dt::before {
+#modal_profile-content dl dt::before {
     content: "";
     margin-bottom: -0.025em;
     display: table;
 }
 
-#modal_profile_content dl dt::after {
+#modal_profile-content dl dt::after {
     content: "";
     margin-top: 0.025em;
     display: table;
 }
 
-#modal_profile_content dd#modal_profile_timezone {
+#modal_profile-content dd#modal_profile-timezone {
     display: inline-flex;
     align-items: center;
     column-gap: 1rem;
 }
 
-#modal_profile_content dl dd #modal_profile_timezone_live-time {
+#modal_profile-content dl dd #modal_profile-timezone-live-time {
     font-family: 'Chakra Petch', monospace;
     text-transform: uppercase;
     font-weight: 600;
@@ -1346,47 +1349,47 @@ body {
     line-height: 0.875rem;
 }
 
-#modal_profile_content dl dd #modal_profile_timezone_live-time::before {
+#modal_profile-content dl dd #modal_profile-timezone-live-time::before {
     content: "";
     margin-bottom: -0.025em;
     display: table;
 }
 
-#modal_profile_content dl dd #modal_profile_timezone_live-time::after {
+#modal_profile-content dl dd #modal_profile-timezone-live-time::after {
     content: "";
     margin-top: 0.025em;
     display: table;
 }
 
-#modal_profile_content dl dd>span,
-#modal_profile_content dl dd#modal_profile_content_paragraph {
+#modal_profile-content dl dd>span,
+#modal_profile-content dl dd#modal_profile-content-paragraph {
     display: inline-flex;
     flex-direction: column;
     row-gap: 2rem;
 }
 
-#modal_profile_content dl dd>span,
-#modal_profile_content dl dd>p {
+#modal_profile-content dl dd>span,
+#modal_profile-content dl dd>p {
     font-size: 1.07143125rem;
     line-height: 1.625rem;
     display: inline;
 }
 
-#modal_profile_content dl dd>span::before,
-#modal_profile_content dl dd>p::before {
+#modal_profile-content dl dd>span::before,
+#modal_profile-content dl dd>p::before {
     content: "";
     margin-bottom: -0.4333em;
     display: table;
 }
 
-#modal_profile_content dl dd>span::after,
-#modal_profile_content dl dd>p::after {
+#modal_profile-content dl dd>span::after,
+#modal_profile-content dl dd>p::after {
     content: "";
     margin-top: -0.3833em;
     display: table;
 }
 
-#modal_profile_content dl dd#modal_profile_tags ul {
+#modal_profile-content dl dd#modal_profile-tags ul {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -1397,7 +1400,7 @@ body {
     row-gap: 0.625rem;
 }
 
-#modal_profile_content dl dd#modal_profile_tags ul li {
+#modal_profile-content dl dd#modal_profile-tags ul li {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1407,32 +1410,32 @@ body {
     padding: 0.609375rem 0.75rem 0.5rem;
 }
 
-#modal_profile_content dl dd#modal_profile_tags ul li svg {
+#modal_profile-content dl dd#modal_profile-tags ul li svg {
     width: 0.875rem;
     height: 0.875rem;
     fill: currentColor;
 }
 
-#modal_profile_content dl dd#modal_profile_tags ul li span {
+#modal_profile-content dl dd#modal_profile-tags ul li span {
     font-family: 'Chakra Petch', monospace;
     font-size: 0.98214375rem;
     line-height: 1.625rem;
     font-weight: 400;
 }
 
-#modal_profile_content dl dd#modal_profile_tags ul li span::before {
+#modal_profile-content dl dd#modal_profile-tags ul li span::before {
     content: "";
     margin-bottom: -0.5023em;
     display: table;
 }
 
-#modal_profile_content dl dd#modal_profile_tags ul li span::after {
+#modal_profile-content dl dd#modal_profile-tags ul li span::after {
     content: "";
     margin-top: -0.4523em;
     display: table;
 }
 
-#modal_profile_content dl dd#modal_profile_tags ul li svg:not(:first-child) {
+#modal_profile-content dl dd#modal_profile-tags ul li svg:not(:first-child) {
     margin-left: 0.375rem;
 }
 
@@ -1480,6 +1483,7 @@ section[data-timeline-section-title]>div span {
     display: inline-flex;
     align-self: start;
     text-align: left;
+    text-transform: uppercase;
     font-family: 'Chakra Petch', monospace;
     font-size: 2.14285625rem;
     line-height: 1.5rem;
@@ -1530,11 +1534,12 @@ section[data-timeline-section]>div {
     border-top: solid max(1px, 0.0625rem) var(--icon);
 }
 
-section[data-timeline-section]>div figure {
+section[data-timeline-section]>div picture {
     margin-top: 2rem;
 }
 
-section[data-timeline-section]>div figure img {
+section[data-timeline-section]>div picture img {
+    width: 100%;
     border-radius: 0.5rem;
 }
 
@@ -2437,7 +2442,7 @@ footer>div {
 @media (max-width: 105rem) {
     /* rules here apply to devices from 105rem (2xl) and lower */
 
-    #modal_profile_content dl div.profile p {
+    #modal_profile-content dl div.profile p {
         text-align: justify;
     }
 }
@@ -2446,6 +2451,10 @@ footer>div {
     /* rules here apply to devices from 90rem (xl) and lower */
 
     .intro-wrapper {
+        max-width: var(--breakpoint-xl);
+    }
+
+    .media_fallback-wrapper {
         max-width: var(--breakpoint-xl);
     }
 }
@@ -2461,18 +2470,18 @@ footer>div {
 @media (max-width: 60rem) {
     /* rules here apply to devices from 60rem (md) and lower */
 
-    #modal_profile_content dl div {
+    #modal_profile-content dl div {
         padding: 1.25rem 1.75rem 0 1.25rem;
         margin-bottom: 0.875rem;
         grid-template-columns: 1fr;
         row-gap: 0.875rem;
     }
 
-    #modal_profile_content dl div:first-child {
+    #modal_profile-content dl div:first-child {
         padding-top: 1.75rem;
     }
 
-    #modal_profile_content dl div dt {
+    #modal_profile-content dl div dt {
         padding-bottom: 0.171875rem;
     }
 

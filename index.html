@@ -106,7 +106,8 @@
                         <h2 class="inline-flex animate-fade-in-name select-none tooltip-wrapper highlight-text"
                             tabindex="0"
                             onkeypress="this.click()"
-                            onclick="handleTouchButtonClick(this, event, () => { if ((event.which && event.which == 3) || (event.button && event.button == 2)) { if ('speechSynthesis' in window) { let msg = new SpeechSynthesisUtterance(); msg.volume= 0.25; msg.lang = 'cs-CZ'; msg.voice = speechSynthesis.getVoices().filter(voice => voice.name === 'Zuzana')[0]; msg.text = 'Štěpán Jákl'; speechSynthesis.speak(msg) } } else { navigator?.clipboard?.writeText('Štěpán Jákl'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip-bottom span'), this, 'Copied to the clipboard') } }, true)"
+                            oncontextmenu="if ('speechSynthesis' in window) { let msg = new SpeechSynthesisUtterance(); msg.volume= 0.25; msg.lang = 'cs-CZ'; msg.voice = speechSynthesis.getVoices().filter(voice => voice.name === 'Zuzana')[0]; msg.text = 'Štěpán Jákl'; speechSynthesis.speak(msg) }"
+                            onclick="handleTouchButtonClick(this, event, () => { navigator?.clipboard?.writeText('Štěpán Jákl'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip-bottom span'), this, 'Copied to the clipboard') }, true)"
                             role="button"
                             aria-label="Click to copy name to clipboard">
                             <div class="inline-flex flex-wrap select-none"
@@ -481,7 +482,7 @@
                                     </svg>
                                 </a>
                             </div>
-                            <div id="modal_profile_content">
+                            <div id="modal_profile-content">
                                 <dl>
                                     <dt>
                                         Photo:
@@ -509,7 +510,7 @@
                                     <dt>
                                         Summary:
                                     </dt>
-                                    <dd id="modal_profile_content_paragraph">
+                                    <dd id="modal_profile-content-paragraph">
 
                                         <p>
                                             Experienced and detail-oriented user interface engineer who specialises in crafting digital solutions that balance clarity and creativity. Committed to delivering high-quality results for projects with exciting propositions and realistic goals. Proficient across both back-end and front-end development, with a strong emphasis on user-focused outcomes.
@@ -584,12 +585,12 @@
                                     <dt>
                                         Timezone:
                                     </dt>
-                                    <dd id="modal_profile_timezone">
+                                    <dd id="modal_profile-timezone">
                                         <span>Europe/London</span>
-                                        <span id="modal_profile_timezone_live-time"></span>
+                                        <span id="modal_profile-timezone-live-time"></span>
                                         <script>
                                             const liveTimezoneTime = () => {
-                                                document.querySelector('#modal_profile_timezone_live-time').innerHTML = `(${new Intl.DateTimeFormat([], {
+                                                document.querySelector('#modal_profile-timezone-live-time').innerHTML = `(${new Intl.DateTimeFormat([], {
 											timeZone: 'Europe/London',
 											timeZoneName: 'short',
 											year: 'numeric',
@@ -606,7 +607,7 @@
                                     <dt style="padding-top: 0.625rem">
                                         Deliverables:
                                     </dt>
-                                    <dd id="modal_profile_tags">
+                                    <dd id="modal_profile-tags">
                                         <ul>
                                             <li>
                                                 <span>Dashboard/Single-page app</span>
@@ -634,7 +635,7 @@
                                     <dt style="padding-top: 0.625rem">
                                         Tools & Languages:
                                     </dt>
-                                    <dd id="modal_profile_tags">
+                                    <dd id="modal_profile-tags">
                                         <ul>
                                             <li>
                                                 <svg>
@@ -708,6 +709,7 @@
                                         </ul>
                                     </dd>
                                 </div>
+                                <!-- TODO change class to id -->
                                 <div class="modal-footer-art-wrapper"
                                      style="position:relative;
                                             width: 100%;
@@ -764,7 +766,7 @@
                                 <div id="modal_archive-wrapper">
                                     <input type="checkbox" id="timeline_section_year-2024-21" checked>
                                     <input type="checkbox" id="timeline_section_year-2021-19">
-                                    <input type="checkbox" id="timeline_section_year-2018">
+                                    <input type="checkbox" id="timeline_section_year-2019-18">
                                     <input type="checkbox" id="timeline_section_year-elsewhen">
                                     <div id="modal_archive-content">
                                         <!-- 2024/21 -->
@@ -786,7 +788,7 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="2024">
+                                        <section data-timeline-section="2024/21">
                                             <figure>
                                                 <hr>
                                                 <hr>
@@ -795,9 +797,6 @@
                                             <div>
                                                 <h1>
                                                     <span>ApostropheCMS Fleet of Sites</span>
-                                                </h1>
-                                                <h1>
-                                                    <span class="spark">ApostropheCMS Fleet of Sites</span>
                                                 </h1>
                                                 <div class="hover-cards">
                                                     <figure>
@@ -872,46 +871,46 @@
                                                     <div data-carousel-slides-wrapper>
                                                         <div data-carousel-slides>
                                                             <figure data-value="slide-1">
-                                                                <a href="projects/2024-25/apostrophe-stripe-extension/store-alpine-1.png"
+                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-1.png"
                                                                    target="_blank">
-                                                                    <img src="projects/2024-25/apostrophe-stripe-extension/store-alpine-1.png"
+                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-alpine-1.png"
                                                                          loading="lazy"
                                                                          width="2624"
                                                                          height="1462">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-2">
-                                                                <a href="projects/2024-25/apostrophe-stripe-extension/store-alpine-2.png"
+                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-2.png"
                                                                    target="_blank">
-                                                                    <img src="projects/2024-25/apostrophe-stripe-extension/store-alpine-2.png"
+                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-alpine-2.png"
                                                                          loading="lazy">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-3">
-                                                                <a href="projects/2024-25/apostrophe-stripe-extension/store-alpine-3.png"
+                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-3.png"
                                                                    target="_blank">
-                                                                    <img src="projects/2024-25/apostrophe-stripe-extension/store-alpine-3.png"
+                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-alpine-3.png"
                                                                          loading="lazy">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-4">
-                                                                <a href="projects/2024-25/apostrophe-stripe-extension/store-alpine-checkout.png"
+                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-checkout.png"
                                                                    target="_blank">
-                                                                    <img src="projects/2024-25/apostrophe-stripe-extension/store-alpine-checkout.png"
+                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-alpine-checkout.png"
                                                                          loading="lazy">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-5">
-                                                                <a href="projects/2024-25/apostrophe-stripe-extension/store-htmx-1.png"
+                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-htmx-1.png"
                                                                    target="_blank">
-                                                                    <img src="projects/2024-25/apostrophe-stripe-extension/store-htmx-1.png"
+                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-htmx-1.png"
                                                                          loading="lazy">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-6">
-                                                                <a href="projects/2024-25/apostrophe-stripe-extension/store-htmx-2.png"
+                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-htmx-2.png"
                                                                    target="_blank">
-                                                                    <img src="projects/2024-25/apostrophe-stripe-extension/store-htmx-2.png"
+                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-htmx-2.png"
                                                                          loading="lazy">
                                                                 </a>
                                                             </figure>
@@ -945,11 +944,11 @@
                                                             <span>Videos:</span>
                                                         </li>
                                                         <li>
-                                                            <a href="/projects/2024-25/apostrophe-stripe-extension/store-alpine-js-example-userflow.mp4"
+                                                            <a href="/projects/2024-21/apostrophe-stripe-extension/store-alpine-js-example-userflow.mp4"
                                                                target="_blank">Demo 1</a>
                                                         </li>
                                                         <li>
-                                                            <a href="/projects/2024-25/apostrophe-stripe-extension/store-htmx-example-userflow.mp4"
+                                                            <a href="/projects/2024-21/apostrophe-stripe-extension/store-htmx-example-userflow.mp4"
                                                                target="_blank">Demo 2</a>
                                                         </li>
                                                     </ul>
@@ -976,45 +975,6 @@
                                                 </h2>
                                                 <p class="text-p">
                                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
-                                                </p>
-                                            </div>
-                                            <figure>
-                                                <hr>
-                                                <hr>
-                                                <hr>
-                                            </figure>
-                                            <div>
-                                                <h1>
-                                                    ApostropheCMS Stripe Extension
-                                                </h1>
-                                                <p class="text-p">
-                                                    Video links
-                                                    <br>
-                                                    Link to repository
-                                                    <br>
-                                                    <br>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
-                                                    <br>
-                                                    <br>
-                                                    Vivamus et efficitur velit. Fusce tortor lectus, imperdiet eu scelerisque at, fermentum quis felis. Sed sit amet volutpat dolor, vel aliquet tortor. Aenean turpis risus, auctor et dui sed, egestas interdum tortor. Praesent vulputate pellentesque facilisis. Sed mollis fermentum libero id elementum. Morbi rutrum enim vel hendrerit congue. Nam efficitur ornare sollicitudin. Integer vestibulum augue et tortor congue, quis ullamcorper tortor finibus. Mauris bibendum sodales nulla efficitur tempus. Pellentesque porta convallis posuere.
-                                                </p>
-                                            </div>
-                                            <figure>
-                                                <hr>
-                                                <hr>
-                                                <hr>
-                                            </figure>
-                                            <div>
-                                                <h1>
-                                                    Project #2
-                                                </h1>
-                                                <p class="text-p">
-                                                    Video links
-                                                    <br>
-                                                    Link to repository
-                                                    <br>
-                                                    <br>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
                                                 </p>
                                             </div>
                                         </section>
@@ -1047,9 +1007,9 @@
                                                 <h1>
                                                     <span>Bohemica Studio</span>
                                                 </h1>
-                                                <figure>
+                                                <picture>
                                                     <img src="/projects/2021-19/bohemica-studio/bohemica-studio-hero.png">
-                                                </figure>
+                                                </picture>
                                                 <p class="text-p">
                                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
                                                 </p>
@@ -1075,9 +1035,9 @@
                                                 <h1>
                                                     <span>MMT Company Web Identity</span>
                                                 </h1>
-                                                <figure>
+                                                <picture>
                                                     <img src="/projects/2021-19/mmt/mmt-logo-hero.svg">
-                                                </figure>
+                                                </picture>
                                                 <nav>
                                                     <ul>
                                                         <li>
@@ -1094,11 +1054,11 @@
                                                 </p>
                                             </div>
                                         </section>
-                                        <!-- 2018 -->
-                                        <section data-timeline-section-title="2018">
+                                        <!-- 2019/18 -->
+                                        <section data-timeline-section-title="2019/18">
                                             <div>
-                                                <label for="timeline_section_year-2018" tabindex="0">
-                                                    2018
+                                                <label for="timeline_section_year-2019-18" tabindex="0">
+                                                    2019/18
                                                 </label>
                                                 <div class="flex align-items-center"
                                                      style="column-gap: 1rem;
@@ -1109,11 +1069,11 @@
                                                     <svg>
                                                         <use xlink:href="images/icons.svg#minus"></use>
                                                     </svg>
-                                                    <span>2018</span>
+                                                    <span>2019/18</span>
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="2018">
+                                        <section data-timeline-section="2019/18">
                                             <figure>
                                                 <hr>
                                                 <hr>
@@ -1121,7 +1081,7 @@
                                             </figure>
                                             <div>
                                                 <h1>
-                                                    Project #2
+                                                    <span>Aéropot Smart Ultraponic System</span>
                                                 </h1>
                                                 <p class="text-p">
                                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
@@ -1129,7 +1089,38 @@
                                             </div>
                                         </section>
                                         <!-- Elsewhen -->
+                                         <section data-timeline-section-title="elsewhen">
+                                            <div>
+                                                <label for="timeline_section_year-elsewhen" tabindex="0">
+                                                    Elsewhen
+                                                </label>
+                                                <div class="flex align-items-center"
+                                                     style="column-gap: 1rem;
+                                                            justify-content: start">
+                                                    <svg>
+                                                        <use xlink:href="images/icons.svg#plus"></use>
+                                                    </svg>
+                                                    <svg>
+                                                        <use xlink:href="images/icons.svg#minus"></use>
+                                                    </svg>
+                                                    <span>Elsewhen</span>
+                                                </div>
+                                            </div>
+                                        </section>
                                         <section data-timeline-section="elsewhen">
+                                            <figure>
+                                                <hr>
+                                                <hr>
+                                                <hr>
+                                            </figure>
+                                            <div>
+                                                <p class="text-p" style="margin-top: 0;">
+                                                    Work and artifacts from different projects and moments that stand apart from full case studies but still belong here.
+                                                </p>
+                                                <h1>
+                                                    <span class="spark">Logos</span>
+                                                </h1>
+                                            </div>
                                         </section>
                                     </div>
                                 </div>

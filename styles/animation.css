@@ -1185,6 +1185,12 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
     transition: opacity var(--animate-in-segment) linear, transform var(--animate-in-segment) var(--ease-out-quad);
 }
 
+/* #profile:target~main #modal_profile-content,
+#archive:target~main #modal_archive-content {
+    transition: opacity var(--animate-in-segment) linear var(--animate-in-segment);
+    opacity: 1;
+} */
+
 #intro_left-column, #intro_right-column {
     transition: transform var(--animate-out-segment) var(--ease-in-quad);
     transform-origin: center;

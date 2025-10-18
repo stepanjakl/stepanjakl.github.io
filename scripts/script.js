@@ -522,6 +522,11 @@ class Popup {
     constructor() {
         this.widthRatio = 0.9
         this.heightRatio = 0.9
+        this.fallbackContainer = null
+        // Static property to track popup blocking across all instances
+        if (typeof Popup.isPopupBlocked === 'undefined') {
+            Popup.isPopupBlocked = false
+        }
     }
 
     async open(element, event) {
@@ -529,32 +534,168 @@ class Popup {
         const { href } = element
 
         try {
-            if (this.isVideo(href)) {
-                const dimensions = await this.getVideoDimensions(href)
-                if (!dimensions) return true
+            const isVideo = this.isVideo(href)
+            const dimensions = isVideo ? await this.getVideoDimensions(href) : await this.getImageDimensions(href)
 
-                const { width, height, left, top } = this.calculateWindowSize(dimensions)
-                const popup = window.open(
-                    href,
-                    '_blank',
-                    `toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=${width},height=${height},top=${top},left=${left}`
-                )
-                return popup === null
-            } else {
-                const dimensions = await this.getImageDimensions(href)
-                if (!dimensions) return true
+            if (!dimensions) return true
 
-                const { width, height, left, top } = this.calculateWindowSize(dimensions)
-                const popup = window.open(
-                    href,
-                    '_blank',
-                    `toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=${width},height=${height},top=${top},left=${left}`
-                )
-                return popup === null
+                        // Check if image is tall (width/height ratio less than 0.75)
+            const aspectRatio = dimensions.width / dimensions.height
+            if (!isVideo && aspectRatio < 0.75) {
+                // Create HTML content for the new tab with 100% width image
+                const html = `
+                    <!DOCTYPE html>
+                    <html>
+                        <head>
+                            <style>
+                                body {
+                                    margin: 0;
+                                    padding: 0;
+                                }
+                                img {
+                                    width: 100%;
+                                    height: auto;
+                                    display: block;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <img src="${href}" alt="" />
+                        </body>
+                    </html>
+                `
+                // Create blob URL from HTML content
+                const blob = new Blob([html], { type: 'text/html' })
+                const blobUrl = URL.createObjectURL(blob)
+
+                // Open in new tab and cleanup blob URL after
+                const newTab = window.open(blobUrl, '_blank')
+                if (newTab) {
+                    newTab.addEventListener('load', () => URL.revokeObjectURL(blobUrl), { once: true })
+                }
+                return false
             }
+
+            if (Popup.isPopupBlocked) {
+                console.log('Popups are blocked for this session. Using fallback view...')
+                this.showFallbackView(href, isVideo, dimensions)
+                return true
+            }
+
+            const { width, height, left, top } = this.calculateWindowSize(dimensions)
+
+            /* const testPopup = window.open('', '_blank')
+            if (testPopup && testPopup.closed) {
+                testPopup.close()
+            } */
+
+            const popup = window.open(
+                href,
+                `popup_${Date.now()}`,
+                `toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=${width},height=${height},top=${top},left=${left},popup=yes`
+            )
+
+            if (popup === null || popup.closed || typeof popup.closed === 'undefined') {
+                console.log('Popup was blocked or opened in tab. Using fallback view for the rest of the session...')
+                Popup.isPopupBlocked = true
+                this.showFallbackView(href, isVideo, dimensions)
+                return true
+            }
+
+            return false
         } catch (error) {
             console.error('Error opening popup:', error)
             return true
+        }
+    }
+
+    showFallbackView(url, isVideo, dimensions) {
+        if (!this.fallbackContainer) {
+            this.fallbackContainer = document.createElement('div')
+            this.fallbackContainer.className = 'media_fallback_overlay'
+            this.fallbackContainer.innerHTML = `<div class="media_fallback-wrapper"><div class="media_fallback-content"></div></div>`
+
+            if (!document.getElementById('media_fallback-styles')) {
+                const styles = document.createElement('style')
+                styles.id = 'media_fallback-styles'
+                styles.textContent = `
+                    .media_fallback_overlay {
+                        position: fixed;
+                        z-index: 300;
+                        inset: 0;
+                        background: rgba(0, 0, 0, 0.25);
+                        backdrop-filter: blur(1rem);
+                    }
+                    .media_fallback-wrapper {
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                        overflow: auto;
+                        margin-inline: auto;
+                    }
+                    .media_fallback-content {
+                        display: flex;
+                        position: relative;
+                        width: 100%;
+                        height: auto;
+                        min-height: 100%;
+                    }
+                    .media_fallback-content img,
+                    .media_fallback-content video {
+                        width: 100%;
+                        height: auto;
+                        object-fit: contain;
+                    }
+                    .media_fallback-close-overlay {
+                        position: absolute;
+                        inset: 0;
+                        cursor: zoom-out;
+                        z-index: 1;
+                    }
+                `
+                document.head.appendChild(styles)
+            }
+
+            this.fallbackContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('media_fallback-close-overlay')) {
+                    this.closeFallbackView()
+                }
+            })
+
+            /* TODO make keyboard accessible */
+            /* document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && this.fallbackContainer.parentElement) {
+                    this.closeFallbackView()
+                }
+            }) */
+        }
+
+        // Clear previous content
+        const wrapper = this.fallbackContainer.querySelector('.media_fallback-content')
+        wrapper.innerHTML = '<div class="media_fallback-close-overlay" aria-label="Close" tabindex="0"></div>'
+
+        // Add new media
+        const mediaElement = isVideo ?
+            document.createElement('video') :
+            document.createElement('img')
+
+        if (isVideo) {
+            mediaElement.controls = true
+            mediaElement.autoplay = true
+        }
+
+        mediaElement.src = url
+        wrapper.appendChild(mediaElement)
+
+        // Add to DOM if not already there
+        if (!this.fallbackContainer.parentElement) {
+            document.body.appendChild(this.fallbackContainer)
+        }
+    }
+
+    closeFallbackView() {
+        if (this.fallbackContainer && this.fallbackContainer.parentElement) {
+            this.fallbackContainer.remove()
         }
     }
 
@@ -594,6 +735,9 @@ class Popup {
         const screenHeight = screen.availHeight * this.heightRatio
         const imageRatio = dimensions.width / dimensions.height
 
+        console.log(screenWidth, screenHeight, dimensions.width, dimensions.height);
+
+
         let width = dimensions.width
         let height = dimensions.height
 
@@ -609,6 +753,13 @@ class Popup {
         const left = (screen.availWidth - width) / 2
         const top = (screen.availHeight - height) / 2
 
+        console.log({
+            width: Math.round(width),
+            height: Math.round(height),
+            left: Math.round(left),
+            top: Math.round(top)
+        });
+
         return {
             width: Math.round(width),
             height: Math.round(height),
@@ -616,6 +767,7 @@ class Popup {
             top: Math.round(top)
         }
     }
+
 }
 
 
@@ -729,7 +881,7 @@ class Carousel {
     }
 
     scrollToSlide(slide) {
-        slide.scrollIntoView({
+        slide?.scrollIntoView({
             behavior: 'smooth',
             block: 'nearest',
             inline: 'start'
@@ -779,7 +931,7 @@ window.handleTouchButtonClick = (element, event, callback, focusAfterClick) => {
 
 window.initializeTimeline = () => {
     window.timelineEl = document.createElement('horizontal-timeline')
-    timelineEl.labels = ['2024/21', '2021/19', '2019/18', 'Elsewhen']
+    timelineEl.labels = ['2024/21', '2021/19', '2019/18', 'elsewhen']
 
     document.querySelector('#horizontal_timeline').appendChild(timelineEl)
 
@@ -864,11 +1016,6 @@ const initializeModalFooterArt = () => {
         footerArt.style.transform = `rotateX(${progress * 30}deg)`
     }
 
-    console.log('ahoj')
-
-    console.log(typeof window.addEventListener)
-
-
     modalProfile.addEventListener('scroll', handleScroll, { passive: true })
     window.addEventListener('resize', handleScroll)
     handleScroll()
@@ -930,7 +1077,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-carousel]').forEach((carouselEl, index) => new Carousel({ id: `carousel-${index + 1}`, element: carouselEl }))
 
     // Initialize popups
-    document.querySelectorAll('[data-carousel-slides] figure a, #modal_archive-content_section-content nav ul li a').forEach(element => {
+    document.querySelectorAll('[data-carousel-slides] figure a, [data-timeline-section] nav ul li a, [data-timeline-section] picture a').forEach(element => {
         element.addEventListener('click', event => new Popup().open(element, event))
     })
 
