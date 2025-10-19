@@ -261,6 +261,8 @@ body {
 
 *, *::before, *::after {
     corner-shape: superellipse(1.15);
+    filter: none !important;
+    backdrop-filter: none !important;
 }
 
 /* Accessibility */

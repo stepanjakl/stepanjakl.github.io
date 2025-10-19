@@ -1,3 +1,12 @@
+/*!
+ * Personal website of Štěpán Jákl
+ * https://stepanjakl.github.io
+ *
+ * Copyright © 2025 Štěpán Jákl
+ * Released under the MIT license
+ * https://github.com/stepanjakl/stepanjakl.github.io/blob/main/LICENSE
+ */
+
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
 
 const isAnimationFinished = (selector) => {
