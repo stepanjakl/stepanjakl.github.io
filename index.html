@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
         <!-- GlitchTip -->
         <script src="https://browser.sentry-cdn.com/8.25.0/bundle.min.js"
@@ -30,12 +31,10 @@
               content="width=440, shrink-to-fit=yes, viewport-fit=contain">
         <!-- <meta name="viewport"
        content="width=device-width, initial-scale=1, viewport-fit=contain"> -->
-
         <!-- Cache -->
         <meta http-equiv="cache-control" content="no-cache">
         <meta http-equiv="expires" content="0">
         <meta http-equiv="pragma" content="no-cache">
-
         <!-- iPhone Safari Notch Background Color -->
         <meta name="theme-color" content="#001417">
         <meta name="apple-mobile-web-app-status-bar-style"
@@ -68,6 +67,7 @@
             console.log('%cInterested in working together? Reach out to me via email at %cstepan.jakl@icloud.com', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;', 'color: #4e7bff; text-decoration: underline;')
         </script>
     </head>
+
     <body class="primary-font">
         <input id="mode"
                type="checkbox"
@@ -262,9 +262,7 @@
                                     </span>
                                     <span id="menu_link_text-wrapper">
                                         <span class="text-xs uppercase select-none button-label"
-                                              style="border-bottom: solid 0.125rem var(--highlight-primary)">
-                                            Profile
-                                        </span>
+                                              style="border-bottom: solid 0.125rem var(--highlight-primary)"> Profile </span>
                                     </span>
                                     <abbr class="tooltip-bottom tooltip">
                                         <span>Learn more about me</span>
@@ -290,9 +288,7 @@
                                         </svg>
                                     </span>
                                     <span id="menu_link_text-wrapper"
-                                          class="text-xs uppercase select-none button-label">
-                                        Archive
-                                    </span>
+                                          class="text-xs uppercase select-none button-label"> Archive </span>
                                     <abbr class="tooltip-bottom tooltip">
                                         <span>Explore snippets of my past work</span>
                                     </abbr>
@@ -475,7 +471,7 @@
                                 <a href="#"
                                    onclick="event.preventDefault(); closeDialog('#')"
                                    id="modal_button-close"
-                                   class="flex align-items-center justify-content-center"
+                                   class="flex align-items-center justify-content-center backdrop-blur-mini"
                                    aria-label="Close modal">
                                     <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
                                         <use xlink:href="images/icons.svg#close"></use>
@@ -511,7 +507,6 @@
                                         Summary:
                                     </dt>
                                     <dd id="modal_profile-content-paragraph">
-
                                         <p>
                                             Experienced and detail-oriented user interface engineer who specialises in crafting digital solutions that balance clarity and creativity. Committed to delivering high-quality results for projects with exciting propositions and realistic goals. Proficient across both back-end and front-end development, with a strong emphasis on user-focused outcomes.
                                         </p>
@@ -519,7 +514,7 @@
                                             Eager to explore modern frameworks and emerging tools while maintaining a solid foundation in web development fundamentals such as clean semantics, cross-browser reliability, and accessibility best practices.
                                         </p>
                                         <p>
-                                            Dedicated to shaping engaging interfaces through purposeful design and seamless interactions.  I value precision in every aspect of the creative process, ensuring layouts feel balanced, transitions enhance flow, and visual elements contribute meaningfully to the overall experience. Each project is an opportunity to refine the connection between form and function.
+                                            Dedicated to shaping engaging interfaces through purposeful design and seamless interactions. I value precision in every aspect of the creative process, ensuring layouts feel balanced, transitions enhance flow, and visual elements contribute meaningfully to the overall experience. Each project is an opportunity to refine the connection between form and function.
                                         </p>
                                         <!-- <p>
                                             In recent years, my efforts have been devoted to building and overseeing a
@@ -591,14 +586,14 @@
                                         <script>
                                             const liveTimezoneTime = () => {
                                                 document.querySelector('#modal_profile-timezone-live-time').innerHTML = `(${new Intl.DateTimeFormat([], {
-											timeZone: 'Europe/London',
-											timeZoneName: 'short',
-											year: 'numeric',
-											month: 'numeric',
-											day: 'numeric',
-											hour: 'numeric',
-											minute: 'numeric'
-										}).format(new Date())})`
+                                                timeZone: 'Europe/London',
+                                                timeZoneName: 'short',
+                                                year: 'numeric',
+                                                month: 'numeric',
+                                                day: 'numeric',
+                                                hour: 'numeric',
+                                                minute: 'numeric'
+                                            }).format(new Date())})`
                                             }
                                             liveTimezoneTime()
                                             setInterval(liveTimezoneTime, 15000)
@@ -708,58 +703,56 @@
                                             </li>
                                         </ul>
                                     </dd>
-                                </div>
-                                <!-- TODO change class to id -->
-                                <div class="modal-footer-art-wrapper"
-                                     style="position:relative;
-                                            width: 100%;
-                                            height: 50vh;
-                                            transform: none;
-                                            margin-top: calc(var(--segment) * -1)">
-                                    <div class="modal-footer-art"
-                                         style="position: absolute;
-                                                inset:0;
-                                                background: radial-gradient(ellipse 75% 50% at 50% 100% in oklch, rgba(0,0,0,0.75), rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%), radial-gradient(ellipse 25% 25% at 50% 50% in oklch, rgba(125, 172, 59, 1), rgba(125, 172, 59, 1) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 100% at bottom center in oklch, rgba(125, 172, 59, 1), rgba(125, 172, 59, 1) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 75% at bottom left in oklch, rgba(125, 172, 59, 0.5), rgba(125, 172, 59, 0.5) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 75% at bottom right in oklch, rgba(125, 172, 59, 0.5), rgba(125, 172, 59, 0.5) 50%, rgba(125, 172, 59, 0) 100%), linear-gradient(to top in oklch, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 75%);
-                                                filter: blur(4rem);
-                                                transform: scaleY(0);
-                                                transform-origin: bottom">
-                                    </div>
-                                </div>
+                                </dl>
                             </div>
-                        </dl>
-                    </div>
-                </dialog>
-                <dialog id="modal_archive" class="modal" role="dialog" aria-modal="true">
-                    <figure class="overflow-clip modal-content">
-                        <div id="modal_button-wrapper">
-                            <a href="#"
-                               onclick="event.preventDefault(); closeDialog('#')"
-                               id="modal_button-close"
-                               class="flex align-items-center justify-content-center"
-                               aria-label="Close modal">
-                                <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
-                                    <use xlink:href="images/icons.svg#close"></use>
-                                </svg>
-                            </a>
-                            <label for="fullscreen"
-                                   tabindex="0"
-                                   onclick="toggleFullscreen()"
-                                   onkeypress="if(event.key === 'Enter') { document.getElementById('fullscreen').click(); }"
-                                   id="modal_button-fullscreen"
-                                   class="flex align-items-center justify-content-center">
-                                <svg class="fullscreen-checked:hidden flex fill-current"
-                                     style="width: 1.125rem;
-                                            height: 1.125rem">
-                                    <use xlink:href="images/icons.svg#fullscreen"></use>
-                                </svg>
-                                <svg class="hidden fullscreen-checked:flex fill-current"
-                                     style="width: 1.125rem;
-                                            height: 1.125rem">
-                                    <use xlink:href="images/icons.svg#fullscreen-off"></use>
-                                </svg>
-                                </>
+                            <!-- TODO change class to id -->
+                            <div id="modal_profile-footer_art-wrapper"
+                                 style="position:relative;
+                                        width: 100%;
+                                        height: 50vh;
+                                        transform: none;
+                                        margin-top: calc(var(--segment) * -1)">
+                                <figure id="modal_profile-footer_art"
+                                     style="position: absolute;
+                                            inset:0;
+                                            background: radial-gradient(ellipse 75% 50% at 50% 100% in oklch, rgba(0,0,0,0.75), rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%), radial-gradient(ellipse 25% 25% at 50% 50% in oklch, rgba(125, 172, 59, 1), rgba(125, 172, 59, 1) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 100% at bottom center in oklch, rgba(125, 172, 59, 1), rgba(125, 172, 59, 1) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 75% at bottom left in oklch, rgba(125, 172, 59, 0.5), rgba(125, 172, 59, 0.5) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 75% at bottom right in oklch, rgba(125, 172, 59, 0.5), rgba(125, 172, 59, 0.5) 50%, rgba(125, 172, 59, 0) 100%), linear-gradient(to top in oklch, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 75%);
+                                            filter: blur(4rem);
+                                            transform: scaleY(0);
+                                            transform-origin: bottom">
+                                </figure>
                             </div>
-
+                        </div>
+                    </dialog>
+                    <dialog id="modal_archive" class="modal" role="dialog" aria-modal="true">
+                        <figure class="overflow-clip modal-content">
+                            <div id="modal_button-wrapper">
+                                <a href="#"
+                                   onclick="event.preventDefault(); closeDialog('#')"
+                                   id="modal_button-close"
+                                   class="flex align-items-center justify-content-center"
+                                   aria-label="Close modal">
+                                    <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
+                                        <use xlink:href="images/icons.svg#close"></use>
+                                    </svg>
+                                </a>
+                                <label for="fullscreen"
+                                       tabindex="0"
+                                       onclick="toggleFullscreen()"
+                                       onkeypress="if(event.key === 'Enter') { document.getElementById('fullscreen').click(); }"
+                                       id="modal_button-fullscreen"
+                                       class="flex align-items-center justify-content-center">
+                                    <svg class="fullscreen-checked:hidden flex fill-current"
+                                         style="width: 1.125rem;
+                                                height: 1.125rem">
+                                        <use xlink:href="images/icons.svg#fullscreen"></use>
+                                    </svg>
+                                    <svg class="hidden fullscreen-checked:flex fill-current"
+                                         style="width: 1.125rem;
+                                                height: 1.125rem">
+                                        <use xlink:href="images/icons.svg#fullscreen-off"></use>
+                                    </svg>
+                                </label>
+                            </div>
                             <div style="position: relative;
                                         height: 100%;
                                         padding-bottom: var(--segment-half)">
@@ -1005,7 +998,7 @@
                                             </figure>
                                             <div>
                                                 <h1>
-                                                    <span>Bohemica Studio</span>
+                                                    <span>Bohemica Studio Team</span>
                                                 </h1>
                                                 <picture>
                                                     <img src="/projects/2021-19/bohemica-studio/bohemica-studio-hero.png">
@@ -1089,7 +1082,7 @@
                                             </div>
                                         </section>
                                         <!-- Elsewhen -->
-                                         <section data-timeline-section-title="elsewhen">
+                                        <section data-timeline-section-title="elsewhen">
                                             <div>
                                                 <label for="timeline_section_year-elsewhen" tabindex="0">
                                                     Elsewhen
@@ -1129,6 +1122,7 @@
                                                 <h1>
                                                     <span class="spark">Graphic Artifacts</span>
                                                 </h1>
+                                                <figure id="modal_archive-footer_art-middle"></figure>
                                             </div>
                                         </section>
                                     </div>
@@ -1138,7 +1132,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <figure id="modal_archive-footer_art-left"></figure>
+                            <figure id="modal_archive-footer_art-right"></figure>
+                        </figure>
                     </dialog>
                     <div aria-hidden="true"
                          tabindex="-1"
@@ -1155,7 +1151,7 @@
                 <div id="triangle-right-alt"
                      class="invisible z-0 fixed inset-0 overflow-hidden pointer-events-none select-none">
                 </div>
-            </div>
+            </figure>
             <footer class="z-1 fixed select-none">
                 <div class="flex px-1/2 py-1/2 w-full h-full">
                     <div class="flex" style="column-gap: 0.5rem">
@@ -1186,4 +1182,5 @@
             </svg>
         </main>
     </body>
+
 </html>

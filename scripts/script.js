@@ -1009,8 +1009,8 @@ const openDialogOnLoad = () => {
 
 
 const initializeModalFooterArt = () => {
-    const footerArtWrapper = document.querySelector('.modal-footer-art-wrapper')
-    const footerArt = document.querySelector('.modal-footer-art')
+    const footerArtWrapper = document.querySelector('#modal_profile-footer_art-wrapper')
+    const footerArt = document.querySelector('#modal_profile-footer_art')
     const modalProfile = document.getElementById('modal_profile')
     if (!footerArtWrapper || !footerArt || !modalProfile) return
 

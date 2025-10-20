@@ -542,6 +542,14 @@ body {
 }
 
 
+/* Filter */
+
+.backdrop-blur-mini {
+    backdrop-filter: blur(max(0.75px, 0.046875rem));
+    -webkit-backdrop-filter: blur(max(0.75px, 0.046875rem));
+}
+
+
 /* Hover */
 
 .hover\:underline {

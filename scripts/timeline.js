@@ -56,9 +56,9 @@ class timeline extends HTMLElement {
                     width: auto;
                     max-width: 100%;
                     border-radius: 0.75rem;
-                    background-color: rgba(0, 91, 102, 0.75); /* 210, 100, 35 */
-                    backdrop-filter: blur(0.375rem);
-                    -webkit-backdrop-filter: blur(0.375rem);
+                    background-color: rgba(0, 91, 102, 0.95); /* 210, 100, 35 */
+                    /* backdrop-filter: blur(0.375rem);
+                    -webkit-backdrop-filter: blur(0.375rem); */
                     overflow: clip;
                     contain: content;
                 }
