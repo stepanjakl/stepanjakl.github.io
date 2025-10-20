@@ -542,80 +542,55 @@ class Popup {
         event.preventDefault()
         const { href } = element
 
-        try {
-            const isVideo = this.isVideo(href)
-            const dimensions = isVideo ? await this.getVideoDimensions(href) : await this.getImageDimensions(href)
+        const isVideo = this.isVideo(href)
+        const dimensions = isVideo ? await this.getVideoDimensions(href) : await this.getImageDimensions(href)
 
-            if (!dimensions) return true
+        if (!dimensions) {
+            console.log('Could not retrieve media dimensions for the popup.')
+            this.showFallbackView(href, isVideo, dimensions)
+            return true
+        }
 
-                        // Check if image is tall (width/height ratio less than 0.75)
-            const aspectRatio = dimensions.width / dimensions.height
-            if (!isVideo && aspectRatio < 0.75) {
-                // Create HTML content for the new tab with 100% width image
-                const html = `
-                    <!DOCTYPE html>
-                    <html>
-                        <head>
-                            <style>
-                                body {
-                                    margin: 0;
-                                    padding: 0;
-                                }
-                                img {
-                                    width: 100%;
-                                    height: auto;
-                                    display: block;
-                                }
-                            </style>
-                        </head>
-                        <body>
-                            <img src="${href}" alt="" />
-                        </body>
-                    </html>
-                `
-                // Create blob URL from HTML content
-                const blob = new Blob([html], { type: 'text/html' })
-                const blobUrl = URL.createObjectURL(blob)
+        if (Popup.isPopupBlocked) {
+            console.log('Popups are blocked for this session. Using fallback view...')
+            this.showFallbackView(href, isVideo, dimensions)
+            return true
+        }
 
-                // Open in new tab and cleanup blob URL after
-                const newTab = window.open(blobUrl, '_blank')
-                if (newTab) {
-                    newTab.addEventListener('load', () => URL.revokeObjectURL(blobUrl), { once: true })
-                }
-                return false
-            }
+        const { width, height, left, top } = this.calculateWindowSize(dimensions)
 
-            if (Popup.isPopupBlocked) {
-                console.log('Popups are blocked for this session. Using fallback view...')
-                this.showFallbackView(href, isVideo, dimensions)
-                return true
-            }
+        // If the media is tall, prefer opening a small HTML page in a new tab so image fits 100% width.
+        const scaledAspect = width / height
+        if (!isVideo && scaledAspect < 0.75) {
+            const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:0;background:#000}img{width:100%;height:auto;display:block}</style></head><body><img src="${href}" alt=""/></body></html>`
+            const blob = new Blob([html], { type: 'text/html' })
+            const blobUrl = URL.createObjectURL(blob)
 
-            const { width, height, left, top } = this.calculateWindowSize(dimensions)
+            const newTab = window.open(blobUrl, '_blank')
 
-            /* const testPopup = window.open('', '_blank')
-            if (testPopup && testPopup.closed) {
-                testPopup.close()
-            } */
-
-            const popup = window.open(
-                href,
-                `popup_${Date.now()}`,
-                `toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=${width},height=${height},top=${top},left=${left},popup=yes`
-            )
-
-            if (popup === null || popup.closed || typeof popup.closed === 'undefined') {
-                console.log('Popup was blocked or opened in tab. Using fallback view for the rest of the session...')
+            // If opening a new tab/window failed, revoke blob and fallback inline
+            if (!newTab) {
+                URL.revokeObjectURL(blobUrl)
                 Popup.isPopupBlocked = true
+                console.log('Opening new tab was blocked. Falling back to inline view for the session.')
                 this.showFallbackView(href, isVideo, dimensions)
                 return true
             }
 
             return false
-        } catch (error) {
-            console.error('Error opening popup:', error)
+        }
+
+        // Otherwise attempt to open a centered popup window
+        const popup = window.open(href, `popup_${Date.now()}`, `toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=${width},height=${height},top=${top},left=${left},popup=yes`)
+
+        if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+            Popup.isPopupBlocked = true
+            console.log('Popup was blocked. Using inline fallback for the session.')
+            this.showFallbackView(href, isVideo, dimensions)
             return true
         }
+
+        return false
     }
 
     showFallbackView(url, isVideo, dimensions) {
@@ -639,8 +614,9 @@ class Popup {
                         position: relative;
                         width: 100%;
                         height: 100%;
-                        overflow: auto;
+                        overflow-y: auto;
                         margin-inline: auto;
+                        overscroll-behavior: none;
                     }
                     .media_fallback-content {
                         display: flex;
@@ -744,9 +720,6 @@ class Popup {
         const screenHeight = screen.availHeight * this.heightRatio
         const imageRatio = dimensions.width / dimensions.height
 
-        console.log(screenWidth, screenHeight, dimensions.width, dimensions.height);
-
-
         let width = dimensions.width
         let height = dimensions.height
 
@@ -762,13 +735,6 @@ class Popup {
         const left = (screen.availWidth - width) / 2
         const top = (screen.availHeight - height) / 2
 
-        console.log({
-            width: Math.round(width),
-            height: Math.round(height),
-            left: Math.round(left),
-            top: Math.round(top)
-        });
-
         return {
             width: Math.round(width),
             height: Math.round(height),
@@ -782,50 +748,107 @@ class Popup {
 
 class Carousel {
     constructor(options = {}) {
-        this.options = options
-        this.carouselEl = options.element
-        this.slidesWrapperEl = this.carouselEl.querySelector('[data-carousel-slides]')
-        this.slideEls = Array.from(this.carouselEl.querySelectorAll('[data-carousel-slides] figure'))
+        const { id = '', element = null } = options
+        this.id = id
+        this.carouselEl = element
+        this.slidesWrapperEl = this.carouselEl.querySelector('[data-carousel-slides-wrapper]')
+        this.slidesEls = Array.from(this.carouselEl.querySelectorAll('[data-carousel-slides] figure'))
+        this.controlsEl = this.carouselEl.querySelector('[data-carousel-controls]')
         this.navEl = this.carouselEl.querySelector('[data-carousel-nav]')
-        this.dotEls = []
         this.prevButtonEl = this.carouselEl.querySelector('[data-carousel-arrows] li:first-child button')
         this.nextButtonEl = this.carouselEl.querySelector('[data-carousel-arrows] li:last-child button')
+        this.dotEls = []
         this.activeSlide = {
             element: null,
             get: () => this.activeSlide.element,
             set: (el) => this.activeSlide.element = el
         }
-
         this.init()
     }
 
     init() {
-        this.createNavigationDots()
+        this.createEdgeNavigation()
+        this.setupEdgeNavigationEventListeners()
+        this.createControlNavigation()
+        this.setupControlNavigationEventListeners()
         this.setupIntersectionObserver()
-        this.setupPseudoElsEventListeners()
-        this.setupDotEventListeners()
-        this.setupButtonEventListeners()
     }
 
-    createNavigationDots() {
-        this.navEl.innerHTML = this.slideEls.map((_, index) => `<button data-label-for="${this.slideEls[index].getAttribute('data-value')}"><span class="sr-only">Slide ${index + 1}</span></button>`).join('')
+    createEdgeNavigation() {
+        const leftEdgeEl = document.createElement('div')
+        leftEdgeEl.className = 'carousel-edge-left'
+        leftEdgeEl.setAttribute('aria-hidden', 'true')
+        this.slidesWrapperEl.appendChild(leftEdgeEl)
+
+        const rightEdgeEl = document.createElement('div')
+        rightEdgeEl.className = 'carousel-edge-right'
+        rightEdgeEl.setAttribute('aria-hidden', 'true')
+        this.slidesWrapperEl.appendChild(rightEdgeEl)
+    }
+
+    setupEdgeNavigationEventListeners() {
+        const leftEdgeEl = this.slidesWrapperEl.querySelector('.carousel-edge-left')
+        const rightEdgeEl = this.slidesWrapperEl.querySelector('.carousel-edge-right')
+        leftEdgeEl.addEventListener('click', (e) => {
+            e.stopPropagation()
+            this.scrollToSlide(this.activeSlide.get()?.previousElementSibling)
+        })
+        rightEdgeEl.addEventListener('click', (e) => {
+            e.stopPropagation()
+            this.scrollToSlide(this.activeSlide.get()?.nextElementSibling)
+        })
+    }
+
+    createControlNavigation() {
+        const controlsEl = document.createElement('div')
+        controlsEl.setAttribute('data-carousel-controls', '')
+        controlsEl.innerHTML = `
+                <div data-carousel-nav-wrapper>
+                    <div data-carousel-nav></div>
+                </div>
+                <ul data-carousel-arrows>
+                    <li><button type="button" aria-label="Previous slide"></button></li>
+                    <li><button type="button" aria-label="Next slide"></button></li>
+                </ul>
+            `
+        this.carouselEl.appendChild(controlsEl)
+        this.controlsEl = controlsEl
+        this.navEl = this.carouselEl.querySelector('[data-carousel-nav]')
+        this.prevButtonEl = this.carouselEl.querySelector('[data-carousel-arrows] li:first-child button')
+        this.nextButtonEl = this.carouselEl.querySelector('[data-carousel-arrows] li:last-child button')
+
+        this.navEl.innerHTML = this.slidesEls.map((slideEl, index) => {
+            const val = slideEl.getAttribute('data-value') || index
+            return `<button data-label-for="${val}"><span class="sr-only">Slide ${index + 1}</span></button>`
+        }).join('')
         this.dotEls = Array.from(this.navEl.querySelectorAll('button'))
-        this.dotEls[0].setAttribute('aria-current', 'true')
+        if (this.dotEls[0]) {
+            this.dotEls[0].setAttribute('aria-current', 'true')
+        }
+    }
+
+    setupControlNavigationEventListeners() {
+        this.dotEls.forEach(dotEl => {
+            dotEl.addEventListener('click', event => {
+                const targetValue = event.currentTarget.getAttribute('data-label-for')
+                const targetSlideEl = this.carouselEl.querySelector(`figure[data-value="${targetValue}"]`)
+                if (targetSlideEl) this.scrollToSlide(targetSlideEl)
+            })
+        })
+
+        this.prevButtonEl.addEventListener('click', () => this.navigateToSlide('prev'))
+        this.nextButtonEl.addEventListener('click', () => this.navigateToSlide('next'))
     }
 
     setupIntersectionObserver() {
-        const observer = new IntersectionObserver(entries => {
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     this.activeSlide.set(entry.target)
                     entry.target.classList.add('active')
-
                     this.dotEls.forEach((dotEl, i) => {
-                        const isCurrent = i === this.slideEls.indexOf(entry.target)
+                        const isCurrent = i === this.slidesEls.indexOf(entry.target)
                         dotEl.toggleAttribute('aria-current', isCurrent)
-                        /* if (isCurrent) {
-                            dotEl.focus()
-                        } */
                     })
                 } else {
                     entry.target.classList.remove('active')
@@ -833,68 +856,20 @@ class Carousel {
             })
         }, {
             root: this.carouselEl,
-            rootMargin: `0%`,
+            rootMargin: '0%',
             threshold: 0.5
         })
-
-        this.slideEls.forEach(itemEl => observer.observe(itemEl))
-    }
-
-    setupPseudoElsEventListeners() {
-        this.slidesWrapperEl.addEventListener('click', event => {
-            const slidesWrapperElRect = this.slidesWrapperEl.getBoundingClientRect()
-            const x = event.clientX - slidesWrapperElRect.left
-
-            if (x < slidesWrapperElRect.width * 0.25) {
-                this.scrollToSlide(this.activeSlide.get()?.previousElementSibling)
-            }
-            else if (x > slidesWrapperElRect.width * 0.75) {
-                this.scrollToSlide(this.activeSlide.get()?.nextElementSibling)
-            }
-        })
-    }
-
-    setupDotEventListeners() {
-        this.dotEls.forEach(dotEl => {
-            dotEl.addEventListener('click', event => {
-                const targetValue = event.currentTarget.getAttribute('data-label-for')
-                const targetSlide = this.carouselEl.querySelector(`figure[data-value="${targetValue}"]`)
-                if (targetSlide) {
-                    this.scrollToSlide(targetSlide)
-                }
-            })
-        })
-    }
-
-    setupButtonEventListeners() {
-        this.prevButtonEl.addEventListener('click', event => {
-            this.navigateToSlide('prev')
-        })
-
-        this.nextButtonEl.addEventListener('click', event => {
-            this.navigateToSlide('next')
-        })
+        this.slidesEls.forEach(slideEl => observer.observe(slideEl))
     }
 
     navigateToSlide(direction) {
-        const currentSlide = this.activeSlide.get()
-        if (!currentSlide) return
-
-        const targetSlide = direction === 'prev'
-            ? currentSlide.previousElementSibling
-            : currentSlide.nextElementSibling
-
-        if (targetSlide) {
-            this.scrollToSlide(targetSlide)
-        }
+        const currentSlideEl = this.activeSlide.get()
+        const targetSlideEl = direction === 'prev' ? currentSlideEl.previousElementSibling : currentSlideEl.nextElementSibling
+        if (targetSlideEl) this.scrollToSlide(targetSlideEl)
     }
 
-    scrollToSlide(slide) {
-        slide?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: 'start'
-        })
+    scrollToSlide(slideEl) {
+        slideEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
     }
 }
 
@@ -1083,7 +1058,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.textHighlighter = new TextHighlighter()
 
     // Initialize carousels
-    document.querySelectorAll('[data-carousel]').forEach((carouselEl, index) => new Carousel({ id: `carousel-${index + 1}`, element: carouselEl }))
+    document.querySelectorAll('[data-carousel]').forEach((carouselEl, index) => {
+        const id = `carousel-${index + 1}`
+        new Carousel({ id, element: carouselEl })
+    })
 
     // Initialize popups
     document.querySelectorAll('[data-carousel-slides] figure a, [data-timeline-section] nav ul li a, [data-timeline-section] picture a').forEach(element => {

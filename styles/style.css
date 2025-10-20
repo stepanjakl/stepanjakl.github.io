@@ -1833,28 +1833,34 @@ section[data-timeline-section]>div>nav ul li a::after {
     display: none;
 }
 
-[data-carousel-slides]::before {
-    content: '';
+[data-carousel-slides]::before,
+[data-carousel-slides]::after {
+    /* Old pseudo-elements replaced by runtime DOM elements for better control and accessibility */
+    content: none;
+}
+
+/* Programmatic edges: created as real elements (.carousel-edge-left / .carousel-edge-right)
+   These replace the previous ::before / ::after pseudo-elements. */
+.carousel-edge-left,
+.carousel-edge-right {
     position: absolute;
     z-index: 5;
     display: block;
-    inset: 0 auto 0 0;
+    top: 0;
+    bottom: 0;
     width: 25%;
-    cursor: w-resize;
     user-select: none;
     -webkit-user-select: none;
 }
 
-[data-carousel-slides]::after {
-    content: '';
-    position: absolute;
-    z-index: 5;
-    display: block;
-    inset: 0 0 0 auto;
-    width: 25%;
+.carousel-edge-left {
+    left: 0;
+    cursor: w-resize;
+}
+
+.carousel-edge-right {
+    right: 0;
     cursor: e-resize;
-    user-select: none;
-    -webkit-user-select: none;
 }
 
 [data-carousel-slides] figure {
