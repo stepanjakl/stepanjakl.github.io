@@ -562,3 +562,12 @@ body {
     text-decoration-color: inherit;
     transition: text-decoration-color var(--animate-in-segment-2\/3) linear;
 }
+
+
+/* Mid */
+.mid {
+    font-size: 0.666em;
+    letter-spacing: 0.075em;
+    font-weight: 500;
+    vertical-align: middle;
+}

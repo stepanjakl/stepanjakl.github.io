@@ -561,11 +561,12 @@ class Popup {
 
         // If the media is tall, prefer opening a small HTML page in a new tab so image fits 100% width.
         const scaledAspect = width / height
-        if (!isVideo && scaledAspect < 0.75) {
-            const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:0;background:#000}img{width:100%;height:auto;display:block}</style></head><body><img src="${href}" alt=""/></body></html>`
-            const blob = new Blob([html], { type: 'text/html' })
-            const blobUrl = URL.createObjectURL(blob)
 
+        const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:0;background:#000}img{width:100%;height:auto;display:block}</style></head><body><img src="${href}" alt=""/></body></html>`
+        const blob = new Blob([html], { type: 'text/html' })
+        const blobUrl = URL.createObjectURL(blob)
+
+        if (!isVideo && scaledAspect < 0.75) {
             const newTab = window.open(blobUrl, '_blank')
 
             // If opening a new tab/window failed, revoke blob and fallback inline
@@ -579,15 +580,16 @@ class Popup {
 
             return false
         }
+        else {
+            // Otherwise attempt to open a centered popup window
+            const popup = window.open(blobUrl, `popup_${Date.now()}`, `toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=${width},height=${height},top=${top},left=${left},popup=yes`)
 
-        // Otherwise attempt to open a centered popup window
-        const popup = window.open(href, `popup_${Date.now()}`, `toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=${width},height=${height},top=${top},left=${left},popup=yes`)
-
-        if (!popup || popup.closed || typeof popup.closed === 'undefined') {
-            Popup.isPopupBlocked = true
-            console.log('Popup was blocked. Using inline fallback for the session.')
-            this.showFallbackView(href, isVideo, dimensions)
-            return true
+            if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+                Popup.isPopupBlocked = true
+                console.log('Popup was blocked. Using inline fallback for the session.')
+                this.showFallbackView(href, isVideo, dimensions)
+                return true
+            }
         }
 
         return false
@@ -1064,7 +1066,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // Initialize popups
-    document.querySelectorAll('[data-carousel-slides] figure a, [data-timeline-section] nav ul li a, [data-timeline-section] picture a').forEach(element => {
+    document.querySelectorAll('a[target="_blank"]').forEach(element => {
         element.addEventListener('click', event => new Popup().open(element, event))
     })
 

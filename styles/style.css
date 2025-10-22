@@ -51,8 +51,14 @@
     --cyan-full-95: #D4F7FF;
     /* 210, 75, 25 */
     --cyan-three-quarters-25: #1c4047;
+    /* 210, 75, 40 */
+    --cyan-three-quarters-40: #30666f;
     /* 210, 75, 45 */
     --cyan-three-quarters-45: #37737e;
+    /* 210, 75, 50 */
+    --cyan-three-quarters-50: #3e808c;
+    /* 210, 75, 55 */
+    --cyan-three-quarters-55: #468e9b;
     /* 210, 75, 65 */
     --cyan-three-quarters-65: #55aab9;
     /* 210, 75, 75 */
@@ -252,6 +258,7 @@ body {
     --modal-line-2: var(--cyan-half-65);
     --modal-line-3: var(--cyan-half-55);
     --modal-tag-bg: var(--cyan-three-quarters-45);
+    --modal-tag-bg-hover: var(--cyan-three-quarters-55);
 
     --footer-square-1: var(--highlight-primary);
     --footer-square-1-hover: var(--yellow);
@@ -1655,14 +1662,8 @@ section[data-timeline-section]>div>nav ul li:first-child span::before {
     transform: translateY(-0.0625rem);
 }
 
-
-section[data-timeline-section]>div>nav ul li:not(:first-child) {
-    padding: 0.609375rem 0.75rem 0.5rem;
-    border-radius: 999rem;
-    background-color: var(--modal-tag-bg);
-}
-
 section[data-timeline-section]>div>nav ul li a {
+    display: inline-block;
     font-family: 'Chakra Petch', monospace;
     font-size: 0.98214375rem;
     line-height: 1.625rem;
@@ -1679,6 +1680,12 @@ section[data-timeline-section]>div>nav ul li a::after {
     content: "";
     margin-top: -0.4523em;
     display: table;
+}
+
+section[data-timeline-section]>div>nav ul li:not(:first-child) a {
+    padding: 0.609375rem 0.75rem 0.5rem;
+    border-radius: 999rem;
+    background-color: var(--modal-tag-bg);
 }
 
 @media (min-width: 45rem) {
@@ -1792,11 +1799,31 @@ section[data-timeline-section]>div>nav ul li a::after {
     margin: 0;
 }
 
-.hover-cards>figure>div>img {
+.hover-cards>figure>div img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: left;
+}
+
+.hover-cards>figure>div>a {
+    cursor: zoom-in;
+}
+
+
+/* Modal - Archive - Hover Cards - Custom */
+
+.hover-cards.hover-cards-custom-1 {
+    --items: 3;
+}
+
+.hover-cards.hover-cards-custom-1>figure {
+    --aspect-w: 2624;
+    --aspect-h: 1530;
+}
+
+.hover-cards.hover-cards-custom-1>figure>div img {
+    object-position: right;
 }
 
 

@@ -1244,6 +1244,16 @@ input[id^="timeline_section_year-"]:checked~#modal_archive-content [data-timelin
     background-color: var(--highlight-secondary);
 }
 
+section[data-timeline-section]>div>nav ul li:not(:first-child) a {
+    transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear;
+}
+
+section[data-timeline-section]>div>nav ul li:not(:first-child) a:hover {
+    background-color: var(--modal-tag-bg-hover);
+    transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear;
+    /* color: var(--cyan-full-5); */
+}
+
 
 /* Modals - Horizontal Timeline */
 
