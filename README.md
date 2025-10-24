@@ -19,3 +19,15 @@
 #### [LinkedIn](https://www.linkedin.com/in/stepanjakl)
 
 #### [Calendly](https://calendly.com/stepanjakl)
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### Copyright Notice
+
+© 2025 Štěpán Jákl. All rights reserved.
+
+While this codebase is open source under the MIT license, all content, designs, artwork, and other creative assets remain the exclusive intellectual property of Štěpán Jákl and may not be used without explicit permission.

@@ -59,7 +59,7 @@
         <script defer src="scripts/dialog.js"></script>
         <script defer src="scripts/timeline.js"></script>
         <script>
-            console.log('%cŠtěpán Jákl | Full-stack developer & interface designer', `border: max(1px, 0.0625rem) solid #4e7bff; border-radius: 0.125rem; color: #4e7bff; font-size: 0.78125rem; padding: 1.40625rem 2.1875rem 1.25rem 2.1875rem; margin: 1.25rem 1.25rem; /* padding: 1.859375rem 1.875rem 1.859375rem 5.25rem; background-image: url('data:image/svg+xml,%3Csvg width='100%' height='100%' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 40V10.033L10.033 0H40V30L30 40H0ZM10 30V25H22.5L25 22.5H10V17.5H30V25L25 30H10ZM15 10H30V15H10L15 10Z' fill='%234e7bff'/%3E%3C/svg%3E%0A'); background-repeat: no-repeat; background-position: 1.25rem 50%; background-size: 2.5rem 2.5rem */`)
+            console.log('%cŠtěpán Jákl | Full-stack developer & interface designer', `border: max(1px, 0.0625rem) solid #4e7bff; border-radius: 0.125rem; color: #4e7bff; font-size: 0.78125rem; padding: 1.40625rem 2.1875rem 1.25rem 2.1875rem; margin: 1.25rem 1.25rem;`)
             console.log('%cThis website uses HTML, CSS, and optional JavaScript for accessibility and a better user experience.', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;')
             console.log('%cThe goal was to create a fast, pixel-perfect, and responsive site.', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;')
             console.log('%cNo frameworks, no compilers, no site generators. Only pure joy.', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;')
@@ -255,8 +255,7 @@
                                              height="100%"
                                              width="100%"
                                              viewBox="0 0 40 40"
-                                             fill="currentColor"
-                                             xmlns="http://www.w3.org/2000/svg">
+                                             fill="currentColor">
                                             <path d="M14.917 24c-.64 0-1.174-.215-1.605-.646-.43-.43-.645-.965-.645-1.604 0-.639.222-1.173.666-1.604.445-.43.986-.646 1.625-.646.64 0 1.167.215 1.584.646.417.43.625.965.625 1.604 0 .639-.215 1.173-.646 1.604-.43.43-.965.646-1.604.646Zm10.166 0c-.639 0-1.173-.215-1.604-.646-.43-.43-.646-.965-.646-1.604 0-.639.215-1.173.646-1.604.43-.43.965-.646 1.604-.646.64 0 1.181.215 1.625.646.445.43.667.965.667 1.604 0 .639-.222 1.173-.667 1.604a2.25 2.25 0 0 1-1.625.646ZM20 33.667c3.805 0 7.035-1.326 9.688-3.979 2.653-2.653 3.979-5.883 3.979-9.688 0-.695-.049-1.368-.146-2.021a9.868 9.868 0 0 0-.438-1.812 11.41 11.41 0 0 1-1.75.291c-.61.056-1.25.084-1.916.084-2.611 0-5.07-.535-7.375-1.604a16.598 16.598 0 0 1-5.917-4.605A16.73 16.73 0 0 1 12.208 16a18.409 18.409 0 0 1-5.833 3.75v.292c0 3.805 1.32 7.027 3.958 9.666 2.64 2.64 5.862 3.959 9.667 3.959Zm.042 3.666c-2.417 0-4.674-.458-6.771-1.375-2.097-.917-3.93-2.153-5.5-3.708-1.57-1.555-2.812-3.389-3.729-5.5-.917-2.111-1.375-4.361-1.375-6.75 0-2.389.458-4.639 1.375-6.75.917-2.111 2.16-3.945 3.729-5.5 1.57-1.555 3.403-2.791 5.5-3.708 2.097-.917 4.354-1.375 6.771-1.375 2.389 0 4.632.458 6.729 1.375 2.097.917 3.93 2.153 5.5 3.708 1.57 1.555 2.805 3.389 3.708 5.5s1.354 4.361 1.354 6.75c0 2.389-.451 4.639-1.354 6.75-.903 2.111-2.139 3.952-3.708 5.521-1.57 1.57-3.41 2.805-5.521 3.708-2.111.903-4.347 1.354-6.708 1.354Z">
                                         </svg>
                                     </span>
@@ -481,7 +480,7 @@
                             <div id="modal_profile-content">
                                 <dl>
                                     <dt>
-                                        Photo:
+                                        <span>Photo:</span>
                                     </dt>
                                     <dd>
                                         <img src="images/selfie.jpg"
@@ -498,13 +497,13 @@
                                                     border: none">
                                     </dd>
                                     <dt>
-                                        Full name:
+                                        <span>Full name:</span>
                                     </dt>
                                     <dd>
                                         <span>Štěpán Jákl</span>
                                     </dd>
                                     <dt>
-                                        Summary:
+                                        <span>Summary:</span>
                                     </dt>
                                     <dd id="modal_profile-content-paragraph">
                                         <p>
@@ -518,7 +517,7 @@
                                         </p>
                                         <!-- <p>
                                             In recent years, my efforts have been devoted to building and overseeing a
-                                            significant number of websites using the&nbsp;<a href="https://apostrophecms.com/" target="_blank"><u>ApostropheCMS</u>
+                                            significant number of websites using the&nbsp;<a href="https://apostrophecms.com" target="_blank"><u>ApostropheCMS</u>
                                             <svg class="fill-current" style="margin-left: 0.1em; margin-top: -0.65em; width: 0.85rem; height: 0.85rem">
                                                 <use xlink:href="images/icons.svg#new-tab"></use>
                                             </svg>
@@ -530,13 +529,13 @@
                                         </p>
                                     </dd>
                                     <dt>
-                                        Decade of birth:
+                                        <span>Decade of birth:</span>
                                     </dt>
                                     <dd>
                                         <span>90s</span>
                                     </dd>
                                     <dt>
-                                        Nationality:
+                                        <span>Nationality:</span>
                                     </dt>
                                     <dd>
                                         <span>
@@ -557,7 +556,7 @@
                                         </span>
                                     </dd>
                                     <dt>
-                                        Place of residence:
+                                        <span>Place of residence:</span>
                                     </dt>
                                     <dd>
                                         <span>
@@ -578,7 +577,7 @@
                                         </span>
                                     </dd>
                                     <dt>
-                                        Timezone:
+                                        <span>Timezone:</span>
                                     </dt>
                                     <dd id="modal_profile-timezone">
                                         <span>Europe/London</span>
@@ -599,8 +598,8 @@
                                             setInterval(liveTimezoneTime, 15000)
                                         </script>
                                     </dd>
-                                    <dt style="padding-top: 0.625rem">
-                                        Deliverables:
+                                    <dt style="padding-top: 0.375rem">
+                                        <span>Deliverables:</span>
                                     </dt>
                                     <dd id="modal_profile-tags">
                                         <ul>
@@ -628,7 +627,7 @@
                                         </ul>
                                     </dd>
                                     <dt style="padding-top: 0.625rem">
-                                        Tools & Languages:
+                                        <span>Tools & Languages:</span>
                                     </dt>
                                     <dd id="modal_profile-tags">
                                         <ul>
@@ -713,12 +712,12 @@
                                         transform: none;
                                         margin-top: calc(var(--segment) * -1)">
                                 <figure id="modal_profile-footer_art"
-                                     style="position: absolute;
-                                            inset:0;
-                                            background: radial-gradient(ellipse 75% 50% at 50% 100% in oklch, rgba(0,0,0,0.75), rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%), radial-gradient(ellipse 25% 25% at 50% 50% in oklch, rgba(125, 172, 59, 1), rgba(125, 172, 59, 1) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 100% at bottom center in oklch, rgba(125, 172, 59, 1), rgba(125, 172, 59, 1) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 75% at bottom left in oklch, rgba(125, 172, 59, 0.5), rgba(125, 172, 59, 0.5) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 75% at bottom right in oklch, rgba(125, 172, 59, 0.5), rgba(125, 172, 59, 0.5) 50%, rgba(125, 172, 59, 0) 100%), linear-gradient(to top in oklch, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 75%);
-                                            filter: blur(4rem);
-                                            transform: scaleY(0);
-                                            transform-origin: bottom">
+                                        style="position: absolute;
+                                               inset:0;
+                                               background: radial-gradient(ellipse 75% 50% at 50% 100% in oklch, rgba(0,0,0,0.75), rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%), radial-gradient(ellipse 25% 25% at 50% 50% in oklch, rgba(125, 172, 59, 1), rgba(125, 172, 59, 1) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 100% at bottom center in oklch, rgba(125, 172, 59, 1), rgba(125, 172, 59, 1) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 75% at bottom left in oklch, rgba(125, 172, 59, 0.5), rgba(125, 172, 59, 0.5) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 75% at bottom right in oklch, rgba(125, 172, 59, 0.5), rgba(125, 172, 59, 0.5) 50%, rgba(125, 172, 59, 0) 100%), linear-gradient(to top in oklch, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 75%);
+                                               filter: blur(4rem);
+                                               transform: scaleY(0);
+                                               transform-origin: bottom">
                                 </figure>
                             </div>
                         </div>
@@ -754,6 +753,7 @@
                                 </label>
                             </div>
                             <div style="position: relative;
+                                        z-index: 1;
                                         height: 100%;
                                         padding-bottom: var(--segment-half)">
                                 <div id="modal_archive-wrapper">
@@ -762,8 +762,8 @@
                                     <input type="checkbox" id="timeline_section_year-2019-18">
                                     <input type="checkbox" id="timeline_section_year-elsewhen">
                                     <div id="modal_archive-content">
-                                        <!-- 2024/21 -->
-                                        <section data-timeline-section-title="2024/21">
+                                        <!-- 2024-21 -->
+                                        <section data-timeline-section-title="2024-21">
                                             <div>
                                                 <label for="timeline_section_year-2024-21" tabindex="0">
                                                     2024
@@ -781,7 +781,7 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="2024/21">
+                                        <section data-timeline-section="2024-21">
                                             <figure>
                                                 <hr>
                                                 <hr>
@@ -791,40 +791,54 @@
                                                 <h1>
                                                     <span>ApostropheCMS Fleet of Sites</span>
                                                 </h1>
-                                                <div class="hover-cards">
+                                                <div class="modal-hover_cards">
                                                     <figure>
                                                         <div>
-                                                            <img src="/projects/2024-21/cloudraker-tfp/landing-hero-ovo.png">
+                                                            <img loading="lazy"
+                                                                 src="/projects/2024-21/cloudraker-tfp/landing-hero-ovo.min.png">
                                                         </div>
                                                     </figure>
                                                     <figure>
                                                         <div>
-                                                            <img src="/projects/2024-21/cloudraker-tfp/landing-hero-olive.png">
+                                                            <img loading="lazy"
+                                                                 src="/projects/2024-21/cloudraker-tfp/landing-hero-olive.min.png">
                                                         </div>
                                                     </figure>
                                                     <figure>
                                                         <div>
-                                                            <img src="/projects/2024-21/cloudraker-tfp/landing-hero-heartland.png">
+                                                            <img loading="lazy"
+                                                                 src="/projects/2024-21/cloudraker-tfp/landing-hero-heartland.min.png">
                                                         </div>
                                                     </figure>
                                                     <figure>
                                                         <div>
-                                                            <img src="/projects/2024-21/cloudraker-tfp/landing-hero-conceptia.png">
+                                                            <img loading="lazy"
+                                                                 src="/projects/2024-21/cloudraker-tfp/landing-hero-conceptia.min.png">
                                                         </div>
                                                     </figure>
                                                     <figure>
                                                         <div>
-                                                            <img src="/projects/2024-21/cloudraker-tfp/landing-hero-grace.png">
+                                                            <img loading="lazy"
+                                                                 src="/projects/2024-21/cloudraker-tfp/landing-hero-grace.min.png">
                                                         </div>
                                                     </figure>
                                                 </div>
                                                 <nav>
                                                     <ul>
                                                         <li>
-                                                            <span>Videos:</span>
+                                                            <span>Video:</span>
                                                         </li>
                                                         <li>
-                                                            <a href="/file/path">Showcase <span class="mid">(1:20)</span></a>
+                                                            <a href="/file/path" target="_blank">Showcase <span class="mid">(1:20)</span></a>
+                                                        </li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li>
+                                                            <span>Screencapture:</span>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/projects/2024-21/cloudraker-tfp/heartland-site-screencapture.full.png"
+                                                               target="_blank">Heartland Home Page</a>
                                                         </li>
                                                     </ul>
                                                     <ul>
@@ -833,7 +847,8 @@
                                                         </li>
                                                         <li>
                                                             <span>
-                                                                Client liaison, full-stack developer, project manager, quality overseer, and technical lead
+                                                                <!-- TODO sort alphabetically -->
+                                                                Client liaison, full-stack developer, quality overseer, and technical lead
                                                             </span>
                                                         </li>
                                                     </ul>
@@ -866,28 +881,31 @@
                                                 <h2>
                                                     ApostropheCMS Template & Module Library
                                                 </h2>
-                                                <div class="hover-cards hover-cards-custom-1">
+                                                <div class="modal-hover_cards modal-hover_cards-custom-1">
                                                     <figure>
                                                         <div>
-                                                            <a href="/projects/2024-21/apostrophe-template/template-widget-live.png"
+                                                            <a href="/projects/2024-21/apostrophe-template/template-widget-live.full.png"
                                                                target="_blank">
-                                                            <img src="/projects/2024-21/apostrophe-template/template-widget-live.png">
+                                                                <img loading="lazy"
+                                                                     src="/projects/2024-21/apostrophe-template/template-widget-live.min.png">
                                                             </a>
                                                         </div>
                                                     </figure>
                                                     <figure>
                                                         <div>
-                                                            <a href="/projects/2024-21/apostrophe-template/template-widget-setting.png"
+                                                            <a href="/projects/2024-21/apostrophe-template/template-widget-setting.full.png"
                                                                target="_blank">
-                                                            <img src="/projects/2024-21/apostrophe-template/template-widget-setting.png">
+                                                                <img loading="lazy"
+                                                                     src="/projects/2024-21/apostrophe-template/template-widget-setting.min.png">
                                                             </a>
                                                         </div>
                                                     </figure>
                                                     <figure>
                                                         <div>
-                                                            <a href="/projects/2024-21/apostrophe-template/template-widget-code-ide.png"
+                                                            <a href="/projects/2024-21/apostrophe-template/template-widget-code-ide.full.png"
                                                                target="_blank">
-                                                            <img src="/projects/2024-21/apostrophe-template/template-widget-code-ide.png">
+                                                                <img loading="lazy"
+                                                                     src="/projects/2024-21/apostrophe-template/template-widget-code-ide.min.png">
                                                             </a>
                                                         </div>
                                                     </figure>
@@ -895,7 +913,7 @@
                                                 <nav>
                                                     <ul>
                                                         <li>
-                                                            <span>Videos:</span>
+                                                            <span>Video:</span>
                                                         </li>
                                                         <li>
                                                             <a href="/file/path">Scrollthrough <span class="mid">(1:20)</span></a>
@@ -903,7 +921,7 @@
                                                     </ul>
                                                 </nav>
                                                 <p class="text-p">
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
+                                                    Private - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
                                                 </p>
                                                 <h2>
                                                     ApostropheCMS Stripe Extension
@@ -912,52 +930,47 @@
                                                     <div data-carousel-slides-wrapper>
                                                         <div data-carousel-slides>
                                                             <figure data-value="slide-1">
-                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-1.png"
+                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-1.full.png"
                                                                    target="_blank">
-                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-alpine-1.png"
+                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-alpine-1.min.png"
                                                                          loading="lazy"
                                                                          width="2624"
                                                                          height="1462">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-2">
-                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-2.png"
+                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-2.full.png"
                                                                    target="_blank">
-                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-alpine-2.png"
+                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-alpine-2.min.png"
                                                                          loading="lazy">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-3">
-                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-3.png"
+                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-3.full.png"
                                                                    target="_blank">
-                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-alpine-3.png"
+                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-alpine-3.min.png"
                                                                          loading="lazy">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-4">
-                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-checkout.png"
+                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-checkout.full.png"
                                                                    target="_blank">
-                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-alpine-checkout.png"
+                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-alpine-checkout.min.png"
                                                                          loading="lazy">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-5">
-                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-htmx-1.png"
+                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-htmx-1.full.png"
                                                                    target="_blank">
-                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-htmx-1.png"
+                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-htmx-1.min.png"
                                                                          loading="lazy">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-6">
-                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-htmx-2.png"
+                                                                <a href="projects/2024-21/apostrophe-stripe-extension/store-htmx-2.full.png"
                                                                    target="_blank">
-                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-htmx-2.png"
+                                                                    <img src="projects/2024-21/apostrophe-stripe-extension/store-htmx-2.min.png"
                                                                          loading="lazy">
-                                                                </a>
-                                                            </figure>
-                                                            <figure data-value="slide-7">
-                                                                <a href="projects/test.png" target="_blank">
-                                                                    <img src="projects/test.png" loading="lazy">
                                                                 </a>
                                                             </figure>
                                                         </div>
@@ -970,38 +983,64 @@
                                                         </li>
                                                         <li>
                                                             <a href="/projects/2024-21/apostrophe-stripe-extension/store-alpine-js-example-userflow.mp4"
-                                                               target="_blank">Demo 1</a>
+                                                               target="_blank">Walkthrough</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/projects/2024-21/apostrophe-stripe-extension/store-alpine-js-example-userflow.mp4"
+                                                               target="_blank">Demo w/ Alpine.js</a>
                                                         </li>
                                                         <li>
                                                             <a href="/projects/2024-21/apostrophe-stripe-extension/store-htmx-example-userflow.mp4"
-                                                               target="_blank">Demo 2</a>
+                                                               target="_blank">Demo w/ HTMX</a>
                                                         </li>
                                                     </ul>
                                                     <ul>
                                                         <li>
-                                                            <span>Repository:</span>
+                                                            <span>Repo:</span>
                                                         </li>
                                                         <li>
-                                                            <a href="/file/path">stepanjakl/apostrophe-stripe (external link svg)</a>
+                                                            <a href="https://github.com/stepanjakl/apostrophe-stripe-examples"
+                                                               target="_blank">
+                                                                <span>@stepanjakl/apostrophe-stripe-examples</span>
+                                                                <svg class="align-self-start fill-current">
+                                                                    <use xlink:href="images/icons.svg#new-tab"></use>
+                                                                </svg>
+                                                            </a>
                                                         </li>
                                                     </ul>
                                                 </nav>
                                                 <p class="text-p">
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
+                                                    Public - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
                                                 </p>
                                                 <h2>
                                                     ApostropheCMS Sync Extension
                                                 </h2>
+                                                <nav>
+                                                    <ul>
+                                                        <li>
+                                                            <span>Repo:</span>
+                                                        </li>
+                                                        <li>
+                                                            <a href="https://www.npmjs.com/package/@bohemicastudio/apostrophe-sync"
+                                                               target="_blank">
+                                                                <span>@bohemicastudio/apostrophe-sync</span>
+                                                                <svg class="align-self-start fill-current">
+                                                                    <use xlink:href="images/icons.svg#new-tab"></use>
+                                                                </svg>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
                                                 <p class="text-p">
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
+                                                    Public - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
                                                 </p>
                                             </div>
                                         </section>
-                                        <!-- 2021/19 -->
-                                        <section data-timeline-section-title="2021/19">
+                                        <!-- 2021-19 -->
+                                        <section data-timeline-section-title="2021-19">
                                             <div>
                                                 <label for="timeline_section_year-2021-19" tabindex="0">
-                                                    2021/19
+                                                    2021-19
                                                 </label>
                                                 <div class="flex align-items-center"
                                                      style="column-gap: 1rem;
@@ -1016,7 +1055,7 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="2021/19">
+                                        <section data-timeline-section="2021-19">
                                             <figure>
                                                 <hr>
                                                 <hr>
@@ -1027,20 +1066,127 @@
                                                     <span>Bohemica Studio Team</span>
                                                 </h1>
                                                 <picture>
-                                                    <img src="/projects/2021-19/bohemica-studio/bohemica-studio-hero.png">
+                                                    <img loading="lazy"
+                                                         src="/projects/2021-19/bohemica-studio/bohemica-studio-hero.min.png">
                                                 </picture>
+                                                <nav>
+                                                    <ul>
+                                                        <li>
+                                                            <span>Website:</span>
+                                                        </li>
+                                                        <li>
+                                                            <a href="https://bohemica.studio" target="_blank">
+                                                                <span>bohemica.studio</span>
+                                                                <svg class="align-self-start fill-current">
+                                                                    <use xlink:href="images/icons.svg#new-tab"></use>
+                                                                </svg>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
                                                 <p class="text-p">
                                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
                                                 </p>
                                                 <h2>
-                                                    Bohemica Signage
+                                                    Bohemica Store
                                                 </h2>
+                                                <nav>
+                                                    <ul>
+                                                        <li>
+                                                            <span>Design System Demo:</span>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/projects/2021-19/bohemica-store/landing-page-dark.jpg"
+                                                               target="_blank">Dark Page</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/projects/2021-19/bohemica-store/landing-page-light.jpg"
+                                                               target="_blank">Light Page</a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
                                                 <p class="text-p">
                                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
                                                 </p>
                                                 <h2>
-                                                    Bohemica Store
+                                                    Bohemica Signage
                                                 </h2>
+                                                <!-- <div data-carousel>
+                                                    <div data-carousel-slides-wrapper>
+                                                        <div data-carousel-slides>
+                                                            <figure data-value="slide-1">
+                                                                <a href="projects/2021-19/bohemica-signage/interface-overview.full.png" target="_blank">
+                                                                    <img src="projects/2021-19/bohemica-signage/interface-overview.min.png" loading="lazy">
+                                                                </a>
+                                                            </figure>
+                                                            <figure data-value="slide-2">
+                                                                <a href="projects/2021-19/bohemica-signage/interface-groups.full.png" target="_blank">
+                                                                    <img src="projects/2021-19/bohemica-signage/interface-groups.min.png  " loading="lazy">
+                                                                </a>
+                                                            </figure>
+                                                            <figure data-value="slide-3">
+                                                                <a href="projects/2021-19/bohemica-signage/interface-display-detail-live.full.png" target="_blank">
+                                                                    <img src="projects/2021-19/bohemica-signage/interface-display-detail-live.min.png" loading="lazy">
+                                                                </a>
+                                                            </figure>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                <div class="modal-hover_cards modal-hover_cards-custom-2">
+                                                    <figure>
+                                                        <div>
+                                                            <a href="/projects/2021-19/bohemica-signage/overview-screen.full.png"
+                                                               target="_blank">
+                                                                <img style="object-position: left"
+                                                                     loading="lazy"
+                                                                     src="/projects/2021-19/bohemica-signage/overview-screen.min.png">
+                                                            </a>
+                                                        </div>
+                                                    </figure>
+                                                    <figure>
+                                                        <div>
+                                                            <a href="/projects/2021-19/bohemica-signage/groups-screen.full.png"
+                                                               target="_blank">
+                                                                <img loading="lazy"
+                                                                     src="/projects/2021-19/bohemica-signage/groups-screen.min.png">
+                                                            </a>
+                                                        </div>
+                                                    </figure>
+                                                    <figure>
+                                                        <div>
+                                                            <a href="/projects/2021-19/bohemica-signage/display-detail-live-screen.full.jpg"
+                                                               target="_blank">
+                                                                <img loading="lazy"
+                                                                     src="/projects/2021-19/bohemica-signage/display-detail-live-screen.min.jpg">
+                                                            </a>
+                                                        </div>
+                                                    </figure>
+                                                    <figure>
+                                                        <div>
+                                                            <a href="/projects/2021-19/bohemica-signage/wireframe-screens.full.png"
+                                                               target="_blank">
+                                                                <img style="object-position: left"
+                                                                     loading="lazy"
+                                                                     src="/projects/2021-19/bohemica-signage/wireframe-screens.min.png">
+                                                            </a>
+                                                        </div>
+                                                    </figure>
+                                                </div>
+                                                <nav>
+                                                    <ul>
+                                                        <li>
+                                                            <span>Screen detail:</span>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/projects/2021-19/bohemica-signage/playlist-detail-fullscreen.png"
+                                                               target="_blank">Playlist</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/projects/2021-19/bohemica-signage/display-detail-fullscreen.png"
+                                                               target="_blank">Display</a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
                                                 <p class="text-p">
                                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
                                                 </p>
@@ -1055,12 +1201,12 @@
                                                     <span>MMT Company Web Identity</span>
                                                 </h1>
                                                 <picture>
-                                                    <img src="/projects/2021-19/mmt/mmt-logo-hero.svg">
+                                                    <img loading="lazy" src="/projects/2021-19/mmt/mmt-logo-hero.svg">
                                                 </picture>
                                                 <nav>
                                                     <ul>
                                                         <li>
-                                                            <span>Mock-ups:</span>
+                                                            <span>Mock-up:</span>
                                                         </li>
                                                         <li>
                                                             <a href="/projects/2021-19/mmt/mmt-landing-page-mockup.png"
@@ -1073,11 +1219,11 @@
                                                 </p>
                                             </div>
                                         </section>
-                                        <!-- 2019/18 -->
-                                        <section data-timeline-section-title="2019/18">
+                                        <!--  /18 -->
+                                        <section data-timeline-section-title="2019-18">
                                             <div>
                                                 <label for="timeline_section_year-2019-18" tabindex="0">
-                                                    2019/18
+                                                    2019-18
                                                 </label>
                                                 <div class="flex align-items-center"
                                                      style="column-gap: 1rem;
@@ -1092,7 +1238,7 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="2019/18">
+                                        <section data-timeline-section="2019-18">
                                             <figure>
                                                 <hr>
                                                 <hr>
@@ -1106,52 +1252,51 @@
                                                     <div data-carousel-slides-wrapper>
                                                         <div data-carousel-slides>
                                                             <figure data-value="slide-1">
-                                                                <a href="projects/2019-18/aeropot/1.png"
-                                                                   target="_blank">
-                                                                    <img src="projects/2019-18/aeropot/1.png"
+                                                                <a href="projects/2019-18/aeropot/hero-cover.full.png" target="_blank">
+                                                                    <img src="projects/2019-18/aeropot/hero-cover.min.png"
                                                                          loading="lazy"
                                                                          width="2624"
                                                                          height="1462">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-2">
-                                                                <a href="projects/2019-18/aeropot/2.png"
+                                                                <a href="projects/2019-18/aeropot/3d-model-perspectives.full.png"
                                                                    target="_blank">
-                                                                    <img src="projects/2019-18/aeropot/2.png"
+                                                                    <img src="projects/2019-18/aeropot/3d-model-perspectives.min.png"
                                                                          loading="lazy">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-3">
-                                                                <a href="projects/2019-18/aeropot/3.png"
+                                                                <a href="projects/2019-18/aeropot/3d-model-print-collage.full.jpg"
                                                                    target="_blank">
-                                                                    <img src="projects/2019-18/aeropot/3.png"
+                                                                    <img src="projects/2019-18/aeropot/3d-model-print-collage.min.jpg"
                                                                          loading="lazy">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-4">
-                                                                <a href="projects/2019-18/aeropot/4.jpg"
+                                                                <a href="projects/2019-18/aeropot/ultraponic-root-growth.full.jpg"
                                                                    target="_blank">
-                                                                    <img src="projects/2019-18/aeropot/4.jpg"
+                                                                    <img src="projects/2019-18/aeropot/ultraponic-root-growth.min.jpg"
                                                                          loading="lazy">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-5">
-                                                                <a href="projects/2019-18/aeropot/5.jpg"
+                                                                <a href="projects/2019-18/aeropot/top-cover-translucent-light-effect.full.jpg"
                                                                    target="_blank">
-                                                                    <img src="projects/2019-18/aeropot/5.jpg"
+                                                                    <img src="projects/2019-18/aeropot/top-cover-translucent-light-effect.min.jpg"
                                                                          loading="lazy">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-6">
-                                                                <a href="projects/2019-18/aeropot/6.png"
+                                                                <a href="projects/2019-18/aeropot/blynk-app-control.full.png"
                                                                    target="_blank">
-                                                                    <img src="projects/2019-18/aeropot/6.png"
+                                                                    <img src="projects/2019-18/aeropot/blynk-app-control.min.png"
                                                                          loading="lazy">
                                                                 </a>
                                                             </figure>
                                                             <figure data-value="slide-7">
-                                                                <a href="projects/2019-18/aeropot/7.jpg" target="_blank">
-                                                                    <img src="projects/2019-18/aeropot/7.jpg" loading="lazy">
+                                                                <a href="projects/2019-18/aeropot/wip.full.jpg" target="_blank">
+                                                                    <img src="projects/2019-18/aeropot/wip.min.jpg" loading="lazy">
                                                                 </a>
                                                             </figure>
                                                         </div>
@@ -1167,16 +1312,37 @@
                                                                target="_blank">Plant Growth Timelapse</a>
                                                         </li>
                                                         <li>
-                                                            <a href=""
-                                                               target="_blank">Demo</a>
+                                                            <a href="" target="_blank">Top Cover Light Effect</a>
                                                         </li>
                                                     </ul>
                                                     <ul>
                                                         <li>
-                                                            <span>Repository:</span>
+                                                            <span>Documents:</span>
                                                         </li>
                                                         <li>
-                                                            <a href="/file/path">stepanjakl/apostrophe-stripe (external link svg)</a>
+                                                            <a href="/projects/2019-18/aeropot/concept-presentation-poster.min2.pdf"
+                                                               target="_blank">Concept Presentation Poster</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/projects/2019-18/aeropot/dissertation.pdf" target="_blank">Dissertation</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/projects/2019-18/aeropot/development-report.pdf"
+                                                               target="_blank">Development Report</a>
+                                                        </li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li>
+                                                            <span>Repo:</span>
+                                                        </li>
+                                                        <li>
+                                                            <a href="https://github.com/stepanjakl/aeropot-arduino/blob/master/src/aerofyt_clion_platformio_project.cpp"
+                                                               target="_blank">
+                                                                <span>@stepanjakl/aeropot-arduino</span>
+                                                                <svg class="align-self-start fill-current">
+                                                                    <use xlink:href="images/icons.svg#new-tab"></use>
+                                                                </svg>
+                                                            </a>
                                                         </li>
                                                     </ul>
                                                 </nav>
@@ -1212,7 +1378,7 @@
                                             </figure>
                                             <div>
                                                 <picture style="margin-top: 0;">
-                                                    <img src="/projects/elsewhen/linkedin-cover.png">
+                                                    <img loading="lazy" src="/projects/elsewhen/elsewhen-hero.min.png">
                                                 </picture>
                                                 <p class="text-p">
                                                     Work and artifacts from different projects and moments that stand apart from full case studies but still belong here.
@@ -1220,13 +1386,112 @@
                                                 <h1>
                                                     <span class="spark">Logos</span>
                                                 </h1>
+                                                <div class="modal-grid">
+                                                    <figure class="logo-figure">
+                                                        <a href="projects/elsewhen/logo/eightshop.full.png" target="_blank">
+                                                            <img loading="lazy" src="projects/elsewhen/logo/eightshop.min.png">
+                                                        </a>
+                                                    </figure>
+                                                    <figure class="logo-figure">
+                                                        <a href="projects/elsewhen/logo/drop-visuals.full.jpg" target="_blank">
+                                                            <img loading="lazy" src="projects/elsewhen/logo/drop-visuals.min.jpg">
+                                                        </a>
+                                                    </figure>
+                                                    <figure class="logo-figure">
+                                                        <a href="projects/elsewhen/logo/moment.svg" target="_blank">
+                                                            <img src="projects/elsewhen/logo/moment.svg" loading="lazy">
+                                                        </a>
+                                                    </figure>
+                                                    <figure class="logo-figure">
+                                                        <a href="projects/elsewhen/logo/w.full.png" target="_blank">
+                                                            <img loading="lazy" src="projects/elsewhen/logo/w.min.png">
+                                                        </a>
+                                                    </figure>
+                                                    <figure class="logo-figure">
+                                                        <a href="projects/elsewhen/logo/us.svg" target="_blank">
+                                                            <img src="projects/elsewhen/logo/us.svg" loading="lazy">
+                                                        </a>
+                                                    </figure>
+                                                    <figure class="logo-figure">
+                                                        <a href="projects/elsewhen/logo/fish.full.png" target="_blank">
+                                                            <img loading="lazy" src="projects/elsewhen/logo/fish.min.png">
+                                                        </a>
+                                                    </figure>
+                                                </div>
                                                 <h1>
                                                     <span class="spark">Wireframes & Mock-ups</span>
                                                 </h1>
+                                                <nav>
+                                                    <ul>
+                                                        <li class="hidden">
+                                                        </li>
+                                                        <li>
+                                                            <a href="/projects/elsewhen/mockup-wireframe/document-data-extraction-ui-ux-task.png"
+                                                               target="_blank">Document Data Extraction UI/UX Task</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/projects/elsewhen/mockup-wireframe/full-mockup-with-measurements.png"
+                                                               target="_blank">Full Mockup with Measurements</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/projects/elsewhen/mockup-wireframe/website-service-wireframe.png"
+                                                               target="_blank">Website Service Wireframe</a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
                                                 <h1>
                                                     <span class="spark">Graphic Artifacts</span>
                                                 </h1>
-                                                <figure id="modal_archive-footer_art-middle"></figure>
+                                                <div data-carousel>
+                                                    <div data-carousel-slides-wrapper>
+                                                        <div data-carousel-slides>
+                                                            <figure data-value="slide-1">
+                                                                <a href="projects/elsewhen/artifact/brock-uni-exchange-art.full.png"
+                                                                   target="_blank">
+                                                                    <img src="projects/elsewhen/artifact/brock-uni-exchange-art.min.png"
+                                                                         loading="lazy">
+                                                                </a>
+                                                            </figure>
+                                                            <figure data-value="slide-2">
+                                                                <a href="projects/elsewhen/artifact/botasko-project-cover.full.png"
+                                                                   target="_blank">
+                                                                    <img src="projects/elsewhen/artifact/botasko-project-cover.min.png"
+                                                                         loading="lazy">
+                                                                </a>
+                                                            </figure>
+                                                            <figure data-value="slide-3">
+                                                                <a href="projects/elsewhen/artifact/den-portfolio-cover.full.png"
+                                                                   target="_blank">
+                                                                    <img src="projects/elsewhen/artifact/den-portfolio-cover.min.png"
+                                                                         loading="lazy">
+                                                                </a>
+                                                            </figure>
+                                                            <figure data-value="slide-4">
+                                                                <a href="projects/elsewhen/artifact/shoe-life-cycle-assessment-board.full.png"
+                                                                   target="_blank">
+                                                                    <img src="projects/elsewhen/artifact/shoe-life-cycle-assessment-board.min.png"
+                                                                         loading="lazy">
+                                                                </a>
+                                                            </figure>
+                                                            <figure data-value="slide-5">
+                                                                <a href="projects/elsewhen/artifact/uni-device-assessment.full.png"
+                                                                   target="_blank">
+                                                                    <img src="projects/elsewhen/artifact/uni-device-assessment.min.png"
+                                                                         loading="lazy">
+                                                                </a>
+                                                            </figure>
+                                                            <figure data-value="slide-6">
+                                                                <a href="projects/elsewhen/artifact/subtitle-editor-app-screenshot.full.png"
+                                                                   target="_blank">
+                                                                    <img src="projects/elsewhen/artifact/subtitle-editor-app-screenshot.min.png"
+                                                                         loading="lazy">
+                                                                </a>
+                                                            </figure>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <figure id="modal_archive-footer_art-middle">
+                                                </figure>
                                             </div>
                                         </section>
                                     </div>
@@ -1236,8 +1501,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <figure id="modal_archive-footer_art-left"></figure>
-                            <figure id="modal_archive-footer_art-right"></figure>
+                            <figure id="modal_archive-footer_art-left">
+                            </figure>
+                            <!-- TODO remove right art? -->
+                            <!-- <figure id="modal_archive-footer_art-right"></figure> -->
                         </figure>
                     </dialog>
                     <div aria-hidden="true"
@@ -1270,10 +1537,7 @@
                     </div>
                 </div>
             </footer>
-            <svg id="debug-grid"
-                 width="100%"
-                 height="100%"
-                 xmlns="http://www.w3.org/2000/svg">
+            <svg id="debug-grid" width="100%" height="100%">
                 <defs>
                 <pattern id="debug-grid-fill" width="8" height="8" patternUnits="userSpaceOnUse">
                 <path d="M 8 0 L 0 0 0 8" fill="none" stroke="currentColor" stroke-width="0.5">

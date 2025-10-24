@@ -1,3 +1,10 @@
+/**
+ * <horizontal-timeline>
+ * Custom Element that renders a horizontal timeline with labels and a bar of vertical lines.
+ * - Keeps the active label centered horizontally when sections intersect the viewport.
+ * - Highlights the matching vertical indicator above the active label.
+ * - Syncs the URL query (?year=YYYY) when inside the archive modal.
+ */
 class timeline extends HTMLElement {
     constructor() {
         super()
@@ -14,12 +21,8 @@ class timeline extends HTMLElement {
         return ['labels']
     }
 
-    attributeChangedCallback(property, oldValue, newValue) {
-        if (oldValue === newValue) return
-        this[property] = stringToArray(newValue)
-    }
-
     connectedCallback() {
+        // Render shadow-less template (static CSS + timeline structure)
         this.innerHTML = `
             <style>
                 horizontal-timeline {
@@ -77,9 +80,12 @@ class timeline extends HTMLElement {
                     white-space: nowrap;
                     scrollbar-width: none;
                     -ms-overflow-style: none;
-                    cursor: grab;
                     padding: 0.5rem 1.5rem 0.25rem 1.5rem;
                     mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) var(--segment), rgba(0, 0, 0, 1) calc(100% - var(--segment)), rgba(0, 0, 0, 0) 100%);
+                }
+
+                horizontal-timeline.timeline-scrollable #timeline-content {
+                    cursor: grab;
                 }
 
                 #timeline-content::-webkit-scrollbar {
@@ -119,7 +125,7 @@ class timeline extends HTMLElement {
                     cursor: pointer;
                 }
 
-                #timeline div span {
+                #timeline-content #timeline div span {
                     transition: background-color var(--animate-out-segment-2\\/3) linear, height var(--animate-out-segment-2\\/3) var(--ease-in-quad);
                     background-color: rgba(255, 255, 255, 0.45);
                     width: max(1.5px, 0.09375rem);
@@ -127,71 +133,79 @@ class timeline extends HTMLElement {
                     border-radius: max(0.5px, 0.09375rem);
                 }
 
-                #timeline div:hover span,
-                #timeline div.highlight span {
+                #timeline-content #timeline div:hover span,
+                #timeline-content #timeline div.highlight span {
                     transition: background-color var(--animate-in-segment-2\\/3) linear, height var(--animate-in-segment-2\\/3) var(--ease-out-quad) !important;
                     height: 100% !important;
                 }
 
-                #timeline div:has(+ div:hover) span,
-                #timeline div:hover + div span,
-                #timeline div:has(+ div.highlight) span,
-                #timeline div.highlight + div span {
+                #timeline-content #timeline div:has(+ div:hover) span,
+                #timeline-content #timeline div:hover + div span,
+                #timeline-content #timeline div:has(+ div.highlight) span,
+                #timeline-content #timeline div.highlight + div span {
+                    transition: background-color var(--animate-in-segment-2\\/3) linear, height var(--animate-in-segment-2\\/3) var(--ease-out-quad) !important;
                     height: calc((14/18) * 100%) !important;
                 }
 
-                #timeline div:has(+ div + div:hover) span,
-                #timeline div:hover + div + div span,
-                #timeline div:has(+ div + div.highlight) span,
-                #timeline div.highlight + div + div span {
+                #timeline-content #timeline div:has(+ div + div:hover) span,
+                #timeline-content #timeline div:hover + div + div span,
+                #timeline-content #timeline div:has(+ div + div.highlight) span,
+                #timeline-content #timeline div.highlight + div + div span {
+                    transition: background-color var(--animate-in-segment-2\\/3) linear, height var(--animate-in-segment-2\\/3) var(--ease-out-quad) !important;
                     height: calc((10/18) * 100%) !important;
                 }
 
-                #timeline div:nth-child(6n + 4) span {
+                #timeline-content #timeline div:nth-child(6n + 4) span {
                     height: calc((12/18) * 100%);
                 }
 
-                #timeline div:nth-child(6n + 3) span, #timeline div:nth-child(6n + 5) span {
+                #timeline-content #timeline div:nth-child(6n + 3) span, #timeline-content #timeline div:nth-child(6n + 5) span {
                     height: calc((8/18) * 100%);
                 }
 
-                #timeline div:nth-child(2) span, #timeline div:nth-last-child(2) span {
+                #timeline-content #timeline div:nth-child(2) span, #timeline-content #timeline div:nth-last-child(2) span {
                     background-color: rgba(255, 255, 255, 0.35);
                 }
 
-                #timeline div:first-child span, #timeline div:last-child span {
+                #timeline-content #timeline div:first-child span, #timeline-content #timeline div:last-child span {
                     background-color: rgba(255, 255, 255, 0.25);
                 }
 
-                #timeline div.active span {
+                #timeline-content #timeline div.active span {
+                    transition: background-color var(--animate-in-segment-2\\/3) linear, height var(--animate-in-segment-2\\/3) var(--ease-out-quad);
                     background-color: rgba(255, 255, 255, 0.75);
                     height: 100%;
                 }
 
-                #timeline div.active + div span {
-                    transition: background-color var(--animate-in-segment-2\\/3) linear calc(var(--delay-segment-1\\/3)), height var(--animate-in-segment-2\\/3) var(--ease-out-quad));
+                #timeline-content #timeline div.active + div span,
+                #timeline-content #timeline div:has(+ div.active) span {
+                    transition: background-color var(--animate-in-segment-2\\/3) linear var(--animate-in-segment-2\\/3), height var(--animate-in-segment-2\\/3) var(--ease-out-quad);
                     background-color: rgba(255, 255, 255, 0.7);
                     height: calc((14/18) * 100%);
                 }
 
-                #timeline div.active + div + div span {
-                    transition: background-color var(--animate-in-segment-2\\/3) linear calc(2 * var(--delay-segment-1\\/3)), height var(--animate-in-segment-2\\/3) var(--ease-out-quad);
+                #timeline-content #timeline div.active + div + div span,
+                #timeline-content #timeline div:has(+ div + div.active) span {
+                    transition: background-color var(--animate-in-segment-2\\/3) linear calc(2 * var(--animate-in-segment-2\\/3)), height var(--animate-in-segment-2\\/3) var(--ease-out-quad);
                     background-color: rgba(255, 255, 255, 0.65);
                     height: calc((10/18) * 100%);
                 }
 
-                #timeline div.active + div + div + div span {
-                    transition: background-color var(--animate-in-segment-2\\/3) linear calc(3 * var(--delay-segment-1\\/3)), height var(--animate-in-segment-2\\/3) var(--ease-out-quad);
+                #timeline-content #timeline div.active + div + div + div span,
+                #timeline-content #timeline div:has(+ div + div + div.active) span {
+                    transition: background-color var(--animate-in-segment-2\\/3) linear calc(3 * var(--animate-in-segment-2\\/3)), height var(--animate-in-segment-2\\/3) var(--ease-out-quad);
                     background-color: rgba(255, 255, 255, 0.6);
                 }
 
-                #timeline div.active + div + div + div + div span {
-                    transition: background-color var(--animate-in-segment-2\\/3) linear calc(4 * var(--delay-segment-1\\/3)), height var(--animate-in-segment-2\\/3) var(--ease-out-quad);
+                #timeline-content #timeline div.active + div + div + div + div span,
+                #timeline-content #timeline div:has(+ div + div + div + div.active) span {
+                    transition: background-color var(--animate-in-segment-2\\/3) linear calc(4 * var(--animate-in-segment-2\\/3)), height var(--animate-in-segment-2\\/3) var(--ease-out-quad);
                     background-color: rgba(255, 255, 255, 0.55);
                 }
 
-                #timeline div.active + div + div + div + div + div span {
-                    transition: background-color var(--animate-in-segment-2\\/3) linear calc(5 * var(--delay-segment-1\\/3)), height var(--animate-in-segment-2\\/3) var(--ease-out-quad);
+                #timeline-content #timeline div.active + div + div + div + div + div span,
+                #timeline-content #timeline div:has(+ div + div + div + div + div.active) span {
+                    transition: background-color var(--animate-in-segment-2\\/3) linear calc(5 * var(--animate-in-segment-2\\/3)), height var(--animate-in-segment-2\\/3) var(--ease-out-quad);
                     background-color: rgba(255, 255, 255, 0.5);
                 }
 
@@ -332,9 +346,32 @@ class timeline extends HTMLElement {
             </div>
         `
 
-        let firstLoad = true
+        // Constants describing the visual grid of the timeline indicators.
+        // First highlighted indicator sits at index 3; subsequent labels are spaced by 6 divs.
+        const TIMELINE_FIRST_INDICATOR_INDEX = 3
+        const TIMELINE_INDICATORS_PER_LABEL = 6
 
-        const scrollParentToChildCenterHorizontal = (parent, child) => {
+        // Apply 'timeline-scrollable' class when content overflows horizontally.
+        // This enables cursor:grab and activates HorizontalEdgeScroller/HorizontalDragScroll.
+        const timelineContentEl = this.querySelector('#timeline-content')
+        if (timelineContentEl && timelineContentEl.scrollWidth > timelineContentEl.clientWidth) {
+            this.classList.add('timeline-scrollable')
+        }
+
+        // Toggle scrollability class on window resize
+        window.addEventListener('resize', () => {
+            if (timelineContentEl.scrollWidth > timelineContentEl.clientWidth) {
+                this.classList.add('timeline-scrollable')
+            } else {
+                this.classList.remove('timeline-scrollable')
+            }
+        })
+
+    /**
+     * Smoothly scroll a horizontally scrollable parent so that the child is centered.
+     * Resolves when native 'scrollend' fires or after a small timeout fallback.
+     */
+    const scrollParentToChildCenterHorizontal = (parent, child) => {
             if (parent === null || child === null) return
             return new Promise((resolve) => {
                 this.isScrolling = true
@@ -351,6 +388,7 @@ class timeline extends HTMLElement {
                     resolve()
                 }
 
+                // Early exit if already at left edge and trying to scroll left
                 if (initialScrollLeft === 0 && scrollAmount < 0) {
                     resolve()
                     return
@@ -365,6 +403,7 @@ class timeline extends HTMLElement {
                     behavior: 'smooth'
                 })
 
+                // Fallback timeout for browsers without 'scrollend' event
                 if (!isScrollEndSupported) {
                     setTimeout(() => {
                         this.isScrolling = false
@@ -374,7 +413,11 @@ class timeline extends HTMLElement {
             })
         }
 
-        const scrollParentToChildVertical = (parent, child, scrollBehavior) => {
+    /**
+     * Vertically scroll a container so that the target child is comfortably visible near the top.
+     * If scrollBehavior === 'instant', temporarily force instant scrolling to avoid animation.
+     */
+    const scrollParentToChildVertical = (parent, child, scrollBehavior) => {
             if (scrollBehavior === 'instant') {
                 parent.classList.add('scroll-behavior-auto')
             }
@@ -389,7 +432,10 @@ class timeline extends HTMLElement {
             }
         }
 
-        const handleLabelClick = (modalArchiveEl, labelEl) => () => {
+    /**
+     * When a label is clicked, scroll the archive modal vertically to the matching section.
+     */
+    const handleLabelClick = (modalArchiveEl, labelEl) => () => {
             const section = labelEl.getAttribute('data-label-for')
             const targetElement = document.querySelector(`[data-timeline-section="${section}"]`)
             if (targetElement) {
@@ -397,43 +443,66 @@ class timeline extends HTMLElement {
             }
         }
 
-        const handleIntersection = (timelineContentEl, labelEls) => (entries) => {
-            entries.forEach(async (entry) => {
-                const targetSection = entry.target.getAttribute('data-timeline-section')
-                const targetLabelEl = this.querySelector(`[data-label-for="${targetSection}"]`)
-                const timelineEls = Array.from(this.querySelectorAll('#timeline div'))
+    /**
+     * IntersectionObserver callback: pick the most visible section and activate its label and indicator.
+     */
+    const handleIntersection = (timelineContentEl, labelEls) => (entries) => {
+            // Find the most intersecting entry (highest intersectionRatio)
+            const intersectingEntries = entries.filter(entry => entry.isIntersecting)
+            if (intersectingEntries.length === 0) return
 
-                if (entry.isIntersecting) {
-                    if (window.location.hash.includes(this.hash) && window.location.hash.split('?year=')[1] !== targetSection) {
-                        window.history.replaceState({}, '', window.location.pathname + window.location.hash.split('?')[0] + '?year=' + targetSection)
-                    }
+            const mostIntersecting = intersectingEntries.reduce((best, current) =>
+                current.intersectionRatio > best.intersectionRatio ? current : best
+            )
 
-                    await scrollParentToChildCenterHorizontal(timelineContentEl, targetLabelEl)
+            const targetSection = mostIntersecting.target.getAttribute('data-timeline-section')
+            const targetLabelEl = this.querySelector(`[data-label-for="${targetSection}"]`)
+            if (!targetLabelEl) return
 
-                    labelEls.forEach((labelEl) => labelEl.classList.remove('active'))
-                    targetLabelEl.classList.add('active')
+            // Use the cached list of all timeline indicator <div>s
+            const timelineEls = this.timelineAllDivEls
 
-                    const index = labelEls.findIndex((labelEl) => labelEl.getAttribute('data-label-for') === targetSection)
-                    timelineEls.forEach((timelineEl) => timelineEl.classList.remove('active'))
-                    timelineEls[3 + (index === 0 ? 0 : index * 6)].classList.add('active')
+            // Update URL query param to reflect active year
+            if (window.location.hash.includes(this.hash) && window.location.hash.split('?year=')[1] !== targetSection) {
+                window.history.replaceState({}, '', window.location.pathname + window.location.hash.split('?')[0] + '?year=' + targetSection)
+            }
 
-                    this.activeSection = targetSection
+            scrollParentToChildCenterHorizontal(timelineContentEl, targetLabelEl)
 
-                    localStorage.setItem('archiveYear', targetSection)
-                }
-            })
+            // Activate the appropriate label
+            labelEls.forEach((labelEl) => labelEl.classList.remove('active'))
+            targetLabelEl.classList.add('active')
+
+            // Activate the corresponding vertical indicator in the timeline bar
+            const index = labelEls.findIndex((labelEl) => labelEl.getAttribute('data-label-for') === targetSection)
+            timelineEls.forEach((timelineEl) => timelineEl.classList.remove('active'))
+            // Target the centered timeline indicator (vertical line) above the active label.
+            // First indicator at index TIMELINE_FIRST_INDICATOR_INDEX, then spaced by TIMELINE_INDICATORS_PER_LABEL.
+            const indicatorIdx = TIMELINE_FIRST_INDICATOR_INDEX + (index === 0 ? 0 : index * TIMELINE_INDICATORS_PER_LABEL)
+            timelineEls[indicatorIdx]?.classList.add('active')
+
+            this.activeSection = targetSection
+
+            localStorage.setItem('archiveYear', targetSection)
         }
 
-        const initializeTimeline = (() => {
+        /**
+         * Cache frequently used elements, wire label clicks, and handle deep-link (?year=) on first load.
+         */
+        const initializeTimeline = () => {
             this.timelineContentEl = this.querySelector('#timeline-content')
             this.labelEls = Array.from(this.querySelectorAll('[data-label-for]'))
+            this.timelineAllDivEls = Array.from(this.querySelectorAll('#timeline div'))
+            this.sectionEls = Array.from(document.querySelectorAll('[data-timeline-section]'))
 
             const modalArchiveEl = document.querySelector('#modal_archive')
 
+            // Wire up label click handlers to scroll to corresponding section
             this.labelEls.forEach((labelEl) => {
                 labelEl.addEventListener('click', handleLabelClick(modalArchiveEl, labelEl))
             })
 
+            // Handle deep-link with ?year= parameter on page load
             if (window.location.hash.includes('?year=')) {
                 const yearParam = window.location.hash.split('?year=')[1]
 
@@ -446,18 +515,21 @@ class timeline extends HTMLElement {
                     const targetElement = document.querySelector(`[data-timeline-section="${yearParam}"]`)
                     if (targetElement) {
                         scrollParentToChildVertical(modalArchiveEl, targetElement, 'instant')
-                        // await scrollParentToChildCenterHorizontal(this.timelineContentEl, this.querySelector(`[data-label-for="${yearParam}"]`))
                     }
                 })
             }
 
+            // Re-center active label when mouse leaves the timeline
             this.addEventListener('mouseleave', async () => {
                 if (this.isScrolling) return
                 await scrollParentToChildCenterHorizontal(this.timelineContentEl, this.querySelector(`[data-label-for="${this.activeSection}"]`))
             })
-        })()
+        }
 
-        const highlightLabelEls = (() => {
+    /**
+     * Hover and click linkage from the top indicator bar → labels.
+     */
+    const highlightLabelEls = () => {
             const timelineEls = this.querySelectorAll('#timeline [data-value]')
 
             timelineEls.forEach(timelineEl => {
@@ -478,14 +550,17 @@ class timeline extends HTMLElement {
                     })
                 }
             })
-        })()
+        }
 
-        const highlightTimelineEls = (() => {
+    /**
+     * Hover linkage from labels → matching centered indicator bar element.
+     */
+    const highlightTimelineEls = () => {
             this.labelEls.forEach(labelEl => {
                 const value = labelEl.getAttribute('data-label-for')
                 const timelineEl = this.querySelector(`#timeline div:nth-child(6n + 4)[data-value="${value}"]`)
 
-                if (labelEl) {
+                if (timelineEl) {
                     labelEl.addEventListener('mouseenter', () => {
                         timelineEl.classList.add('highlight')
                     })
@@ -495,16 +570,26 @@ class timeline extends HTMLElement {
                     })
                 }
             })
-        })()
+        }
 
+        /**
+         * Start an IntersectionObserver that tracks which content section is most visible.
+         * rootMargin centers the active window; thresholds provide richer intersectionRatio values.
+         */
         const setupIntersectionObserver = (timelineContentEl, labelEls) => {
             this.intersectionObserver = new IntersectionObserver(handleIntersection(timelineContentEl, labelEls), {
                 rootMargin: '-50% 0% -50% 0%',
-                threshold: 0
+                threshold: [0, 0.25, 0.5, 0.75, 1]
             })
-            document.querySelectorAll('[data-timeline-section]').forEach(async (element) => await this.intersectionObserver.observe(element))
+            this.sectionEls.forEach((element) => this.intersectionObserver.observe(element))
         }
 
+        // Initialize timeline functionality
+        initializeTimeline()
+        highlightLabelEls()
+        highlightTimelineEls()
+
+        // Public methods for controlling the IntersectionObserver
         this.startIntersectionObserver = () => {
             setupIntersectionObserver(this.timelineContentEl, this.labelEls)
         }
@@ -513,14 +598,6 @@ class timeline extends HTMLElement {
             this.intersectionObserver.disconnect()
         }
     }
-}
-
-const stringToArray = (inputString) => {
-    const match = inputString.match(/\[(.*?)\]/)
-    if (match && match[1]) {
-        return match[1].split(',').map(item => item.trim())
-    }
-    return []
 }
 
 customElements.define('horizontal-timeline', timeline)

@@ -316,7 +316,7 @@ class TouchHandler {
 }
 
 
-class HorizontalDragScroll {
+class HorizontalDragScroller {
     constructor(options = {}) {
         this.element = options.element
         this.options = options
@@ -327,11 +327,22 @@ class HorizontalDragScroll {
     }
 
     init() {
-        this.element.addEventListener('mousedown', this.onMouseDown.bind(this))
-        this.element.addEventListener('mousemove', this.onMouseMove.bind(this))
-        this.element.addEventListener('mouseup', this.completeDrag.bind(this))
-        this.element.addEventListener('mouseleave', this.completeDrag.bind(this))
-        this.element.addEventListener('mousecancel', this.completeDrag.bind(this))
+        this.onMouseDownBound = this.onMouseDown.bind(this)
+        this.onMouseMoveBound = this.onMouseMove.bind(this)
+        this.completeDragBound = this.completeDrag.bind(this)
+        this.element.addEventListener('mousedown', this.onMouseDownBound)
+        this.element.addEventListener('mousemove', this.onMouseMoveBound)
+        this.element.addEventListener('mouseup', this.completeDragBound)
+        this.element.addEventListener('mouseleave', this.completeDragBound)
+        this.element.addEventListener('mousecancel', this.completeDragBound)
+    }
+
+    destroy() {
+        this.element.removeEventListener('mousedown', this.onMouseDownBound)
+        this.element.removeEventListener('mousemove', this.onMouseMoveBound)
+        this.element.removeEventListener('mouseup', this.completeDragBound)
+        this.element.removeEventListener('mouseleave', this.completeDragBound)
+        this.element.removeEventListener('mousecancel', this.completeDragBound)
     }
 
     onMouseDown(event) {
@@ -385,8 +396,10 @@ class HorizontalEdgeScroller {
 
     init() {
         if (!isTouchDevice) {
-            document.addEventListener('mousemove', this.handleMouseMove.bind(this))
-            window.addEventListener('resize', this.onResize.bind(this))
+            this.handleMouseMoveBound = this.handleMouseMove.bind(this)
+            this.onResizeBound = this.onResize.bind(this)
+            document.addEventListener('mousemove', this.handleMouseMoveBound)
+            window.addEventListener('resize', this.onResizeBound)
             this.onResize()
         }
     }
@@ -524,6 +537,13 @@ class HorizontalEdgeScroller {
         const speed = (this.maxSpeed * (edgeWidth - distance)) / edgeWidth
         return direction === 'left' ? -speed : speed
     }
+
+    destroy() {
+        if (!isTouchDevice) {
+            document.removeEventListener('mousemove', this.handleMouseMoveBound)
+            window.removeEventListener('resize', this.onResizeBound)
+        }
+    }
 }
 
 
@@ -562,11 +582,29 @@ class Popup {
         // If the media is tall, prefer opening a small HTML page in a new tab so image fits 100% width.
         const scaledAspect = width / height
 
-        const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:0;background:#000}img{width:100%;height:auto;display:block}</style></head><body><img src="${href}" alt=""/></body></html>`
+        const mediaElementHtml = isVideo
+            ? `<video src="${href}" controls autoplay playsinline></video>`
+            : `<img src="${href}" />`
+
+        const html = `<!DOCTYPE html>
+        <html>
+        <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>Preview</title>
+        <style>
+          html,body{margin:0;padding:0}
+          img,video{width:100%;height:auto}
+        </style>
+        </head>
+        <body>
+          ${mediaElementHtml}
+        </body>
+        </html>`
         const blob = new Blob([html], { type: 'text/html' })
         const blobUrl = URL.createObjectURL(blob)
 
-        if (!isVideo && scaledAspect < 0.75) {
+        if (scaledAspect < 0.85) {
             const newTab = window.open(blobUrl, '_blank')
 
             // If opening a new tab/window failed, revoke blob and fallback inline
@@ -778,19 +816,19 @@ class Carousel {
 
     createEdgeNavigation() {
         const leftEdgeEl = document.createElement('div')
-        leftEdgeEl.className = 'carousel-edge-left'
+        leftEdgeEl.setAttribute('data-carousel-edge-left', '')
         leftEdgeEl.setAttribute('aria-hidden', 'true')
         this.slidesWrapperEl.appendChild(leftEdgeEl)
 
         const rightEdgeEl = document.createElement('div')
-        rightEdgeEl.className = 'carousel-edge-right'
+        rightEdgeEl.setAttribute('data-carousel-edge-right', '')
         rightEdgeEl.setAttribute('aria-hidden', 'true')
         this.slidesWrapperEl.appendChild(rightEdgeEl)
     }
 
     setupEdgeNavigationEventListeners() {
-        const leftEdgeEl = this.slidesWrapperEl.querySelector('.carousel-edge-left')
-        const rightEdgeEl = this.slidesWrapperEl.querySelector('.carousel-edge-right')
+        const leftEdgeEl = this.slidesWrapperEl.querySelector('[data-carousel-edge-left]')
+        const rightEdgeEl = this.slidesWrapperEl.querySelector('[data-carousel-edge-right]')
         leftEdgeEl.addEventListener('click', (e) => {
             e.stopPropagation()
             this.scrollToSlide(this.activeSlide.get()?.previousElementSibling)
@@ -917,12 +955,44 @@ window.handleTouchButtonClick = (element, event, callback, focusAfterClick) => {
 
 window.initializeTimeline = () => {
     window.timelineEl = document.createElement('horizontal-timeline')
-    timelineEl.labels = ['2024/21', '2021/19', '2019/18', 'elsewhen']
+    timelineEl.labels = ['2024-21', '2021-19', '2019-18', 'elsewhen']
 
     document.querySelector('#horizontal_timeline').appendChild(timelineEl)
 
-    new HorizontalEdgeScroller({ id: 'timeline', element: document.querySelector('#timeline-content') })
-    new HorizontalDragScroll({ element: document.querySelector('#timeline-content') })
+    const timelineContent = document.querySelector('#timeline-content')
+    let edgeScroller, dragScroll;
+
+    const isScrollable = () => timelineContent && timelineContent.scrollWidth > timelineContent.clientWidth;
+
+    const createScrollers = () => {
+        if (!isScrollable()) return;
+        if (!edgeScroller) edgeScroller = new HorizontalEdgeScroller({ id: 'timeline', element: timelineContent });
+        if (!dragScroll) dragScroll = new HorizontalDragScroller({ element: timelineContent });
+    };
+
+    const destroyScrollers = () => {
+        if (edgeScroller) {
+            edgeScroller.destroy();
+            edgeScroller = null;
+        }
+        if (dragScroll) {
+            dragScroll.destroy();
+            dragScroll = null;
+        }
+    };
+
+    const handleResize = () => {
+        if (isScrollable()) {
+            createScrollers();
+        } else {
+            destroyScrollers();
+        }
+    };
+
+    if (timelineContent) {
+        handleResize();
+        window.addEventListener('resize', handleResize);
+    }
 }
 
 function initializeDialogs() {
@@ -1066,7 +1136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // Initialize popups
-    document.querySelectorAll('a[target="_blank"]').forEach(element => {
+    document.querySelectorAll('a[target="_blank"][href$=".mp4"], a[target="_blank"][href$=".png"], a[target="_blank"][href$=".jpg"], a[target="_blank"][href$=".svg"]').forEach(element => {
         element.addEventListener('click', event => new Popup().open(element, event))
     })
 
@@ -1074,11 +1144,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeModalFooterArt()
 
     // Initialize timeline
+    /* TODO - is the backdrop necessary? */
     aria.addBackdrop('modal_archive')
-    requestAnimationFrame(() => {
+    /* requestAnimationFrame(() => {
         requestAnimationFrame(() => {
         })
-    })
+    }) */
     initializeTimeline()
     timelineEl.startIntersectionObserver()
     const positionTimeline = event => {
