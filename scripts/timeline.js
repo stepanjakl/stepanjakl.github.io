@@ -60,10 +60,15 @@ class timeline extends HTMLElement {
                     max-width: 100%;
                     border-radius: 0.75rem;
                     background-color: rgba(0, 91, 102, 0.95); /* 210, 100, 35 */
-                    /* backdrop-filter: blur(0.375rem);
-                    -webkit-backdrop-filter: blur(0.375rem); */
+                    /* background-image: radial-gradient(circle at 0.09375rem 0.09375rem, #00768450 max(1px, 0.0625rem), transparent max(1px, 0.0625rem)), radial-gradient(circle at 0.09375rem 0.09375rem, #00768450 max(1px, 0.0625rem), transparent max(1px, 0.0625rem));
+                    background-size: 0.875rem 0.875rem;
+                    background-position: 0.1875rem 0.0625rem, 0.625rem 0.5rem;
+                    background-repeat: repeat;
+                    background-origin: content-box; */
                     overflow: clip;
                     contain: content;
+                    /* backdrop-filter: blur(0.375rem);
+                    -webkit-backdrop-filter: blur(0.375rem); */
                 }
 
                 horizontal-timeline:hover #timeline-wrapper {
