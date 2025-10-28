@@ -1162,8 +1162,8 @@ body {
     background-repeat: repeat;
     background-origin: content-box;
     background-position: 100% 0%;
-    backdrop-filter: blur(3rem);
-    -webkit-backdrop-filter: blur(3rem);
+    backdrop-filter: saturate(1.25) blur(3rem);
+    -webkit-backdrop-filter: saturate(1.25) blur(3rem);
 }
 
 #modal_archive .modal-content::before {

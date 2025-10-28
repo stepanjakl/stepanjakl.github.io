@@ -7,329 +7,398 @@
  * https://github.com/stepanjakl/stepanjakl.github.io/blob/main/LICENSE
  */
 
+// ============================================================================
+// Utility Functions
+// ============================================================================
+
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
 
 const isAnimationFinished = (selector) => {
-    const animations = document.querySelector(selector).getAnimations()
-    return animations.length === 0 || animations[0].playState === 'finished'
+    const animations = document.querySelector(selector)?.getAnimations()
+    return !animations || animations.length === 0 || animations[0].playState === 'finished'
 }
 
+const getCurrentHash = () => window.location.hash
+
+const getHashWithoutParams = () => getCurrentHash().split('?')[0]
+
+const isHash = (hash) => getCurrentHash() === hash
+
+const hashIncludes = (hash) => getCurrentHash().includes(hash)
+
+// ============================================================================
+// TextHighlighter Class
+// ============================================================================
+
+/**
+ * Handles text highlighting and copying with temporary text replacement
+ */
 class TextHighlighter {
     constructor() {
         this.originalText = ''
+        this.HIGHLIGHT_DURATION = 1000
+        this.HIGHLIGHT_ACTIVE_CLASS = 'highlight-text--active'
     }
 
     highlightAndCopyText(event, textElement, highlightElement, temporaryText) {
-        if (this.isCopying(event.target)) {
-            this.setTemporaryText(textElement, temporaryText)
-            this.activateHighlight(highlightElement)
-            this.scheduleDeactivation(event, textElement, highlightElement)
+        const target = event.target
+        if (target.getAttribute('data-copying') !== '') {
+            this.originalText = textElement.textContent
+            if (temporaryText) {
+                textElement.textContent = temporaryText
+            }
+            highlightElement.classList.add(this.HIGHLIGHT_ACTIVE_CLASS)
+
+            setTimeout(() => {
+                target.removeAttribute('data-copying')
+                textElement.textContent = this.originalText
+                highlightElement.classList.remove(this.HIGHLIGHT_ACTIVE_CLASS)
+            }, this.HIGHLIGHT_DURATION)
         }
-    }
-
-    isCopying(target) {
-        return target.getAttribute('data-copying') !== ''
-    }
-
-    setTemporaryText(textElement, temporaryText) {
-        this.originalText = textElement.innerText
-        if (temporaryText) {
-            textElement.innerText = temporaryText
-        }
-    }
-
-    restoreOriginalText(event, textElement) {
-        if (this.isCopying(event.target)) {
-            event.target.removeAttribute('data-copying')
-            textElement.innerText = this.originalText
-        }
-    }
-
-    activateHighlight(highlightElement) {
-        highlightElement.classList.add('highlight-text--active')
-    }
-
-    deactivateHighlight(highlightElement) {
-        highlightElement.classList.remove('highlight-text--active')
-    }
-
-    scheduleDeactivation(event, textElement, highlightElement) {
-        setTimeout(() => {
-            this.restoreOriginalText(event, textElement)
-            this.deactivateHighlight(highlightElement)
-            /* setTimeout(() => {
-                document.activeElement.blur()
-            }, 200) */
-        }, 1000)
     }
 }
 
 
+// ============================================================================
+// KeyHandler Class
+// ============================================================================
+
+/**
+ * Handles keyboard shortcuts and tooltip interactions
+ */
 class KeyHandler {
     constructor() {
-        this.tooltipSelectors = '#menu_link_profile, #menu_link_archive, #menu_button-wrapper'
-        this.menuElementSelector = '#menu'
-        this.menuDropdownSelector = '#menu_dropdown'
-        this.menuButtonOpenSelector = '#menu_button--open'
-        this.menuButtonCloseSelector = '#menu_button--close'
+        this.tooltipElements = null
+        this.debugElement = null
 
-        document.addEventListener('keydown', this.handleKeydown.bind(this))
-        document.addEventListener('keyup', this.handleKeyup.bind(this))
+        this.ANIMATION_CHECK_SELECTOR = '.animate-fade-in-cta-2 #menu-bg'
+        this.TOOLTIP_ITEMS_SELECTOR = '#menu_link_profile, #menu_link_archive, #menu_button-wrapper'
+        this.TOOLTIP_ACTIVE_CLASS = 'tooltip-key--active'
 
-        window.addEventListener('blur', () => { this.toggleTooltipActiveClass('remove') })
-        document.body.addEventListener('click', () => { this.toggleTooltipActiveClass('remove') })
+        this.KEYS = {
+            ESCAPE: 'Escape',
+            KEY_P: 'p',
+            KEY_A: 'a',
+            KEY_M: 'm',
+            KEY_D: 'd'
+        }
+
+        this.HASHES = {
+            PROFILE: '#profile',
+            ARCHIVE: '#archive',
+            MENU: '#menu'
+        }
+
+        this.boundHandleKeydown = this.handleKeydown.bind(this)
+        this.boundHandleKeyup = this.handleKeyup.bind(this)
+        this.boundRemoveTooltips = () => this.toggleTooltipActiveClass(false)
+
+        document.addEventListener('keydown', this.boundHandleKeydown)
+        document.addEventListener('keyup', this.boundHandleKeyup)
+        window.addEventListener('blur', this.boundRemoveTooltips)
+        document.body.addEventListener('click', this.boundRemoveTooltips)
+    }
+
+    getTooltipElements() {
+        return this.tooltipElements ??= Array.from(document.querySelectorAll(this.TOOLTIP_ITEMS_SELECTOR))
     }
 
     handleKeydown(event) {
-        if (isAnimationFinished('.animate-fade-in-cta-2 #menu-bg')) {
-            switch (event.keyCode) {
-                case 27: // Escape key
-                    if (aria.getCurrentDialog()) {
-                        closeDialog('#')
-                    }
-                    break
-                case 80: // P key
-                    this.toggleProfile(event)
-                    break
-                case 65: // A key
-                    this.toggleArchive(event)
-                    break
-                case 77: // M key
-                    this.toggleMenu(event)
-                    break
-                case 68: // D key
-                    this.toggleDebug(event)
-                    break
-                default:
-                    break
-            }
+        if (!isAnimationFinished(this.ANIMATION_CHECK_SELECTOR)) return
+
+        const key = event.key?.toLowerCase()
+
+        switch (key) {
+            case this.KEYS.ESCAPE:
+                if (aria.getCurrentDialog()) {
+                    closeDialog('#')
+                }
+                break
+            case this.KEYS.KEY_P:
+                this.toggleDialog(event, this.HASHES.PROFILE, 'modal_profile', 'menu_link_profile')
+                break
+            case this.KEYS.KEY_A:
+                this.toggleDialog(event, this.HASHES.ARCHIVE, 'modal_archive', 'menu_link_archive', true)
+                break
+            case this.KEYS.KEY_M:
+                this.toggleDialog(event, this.HASHES.MENU, 'menu_button-wrapper', 'menu_button--open', false, 'menu_button--close')
+                break
+            case this.KEYS.KEY_D:
+                this.toggleDebug(event)
+                break
         }
 
-        requestAnimationFrame(() => {
-            this.handleTooltipActiveClass(event)
-        })
+        requestAnimationFrame(() => this.handleTooltipActiveClass(event))
     }
 
-    handleKeyup(event) {
-        this.toggleTooltipActiveClass('remove')
+    handleKeyup() {
+        this.toggleTooltipActiveClass(false)
     }
 
-    toggleTooltipActiveClass(action) {
-        document.querySelectorAll(this.tooltipSelectors).forEach(element => {
-            element.classList[action]('tooltip-key--active')
-        })
+    toggleTooltipActiveClass(add) {
+        const elements = this.getTooltipElements()
+        const method = add ? 'add' : 'remove'
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].classList[method](this.TOOLTIP_ACTIVE_CLASS)
+        }
     }
 
-    toggleProfile(event) {
+    toggleDialog(event, hash, ...openDialogArgs) {
         event.preventDefault()
-        if (window.location.hash === '#profile') {
-            closeDialog('#')
-        }
-        else {
-            openDialog('modal_profile', 'menu_link_profile', null, 'profile')
-        }
-    }
+        const useIncludes = openDialogArgs[3] === true
+        const shouldClose = useIncludes ? hashIncludes(hash) : isHash(hash)
 
-    toggleArchive(event) {
-        event.preventDefault()
-        if (window.location.hash.includes('#archive')) {
-            closeDialog('#')
-        }
-        else {
-            openDialog('modal_archive', 'menu_link_archive', null, 'archive')
-        }
-    }
-
-    toggleMenu(event) {
-        event.preventDefault()
-        if (window.location.hash === '#menu') {
+        if (shouldClose) {
             closeDialog('#')
         } else {
-            openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
+            const [dialogId, triggerId, closeId] = openDialogArgs
+            openDialog(dialogId, triggerId, closeId || null, hash.substring(1))
         }
     }
 
     toggleDebug(event) {
         event.preventDefault()
-        const debugElement = document.getElementById('debug')
-        debugElement.checked = !debugElement.checked
+        this.debugElement ??= document.getElementById('debug')
+        if (this.debugElement) {
+            this.debugElement.checked = !this.debugElement.checked
+        }
     }
 
     handleTooltipActiveClass(event) {
-        if (window.location.hash.split('#')[1] !== ('' || undefined)) {
-            this.toggleTooltipActiveClass('remove')
+        const hash = getCurrentHash()
+        const hashValue = hash.split('#')[1]
+
+        if (hashValue) {
+            this.toggleTooltipActiveClass(false)
         } else if (event.ctrlKey || event.metaKey) {
-            if (window.location.hash === '') {
-                this.toggleTooltipActiveClass('add')
+            if (!hash) {
+                this.toggleTooltipActiveClass(true)
             }
         }
     }
 }
 
 
+// ============================================================================
+// WheelHandler Class
+// ============================================================================
+
+/**
+ * Handles mouse wheel scrolling for navigation between dialogs and pages
+ */
 class WheelHandler {
     constructor() {
+        this.modalProfileEl = null
+        this.modalArchiveEl = null
+
+        this.ANIMATION_CHECK_SELECTOR = '.animate-fade-in-cta-2 #menu-bg'
+        this.SCROLL_MIN_THRESHOLD = 5
+
+        this.SELECTORS = {
+            MODAL_PROFILE: '#modal_profile',
+            MODAL_ARCHIVE: '#modal_archive'
+        }
+
+        this.HASHES = {
+            PROFILE: '#profile',
+            ARCHIVE: '#archive',
+            MENU: '#menu'
+        }
+
         window.addEventListener('wheel', this.handleWheelEvent.bind(this))
     }
 
-    handleWheelEvent(event) {
-        if (isAnimationFinished('.animate-fade-in-cta-2 #menu-bg')) {
-            const deltaX = Math.abs(event.deltaX)
-            const deltaY = Math.abs(event.deltaY)
+    getModalElement(hash) {
+        if (hash === this.HASHES.PROFILE) {
+            return this.modalProfileEl ??= document.querySelector(this.SELECTORS.MODAL_PROFILE)
+        } else if (hash === this.HASHES.ARCHIVE) {
+            return this.modalArchiveEl ??= document.querySelector(this.SELECTORS.MODAL_ARCHIVE)
+        }
+        return null
+    }
 
-            if (deltaY > deltaX && deltaY > 5) {
-                this.handleVerticalScroll(event.deltaY)
-            } else if (deltaX > deltaY && deltaX > 5) {
-                this.handleHorizontalScroll(event.deltaX)
-            }
+    handleWheelEvent(event) {
+        if (!isAnimationFinished(this.ANIMATION_CHECK_SELECTOR)) return
+
+        const deltaX = Math.abs(event.deltaX)
+        const deltaY = Math.abs(event.deltaY)
+
+        if (deltaY > deltaX && deltaY > this.SCROLL_MIN_THRESHOLD) {
+            this.handleVerticalScroll(event.deltaY)
+        } else if (deltaX > deltaY && deltaX > this.SCROLL_MIN_THRESHOLD) {
+            this.handleHorizontalScroll(event.deltaX)
         }
     }
 
     handleVerticalScroll(deltaY) {
-        const verticalScrollDirection = deltaY > 0 ? 'down' : 'up'
-        const currentHash = window.location.hash.split('?')[0]
+        const direction = deltaY > 0 ? 'down' : 'up'
+        const currentHash = getHashWithoutParams()
 
-        if (currentHash === '#profile' || currentHash === '#archive') {
-            this.handleModalVerticalScroll(verticalScrollDirection, currentHash)
+        if (currentHash === this.HASHES.PROFILE || currentHash === this.HASHES.ARCHIVE) {
+            this.handleModalVerticalScroll(direction, currentHash)
         } else {
-            this.handleVerticalPageScroll(verticalScrollDirection)
+            this.handleVerticalPageScroll(direction)
         }
     }
 
-    handleModalVerticalScroll(verticalScrollDirection, currentHash) {
-        const modalElement = document.querySelector(
-            currentHash === '#profile' ? '#modal_profile' : '#modal_archive'
-        )
-        const scrollPositionTop = modalElement.scrollTop
-        if (verticalScrollDirection === 'up' && scrollPositionTop === 0) {
+    handleModalVerticalScroll(direction, currentHash) {
+        if (direction !== 'up') return
+
+        const modalElement = this.getModalElement(currentHash)
+        if (modalElement?.scrollTop === 0) {
             closeDialog('#')
         }
     }
 
-    handleVerticalPageScroll(verticalScrollDirection) {
-        const scrollPositionY = window.scrollY || window.pageYOffset
-        const totalHeight = document.body.scrollHeight
+    handleVerticalPageScroll(direction) {
+        if (direction !== 'down' || getCurrentHash()) return
 
-        if (verticalScrollDirection === 'down' && scrollPositionY + window.innerHeight >= totalHeight) {
-            if (window.location.hash === '') {
-                openDialog('modal_profile', 'menu_link_profile', null, 'profile')
-            }
+        if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
+            openDialog('modal_profile', 'menu_link_profile', null, 'profile')
         }
     }
 
     handleHorizontalScroll(deltaX) {
-        const horizontalScrollDirection = deltaX > 0 ? 'right' : 'left'
-        const scrollPositionX = window.scrollX || window.pageXOffset
-        const totalWidth = document.body.scrollWidth
+        const direction = deltaX > 0 ? 'right' : 'left'
+        const hash = getCurrentHash()
+        const scrollX = window.scrollX
 
-        if (horizontalScrollDirection === 'right' && scrollPositionX + window.innerWidth >= totalWidth) {
-            if (window.location.hash === '') {
+        if (direction === 'right' && !hash) {
+            if (scrollX + window.innerWidth >= document.body.scrollWidth) {
                 openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
             }
-        } else if (horizontalScrollDirection === 'left' && scrollPositionX === 0) {
-            if (window.location.hash === '#menu') {
-                closeDialog('#')
-            }
+        } else if (direction === 'left' && hash === this.HASHES.MENU && scrollX === 0) {
+            closeDialog('#')
         }
     }
 }
 
 
+// ============================================================================
+// TouchHandler Class
+// ============================================================================
+
+/**
+ * Handles touch gestures for navigation on mobile devices
+ */
 class TouchHandler {
     constructor() {
         this.touchStartX = 0
         this.touchStartY = 0
-        this.init()
-    }
+        this.modalProfileEl = null
+        this.modalArchiveEl = null
 
-    init() {
-        window.addEventListener('touchstart', this.handleTouchStart.bind(this))
-        window.addEventListener('touchmove', this.handleTouchMove.bind(this))
+        this.ANIMATION_CHECK_SELECTOR = '.animate-fade-in-cta-2 #menu-bg'
+        this.SCROLL_MIN_THRESHOLD = 5
+
+        this.SELECTORS = {
+            MODAL_PROFILE: '#modal_profile',
+            MODAL_ARCHIVE: '#modal_archive'
+        }
+
+        this.HASHES = {
+            PROFILE: '#profile',
+            ARCHIVE: '#archive',
+            MENU: '#menu'
+        }
+
+        window.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true })
+        window.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: true })
     }
 
     handleTouchStart(event) {
-        this.touchStartX = event.touches[0].clientX
-        this.touchStartY = event.touches[0].clientY
+        const touch = event.touches[0]
+        this.touchStartX = touch.clientX
+        this.touchStartY = touch.clientY
+    }
+
+    getModalElement(hash) {
+        if (hash === this.HASHES.PROFILE) {
+            return this.modalProfileEl ??= document.querySelector(this.SELECTORS.MODAL_PROFILE)
+        } else if (hash === this.HASHES.ARCHIVE) {
+            return this.modalArchiveEl ??= document.querySelector(this.SELECTORS.MODAL_ARCHIVE)
+        }
+        return null
     }
 
     handleTouchMove(event) {
-        if (isAnimationFinished('.animate-fade-in-cta-2 #menu-bg')) {
-            const touchEndX = event.touches[0].clientX
-            const touchEndY = event.touches[0].clientY
-            const deltaX = Math.abs(touchEndX - this.touchStartX)
-            const deltaY = Math.abs(touchEndY - this.touchStartY)
+        if (!isAnimationFinished(this.ANIMATION_CHECK_SELECTOR)) return
 
-            if (deltaY > deltaX && deltaY > 5) {
-                this.handleVerticalScroll(touchEndY)
-            } else if (deltaX > deltaY && deltaX > 5) {
-                this.handleHorizontalScroll(touchEndX)
-            }
+        const touch = event.touches[0]
+        const deltaX = Math.abs(touch.clientX - this.touchStartX)
+        const deltaY = Math.abs(touch.clientY - this.touchStartY)
+
+        if (deltaY > deltaX && deltaY > this.SCROLL_MIN_THRESHOLD) {
+            this.handleVerticalScroll(touch.clientY)
+        } else if (deltaX > deltaY && deltaX > this.SCROLL_MIN_THRESHOLD) {
+            this.handleHorizontalScroll(touch.clientX)
         }
     }
 
     handleVerticalScroll(touchEndY) {
-        const verticalScrollDirection = touchEndY < this.touchStartY ? 'down' : 'up'
-        const currentHash = window.location.hash.split('?')[0]
+        const direction = touchEndY < this.touchStartY ? 'down' : 'up'
+        const currentHash = getHashWithoutParams()
 
-        if (currentHash === '#profile' || currentHash === '#archive') {
-            this.handleModalScroll(verticalScrollDirection, currentHash)
+        if (currentHash === this.HASHES.PROFILE || currentHash === this.HASHES.ARCHIVE) {
+            this.handleModalScroll(direction, currentHash)
         } else {
-            this.handleVerticalPageScroll(verticalScrollDirection)
+            this.handleVerticalPageScroll(direction)
         }
     }
 
-    handleModalScroll(verticalScrollDirection, currentHash) {
-        const modalElement = document.querySelector(currentHash === '#profile' ? '#modal_profile' : '#modal_archive')
-        const scrollPositionTop = modalElement.scrollTop
+    handleModalScroll(direction, currentHash) {
+        if (direction !== 'up') return
 
-        if (verticalScrollDirection === 'up' && scrollPositionTop === 0) {
+        const modalElement = this.getModalElement(currentHash)
+        if (modalElement?.scrollTop === 0) {
             closeDialog('#')
         }
     }
 
-    handleVerticalPageScroll(verticalScrollDirection) {
-        const scrollPositionY = window.scrollY || window.pageYOffset
-        const totalHeight = document.body.scrollHeight
+    handleVerticalPageScroll(direction) {
+        if (direction !== 'down' || getCurrentHash()) return
 
-        if (verticalScrollDirection === 'down' && scrollPositionY + window.innerHeight >= totalHeight) {
-            if (window.location.hash === '') {
-                openDialog('modal_profile', 'menu_link_profile', null, 'profile')
-            }
+        if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
+            openDialog('modal_profile', 'menu_link_profile', null, 'profile')
         }
     }
 
     handleHorizontalScroll(touchEndX) {
-        const horizontalScrollDirection = touchEndX > this.touchStartX ? 'right' : 'left'
-        const scrollPositionX = window.scrollX
-        const totalWidth = document.body.scrollWidth
+        const direction = touchEndX > this.touchStartX ? 'right' : 'left'
+        const hash = getCurrentHash()
+        const scrollX = window.scrollX
 
-        if (horizontalScrollDirection === 'right' && scrollPositionX + window.innerWidth >= totalWidth) {
-            if (window.location.hash === '#menu') {
-                closeDialog('#')
-            }
-        } else if (horizontalScrollDirection === 'left' && scrollPositionX === 0) {
-            if (window.location.hash === '') {
-                openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
-            }
+        if (direction === 'right' && hash === this.HASHES.MENU && scrollX + window.innerWidth >= document.body.scrollWidth) {
+            closeDialog('#')
+        } else if (direction === 'left' && !hash && scrollX === 0) {
+            openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
         }
     }
 }
 
 
+// ============================================================================
+// HorizontalDragScroller Class
+// ============================================================================
+
+/**
+ * Enables drag-to-scroll functionality on horizontal scrollable elements
+ */
 class HorizontalDragScroller {
     constructor(options = {}) {
         this.element = options.element
-        this.options = options
         this.isMouseDown = false
         this.startX = 0
         this.scrollLeft = 0
-        this.init()
-    }
 
-    init() {
+        this.MOUSE_DOWN_CLASS = 'x-drag-scroll--mouse-down'
+        this.DRAGGING_CLASS = 'x-drag-scroll--dragging'
+        this.DRAG_RELEASE_TIMEOUT = 300
+
         this.onMouseDownBound = this.onMouseDown.bind(this)
         this.onMouseMoveBound = this.onMouseMove.bind(this)
         this.completeDragBound = this.completeDrag.bind(this)
+
         this.element.addEventListener('mousedown', this.onMouseDownBound)
         this.element.addEventListener('mousemove', this.onMouseMoveBound)
         this.element.addEventListener('mouseup', this.completeDragBound)
@@ -349,52 +418,55 @@ class HorizontalDragScroller {
         this.isMouseDown = true
         this.startX = event.clientX
         this.scrollLeft = this.element.scrollLeft
-        this.element.classList.add('x-drag-scroll--mouse-down')
+        this.element.classList.add(this.MOUSE_DOWN_CLASS)
     }
 
     onMouseMove(event) {
         if (!this.isMouseDown) return
 
-        // event.preventDefault()
-        /* this.element.setPointerCapture(event.pointerId) */
-        this.element.classList.add('x-drag-scroll--dragging')
-        const moveX = event.clientX - this.startX
-        this.element.scrollLeft = this.scrollLeft - moveX
+        this.element.classList.add(this.DRAGGING_CLASS)
+        this.element.scrollLeft = this.scrollLeft - (event.clientX - this.startX)
     }
 
-    completeDrag(event) {
-        if (this.isMouseDown) {
+    completeDrag() {
+        if (!this.isMouseDown) return
 
-            this.isMouseDown = false
+        this.isMouseDown = false
+        this.element.classList.remove(this.MOUSE_DOWN_CLASS)
 
-            this.element.classList.remove('x-drag-scroll--mouse-down')
-
-            setTimeout(() => {
-                this.element.classList.remove('x-drag-scroll--dragging')
-                /* this.element.releasePointerCapture(event.pointerId) */
-            }, 300)
-        }
+        setTimeout(() => {
+            this.element.classList.remove(this.DRAGGING_CLASS)
+        }, this.DRAG_RELEASE_TIMEOUT)
     }
 }
 
 
+// ============================================================================
+// HorizontalEdgeScroller Class
+// ============================================================================
+
+/**
+ * Auto-scrolls content when mouse hovers near the edges
+ */
 class HorizontalEdgeScroller {
     constructor(options = {}) {
         this.options = options
-        this.element = this.options.element
-        this.maxSpeed = this.options.maxSpeed || 0.75
+        this.element = options.element
+        this.maxSpeed = options.maxSpeed ?? 0.75
         this.scrollSpeed = 0
         this.isScrolling = false
         this.lastTimestamp = null
         this.isSnapped = true
+        this.edgeWidth = 0
+        this.mediaQuery = window.matchMedia('(min-width: 45rem)')
+
+        this.DRAGGING_CLASS = 'x-drag-scroll--dragging'
+        this.EDGE_SCROLLING_CLASS = 'edge-x-scroll--scrolling'
+        this.SCROLL_STOP_TIMEOUT = 300
 
         this.scrollStep = this.scrollStep.bind(this)
         this.handleMouseOut = this.handleMouseOut.bind(this)
 
-        this.init()
-    }
-
-    init() {
         if (!isTouchDevice) {
             this.handleMouseMoveBound = this.handleMouseMove.bind(this)
             this.onResizeBound = this.onResize.bind(this)
@@ -405,14 +477,15 @@ class HorizontalEdgeScroller {
     }
 
     onResize() {
-        this.edgeWidth = (this.options.edgeWidthRatio || 3) * parseFloat(getComputedStyle(document.body).fontSize)
-        this.setPseudoElementsWidth()
+        this.edgeWidth = (this.options.edgeWidthRatio ?? 3) * parseFloat(getComputedStyle(document.body).fontSize)
+        this.updatePseudoElementStyles()
     }
 
-    setPseudoElementsWidth() {
-        this.element.setAttribute('data-edge-scroll-id', this.options.id)
+    updatePseudoElementStyles() {
+        const { id } = this.options
+        this.element.setAttribute('data-edge-scroll-id', id)
 
-        const styleId = `horizontal-edge-scroll-style-${this.options.id}`
+        const styleId = `horizontal-edge-scroll-style-${id}`
         let style = document.getElementById(styleId)
 
         if (!style) {
@@ -421,29 +494,24 @@ class HorizontalEdgeScroller {
             document.head.appendChild(style)
         }
 
+        const { edgeWidth } = this
         style.textContent = `
-          [data-edge-scroll-id="${this.options.id}"]::before {
+          [data-edge-scroll-id="${id}"]::before,
+          [data-edge-scroll-id="${id}"]::after {
             content: '';
             position: absolute;
             z-index: 5;
             display: block;
-            inset: 0 auto 0 0;
-            width: ${this.edgeWidth}px;
-            cursor: w-resize;
+            width: ${edgeWidth}px;
             user-select: none;
-            -webkit-user-select: none;
           }
-
-          [data-edge-scroll-id="${this.options.id}"]::after {
-            content: '';
-            position: absolute;
-            z-index: 5;
-            display: block;
+          [data-edge-scroll-id="${id}"]::before {
+            inset: 0 auto 0 0;
+            cursor: w-resize;
+          }
+          [data-edge-scroll-id="${id}"]::after {
             inset: 0 0 0 auto;
-            width: ${this.edgeWidth}px;
             cursor: e-resize;
-            user-select: none;
-            -webkit-user-select: none;
           }
         `
     }
@@ -451,49 +519,46 @@ class HorizontalEdgeScroller {
     handleMouseOut() {
         this.isSnapped = true
 
-        if (this.options.activeSlide) {
+        const activeSlide = this.options.activeSlide?.get()
+        if (activeSlide) {
             requestAnimationFrame(() => {
                 this.element.scrollTo({
-                    left: this.options.activeSlide.get().offsetLeft,
+                    left: activeSlide.offsetLeft,
                     behavior: 'smooth'
                 })
             })
         }
 
         setTimeout(() => {
-            this.element.classList.remove('edge-x-scroll--scrolling')
-        }, 300)
+            this.element.classList.remove(this.EDGE_SCROLLING_CLASS)
+        }, this.SCROLL_STOP_TIMEOUT)
     }
 
     handleMouseMove(event) {
-        if (window.matchMedia('(min-width: 45rem)').matches === false) return
-        if (this.element.classList.contains('x-drag-scroll--dragging')) return
+        if (!this.mediaQuery.matches || this.element.classList.contains(this.DRAGGING_CLASS)) return
 
         const rect = this.element.getBoundingClientRect()
         const { clientX, clientY } = event
 
-        const withinXBounds = clientX >= rect.left && clientX <= rect.right
-        const withinYBounds = clientY >= rect.top && clientY <= rect.bottom
+        const withinBounds = clientX >= rect.left && clientX <= rect.right &&
+                             clientY >= rect.top && clientY <= rect.bottom
         const nearLeftEdge = clientX < rect.left + this.edgeWidth
         const nearRightEdge = clientX > rect.right - this.edgeWidth
 
-        if (withinXBounds && withinYBounds) {
+        if (withinBounds) {
             if (nearLeftEdge) {
-                this.scrollSpeed = this.calculateSpeed(clientX - rect.left, this.edgeWidth, 'left')
+                this.scrollSpeed = this.calculateSpeed(clientX - rect.left, 'left')
                 this.startScroll()
             } else if (nearRightEdge) {
-                this.scrollSpeed = this.calculateSpeed(rect.right - clientX, this.edgeWidth, 'right')
+                this.scrollSpeed = this.calculateSpeed(rect.right - clientX, 'right')
                 this.startScroll()
-            } else {
-                if (this.isScrolling) {
-                    this.stopScroll()
-                }
+            } else if (this.isScrolling) {
+                this.stopScroll()
             }
         } else {
             if (this.isScrolling) {
                 this.stopScroll()
             }
-
             if (!this.isSnapped) {
                 this.handleMouseOut()
             }
@@ -501,24 +566,21 @@ class HorizontalEdgeScroller {
     }
 
     startScroll() {
-        if (!this.isScrolling) {
-            this.isScrolling = true
-            this.isSnapped = false
-            this.element.classList.add('edge-x-scroll--scrolling')
-            requestAnimationFrame(this.scrollStep)
-        }
+        if (this.isScrolling) return
+
+        this.isScrolling = true
+        this.isSnapped = false
+        this.element.classList.add(this.EDGE_SCROLLING_CLASS)
+        requestAnimationFrame(this.scrollStep)
     }
 
     scrollStep(timestamp) {
         if (this.lastTimestamp === null) {
             this.lastTimestamp = timestamp
         }
+
         const elapsed = timestamp - this.lastTimestamp
         this.lastTimestamp = timestamp
-
-        const maxScrollLeft = this.element.scrollWidth - this.element.clientWidth
-        const minScrollLeft = 0
-
         this.element.scrollLeft += this.scrollSpeed * elapsed
 
         if (this.scrollSpeed !== 0) {
@@ -533,13 +595,13 @@ class HorizontalEdgeScroller {
         this.scrollSpeed = 0
     }
 
-    calculateSpeed(distance, edgeWidth, direction) {
-        const speed = (this.maxSpeed * (edgeWidth - distance)) / edgeWidth
+    calculateSpeed(distance, direction) {
+        const speed = (this.maxSpeed * (this.edgeWidth - distance)) / this.edgeWidth
         return direction === 'left' ? -speed : speed
     }
 
     destroy() {
-        if (!isTouchDevice) {
+        if (!isTouchDevice && this.handleMouseMoveBound) {
             document.removeEventListener('mousemove', this.handleMouseMoveBound)
             window.removeEventListener('resize', this.onResizeBound)
         }
@@ -552,6 +614,14 @@ class Popup {
         this.widthRatio = 0.9
         this.heightRatio = 0.9
         this.fallbackContainer = null
+        this.wrapperElement = null
+        this.stylesInjected = false
+
+        this.ASPECT_RATIO_TALL_THRESHOLD = 0.85
+        this.SQUARE_RATIO_MIN = 0.95
+        this.SQUARE_RATIO_MAX = 1.05
+        this.SQUARE_RATIO_CLASS = 'square-ratio'
+
         // Static property to track popup blocking across all instances
         if (typeof Popup.isPopupBlocked === 'undefined') {
             Popup.isPopupBlocked = false
@@ -563,17 +633,21 @@ class Popup {
         const { href } = element
 
         const isVideo = this.isVideo(href)
-        const dimensions = isVideo ? await this.getVideoDimensions(href) : await this.getImageDimensions(href)
+        const placeholderUrl = !isVideo ? this.getPlaceholderUrl(href) : null
+
+        const dimensions = isVideo
+            ? await this.getVideoDimensions(href)
+            : await this.getImageDimensions(href)
 
         if (!dimensions) {
             console.log('Could not retrieve media dimensions for the popup.')
-            this.showFallbackView(href, isVideo, dimensions)
+            this.showFallbackView(href, isVideo, dimensions, placeholderUrl)
             return true
         }
 
         if (Popup.isPopupBlocked) {
             console.log('Popups are blocked for this session. Using fallback view...')
-            this.showFallbackView(href, isVideo, dimensions)
+            this.showFallbackView(href, isVideo, dimensions, placeholderUrl)
             return true
         }
 
@@ -584,7 +658,9 @@ class Popup {
 
         const mediaElementHtml = isVideo
             ? `<video src="${href}" controls autoplay playsinline></video>`
-            : `<img src="${href}" />`
+            : placeholderUrl
+                ? `<img src="${href}" onload="requestAnimationFrame(()=>requestAnimationFrame(()=>{this.nextElementSibling.style.opacity='0'}))" style="width:100%;height:auto"><img src="${placeholderUrl}" style="position:absolute;inset:0;margin:auto;width:100%;height:auto;transition:opacity .3s linear">`
+                : `<img src="${href}" />`
 
         const html = `<!DOCTYPE html>
         <html>
@@ -593,7 +669,7 @@ class Popup {
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>Preview</title>
         <style>
-          html,body{margin:0;padding:0}
+          html,body{margin:0;padding:0;background-color:#000;position:relative}
           img,video{width:100%;height:auto}
         </style>
         </head>
@@ -604,7 +680,7 @@ class Popup {
         const blob = new Blob([html], { type: 'text/html' })
         const blobUrl = URL.createObjectURL(blob)
 
-        if (scaledAspect < 0.85) {
+        if (scaledAspect < this.ASPECT_RATIO_TALL_THRESHOLD) {
             const newTab = window.open(blobUrl, '_blank')
 
             // If opening a new tab/window failed, revoke blob and fallback inline
@@ -612,7 +688,7 @@ class Popup {
                 URL.revokeObjectURL(blobUrl)
                 Popup.isPopupBlocked = true
                 console.log('Opening new tab was blocked. Falling back to inline view for the session.')
-                this.showFallbackView(href, isVideo, dimensions)
+                this.showFallbackView(href, isVideo, dimensions, placeholderUrl)
                 return true
             }
 
@@ -625,7 +701,7 @@ class Popup {
             if (!popup || popup.closed || typeof popup.closed === 'undefined') {
                 Popup.isPopupBlocked = true
                 console.log('Popup was blocked. Using inline fallback for the session.')
-                this.showFallbackView(href, isVideo, dimensions)
+                this.showFallbackView(href, isVideo, dimensions, placeholderUrl)
                 return true
             }
         }
@@ -633,99 +709,270 @@ class Popup {
         return false
     }
 
-    showFallbackView(url, isVideo, dimensions) {
+    showFallbackView(url, isVideo, dimensions, placeholderUrl) {
+        // Initialize fallback container only once
         if (!this.fallbackContainer) {
-            this.fallbackContainer = document.createElement('div')
-            this.fallbackContainer.className = 'media_fallback_overlay'
-            this.fallbackContainer.innerHTML = `<div class="media_fallback-wrapper"><div class="media_fallback-content"></div></div>`
-
-            if (!document.getElementById('media_fallback-styles')) {
-                const styles = document.createElement('style')
-                styles.id = 'media_fallback-styles'
-                styles.textContent = `
-                    .media_fallback_overlay {
-                        position: fixed;
-                        z-index: 300;
-                        inset: 0;
-                        background: rgba(0, 0, 0, 0.25);
-                        backdrop-filter: blur(1rem);
-                    }
-                    .media_fallback-wrapper {
-                        position: relative;
-                        width: 100%;
-                        height: 100%;
-                        overflow-y: auto;
-                        margin-inline: auto;
-                        overscroll-behavior: none;
-                    }
-                    .media_fallback-content {
-                        display: flex;
-                        position: relative;
-                        width: 100%;
-                        height: auto;
-                        min-height: 100%;
-                    }
-                    .media_fallback-content img,
-                    .media_fallback-content video {
-                        width: 100%;
-                        height: auto;
-                        object-fit: contain;
-                    }
-                    .media_fallback-close-overlay {
-                        position: absolute;
-                        inset: 0;
-                        cursor: zoom-out;
-                        z-index: 1;
-                    }
-                `
-                document.head.appendChild(styles)
-            }
-
-            this.fallbackContainer.addEventListener('click', (e) => {
-                if (e.target.classList.contains('media_fallback-close-overlay')) {
-                    this.closeFallbackView()
-                }
-            })
-
-            /* TODO make keyboard accessible */
-            /* document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && this.fallbackContainer.parentElement) {
-                    this.closeFallbackView()
-                }
-            }) */
+            this.initializeFallbackContainer()
         }
 
-        // Clear previous content
-        const wrapper = this.fallbackContainer.querySelector('.media_fallback-content')
-        wrapper.innerHTML = '<div class="media_fallback-close-overlay" aria-label="Close" tabindex="0"></div>'
+        // Cache wrapper element reference
+        if (!this.wrapperElement) {
+            this.wrapperElement = this.fallbackContainer.querySelector('.media_fallback-content')
+        }
 
-        // Add new media
-        const mediaElement = isVideo ?
-            document.createElement('video') :
-            document.createElement('img')
+        const wrapper = this.wrapperElement
+
+        // Reset wrapper state
+        wrapper.classList.remove(this.SQUARE_RATIO_CLASS)
+
+        // Build content based on media type
+        const fragment = document.createDocumentFragment()
 
         if (isVideo) {
-            mediaElement.controls = true
-            mediaElement.autoplay = true
+            const closeButton = this.createCloseButton()
+            fragment.appendChild(closeButton)
+        } else {
+            const overlay = this.createCloseOverlay()
+            fragment.appendChild(overlay)
         }
 
-        mediaElement.src = url
-        wrapper.appendChild(mediaElement)
+        // Handle square ratio for images
+        if (!isVideo && dimensions) {
+            const aspectRatio = dimensions.width / dimensions.height
+            if (aspectRatio >= this.SQUARE_RATIO_MIN && aspectRatio <= this.SQUARE_RATIO_MAX) {
+                wrapper.classList.add(this.SQUARE_RATIO_CLASS)
+            }
+        }
 
-        // Add to DOM if not already there
+        // Create media element
+        if (isVideo) {
+            const video = document.createElement('video')
+            video.src = url
+            video.controls = true
+            video.autoplay = true
+            fragment.appendChild(video)
+        } else {
+            // Full image
+            const img = document.createElement('img')
+            img.src = url
+
+            // Placeholder image (if available)
+            let placeholder = null
+            if (placeholderUrl) {
+                placeholder = document.createElement('img')
+                placeholder.src = placeholderUrl
+                placeholder.style.position = 'absolute'
+                placeholder.style.inset = '0'
+                placeholder.style.margin = 'auto'
+                placeholder.style.transition = 'opacity 0.3s linear'
+                placeholder.style.opacity = '0'
+
+                const onPlaceholderLoad = () => {
+                    if (!img.complete) placeholder.style.opacity = '1'
+                }
+
+                if (placeholder.complete) {
+                    onPlaceholderLoad()
+                } else {
+                    placeholder.onload = onPlaceholderLoad
+                }
+            }
+
+            const onFullImageLoad = () => {
+                // Use requestAnimationFrame to ensure image is painted before fading
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        if (placeholder) placeholder.style.opacity = '0'
+                    })
+                })
+            }
+
+            if (img.complete && img.naturalWidth > 0) {
+                // Image already loaded, but add small delay for rendering
+                onFullImageLoad()
+            } else {
+                img.onload = onFullImageLoad
+            }
+
+            fragment.appendChild(img)
+            if (placeholder) fragment.appendChild(placeholder)
+        }
+
+        // Clear and update wrapper content in one operation
+        wrapper.textContent = ''
+        wrapper.appendChild(fragment)
+
+        // Add to DOM if needed
         if (!this.fallbackContainer.parentElement) {
             document.body.appendChild(this.fallbackContainer)
         }
     }
 
+    initializeFallbackContainer() {
+        this.fallbackContainer = document.createElement('div')
+        this.fallbackContainer.className = 'media_fallback_overlay'
+        this.fallbackContainer.innerHTML = `<div class="media_fallback-wrapper"><div class="media_fallback-content"></div></div>`
+
+        // Inject styles only once
+        if (!this.stylesInjected && !document.getElementById('media_fallback-styles')) {
+            this.injectStyles()
+            this.stylesInjected = true
+        }
+
+        // Set up event delegation for close actions
+        this.fallbackContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('media_fallback-close-overlay') ||
+                e.target.classList.contains('media_fallback-close-button') ||
+                e.target.closest('.media_fallback-close-button')) {
+                this.closeFallbackView()
+            }
+        })
+
+        // Set up escape key handler once
+        this.handleEscapeKey = (e) => {
+            if (e.key === 'Escape' && this.fallbackContainer?.parentElement) {
+                e.stopPropagation()
+                e.preventDefault()
+                this.closeFallbackView()
+            }
+        }
+        document.addEventListener('keydown', this.handleEscapeKey, true)
+    }
+
+    createCloseButton() {
+        const button = document.createElement('button')
+        button.className = 'media_fallback-close-button'
+        button.setAttribute('aria-label', 'Close')
+        button.type = 'button'
+        button.innerHTML = '<svg class="fill-current" style="width: 1.125rem; height: 1.125rem"><use xlink:href="images/icons.svg#close"></use></svg>'
+        return button
+    }
+
+    createCloseOverlay() {
+        const overlay = document.createElement('div')
+        overlay.className = 'media_fallback-close-overlay'
+        overlay.setAttribute('aria-label', 'Close')
+        overlay.tabIndex = 0
+        return overlay
+    }
+
+    injectStyles() {
+        const styles = document.createElement('style')
+        styles.id = 'media_fallback-styles'
+        styles.textContent = `
+            .media_fallback_overlay {
+                position: fixed;
+                z-index: 300;
+                inset: 0;
+            }
+            .media_fallback-wrapper {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                overflow-y: auto;
+                margin-inline: auto;
+                overscroll-behavior: none;
+            }
+            .media_fallback-content {
+                display: flex;
+                position: relative;
+                width: 100%;
+                height: auto;
+                min-height: 100%;
+            }
+            .media_fallback-content.square-ratio {
+                height: 100%;
+                min-height: auto;
+                align-items: center;
+                justify-content: center;
+            }
+            .media_fallback-content img {
+                position: relative;
+                width: 100%;
+                height: auto;
+                opacity: 1;
+            }
+            .media_fallback-content.square-ratio img {
+                width: auto;
+                height: 100%;
+                object-fit: contain;
+            }
+            .media_fallback-content video {
+                position: relative;
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+                opacity: 1;
+            }
+            .media_fallback-close-overlay {
+                position: absolute;
+                inset: 0;
+                cursor: zoom-out;
+                z-index: 1;
+            }
+            .media_fallback-close-button {
+                position: fixed;
+                top: 0;
+                right: 0;
+                margin-top: var(--modal-button-inset);
+                margin-right: var(--modal-button-inset);
+                width: var(--modal-button-size);
+                height: var(--modal-button-size);
+                border-radius: 50%;
+                color: rgba(255,255,255,0.75);
+                background: rgba(0, 0, 0, 0.55);
+                backdrop-filter: saturate(1.75) blur(1rem);
+                color: white;
+                border: none;
+                cursor: pointer;
+                z-index: 2;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                line-height: 1;
+                transition: color 200ms linear, background-color 200ms linear;
+            }
+            .media_fallback-close-button:hover {
+                background: rgba(0, 0, 0, 0.45);
+                color: rgba(255,255,255,0.95);
+                transition: color 150ms linear, background-color 150ms linear;
+            }
+            .media_fallback-close-button::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.15);
+                mix-blend-mode: lighten;
+                transition: background-color 200ms linear;
+            }
+            .media_fallback-close-button:hover::after {
+                background: rgba(255, 255, 255, 0.25);
+                transition: background-color 150ms linear;
+            }
+            .media_fallback-close-button:focus {
+                outline: 2px solid white;
+                outline-offset: 2px;
+            }
+        `
+        document.head.appendChild(styles)
+    }
+
     closeFallbackView() {
         if (this.fallbackContainer && this.fallbackContainer.parentElement) {
             this.fallbackContainer.remove()
+            // Note: We keep the Escape key event listener attached since it's added only once
+            // during initialization and checks if container is in DOM
         }
     }
 
     isVideo(url) {
         return /\.(mp4|webm|ogg)$/i.test(url)
+    }
+
+    getPlaceholderUrl(url) {
+        return url.replace('.full.', '.min.')
     }
 
     getImageDimensions(url) {
@@ -793,16 +1040,21 @@ class Carousel {
         this.carouselEl = element
         this.slidesWrapperEl = this.carouselEl.querySelector('[data-carousel-slides-wrapper]')
         this.slidesEls = Array.from(this.carouselEl.querySelectorAll('[data-carousel-slides] figure'))
-        this.controlsEl = this.carouselEl.querySelector('[data-carousel-controls]')
-        this.navEl = this.carouselEl.querySelector('[data-carousel-nav]')
-        this.prevButtonEl = this.carouselEl.querySelector('[data-carousel-arrows] li:first-child button')
-        this.nextButtonEl = this.carouselEl.querySelector('[data-carousel-arrows] li:last-child button')
+        this.controlsEl = null
+        this.navEl = null
+        this.prevButtonEl = null
+        this.nextButtonEl = null
         this.dotEls = []
+        this.leftEdgeEl = null
+        this.rightEdgeEl = null
         this.activeSlide = {
             element: null,
             get: () => this.activeSlide.element,
             set: (el) => this.activeSlide.element = el
         }
+
+        this.ACTIVE_CLASS = 'active'
+
         this.init()
     }
 
@@ -815,34 +1067,39 @@ class Carousel {
     }
 
     createEdgeNavigation() {
-        const leftEdgeEl = document.createElement('div')
-        leftEdgeEl.setAttribute('data-carousel-edge-left', '')
-        leftEdgeEl.setAttribute('aria-hidden', 'true')
-        this.slidesWrapperEl.appendChild(leftEdgeEl)
+        this.leftEdgeEl = document.createElement('div')
+        this.leftEdgeEl.setAttribute('data-carousel-edge-left', '')
+        this.leftEdgeEl.setAttribute('aria-hidden', 'true')
+        this.slidesWrapperEl.appendChild(this.leftEdgeEl)
 
-        const rightEdgeEl = document.createElement('div')
-        rightEdgeEl.setAttribute('data-carousel-edge-right', '')
-        rightEdgeEl.setAttribute('aria-hidden', 'true')
-        this.slidesWrapperEl.appendChild(rightEdgeEl)
+        this.rightEdgeEl = document.createElement('div')
+        this.rightEdgeEl.setAttribute('data-carousel-edge-right', '')
+        this.rightEdgeEl.setAttribute('aria-hidden', 'true')
+        this.slidesWrapperEl.appendChild(this.rightEdgeEl)
     }
 
     setupEdgeNavigationEventListeners() {
-        const leftEdgeEl = this.slidesWrapperEl.querySelector('[data-carousel-edge-left]')
-        const rightEdgeEl = this.slidesWrapperEl.querySelector('[data-carousel-edge-right]')
-        leftEdgeEl.addEventListener('click', (e) => {
+        this.leftEdgeEl.addEventListener('click', (e) => {
             e.stopPropagation()
-            this.scrollToSlide(this.activeSlide.get()?.previousElementSibling)
+            const activeSlide = this.activeSlide.get()
+            if (activeSlide?.previousElementSibling) {
+                this.scrollToSlide(activeSlide.previousElementSibling)
+            }
         })
-        rightEdgeEl.addEventListener('click', (e) => {
+
+        this.rightEdgeEl.addEventListener('click', (e) => {
             e.stopPropagation()
-            this.scrollToSlide(this.activeSlide.get()?.nextElementSibling)
+            const activeSlide = this.activeSlide.get()
+            if (activeSlide?.nextElementSibling) {
+                this.scrollToSlide(activeSlide.nextElementSibling)
+            }
         })
     }
 
     createControlNavigation() {
-        const controlsEl = document.createElement('div')
-        controlsEl.setAttribute('data-carousel-controls', '')
-        controlsEl.innerHTML = `
+        this.controlsEl = document.createElement('div')
+        this.controlsEl.setAttribute('data-carousel-controls', '')
+        this.controlsEl.innerHTML = `
                 <div data-carousel-nav-wrapper>
                     <div data-carousel-nav></div>
                 </div>
@@ -851,29 +1108,36 @@ class Carousel {
                     <li><button type="button" aria-label="Next slide"></button></li>
                 </ul>
             `
-        this.carouselEl.appendChild(controlsEl)
-        this.controlsEl = controlsEl
-        this.navEl = this.carouselEl.querySelector('[data-carousel-nav]')
-        this.prevButtonEl = this.carouselEl.querySelector('[data-carousel-arrows] li:first-child button')
-        this.nextButtonEl = this.carouselEl.querySelector('[data-carousel-arrows] li:last-child button')
+        this.carouselEl.appendChild(this.controlsEl)
 
-        this.navEl.innerHTML = this.slidesEls.map((slideEl, index) => {
+        this.navEl = this.controlsEl.querySelector('[data-carousel-nav]')
+        this.prevButtonEl = this.controlsEl.querySelector('[data-carousel-arrows] li:first-child button')
+        this.nextButtonEl = this.controlsEl.querySelector('[data-carousel-arrows] li:last-child button')
+
+        const navButtons = this.slidesEls.map((slideEl, index) => {
             const val = slideEl.getAttribute('data-value') || index
             return `<button data-label-for="${val}"><span class="sr-only">Slide ${index + 1}</span></button>`
-        }).join('')
+        })
+
+        this.navEl.innerHTML = navButtons.join('')
         this.dotEls = Array.from(this.navEl.querySelectorAll('button'))
-        if (this.dotEls[0]) {
+
+        if (this.dotEls.length > 0) {
             this.dotEls[0].setAttribute('aria-current', 'true')
         }
     }
 
     setupControlNavigationEventListeners() {
-        this.dotEls.forEach(dotEl => {
-            dotEl.addEventListener('click', event => {
-                const targetValue = event.currentTarget.getAttribute('data-label-for')
-                const targetSlideEl = this.carouselEl.querySelector(`figure[data-value="${targetValue}"]`)
-                if (targetSlideEl) this.scrollToSlide(targetSlideEl)
-            })
+        // Use event delegation for dot buttons
+        this.navEl.addEventListener('click', (event) => {
+            const button = event.target.closest('button[data-label-for]')
+            if (!button) return
+
+            const targetValue = button.getAttribute('data-label-for')
+            const targetSlideEl = this.carouselEl.querySelector(`figure[data-value="${targetValue}"]`)
+            if (targetSlideEl) {
+                this.scrollToSlide(targetSlideEl)
+            }
         })
 
         this.prevButtonEl.addEventListener('click', () => this.navigateToSlide('prev'))
@@ -881,35 +1145,49 @@ class Carousel {
     }
 
     setupIntersectionObserver() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+        const observerCallback = (entries) => {
+            for (let i = 0; i < entries.length; i++) {
+                const entry = entries[i]
                 if (entry.isIntersecting) {
                     this.activeSlide.set(entry.target)
-                    entry.target.classList.add('active')
-                    this.dotEls.forEach((dotEl, i) => {
-                        const isCurrent = i === this.slidesEls.indexOf(entry.target)
-                        dotEl.toggleAttribute('aria-current', isCurrent)
-                    })
+                    entry.target.classList.add(this.ACTIVE_CLASS)
+
+                    const slideIndex = this.slidesEls.indexOf(entry.target)
+                    for (let j = 0; j < this.dotEls.length; j++) {
+                        this.dotEls[j].toggleAttribute('aria-current', j === slideIndex)
+                    }
                 } else {
-                    entry.target.classList.remove('active')
+                    entry.target.classList.remove(this.ACTIVE_CLASS)
                 }
-            })
-        }, {
+            }
+        }
+
+        const observer = new IntersectionObserver(observerCallback, {
             root: this.carouselEl,
             rootMargin: '0%',
             threshold: 0.5
         })
+
         this.slidesEls.forEach(slideEl => observer.observe(slideEl))
     }
 
     navigateToSlide(direction) {
         const currentSlideEl = this.activeSlide.get()
-        const targetSlideEl = direction === 'prev' ? currentSlideEl.previousElementSibling : currentSlideEl.nextElementSibling
-        if (targetSlideEl) this.scrollToSlide(targetSlideEl)
+        if (!currentSlideEl) return
+
+        const targetSlideEl = direction === 'prev'
+            ? currentSlideEl.previousElementSibling
+            : currentSlideEl.nextElementSibling
+
+        if (targetSlideEl) {
+            this.scrollToSlide(targetSlideEl)
+        }
     }
 
     scrollToSlide(slideEl) {
-        slideEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+        if (slideEl) {
+            slideEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+        }
     }
 }
 
@@ -960,59 +1238,58 @@ window.initializeTimeline = () => {
     document.querySelector('#horizontal_timeline').appendChild(timelineEl)
 
     const timelineContent = document.querySelector('#timeline-content')
-    let edgeScroller, dragScroll;
+    let edgeScroller, dragScroll
 
-    const isScrollable = () => timelineContent && timelineContent.scrollWidth > timelineContent.clientWidth;
+    const isScrollable = () => timelineContent && timelineContent.scrollWidth > timelineContent.clientWidth
 
     const createScrollers = () => {
-        if (!isScrollable()) return;
-        if (!edgeScroller) edgeScroller = new HorizontalEdgeScroller({ id: 'timeline', element: timelineContent });
-        if (!dragScroll) dragScroll = new HorizontalDragScroller({ element: timelineContent });
-    };
+        if (!isScrollable()) return
+        if (!edgeScroller) edgeScroller = new HorizontalEdgeScroller({ id: 'timeline', element: timelineContent })
+        if (!dragScroll) dragScroll = new HorizontalDragScroller({ element: timelineContent })
+    }
 
     const destroyScrollers = () => {
         if (edgeScroller) {
-            edgeScroller.destroy();
-            edgeScroller = null;
+            edgeScroller.destroy()
+            edgeScroller = null
         }
         if (dragScroll) {
-            dragScroll.destroy();
-            dragScroll = null;
+            dragScroll.destroy()
+            dragScroll = null
         }
-    };
+    }
 
     const handleResize = () => {
         if (isScrollable()) {
-            createScrollers();
+            createScrollers()
         } else {
-            destroyScrollers();
+            destroyScrollers()
         }
-    };
+    }
 
     if (timelineContent) {
-        handleResize();
-        window.addEventListener('resize', handleResize);
+        handleResize()
+        window.addEventListener('resize', handleResize)
     }
 }
 
 function initializeDialogs() {
-    // List all dialog IDs you want to initialize
     const dialogIds = ['modal_profile', 'modal_archive', 'menu_button-wrapper']
-    dialogIds.forEach(dialogId => {
-        const dialogEl = document.getElementById(dialogId)
+
+    for (let i = 0; i < dialogIds.length; i++) {
+        const dialogEl = document.getElementById(dialogIds[i])
         if (dialogEl) {
-            // Ensure ARIA role is set
             if (!dialogEl.getAttribute('role')) {
                 dialogEl.setAttribute('role', 'dialog')
             }
-            // Ensure backdrop is initialized
-            aria.addBackdrop(dialogId)
+            aria.addBackdrop(dialogIds[i])
         }
-    })
+    }
 }
 
 const applyNoAnimation = () => {
-    document.querySelectorAll(
+    const QUICK_ANIMATION_CLASS = 'quick-animation'
+    const elements = document.querySelectorAll(
         `#square-2,
              #square-3,
              #square-4,
@@ -1031,9 +1308,11 @@ const applyNoAnimation = () => {
             .animate-fade-in-cta-2 #menu_link_profile,
             .animate-fade-in-cta-2 #menu_link_archive,
             .animate-fade-in-cta-2 #menu_button-wrapper`
-    ).forEach(element => {
-        element.classList.add('quick-animation')
-    })
+    )
+
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].classList.add(QUICK_ANIMATION_CLASS)
+    }
 }
 
 const openDialogOnLoad = () => {
@@ -1059,16 +1338,14 @@ const initializeModalFooterArt = () => {
     const footerArtWrapper = document.querySelector('#modal_profile-footer_art-wrapper')
     const footerArt = document.querySelector('#modal_profile-footer_art')
     const modalProfile = document.getElementById('modal_profile')
+
     if (!footerArtWrapper || !footerArt || !modalProfile) return
 
-    function handleScroll() {
+    const handleScroll = () => {
         const rect = footerArtWrapper.getBoundingClientRect()
         const modalRect = modalProfile.getBoundingClientRect()
         const inViewDistance = Math.min(Math.max((modalRect.height + rect.height) - rect.bottom, 0), rect.height)
         const progress = Math.min(Math.max(inViewDistance / rect.height, 0), 1)
-        // footerArt.style.transform = `scaleY(${progress})`;
-        // footerArt.style.transform = `rotateX(${(1 - progress) * 90}deg)`;
-        // footerArt.style.transform = `rotateX(${(1 - progress) * 90}deg) scaleY(${progress})`;
         footerArt.style.transform = `rotateX(${progress * 30}deg)`
     }
 
@@ -1087,9 +1364,13 @@ window.toggleFullscreen = () => {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    const ANIMATION_CHECK_SELECTOR = '.animate-fade-in-cta-2 #menu-bg'
+    const TOUCH_DEVICE_CLASS = 'touch-device'
+    const OVERFLOW_HIDDEN_CLASS = 'overflow-hidden'
 
+    // Apply no animation on first click
     document.body.addEventListener('click', () => {
-        if (!isAnimationFinished('.animate-fade-in-cta-2 #menu-bg')) {
+        if (!isAnimationFinished(ANIMATION_CHECK_SELECTOR)) {
             applyNoAnimation()
         }
     }, { once: true })
@@ -1098,7 +1379,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Detect touch device
     if (isTouchDevice) {
-        document.body.classList.add('touch-device')
+        document.body.classList.add(TOUCH_DEVICE_CLASS)
     }
 
     // Initialize the UI elements based on the current hash
@@ -1109,15 +1390,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Prevent the default behavior of scrolling to the hash
     let scrollTop = document.body.scrollTop
+
     window.addEventListener('scroll', () => {
         scrollTop = document.body.scrollTop
-    })
+    }, { passive: true })
+
     window.addEventListener('hashchange', () => {
-        document.body.classList.add('overflow-hidden')
+        document.body.classList.add(OVERFLOW_HIDDEN_CLASS)
         window.scroll(0, scrollTop)
 
         requestAnimationFrame(() => {
-            document.body.classList.remove('overflow-hidden')
+            document.body.classList.remove(OVERFLOW_HIDDEN_CLASS)
         })
     })
 
@@ -1130,42 +1413,53 @@ document.addEventListener('DOMContentLoaded', () => {
     window.textHighlighter = new TextHighlighter()
 
     // Initialize carousels
-    document.querySelectorAll('[data-carousel]').forEach((carouselEl, index) => {
-        const id = `carousel-${index + 1}`
-        new Carousel({ id, element: carouselEl })
-    })
+    const carouselElements = document.querySelectorAll('[data-carousel]')
+    for (let i = 0; i < carouselElements.length; i++) {
+        new Carousel({ id: `carousel-${i + 1}`, element: carouselElements[i] })
+    }
 
     // Initialize popups
-    document.querySelectorAll('a[target="_blank"][href$=".mp4"], a[target="_blank"][href$=".png"], a[target="_blank"][href$=".jpg"], a[target="_blank"][href$=".svg"]').forEach(element => {
-        element.addEventListener('click', event => new Popup().open(element, event))
-    })
+    const popupInstance = new Popup()
+    const popupLinks = document.querySelectorAll('a[target="_blank"][href$=".mp4"], a[target="_blank"][href$=".png"], a[target="_blank"][href$=".jpg"], a[target="_blank"][href$=".svg"]')
+
+    for (let i = 0; i < popupLinks.length; i++) {
+        const link = popupLinks[i]
+
+        // Preload placeholder on hover
+        link.addEventListener('mouseenter', () => {
+            if (!popupInstance.isVideo(link.href)) {
+                const placeholderUrl = popupInstance.getPlaceholderUrl(link.href)
+                const preloadImg = new Image()
+                preloadImg.src = placeholderUrl
+            }
+        }, { once: true })
+
+        link.addEventListener('click', event => popupInstance.open(link, event))
+    }
 
     // Initialize modal footer art
     initializeModalFooterArt()
 
     // Initialize timeline
-    /* TODO - is the backdrop necessary? */
     aria.addBackdrop('modal_archive')
-    /* requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-        })
-    }) */
     initializeTimeline()
     timelineEl.startIntersectionObserver()
+
+    const archiveWrapperEl = document.querySelector('#modal_archive-wrapper')
+    const timelineContentSectionEl = document.querySelector('#modal_archive-wrapper [data-timeline-section]')
+    const timelineWrapperEl = document.querySelector('#horizontal_timeline')
+
     const positionTimeline = event => {
         if (event && event.currentTarget !== event.target) return
 
-        const archiveWrapperEl = document.querySelector('#modal_archive-wrapper')
         const archiveWrapperRect = archiveWrapperEl.getBoundingClientRect()
-        const timelineContentSectionEl = document.querySelector('#modal_archive-wrapper [data-timeline-section]')
         const timelineContentSectionRect = timelineContentSectionEl.getBoundingClientRect()
 
-        const timelineWrapperEl = document.querySelector('#horizontal_timeline')
         timelineWrapperEl.style.setProperty('left', `${timelineContentSectionRect.left - archiveWrapperRect.left}px`)
         timelineWrapperEl.style.setProperty('right', `${archiveWrapperRect.right - timelineContentSectionRect.right}px`)
     }
+
     positionTimeline()
     document.querySelector('#modal_archive .modal-content').addEventListener('transitionend', positionTimeline)
     window.addEventListener('resize', positionTimeline)
-
 })
