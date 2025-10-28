@@ -190,6 +190,17 @@ aria.Dialog.prototype.close = function (hash) {
 }
 
 aria.Dialog.prototype.replace = function (newDialogId, newFocusAfterClosed, newFocusFirst, hash) {
+    // Clean up current modal-specific features before replacing
+    if (this.dialogNode.id === 'modal_archive') {
+        if (typeof window.cleanupArchiveModal === 'function') {
+            window.cleanupArchiveModal()
+        }
+    } else if (this.dialogNode.id === 'modal_profile') {
+        if (typeof window.cleanupProfileModal === 'function') {
+            window.cleanupProfileModal()
+        }
+    }
+
     aria.OpenDialogList.pop()
     this.removeListeners()
     aria.Utils.remove(this.preNode)
@@ -199,6 +210,13 @@ aria.Dialog.prototype.replace = function (newDialogId, newFocusAfterClosed, newF
 
     const focusAfterClosed = newFocusAfterClosed || this.focusAfterClosed
     new aria.Dialog(newDialogId, focusAfterClosed, newFocusFirst, hash)
+
+    // Initialize new modal-specific features
+    if (newDialogId === 'modal_archive' && typeof window.initializeArchiveModal === 'function') {
+        window.initializeArchiveModal()
+    } else if (newDialogId === 'modal_profile' && typeof window.initializeProfileModal === 'function') {
+        window.initializeProfileModal()
+    }
 }
 
 aria.Dialog.prototype.addListeners = function () {
@@ -233,13 +251,30 @@ window.openDialog = (dialogId, focusAfterClosed, focusFirst, hash) => {
     else {
         new aria.Dialog(dialogId, focusAfterClosed, focusFirst, hash)
     }
+
+    // Initialize modal-specific features
+    if (dialogId === 'modal_archive' && typeof window.initializeArchiveModal === 'function') {
+        window.initializeArchiveModal()
+    } else if (dialogId === 'modal_profile' && typeof window.initializeProfileModal === 'function') {
+        window.initializeProfileModal()
+    }
 }
 
 window.closeDialog = (hash) => {
-    /* if (window.location.hash.includes('#archive')) {
-        timelineEl.stopIntersectionObserver()
-    } */
-
     const topDialog = aria.getCurrentDialog()
+
+    // Clean up modal-specific features before closing
+    if (topDialog && topDialog.dialogNode) {
+        if (topDialog.dialogNode.id === 'modal_archive') {
+            if (typeof window.cleanupArchiveModal === 'function') {
+                window.cleanupArchiveModal()
+            }
+        } else if (topDialog.dialogNode.id === 'modal_profile') {
+            if (typeof window.cleanupProfileModal === 'function') {
+                window.cleanupProfileModal()
+            }
+        }
+    }
+
     topDialog?.close(hash)
 }

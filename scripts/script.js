@@ -26,6 +26,18 @@ const isHash = (hash) => getCurrentHash() === hash
 
 const hashIncludes = (hash) => getCurrentHash().includes(hash)
 
+// Shared navigation constants
+const NAVIGATION_HASHES = {
+    PROFILE: '#profile',
+    ARCHIVE: '#archive',
+    MENU: '#menu'
+}
+
+const MODAL_SELECTORS = {
+    PROFILE: '#modal_profile',
+    ARCHIVE: '#modal_archive'
+}
+
 // ============================================================================
 // TextHighlighter Class
 // ============================================================================
@@ -83,12 +95,6 @@ class KeyHandler {
             KEY_D: 'd'
         }
 
-        this.HASHES = {
-            PROFILE: '#profile',
-            ARCHIVE: '#archive',
-            MENU: '#menu'
-        }
-
         this.boundHandleKeydown = this.handleKeydown.bind(this)
         this.boundHandleKeyup = this.handleKeyup.bind(this)
         this.boundRemoveTooltips = () => this.toggleTooltipActiveClass(false)
@@ -115,13 +121,13 @@ class KeyHandler {
                 }
                 break
             case this.KEYS.KEY_P:
-                this.toggleDialog(event, this.HASHES.PROFILE, 'modal_profile', 'menu_link_profile')
+                this.toggleDialog(event, NAVIGATION_HASHES.PROFILE, 'modal_profile', 'menu_link_profile')
                 break
             case this.KEYS.KEY_A:
-                this.toggleDialog(event, this.HASHES.ARCHIVE, 'modal_archive', 'menu_link_archive', true)
+                this.toggleDialog(event, NAVIGATION_HASHES.ARCHIVE, 'modal_archive', 'menu_link_archive', true)
                 break
             case this.KEYS.KEY_M:
-                this.toggleDialog(event, this.HASHES.MENU, 'menu_button-wrapper', 'menu_button--open', false, 'menu_button--close')
+                this.toggleDialog(event, NAVIGATION_HASHES.MENU, 'menu_button-wrapper', 'menu_button--open', false, 'menu_button--close')
                 break
             case this.KEYS.KEY_D:
                 this.toggleDebug(event)
@@ -176,6 +182,13 @@ class KeyHandler {
             }
         }
     }
+
+    destroy() {
+        document.removeEventListener('keydown', this.boundHandleKeydown)
+        document.removeEventListener('keyup', this.boundHandleKeyup)
+        window.removeEventListener('blur', this.boundRemoveTooltips)
+        document.body.removeEventListener('click', this.boundRemoveTooltips)
+    }
 }
 
 
@@ -194,25 +207,15 @@ class WheelHandler {
         this.ANIMATION_CHECK_SELECTOR = '.animate-fade-in-cta-2 #menu-bg'
         this.SCROLL_MIN_THRESHOLD = 5
 
-        this.SELECTORS = {
-            MODAL_PROFILE: '#modal_profile',
-            MODAL_ARCHIVE: '#modal_archive'
-        }
-
-        this.HASHES = {
-            PROFILE: '#profile',
-            ARCHIVE: '#archive',
-            MENU: '#menu'
-        }
-
-        window.addEventListener('wheel', this.handleWheelEvent.bind(this))
+        this.boundHandleWheelEvent = this.handleWheelEvent.bind(this)
+        window.addEventListener('wheel', this.boundHandleWheelEvent)
     }
 
     getModalElement(hash) {
-        if (hash === this.HASHES.PROFILE) {
-            return this.modalProfileEl ??= document.querySelector(this.SELECTORS.MODAL_PROFILE)
-        } else if (hash === this.HASHES.ARCHIVE) {
-            return this.modalArchiveEl ??= document.querySelector(this.SELECTORS.MODAL_ARCHIVE)
+        if (hash === NAVIGATION_HASHES.PROFILE) {
+            return this.modalProfileEl ??= document.querySelector(MODAL_SELECTORS.PROFILE)
+        } else if (hash === NAVIGATION_HASHES.ARCHIVE) {
+            return this.modalArchiveEl ??= document.querySelector(MODAL_SELECTORS.ARCHIVE)
         }
         return null
     }
@@ -234,7 +237,7 @@ class WheelHandler {
         const direction = deltaY > 0 ? 'down' : 'up'
         const currentHash = getHashWithoutParams()
 
-        if (currentHash === this.HASHES.PROFILE || currentHash === this.HASHES.ARCHIVE) {
+        if (currentHash === NAVIGATION_HASHES.PROFILE || currentHash === NAVIGATION_HASHES.ARCHIVE) {
             this.handleModalVerticalScroll(direction, currentHash)
         } else {
             this.handleVerticalPageScroll(direction)
@@ -267,9 +270,13 @@ class WheelHandler {
             if (scrollX + window.innerWidth >= document.body.scrollWidth) {
                 openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
             }
-        } else if (direction === 'left' && hash === this.HASHES.MENU && scrollX === 0) {
+        } else if (direction === 'left' && hash === NAVIGATION_HASHES.MENU && scrollX === 0) {
             closeDialog('#')
         }
+    }
+
+    destroy() {
+        window.removeEventListener('wheel', this.boundHandleWheelEvent)
     }
 }
 
@@ -291,19 +298,10 @@ class TouchHandler {
         this.ANIMATION_CHECK_SELECTOR = '.animate-fade-in-cta-2 #menu-bg'
         this.SCROLL_MIN_THRESHOLD = 5
 
-        this.SELECTORS = {
-            MODAL_PROFILE: '#modal_profile',
-            MODAL_ARCHIVE: '#modal_archive'
-        }
-
-        this.HASHES = {
-            PROFILE: '#profile',
-            ARCHIVE: '#archive',
-            MENU: '#menu'
-        }
-
-        window.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true })
-        window.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: true })
+        this.boundHandleTouchStart = this.handleTouchStart.bind(this)
+        this.boundHandleTouchMove = this.handleTouchMove.bind(this)
+        window.addEventListener('touchstart', this.boundHandleTouchStart, { passive: true })
+        window.addEventListener('touchmove', this.boundHandleTouchMove, { passive: true })
     }
 
     handleTouchStart(event) {
@@ -313,10 +311,10 @@ class TouchHandler {
     }
 
     getModalElement(hash) {
-        if (hash === this.HASHES.PROFILE) {
-            return this.modalProfileEl ??= document.querySelector(this.SELECTORS.MODAL_PROFILE)
-        } else if (hash === this.HASHES.ARCHIVE) {
-            return this.modalArchiveEl ??= document.querySelector(this.SELECTORS.MODAL_ARCHIVE)
+        if (hash === NAVIGATION_HASHES.PROFILE) {
+            return this.modalProfileEl ??= document.querySelector(MODAL_SELECTORS.PROFILE)
+        } else if (hash === NAVIGATION_HASHES.ARCHIVE) {
+            return this.modalArchiveEl ??= document.querySelector(MODAL_SELECTORS.ARCHIVE)
         }
         return null
     }
@@ -339,7 +337,7 @@ class TouchHandler {
         const direction = touchEndY < this.touchStartY ? 'down' : 'up'
         const currentHash = getHashWithoutParams()
 
-        if (currentHash === this.HASHES.PROFILE || currentHash === this.HASHES.ARCHIVE) {
+        if (currentHash === NAVIGATION_HASHES.PROFILE || currentHash === NAVIGATION_HASHES.ARCHIVE) {
             this.handleModalScroll(direction, currentHash)
         } else {
             this.handleVerticalPageScroll(direction)
@@ -368,11 +366,16 @@ class TouchHandler {
         const hash = getCurrentHash()
         const scrollX = window.scrollX
 
-        if (direction === 'right' && hash === this.HASHES.MENU && scrollX + window.innerWidth >= document.body.scrollWidth) {
+        if (direction === 'right' && hash === NAVIGATION_HASHES.MENU && scrollX + window.innerWidth >= document.body.scrollWidth) {
             closeDialog('#')
         } else if (direction === 'left' && !hash && scrollX === 0) {
             openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
         }
+    }
+
+    destroy() {
+        window.removeEventListener('touchstart', this.boundHandleTouchStart)
+        window.removeEventListener('touchmove', this.boundHandleTouchMove)
     }
 }
 
@@ -459,6 +462,7 @@ class HorizontalEdgeScroller {
         this.isSnapped = true
         this.edgeWidth = 0
         this.mediaQuery = window.matchMedia('(min-width: 45rem)')
+        this.styleElement = null
 
         this.DRAGGING_CLASS = 'x-drag-scroll--dragging'
         this.EDGE_SCROLLING_CLASS = 'edge-x-scroll--scrolling'
@@ -486,16 +490,18 @@ class HorizontalEdgeScroller {
         this.element.setAttribute('data-edge-scroll-id', id)
 
         const styleId = `horizontal-edge-scroll-style-${id}`
-        let style = document.getElementById(styleId)
 
-        if (!style) {
-            style = document.createElement('style')
-            style.id = styleId
-            document.head.appendChild(style)
+        if (!this.styleElement) {
+            this.styleElement = document.getElementById(styleId)
+            if (!this.styleElement) {
+                this.styleElement = document.createElement('style')
+                this.styleElement.id = styleId
+                document.head.appendChild(this.styleElement)
+            }
         }
 
         const { edgeWidth } = this
-        style.textContent = `
+        this.styleElement.textContent = `
           [data-edge-scroll-id="${id}"]::before,
           [data-edge-scroll-id="${id}"]::after {
             content: '';
@@ -541,7 +547,7 @@ class HorizontalEdgeScroller {
         const { clientX, clientY } = event
 
         const withinBounds = clientX >= rect.left && clientX <= rect.right &&
-                             clientY >= rect.top && clientY <= rect.bottom
+            clientY >= rect.top && clientY <= rect.bottom
         const nearLeftEdge = clientX < rect.left + this.edgeWidth
         const nearRightEdge = clientX > rect.right - this.edgeWidth
 
@@ -605,10 +611,23 @@ class HorizontalEdgeScroller {
             document.removeEventListener('mousemove', this.handleMouseMoveBound)
             window.removeEventListener('resize', this.onResizeBound)
         }
+        if (this.styleElement && this.styleElement.parentElement) {
+            this.styleElement.remove()
+        }
+        if (this.element) {
+            this.element.removeAttribute('data-edge-scroll-id')
+        }
     }
 }
 
 
+// ============================================================================
+// Popup Class
+// ============================================================================
+
+/**
+ * Handles image and video popups with fallback views for blocked popups
+ */
 class Popup {
     constructor() {
         this.widthRatio = 0.9
@@ -616,6 +635,8 @@ class Popup {
         this.fallbackContainer = null
         this.wrapperElement = null
         this.stylesInjected = false
+        this.handleEscapeKey = null
+        this.handleFallbackClick = null
 
         this.ASPECT_RATIO_TALL_THRESHOLD = 0.85
         this.SQUARE_RATIO_MIN = 0.95
@@ -626,6 +647,43 @@ class Popup {
         if (typeof Popup.isPopupBlocked === 'undefined') {
             Popup.isPopupBlocked = false
         }
+    }
+
+    generatePopupHTML(href, isVideo, placeholderUrl, includeOverlay = false) {
+        const mediaElementHtml = isVideo
+            ? `<video src="${href}" controls autoplay playsinline></video>`
+            : placeholderUrl
+                ? `<img src="${href}" onload="requestAnimationFrame(()=>requestAnimationFrame(()=>{this.nextElementSibling.style.opacity='0'}))" style="width:100%;height:auto"><img src="${placeholderUrl}" style="position:absolute;inset:0;width:100%;height:auto;transition:opacity .3s linear">`
+                : `<img src="${href}" />`
+
+        const overlayHtml = includeOverlay
+            ? `<div style="position:absolute;inset:0;cursor:zoom-out;z-index:1" onclick="window.close()" aria-label="Close" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){window.close()}"></div>`
+            : ''
+
+        return `<!DOCTYPE html>
+        <html>
+        <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>Preview</title>
+        <style>
+          html,body{margin:0;padding:0;background-color:#000;position:relative;min-height:100vh}
+          img,video{width:100%;height:auto;display:block;position:relative;z-index:0}
+        </style>
+        </head>
+        <body>
+          ${mediaElementHtml}
+          ${overlayHtml}
+          <script>
+            document.addEventListener('keydown', (e) => {
+              if (e.key === 'Escape') {
+                e.preventDefault();
+                window.close();
+              }
+            });
+          </script>
+        </body>
+        </html>`
     }
 
     async open(element, event) {
@@ -653,34 +711,17 @@ class Popup {
 
         const { width, height, left, top } = this.calculateWindowSize(dimensions)
 
-        // If the media is tall, prefer opening a small HTML page in a new tab so image fits 100% width.
-        const scaledAspect = width / height
+        const imageAspect = dimensions.width / dimensions.height
+        const isTallImage = !isVideo && imageAspect < this.ASPECT_RATIO_TALL_THRESHOLD
 
-        const mediaElementHtml = isVideo
-            ? `<video src="${href}" controls autoplay playsinline></video>`
-            : placeholderUrl
-                ? `<img src="${href}" onload="requestAnimationFrame(()=>requestAnimationFrame(()=>{this.nextElementSibling.style.opacity='0'}))" style="width:100%;height:auto"><img src="${placeholderUrl}" style="position:absolute;inset:0;margin:auto;width:100%;height:auto;transition:opacity .3s linear">`
-                : `<img src="${href}" />`
-
-        const html = `<!DOCTYPE html>
-        <html>
-        <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>Preview</title>
-        <style>
-          html,body{margin:0;padding:0;background-color:#000;position:relative}
-          img,video{width:100%;height:auto}
-        </style>
-        </head>
-        <body>
-          ${mediaElementHtml}
-        </body>
-        </html>`
+        // Generate popup/tab HTML with shared functionality
+        // Add overlay for all images (not videos)
+        const html = this.generatePopupHTML(href, isVideo, placeholderUrl, !isVideo)
         const blob = new Blob([html], { type: 'text/html' })
         const blobUrl = URL.createObjectURL(blob)
 
-        if (scaledAspect < this.ASPECT_RATIO_TALL_THRESHOLD) {
+        // If the image is tall, prefer opening a small HTML page in a new tab
+        if (isTallImage) {
             const newTab = window.open(blobUrl, '_blank')
 
             // If opening a new tab/window failed, revoke blob and fallback inline
@@ -820,13 +861,14 @@ class Popup {
         }
 
         // Set up event delegation for close actions
-        this.fallbackContainer.addEventListener('click', (e) => {
+        this.handleFallbackClick = (e) => {
             if (e.target.classList.contains('media_fallback-close-overlay') ||
                 e.target.classList.contains('media_fallback-close-button') ||
                 e.target.closest('.media_fallback-close-button')) {
                 this.closeFallbackView()
             }
-        })
+        }
+        this.fallbackContainer.addEventListener('click', this.handleFallbackClick)
 
         // Set up escape key handler once
         this.handleEscapeKey = (e) => {
@@ -978,13 +1020,24 @@ class Popup {
     getImageDimensions(url) {
         return new Promise((resolve) => {
             const img = new Image()
-            img.onload = () => {
-                resolve({ width: img.width, height: img.height })
+
+            const handleLoad = () => {
+                if (img.naturalWidth && img.naturalHeight) {
+                    resolve({ width: img.naturalWidth, height: img.naturalHeight })
+                } else {
+                    resolve(null)
+                }
             }
-            img.onerror = () => {
-                resolve(null)
-            }
+
+            img.addEventListener('load', handleLoad, { once: true })
+            img.addEventListener('error', () => resolve(null), { once: true })
+
             img.src = url
+
+            // Check if dimensions are already available (cached image)
+            if (img.complete && img.naturalWidth > 0) {
+                handleLoad()
+            }
         })
     }
 
@@ -992,12 +1045,15 @@ class Popup {
         return new Promise((resolve) => {
             const video = document.createElement('video')
             video.preload = 'metadata'
-            video.onloadedmetadata = () => {
+
+            video.addEventListener('loadedmetadata', () => {
                 resolve({ width: video.videoWidth, height: video.videoHeight })
-            }
-            video.onerror = () => {
+            }, { once: true })
+
+            video.addEventListener('error', () => {
                 resolve(null)
-            }
+            }, { once: true })
+
             video.src = url
         })
     }
@@ -1030,9 +1086,23 @@ class Popup {
         }
     }
 
+    destroy() {
+        this.closeFallbackView()
+        if (this.handleEscapeKey) {
+            document.removeEventListener('keydown', this.handleEscapeKey, true)
+        }
+    }
+
 }
 
 
+// ============================================================================
+// Carousel Class
+// ============================================================================
+
+/**
+ * Manages carousel functionality with navigation controls and intersection observers
+ */
 class Carousel {
     constructor(options = {}) {
         const { id = '', element = null } = options
@@ -1047,6 +1117,7 @@ class Carousel {
         this.dotEls = []
         this.leftEdgeEl = null
         this.rightEdgeEl = null
+        this.observer = null
         this.activeSlide = {
             element: null,
             get: () => this.activeSlide.element,
@@ -1162,13 +1233,13 @@ class Carousel {
             }
         }
 
-        const observer = new IntersectionObserver(observerCallback, {
+        this.observer = new IntersectionObserver(observerCallback, {
             root: this.carouselEl,
             rootMargin: '0%',
             threshold: 0.5
         })
 
-        this.slidesEls.forEach(slideEl => observer.observe(slideEl))
+        this.slidesEls.forEach(slideEl => this.observer.observe(slideEl))
     }
 
     navigateToSlide(direction) {
@@ -1189,8 +1260,72 @@ class Carousel {
             slideEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
         }
     }
+
+    destroy() {
+        if (this.observer) {
+            this.observer.disconnect()
+        }
+    }
 }
 
+// ============================================================================
+// Modal Lifecycle Management
+// ============================================================================
+
+/**
+ * Stores cleanup functions for modal-specific features
+ */
+const modalCleanupHandlers = {
+    timeline: null,
+    footerArt: null
+}
+
+/**
+ * Cleanup function to be called when archive modal closes
+ */
+window.cleanupArchiveModal = () => {
+    if (window.timelineEl) {
+        window.timelineEl.stopIntersectionObserver()
+    }
+}
+
+/**
+ * Cleanup function to be called when profile modal closes
+ */
+window.cleanupProfileModal = () => {
+    if (modalCleanupHandlers.footerArt) {
+        modalCleanupHandlers.footerArt()
+        modalCleanupHandlers.footerArt = null
+    }
+}
+
+/**
+ * Initialize features specific to archive modal
+ */
+window.initializeArchiveModal = () => {
+    // Start the observer when modal opens
+    if (window.timelineEl && window.timelineEl.startIntersectionObserver) {
+        window.timelineEl.startIntersectionObserver()
+    }
+}
+
+/**
+ * Initialize features specific to profile modal
+ */
+window.initializeProfileModal = () => {
+    // Only initialize if not already initialized
+    if (!modalCleanupHandlers.footerArt) {
+        modalCleanupHandlers.footerArt = initializeModalFooterArt()
+    }
+}
+
+// ============================================================================
+// Global Functions
+// ============================================================================
+
+/**
+ * Handles touch button click interactions with focus management
+ */
 window.handleTouchButtonClick = (element, event, callback, focusAfterClick) => {
     event.preventDefault()
 
@@ -1231,7 +1366,16 @@ window.handleTouchButtonClick = (element, event, callback, focusAfterClick) => {
     }
 }
 
+/**
+ * Initializes the timeline component with scrollers
+ */
 window.initializeTimeline = () => {
+    // Prevent duplicate timeline creation
+    if (window.timelineEl) {
+        console.warn('Timeline already initialized')
+        return window.timelineCleanup || (() => {})
+    }
+
     window.timelineEl = document.createElement('horizontal-timeline')
     timelineEl.labels = ['2024-21', '2021-19', '2019-18', 'elsewhen']
 
@@ -1271,8 +1415,22 @@ window.initializeTimeline = () => {
         handleResize()
         window.addEventListener('resize', handleResize)
     }
+
+    // Store cleanup function globally so we can call it later
+    window.timelineCleanup = () => {
+        destroyScrollers()
+        if (timelineContent) {
+            window.removeEventListener('resize', handleResize)
+        }
+    }
+
+    // Return cleanup function
+    return window.timelineCleanup
 }
 
+/**
+ * Initializes dialog elements with ARIA attributes and backdrops
+ */
 function initializeDialogs() {
     const dialogIds = ['modal_profile', 'modal_archive', 'menu_button-wrapper']
 
@@ -1287,6 +1445,9 @@ function initializeDialogs() {
     }
 }
 
+/**
+ * Applies quick animation class to skip initial page load animations
+ */
 const applyNoAnimation = () => {
     const QUICK_ANIMATION_CLASS = 'quick-animation'
     const elements = document.querySelectorAll(
@@ -1315,6 +1476,9 @@ const applyNoAnimation = () => {
     }
 }
 
+/**
+ * Opens the appropriate dialog based on URL hash on page load
+ */
 const openDialogOnLoad = () => {
     switch (window.location.hash.split('?')[0]) {
         case '#profile':
@@ -1334,6 +1498,9 @@ const openDialogOnLoad = () => {
 }
 
 
+/**
+ * Initializes 3D transform effect for modal profile footer art based on scroll
+ */
 const initializeModalFooterArt = () => {
     const footerArtWrapper = document.querySelector('#modal_profile-footer_art-wrapper')
     const footerArt = document.querySelector('#modal_profile-footer_art')
@@ -1352,9 +1519,18 @@ const initializeModalFooterArt = () => {
     modalProfile.addEventListener('scroll', handleScroll, { passive: true })
     window.addEventListener('resize', handleScroll)
     handleScroll()
+
+    // Return cleanup function
+    return () => {
+        modalProfile.removeEventListener('scroll', handleScroll)
+        window.removeEventListener('resize', handleScroll)
+    }
 }
 
 
+/**
+ * Toggles fullscreen mode for the document
+ */
 window.toggleFullscreen = () => {
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen()
@@ -1362,6 +1538,10 @@ window.toggleFullscreen = () => {
         document.exitFullscreen()
     }
 }
+
+// ============================================================================
+// DOM Content Loaded Event Handler
+// ============================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
     const ANIMATION_CHECK_SELECTOR = '.animate-fade-in-cta-2 #menu-bg'
@@ -1404,7 +1584,8 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     })
 
-    // Initialize handlers
+    // Initialize global handlers (persistent throughout page lifetime)
+    // Note: destroy() methods exist but are not called since these are page-level handlers
     new WheelHandler()
     new TouchHandler()
     new KeyHandler()
@@ -1412,13 +1593,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize text highlighter
     window.textHighlighter = new TextHighlighter()
 
-    // Initialize carousels
+    // Initialize carousels (persistent throughout page lifetime)
+    // Note: destroy() methods exist but are not called since carousels are permanent page elements
     const carouselElements = document.querySelectorAll('[data-carousel]')
     for (let i = 0; i < carouselElements.length; i++) {
         new Carousel({ id: `carousel-${i + 1}`, element: carouselElements[i] })
     }
 
-    // Initialize popups
+    // Initialize popups (persistent throughout page lifetime)
+    // Note: destroy() method exists but is not called since popup handler is used throughout the page
     const popupInstance = new Popup()
     const popupLinks = document.querySelectorAll('a[target="_blank"][href$=".mp4"], a[target="_blank"][href$=".png"], a[target="_blank"][href$=".jpg"], a[target="_blank"][href$=".svg"]')
 
@@ -1437,17 +1620,16 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', event => popupInstance.open(link, event))
     }
 
-    // Initialize modal footer art
-    initializeModalFooterArt()
-
-    // Initialize timeline
+    // Pre-initialize timeline element (but don't start observer yet)
+    // Observer will be started when archive modal opens
     aria.addBackdrop('modal_archive')
-    initializeTimeline()
-    timelineEl.startIntersectionObserver()
+    window.initializeTimeline()
 
+    // Setup timeline positioning
     const archiveWrapperEl = document.querySelector('#modal_archive-wrapper')
     const timelineContentSectionEl = document.querySelector('#modal_archive-wrapper [data-timeline-section]')
     const timelineWrapperEl = document.querySelector('#horizontal_timeline')
+    const modalArchiveContent = document.querySelector('#modal_archive .modal-content')
 
     const positionTimeline = event => {
         if (event && event.currentTarget !== event.target) return
@@ -1460,6 +1642,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     positionTimeline()
-    document.querySelector('#modal_archive .modal-content').addEventListener('transitionend', positionTimeline)
+
+    if (modalArchiveContent) {
+        modalArchiveContent.addEventListener('transitionend', positionTimeline)
+    }
     window.addEventListener('resize', positionTimeline)
 })

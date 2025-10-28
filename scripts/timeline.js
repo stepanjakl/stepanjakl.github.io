@@ -1,3 +1,16 @@
+/*!
+ * Personal website of Štěpán Jákl
+ * https://stepanjakl.github.io
+ *
+ * Copyright © 2025 Štěpán Jákl
+ * Released under the MIT license
+ * https://github.com/stepanjakl/stepanjakl.github.io/blob/main/LICENSE
+ */
+
+// ============================================================================
+// HorizontalTimeline Custom Element
+// ============================================================================
+
 /**
  * <horizontal-timeline>
  * Custom Element that renders a horizontal timeline with labels and a bar of vertical lines.
@@ -5,24 +18,67 @@
  * - Highlights the matching vertical indicator above the active label.
  * - Syncs the URL query (?year=YYYY) when inside the archive modal.
  */
-class timeline extends HTMLElement {
+class HorizontalTimeline extends HTMLElement {
     constructor() {
         super()
+
+        // State properties
         this.labels = []
         this.activeSection = null
         this.isScrolling = false
-        this.intersectionObserver = null
+
+        // DOM element caches
         this.timelineContentEl = null
         this.labelEls = null
-        this.hash = '#archive'
+        this.timelineAllDivEls = null
+        this.sectionEls = null
+        this.modalArchiveEl = null
+
+        // Observer instance
+        this.intersectionObserver = null
+
+        // Bound event handlers
+        this.boundHandleResize = null
+        this.boundHandleMouseLeave = null
+        this.boundHandleScrollEnd = null
+
+        // Constants
+        this.TIMELINE_FIRST_INDICATOR_INDEX = 3
+        this.TIMELINE_INDICATORS_PER_LABEL = 6
+        this.HASH_PREFIX = '#archive'
+        this.SCROLLABLE_CLASS = 'timeline-scrollable'
+        this.ACTIVE_CLASS = 'active'
+        this.HIGHLIGHT_CLASS = 'highlight'
+        this.SCROLL_BEHAVIOR_AUTO_CLASS = 'scroll-behavior-auto'
+        this.SCROLL_END_TIMEOUT = 300
+        this.SCROLL_OFFSET = 24
+        this.OBSERVER_ROOT_MARGIN = '-50% 0% -50% 0%'
+        this.OBSERVER_THRESHOLDS = [0, 0.25, 0.5, 0.75, 1]
     }
 
     static get observedAttributes() {
         return ['labels']
     }
 
+    // ========================================================================
+    // Lifecycle Methods
+    // ========================================================================
+
     connectedCallback() {
-        // Render shadow-less template (static CSS + timeline structure)
+        this.render()
+        this.initializeTimeline()
+        this.setupHighlighting()
+    }
+
+    disconnectedCallback() {
+        this.destroy()
+    }
+
+    // ========================================================================
+    // Rendering
+    // ========================================================================
+
+    render() {
         this.innerHTML = `
             <style>
                 horizontal-timeline {
@@ -351,258 +407,406 @@ class timeline extends HTMLElement {
             </div>
         `
 
-        // Constants describing the visual grid of the timeline indicators.
-        // First highlighted indicator sits at index 3; subsequent labels are spaced by 6 divs.
-        const TIMELINE_FIRST_INDICATOR_INDEX = 3
-        const TIMELINE_INDICATORS_PER_LABEL = 6
+        this.updateScrollableClass()
+    }
 
-        // Apply 'timeline-scrollable' class when content overflows horizontally.
-        // This enables cursor:grab and activates HorizontalEdgeScroller/HorizontalDragScroll.
-        const timelineContentEl = this.querySelector('#timeline-content')
-        if (timelineContentEl && timelineContentEl.scrollWidth > timelineContentEl.clientWidth) {
-            this.classList.add('timeline-scrollable')
+    // ========================================================================
+    // DOM Helpers
+    // ========================================================================
+
+    getTimelineContentEl() {
+        return this.timelineContentEl ??= this.querySelector('#timeline-content')
+    }
+
+    getLabelEls() {
+        return this.labelEls ??= Array.from(this.querySelectorAll('[data-label-for]'))
+    }
+
+    getTimelineAllDivEls() {
+        return this.timelineAllDivEls ??= Array.from(this.querySelectorAll('#timeline div'))
+    }
+
+    getSectionEls() {
+        return this.sectionEls ??= Array.from(document.querySelectorAll('[data-timeline-section]'))
+    }
+
+    getModalArchiveEl() {
+        return this.modalArchiveEl ??= document.querySelector('#modal_archive')
+    }
+
+    // ========================================================================
+    // Scrollable State Management
+    // ========================================================================
+
+    updateScrollableClass() {
+        const timelineContent = this.getTimelineContentEl()
+        if (!timelineContent) return
+
+        const isScrollable = timelineContent.scrollWidth > timelineContent.clientWidth
+
+        if (isScrollable) {
+            this.classList.add(this.SCROLLABLE_CLASS)
+        } else {
+            this.classList.remove(this.SCROLLABLE_CLASS)
         }
+    }
 
-        // Toggle scrollability class on window resize
-        window.addEventListener('resize', () => {
-            if (timelineContentEl.scrollWidth > timelineContentEl.clientWidth) {
-                this.classList.add('timeline-scrollable')
-            } else {
-                this.classList.remove('timeline-scrollable')
-            }
-        })
+    // ========================================================================
+    // Scrolling Utilities
+    // ========================================================================
 
     /**
      * Smoothly scroll a horizontally scrollable parent so that the child is centered.
      * Resolves when native 'scrollend' fires or after a small timeout fallback.
      */
-    const scrollParentToChildCenterHorizontal = (parent, child) => {
-            if (parent === null || child === null) return
-            return new Promise((resolve) => {
-                this.isScrolling = true
-                let parentRect = parent.getBoundingClientRect()
-                let childRect = child.getBoundingClientRect()
-                let scrollAmount = childRect.left - parentRect.left - (parentRect.width - childRect.width) / 2
-                let initialScrollLeft = parent.scrollLeft
+    scrollParentToChildCenterHorizontal(parent, child) {
+        if (!parent || !child) return Promise.resolve()
 
-                const isScrollEndSupported = 'onscrollend' in window
+        return new Promise((resolve) => {
+            this.isScrolling = true
 
-                const handleScrollEnd = (event) => {
-                    parent.removeEventListener('scrollend', handleScrollEnd)
-                    this.isScrolling = false
-                    resolve()
+            const parentRect = parent.getBoundingClientRect()
+            const childRect = child.getBoundingClientRect()
+            const scrollAmount = childRect.left - parentRect.left - (parentRect.width - childRect.width) / 2
+            const initialScrollLeft = parent.scrollLeft
+
+            // Early exit if already at left edge and trying to scroll left
+            if (initialScrollLeft === 0 && scrollAmount < 0) {
+                this.isScrolling = false
+                resolve()
+                return
+            }
+
+            const isScrollEndSupported = 'onscrollend' in window
+
+            const handleScrollEnd = () => {
+                if (this.boundHandleScrollEnd) {
+                    parent.removeEventListener('scrollend', this.boundHandleScrollEnd)
+                    this.boundHandleScrollEnd = null
                 }
+                this.isScrolling = false
+                resolve()
+            }
 
-                // Early exit if already at left edge and trying to scroll left
-                if (initialScrollLeft === 0 && scrollAmount < 0) {
-                    resolve()
-                    return
-                }
+            if (isScrollEndSupported) {
+                this.boundHandleScrollEnd = handleScrollEnd
+                parent.addEventListener('scrollend', this.boundHandleScrollEnd, { once: true })
+            }
 
-                if (isScrollEndSupported) {
-                    parent.addEventListener('scrollend', handleScrollEnd)
-                }
-
-                parent.scroll({
-                    left: initialScrollLeft + scrollAmount,
-                    behavior: 'smooth'
-                })
-
-                // Fallback timeout for browsers without 'scrollend' event
-                if (!isScrollEndSupported) {
-                    setTimeout(() => {
-                        this.isScrolling = false
-                        resolve()
-                    }, 300)
-                }
+            parent.scroll({
+                left: initialScrollLeft + scrollAmount,
+                behavior: 'smooth'
             })
-        }
+
+            // Fallback timeout for browsers without 'scrollend' event
+            if (!isScrollEndSupported) {
+                setTimeout(handleScrollEnd, this.SCROLL_END_TIMEOUT)
+            }
+        })
+    }
 
     /**
      * Vertically scroll a container so that the target child is comfortably visible near the top.
      * If scrollBehavior === 'instant', temporarily force instant scrolling to avoid animation.
      */
-    const scrollParentToChildVertical = (parent, child, scrollBehavior) => {
-            if (scrollBehavior === 'instant') {
-                parent.classList.add('scroll-behavior-auto')
-            }
+    scrollParentToChildVertical(parent, child, scrollBehavior) {
+        if (!parent || !child) return
 
-            const parentRect = parent.getBoundingClientRect()
-            const childRect = child.getBoundingClientRect()
-            const scrollAmount = childRect.top - parentRect.top - 24
+        if (scrollBehavior === 'instant') {
+            parent.classList.add(this.SCROLL_BEHAVIOR_AUTO_CLASS)
+        }
+
+        const parentRect = parent.getBoundingClientRect()
+        const childRect = child.getBoundingClientRect()
+        const scrollAmount = childRect.top - parentRect.top - this.SCROLL_OFFSET
+
+        if (scrollBehavior === 'instant') {
             parent.scrollTop += scrollAmount
+            requestAnimationFrame(() => {
+                parent.classList.remove(this.SCROLL_BEHAVIOR_AUTO_CLASS)
+            })
+        } else {
+            parent.scrollBy({
+                top: scrollAmount,
+                behavior: 'smooth'
+            })
+        }
+    }
 
-            if (scrollBehavior === 'instant') {
-                parent.classList.remove('scroll-behavior-auto')
+    // ========================================================================
+    // Event Handlers
+    // ========================================================================
+
+    handleLabelClick(labelEl) {
+        const section = labelEl.getAttribute('data-label-for')
+        const targetElement = document.querySelector(`[data-timeline-section="${section}"]`)
+        const modalArchive = this.getModalArchiveEl()
+
+        if (targetElement && modalArchive) {
+            this.scrollParentToChildVertical(modalArchive, targetElement)
+        }
+    }
+
+    handleIntersection(entries) {
+        // Find the most intersecting entry (highest intersectionRatio)
+        const intersectingEntries = entries.filter(entry => entry.isIntersecting)
+        if (intersectingEntries.length === 0) return
+
+        const mostIntersecting = intersectingEntries.reduce((best, current) =>
+            current.intersectionRatio > best.intersectionRatio ? current : best
+        )
+
+        const targetSection = mostIntersecting.target.getAttribute('data-timeline-section')
+        const targetLabelEl = this.querySelector(`[data-label-for="${targetSection}"]`)
+        if (!targetLabelEl) return
+
+        const timelineEls = this.getTimelineAllDivEls()
+        const labelEls = this.getLabelEls()
+        const timelineContent = this.getTimelineContentEl()
+
+        // Update URL query param to reflect active year
+        if (window.location.hash.includes(this.HASH_PREFIX)) {
+            const currentYear = window.location.hash.split('?year=')[1]
+            if (currentYear !== targetSection) {
+                const hashWithoutParams = window.location.hash.split('?')[0]
+                window.history.replaceState(
+                    {},
+                    '',
+                    `${window.location.pathname}${hashWithoutParams}?year=${targetSection}`
+                )
             }
         }
 
-    /**
-     * When a label is clicked, scroll the archive modal vertically to the matching section.
-     */
-    const handleLabelClick = (modalArchiveEl, labelEl) => () => {
-            const section = labelEl.getAttribute('data-label-for')
-            const targetElement = document.querySelector(`[data-timeline-section="${section}"]`)
-            if (targetElement) {
-                scrollParentToChildVertical(modalArchiveEl, targetElement)
-            }
+        this.scrollParentToChildCenterHorizontal(timelineContent, targetLabelEl)
+
+        // Activate the appropriate label
+        for (let i = 0; i < labelEls.length; i++) {
+            labelEls[i].classList.remove(this.ACTIVE_CLASS)
+        }
+        targetLabelEl.classList.add(this.ACTIVE_CLASS)
+
+        // Activate the corresponding vertical indicator in the timeline bar
+        const labelIndex = labelEls.findIndex((el) => el.getAttribute('data-label-for') === targetSection)
+
+        for (let i = 0; i < timelineEls.length; i++) {
+            timelineEls[i].classList.remove(this.ACTIVE_CLASS)
         }
 
-    /**
-     * IntersectionObserver callback: pick the most visible section and activate its label and indicator.
-     */
-    const handleIntersection = (timelineContentEl, labelEls) => (entries) => {
-            // Find the most intersecting entry (highest intersectionRatio)
-            const intersectingEntries = entries.filter(entry => entry.isIntersecting)
-            if (intersectingEntries.length === 0) return
+        // Target the centered timeline indicator (vertical line) above the active label.
+        const indicatorIdx = this.TIMELINE_FIRST_INDICATOR_INDEX + (labelIndex === 0 ? 0 : labelIndex * this.TIMELINE_INDICATORS_PER_LABEL)
+        if (timelineEls[indicatorIdx]) {
+            timelineEls[indicatorIdx].classList.add(this.ACTIVE_CLASS)
+        }
 
-            const mostIntersecting = intersectingEntries.reduce((best, current) =>
-                current.intersectionRatio > best.intersectionRatio ? current : best
+        this.activeSection = targetSection
+        localStorage.setItem('archiveYear', targetSection)
+    }
+
+    handleMouseLeave() {
+        if (this.isScrolling) return
+
+        const timelineContent = this.getTimelineContentEl()
+        const activeLabel = this.querySelector(`[data-label-for="${this.activeSection}"]`)
+
+        this.scrollParentToChildCenterHorizontal(timelineContent, activeLabel)
+    }
+
+    handleResize() {
+        this.updateScrollableClass()
+    }
+
+    // ========================================================================
+    // Initialization
+    // ========================================================================
+
+    initializeTimeline() {
+        // Cache DOM references
+        this.getTimelineContentEl()
+        this.getLabelEls()
+        this.getTimelineAllDivEls()
+        this.getSectionEls()
+
+        // Setup event listeners
+        this.setupLabelClickHandlers()
+        this.setupDeepLinkHandling()
+        this.setupMouseLeaveHandler()
+        this.setupResizeHandler()
+    }
+
+    setupLabelClickHandlers() {
+        const labelEls = this.getLabelEls()
+
+        for (let i = 0; i < labelEls.length; i++) {
+            const labelEl = labelEls[i]
+            labelEl.addEventListener('click', () => this.handleLabelClick(labelEl))
+        }
+    }
+
+    setupDeepLinkHandling() {
+        // Handle deep-link with ?year= parameter on page load
+        if (!window.location.hash.includes('?year=')) return
+
+        const yearParam = window.location.hash.split('?year=')[1]
+        const modalArchive = this.getModalArchiveEl()
+
+        window.history.pushState({}, '', `${window.location.pathname}${this.HASH_PREFIX}`)
+
+        requestAnimationFrame(() => {
+            window.history.replaceState(
+                {},
+                '',
+                `${window.location.pathname}${this.HASH_PREFIX}?year=${yearParam}`
             )
 
-            const targetSection = mostIntersecting.target.getAttribute('data-timeline-section')
-            const targetLabelEl = this.querySelector(`[data-label-for="${targetSection}"]`)
-            if (!targetLabelEl) return
-
-            // Use the cached list of all timeline indicator <div>s
-            const timelineEls = this.timelineAllDivEls
-
-            // Update URL query param to reflect active year
-            if (window.location.hash.includes(this.hash) && window.location.hash.split('?year=')[1] !== targetSection) {
-                window.history.replaceState({}, '', window.location.pathname + window.location.hash.split('?')[0] + '?year=' + targetSection)
+            if (typeof openDialog === 'function') {
+                const menuLinkArchive = document.querySelector('#menu_link_archive')
+                openDialog('modal_archive', menuLinkArchive)
             }
 
-            scrollParentToChildCenterHorizontal(timelineContentEl, targetLabelEl)
-
-            // Activate the appropriate label
-            labelEls.forEach((labelEl) => labelEl.classList.remove('active'))
-            targetLabelEl.classList.add('active')
-
-            // Activate the corresponding vertical indicator in the timeline bar
-            const index = labelEls.findIndex((labelEl) => labelEl.getAttribute('data-label-for') === targetSection)
-            timelineEls.forEach((timelineEl) => timelineEl.classList.remove('active'))
-            // Target the centered timeline indicator (vertical line) above the active label.
-            // First indicator at index TIMELINE_FIRST_INDICATOR_INDEX, then spaced by TIMELINE_INDICATORS_PER_LABEL.
-            const indicatorIdx = TIMELINE_FIRST_INDICATOR_INDEX + (index === 0 ? 0 : index * TIMELINE_INDICATORS_PER_LABEL)
-            timelineEls[indicatorIdx]?.classList.add('active')
-
-            this.activeSection = targetSection
-
-            localStorage.setItem('archiveYear', targetSection)
-        }
-
-        /**
-         * Cache frequently used elements, wire label clicks, and handle deep-link (?year=) on first load.
-         */
-        const initializeTimeline = () => {
-            this.timelineContentEl = this.querySelector('#timeline-content')
-            this.labelEls = Array.from(this.querySelectorAll('[data-label-for]'))
-            this.timelineAllDivEls = Array.from(this.querySelectorAll('#timeline div'))
-            this.sectionEls = Array.from(document.querySelectorAll('[data-timeline-section]'))
-
-            const modalArchiveEl = document.querySelector('#modal_archive')
-
-            // Wire up label click handlers to scroll to corresponding section
-            this.labelEls.forEach((labelEl) => {
-                labelEl.addEventListener('click', handleLabelClick(modalArchiveEl, labelEl))
-            })
-
-            // Handle deep-link with ?year= parameter on page load
-            if (window.location.hash.includes('?year=')) {
-                const yearParam = window.location.hash.split('?year=')[1]
-
-                window.history.pushState({}, '', `${window.location.pathname}${this.hash}`)
-
-                requestAnimationFrame(async () => {
-                    window.history.replaceState({}, '', `${window.location.pathname}${this.hash}?year=${yearParam}`)
-                    openDialog('modal_archive', document.querySelector('#menu_link_archive'))
-
-                    const targetElement = document.querySelector(`[data-timeline-section="${yearParam}"]`)
-                    if (targetElement) {
-                        scrollParentToChildVertical(modalArchiveEl, targetElement, 'instant')
-                    }
-                })
+            const targetElement = document.querySelector(`[data-timeline-section="${yearParam}"]`)
+            if (targetElement && modalArchive) {
+                this.scrollParentToChildVertical(modalArchive, targetElement, 'instant')
             }
+        })
+    }
 
-            // Re-center active label when mouse leaves the timeline
-            this.addEventListener('mouseleave', async () => {
-                if (this.isScrolling) return
-                await scrollParentToChildCenterHorizontal(this.timelineContentEl, this.querySelector(`[data-label-for="${this.activeSection}"]`))
-            })
-        }
+    setupMouseLeaveHandler() {
+        this.boundHandleMouseLeave = () => this.handleMouseLeave()
+        this.addEventListener('mouseleave', this.boundHandleMouseLeave)
+    }
+
+    setupResizeHandler() {
+        this.boundHandleResize = () => this.handleResize()
+        window.addEventListener('resize', this.boundHandleResize)
+    }
+
+    // ========================================================================
+    // Highlighting
+    // ========================================================================
+
+    setupHighlighting() {
+        this.setupLabelToIndicatorHighlighting()
+        this.setupIndicatorToLabelHighlighting()
+    }
 
     /**
      * Hover and click linkage from the top indicator bar → labels.
      */
-    const highlightLabelEls = () => {
-            const timelineEls = this.querySelectorAll('#timeline [data-value]')
+    setupIndicatorToLabelHighlighting() {
+        const timelineEls = this.querySelectorAll('#timeline [data-value]')
 
-            timelineEls.forEach(timelineEl => {
-                const value = timelineEl.getAttribute('data-value')
-                const labelEl = this.querySelector(`#timeline_labels [data-label-for="${value}"]`)
+        for (let i = 0; i < timelineEls.length; i++) {
+            const timelineEl = timelineEls[i]
+            const value = timelineEl.getAttribute('data-value')
+            const labelEl = this.querySelector(`#timeline_labels [data-label-for="${value}"]`)
 
-                if (labelEl) {
-                    timelineEl.addEventListener('mouseenter', () => {
-                        labelEl.classList.add('highlight')
-                    })
+            if (!labelEl) continue
 
-                    timelineEl.addEventListener('mouseleave', () => {
-                        labelEl.classList.remove('highlight')
-                    })
+            timelineEl.addEventListener('mouseenter', () => {
+                labelEl.classList.add(this.HIGHLIGHT_CLASS)
+            })
 
-                    timelineEl.addEventListener('click', () => {
-                        labelEl.click()
-                    })
-                }
+            timelineEl.addEventListener('mouseleave', () => {
+                labelEl.classList.remove(this.HIGHLIGHT_CLASS)
+            })
+
+            timelineEl.addEventListener('click', () => {
+                labelEl.click()
             })
         }
+    }
 
     /**
      * Hover linkage from labels → matching centered indicator bar element.
      */
-    const highlightTimelineEls = () => {
-            this.labelEls.forEach(labelEl => {
-                const value = labelEl.getAttribute('data-label-for')
-                const timelineEl = this.querySelector(`#timeline div:nth-child(6n + 4)[data-value="${value}"]`)
+    setupLabelToIndicatorHighlighting() {
+        const labelEls = this.getLabelEls()
 
-                if (timelineEl) {
-                    labelEl.addEventListener('mouseenter', () => {
-                        timelineEl.classList.add('highlight')
-                    })
+        for (let i = 0; i < labelEls.length; i++) {
+            const labelEl = labelEls[i]
+            const value = labelEl.getAttribute('data-label-for')
+            const timelineEl = this.querySelector(`#timeline div:nth-child(6n + 4)[data-value="${value}"]`)
 
-                    labelEl.addEventListener('mouseleave', () => {
-                        timelineEl.classList.remove('highlight')
-                    })
-                }
+            if (!timelineEl) continue
+
+            labelEl.addEventListener('mouseenter', () => {
+                timelineEl.classList.add(this.HIGHLIGHT_CLASS)
+            })
+
+            labelEl.addEventListener('mouseleave', () => {
+                timelineEl.classList.remove(this.HIGHLIGHT_CLASS)
             })
         }
+    }
 
-        /**
-         * Start an IntersectionObserver that tracks which content section is most visible.
-         * rootMargin centers the active window; thresholds provide richer intersectionRatio values.
-         */
-        const setupIntersectionObserver = (timelineContentEl, labelEls) => {
-            this.intersectionObserver = new IntersectionObserver(handleIntersection(timelineContentEl, labelEls), {
-                rootMargin: '-50% 0% -50% 0%',
-                threshold: [0, 0.25, 0.5, 0.75, 1]
-            })
-            this.sectionEls.forEach((element) => this.intersectionObserver.observe(element))
+    // ========================================================================
+    // Intersection Observer
+    // ========================================================================
+
+    /**
+     * Start an IntersectionObserver that tracks which content section is most visible.
+     * rootMargin centers the active window; thresholds provide richer intersectionRatio values.
+     */
+    startIntersectionObserver() {
+        if (this.intersectionObserver) return
+
+        this.intersectionObserver = new IntersectionObserver(
+            (entries) => this.handleIntersection(entries),
+            {
+                rootMargin: this.OBSERVER_ROOT_MARGIN,
+                threshold: this.OBSERVER_THRESHOLDS
+            }
+        )
+
+        const sectionEls = this.getSectionEls()
+        for (let i = 0; i < sectionEls.length; i++) {
+            this.intersectionObserver.observe(sectionEls[i])
+        }
+    }
+
+    stopIntersectionObserver() {
+        if (!this.intersectionObserver) return
+
+        this.intersectionObserver.disconnect()
+        this.intersectionObserver = null
+    }
+
+    // ========================================================================
+    // Cleanup
+    // ========================================================================
+
+    destroy() {
+        this.stopIntersectionObserver()
+
+        if (this.boundHandleMouseLeave) {
+            this.removeEventListener('mouseleave', this.boundHandleMouseLeave)
+            this.boundHandleMouseLeave = null
         }
 
-        // Initialize timeline functionality
-        initializeTimeline()
-        highlightLabelEls()
-        highlightTimelineEls()
-
-        // Public methods for controlling the IntersectionObserver
-        this.startIntersectionObserver = () => {
-            setupIntersectionObserver(this.timelineContentEl, this.labelEls)
+        if (this.boundHandleResize) {
+            window.removeEventListener('resize', this.boundHandleResize)
+            this.boundHandleResize = null
         }
 
-        this.stopIntersectionObserver = () => {
-            this.intersectionObserver.disconnect()
+        if (this.boundHandleScrollEnd) {
+            const timelineContent = this.getTimelineContentEl()
+            if (timelineContent) {
+                timelineContent.removeEventListener('scrollend', this.boundHandleScrollEnd)
+            }
+            this.boundHandleScrollEnd = null
         }
+
+        // Clear cached DOM references
+        this.timelineContentEl = null
+        this.labelEls = null
+        this.timelineAllDivEls = null
+        this.sectionEls = null
+        this.modalArchiveEl = null
     }
 }
 
-customElements.define('horizontal-timeline', timeline)
+// ============================================================================
+// Register Custom Element
+// ============================================================================
+
+customElements.define('horizontal-timeline', HorizontalTimeline)
