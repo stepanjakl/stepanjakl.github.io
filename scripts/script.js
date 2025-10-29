@@ -27,16 +27,34 @@ const isHash = (hash) => getCurrentHash() === hash
 const hashIncludes = (hash) => getCurrentHash().includes(hash)
 
 // Shared navigation constants
-const NAVIGATION_HASHES = {
+const NAVIGATION_HASHES = Object.freeze({
     PROFILE: '#profile',
     ARCHIVE: '#archive',
     MENU: '#menu'
-}
+})
 
-const MODAL_SELECTORS = {
+const MODAL_SELECTORS = Object.freeze({
     PROFILE: '#modal_profile',
     ARCHIVE: '#modal_archive'
-}
+})
+
+// Dialog configuration for consistent ID references
+// Note: aria.DIALOG_IDS is defined in dialog.js but we keep these for backward compatibility
+const DIALOG_CONFIG = Object.freeze({
+    PROFILE: {
+        id: 'modal_profile',
+        trigger: 'menu_link_profile'
+    },
+    ARCHIVE: {
+        id: 'modal_archive',
+        trigger: 'menu_link_archive'
+    },
+    MENU: {
+        id: 'menu_button-wrapper',
+        trigger: 'menu_button--open',
+        close: 'menu_button--close'
+    }
+})
 
 // ============================================================================
 // TextHighlighter Class
@@ -121,13 +139,13 @@ class KeyHandler {
                 }
                 break
             case this.KEYS.KEY_P:
-                this.toggleDialog(event, NAVIGATION_HASHES.PROFILE, 'modal_profile', 'menu_link_profile')
+                this.toggleDialog(event, NAVIGATION_HASHES.PROFILE, DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger)
                 break
             case this.KEYS.KEY_A:
-                this.toggleDialog(event, NAVIGATION_HASHES.ARCHIVE, 'modal_archive', 'menu_link_archive', true)
+                this.toggleDialog(event, NAVIGATION_HASHES.ARCHIVE, DIALOG_CONFIG.ARCHIVE.id, DIALOG_CONFIG.ARCHIVE.trigger, true)
                 break
             case this.KEYS.KEY_M:
-                this.toggleDialog(event, NAVIGATION_HASHES.MENU, 'menu_button-wrapper', 'menu_button--open', false, 'menu_button--close')
+                this.toggleDialog(event, NAVIGATION_HASHES.MENU, DIALOG_CONFIG.MENU.id, DIALOG_CONFIG.MENU.trigger, false, DIALOG_CONFIG.MENU.close)
                 break
             case this.KEYS.KEY_D:
                 this.toggleDebug(event)
@@ -257,7 +275,7 @@ class WheelHandler {
         if (direction !== 'down' || getCurrentHash()) return
 
         if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
-            openDialog('modal_profile', 'menu_link_profile', null, 'profile')
+            openDialog(DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger, null, 'profile')
         }
     }
 
@@ -268,7 +286,7 @@ class WheelHandler {
 
         if (direction === 'right' && !hash) {
             if (scrollX + window.innerWidth >= document.body.scrollWidth) {
-                openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
+                openDialog(DIALOG_CONFIG.MENU.id, DIALOG_CONFIG.MENU.trigger, DIALOG_CONFIG.MENU.close, 'menu')
             }
         } else if (direction === 'left' && hash === NAVIGATION_HASHES.MENU && scrollX === 0) {
             closeDialog('#')
@@ -357,7 +375,7 @@ class TouchHandler {
         if (direction !== 'down' || getCurrentHash()) return
 
         if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
-            openDialog('modal_profile', 'menu_link_profile', null, 'profile')
+            openDialog(DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger, null, 'profile')
         }
     }
 
@@ -369,7 +387,7 @@ class TouchHandler {
         if (direction === 'right' && hash === NAVIGATION_HASHES.MENU && scrollX + window.innerWidth >= document.body.scrollWidth) {
             closeDialog('#')
         } else if (direction === 'left' && !hash && scrollX === 0) {
-            openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
+            openDialog(DIALOG_CONFIG.MENU.id, DIALOG_CONFIG.MENU.trigger, DIALOG_CONFIG.MENU.close, 'menu')
         }
     }
 
@@ -1432,15 +1450,15 @@ window.initializeTimeline = () => {
  * Initializes dialog elements with ARIA attributes and backdrops
  */
 function initializeDialogs() {
-    const dialogIds = ['modal_profile', 'modal_archive', 'menu_button-wrapper']
+    const dialogConfigs = [DIALOG_CONFIG.PROFILE, DIALOG_CONFIG.ARCHIVE, DIALOG_CONFIG.MENU]
 
-    for (let i = 0; i < dialogIds.length; i++) {
-        const dialogEl = document.getElementById(dialogIds[i])
+    for (const config of dialogConfigs) {
+        const dialogEl = document.getElementById(config.id)
         if (dialogEl) {
             if (!dialogEl.getAttribute('role')) {
                 dialogEl.setAttribute('role', 'dialog')
             }
-            aria.addBackdrop(dialogIds[i])
+            aria.addBackdrop(config.id)
         }
     }
 }
@@ -1482,17 +1500,17 @@ const applyNoAnimation = () => {
 const openDialogOnLoad = () => {
     switch (window.location.hash.split('?')[0]) {
         case '#profile':
-            openDialog('modal_profile', 'menu_link_profile', null, 'profile')
+            openDialog(DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger, null, 'profile')
             break
         case '#archive':
             const yearParam = window.location.hash.split('?year=')[1]
             if (yearParam) {
                 localStorage.setItem('archiveYear', yearParam)
             }
-            openDialog('modal_archive', 'menu_link_archive', null, window.location.hash)
+            openDialog(DIALOG_CONFIG.ARCHIVE.id, DIALOG_CONFIG.ARCHIVE.trigger, null, window.location.hash)
             break
         case '#menu':
-            openDialog('menu_button-wrapper', 'menu_button--open', 'menu_button--close', 'menu')
+            openDialog(DIALOG_CONFIG.MENU.id, DIALOG_CONFIG.MENU.trigger, DIALOG_CONFIG.MENU.close, 'menu')
             break
     }
 }
@@ -1504,7 +1522,7 @@ const openDialogOnLoad = () => {
 const initializeModalFooterArt = () => {
     const footerArtWrapper = document.querySelector('#modal_profile-footer_art-wrapper')
     const footerArt = document.querySelector('#modal_profile-footer_art')
-    const modalProfile = document.getElementById('modal_profile')
+    const modalProfile = document.getElementById(DIALOG_CONFIG.PROFILE.id)
 
     if (!footerArtWrapper || !footerArt || !modalProfile) return
 
@@ -1622,7 +1640,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Pre-initialize timeline element (but don't start observer yet)
     // Observer will be started when archive modal opens
-    aria.addBackdrop('modal_archive')
+    aria.addBackdrop(DIALOG_CONFIG.ARCHIVE.id)
     window.initializeTimeline()
 
     // Setup timeline positioning

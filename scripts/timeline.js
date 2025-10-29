@@ -658,9 +658,8 @@ class HorizontalTimeline extends HTMLElement {
                 `${window.location.pathname}${this.HASH_PREFIX}?year=${yearParam}`
             )
 
-            if (typeof openDialog === 'function') {
-                const menuLinkArchive = document.querySelector('#menu_link_archive')
-                openDialog('modal_archive', menuLinkArchive)
+            if (typeof openDialog === 'function' && typeof DIALOG_CONFIG !== 'undefined') {
+                openDialog(DIALOG_CONFIG.ARCHIVE.id, DIALOG_CONFIG.ARCHIVE.trigger)
             }
 
             const targetElement = document.querySelector(`[data-timeline-section="${yearParam}"]`)
