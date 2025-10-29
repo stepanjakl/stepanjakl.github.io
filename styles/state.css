@@ -62,19 +62,19 @@
 
 /* Light mode - Menu */
 
-#mode:not(:checked)~main #menu_dropdown label#menu_dropdown_light-mode {
+#mode:not(:checked)~main #menu-dropdown label#menu-dropdown-light-mode {
     display: flex;
 }
 
-#mode:checked~main #menu_dropdown label#menu_dropdown_light-mode {
+#mode:checked~main #menu-dropdown label#menu-dropdown-light-mode {
     display: none;
 }
 
-#mode:not(:checked)~main #menu_dropdown label#menu_dropdown_dark-mode {
+#mode:not(:checked)~main #menu-dropdown label#menu-dropdown-dark-mode {
     display: none;
 }
 
-#mode:checked~main #menu_dropdown label#menu_dropdown_dark-mode {
+#mode:checked~main #menu-dropdown label#menu-dropdown-dark-mode {
     display: flex;
 }
 
@@ -102,8 +102,8 @@
 
 /* Light mode - Intro */
 
-#mode:checked~main #intro_right-column_title--primary span,
-#mode:checked~main #intro_right-column_title--secondary span {
+#mode:checked~main .intro__title--primary span,
+#mode:checked~main .intro__title--secondary span {
     color: var(--text-2);
 }
 
@@ -157,8 +157,8 @@
 
 /* Modals */
 
-#profile:target~main #modal_profile,
-#archive:target~main #modal_archive {
+#profile:target~main #modal-profile,
+#archive:target~main #modal-archive {
     pointer-events: auto;
     /* z-index: 2; */
 }
@@ -171,22 +171,22 @@
 
 /* Modal - Profile */
 
-#profile:target~main #modal_profile {
+#profile:target~main #modal-profile {
     overflow: auto;
 }
 
-#profile:target~main #modal_profile .modal-content {
+#profile:target~main #modal-profile .modal__content {
     pointer-events: auto;
 }
 
 
 /* Modal - Archive */
 
-#archive:target~main #modal_archive {
+#archive:target~main #modal-archive {
     overflow: auto;
 }
 
-#archive:target~main #modal_archive .modal-content {
+#archive:target~main #modal-archive .modal__content {
     pointer-events: auto;
 }
 
@@ -240,21 +240,21 @@
 }
 
 @media (max-width: 45rem) {
-    #timeline_section_year-2024:not(:checked) ~ #modal_archive-content #modal_archive-content_section[data-timeline-section="2024"],
-    #timeline_section_year-2018:not(:checked) ~ #modal_archive-content #modal_archive-content_section[data-timeline-section="2018"] {
+    #timeline-section-year-2024:not(:checked) ~ #modal-archive-content [data-timeline-section="2024"],
+    #timeline-section-year-2018:not(:checked) ~ #modal-archive-content [data-timeline-section="2018"] {
         visibility: hidden;
         opacity: 0;
         height: 0;
         padding: 0;
     }
 
-    #timeline_section_year-2024:checked ~ #modal_archive-content #modal_archive-content_section-title[data-timeline-section="2024"] svg:first-child,
-    #timeline_section_year-2018:checked ~ #modal_archive-content #modal_archive-content_section-title[data-timeline-section="2018"] svg:first-child {
+    #timeline-section-year-2024:checked ~ #modal-archive-content [data-timeline-section-title="2024"] svg:first-child,
+    #timeline-section-year-2018:checked ~ #modal-archive-content [data-timeline-section-title="2018"] svg:first-child {
         display: none;
     }
 
-    #timeline_section_year-2024:not(:checked) ~ #modal_archive-content #modal_archive-content_section-title[data-timeline-section="2024"] svg:nth-child(2),
-    #timeline_section_year-2018:not(:checked) ~ #modal_archive-content #modal_archive-content_section-title[data-timeline-section="2018"] svg:nth-child(2) {
+    #timeline-section-year-2024:not(:checked) ~ #modal-archive-content [data-timeline-section-title="2024"] svg:nth-child(2),
+    #timeline-section-year-2018:not(:checked) ~ #modal-archive-content [data-timeline-section-title="2018"] svg:nth-child(2) {
         display: none;
     }
 }

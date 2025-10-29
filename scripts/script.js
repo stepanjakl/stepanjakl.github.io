@@ -19,7 +19,7 @@ const isAnimationFinished = (selector) => {
 }
 
 // Shared animation gate selector (used across handlers)
-const ANIMATION_CHECK_SELECTOR = '.animate-fade-in-cta-2 #menu-bg'
+const ANIMATION_CHECK_SELECTOR = '.menu--animating .menu__background'
 
 const getCurrentHash = () => window.location.hash
 
@@ -42,24 +42,24 @@ const NAVIGATION_HASHES = Object.freeze({
 })
 
 const MODAL_SELECTORS = Object.freeze({
-    PROFILE: '#modal_profile',
-    ARCHIVE: '#modal_archive'
+    PROFILE: '#modal-profile',
+    ARCHIVE: '#modal-archive'
 })
 
 // Dialog configuration for consistent ID references
 const DIALOG_CONFIG = Object.freeze({
     PROFILE: {
-        id: 'modal_profile',
-        trigger: 'menu_link_profile'  // Element to focus when dialog closes
+        id: 'modal-profile',
+        trigger: 'menu-link-profile'  // Element to focus when dialog closes
     },
     ARCHIVE: {
-        id: 'modal_archive',
-        trigger: 'menu_link_archive'
+        id: 'modal-archive',
+        trigger: 'menu-link-archive'
     },
     MENU: {
-        id: 'menu_button-wrapper',
-        trigger: 'menu_button--open',
-        close: 'menu_button--close'   // Element to focus when dialog opens
+        id: 'menu-toggle',
+        trigger: 'menu-button-open',
+        close: 'menu-button-close'   // Element to focus when dialog opens
     }
 })
 
@@ -107,7 +107,7 @@ class KeyHandler {
     constructor() {
         this.tooltipElements = null
         this.debugElement = null
-        this.TOOLTIP_ITEMS_SELECTOR = '#menu_link_profile, #menu_link_archive, #menu_button-wrapper'
+        this.TOOLTIP_ITEMS_SELECTOR = '#menu-link-profile, #menu-link-archive, #menu-toggle'
         this.TOOLTIP_ACTIVE_CLASS = 'tooltip-key--active'
 
         this.KEYS = {
@@ -1411,7 +1411,7 @@ window.initializeTimeline = () => {
     window.timelineEl = document.createElement('horizontal-timeline')
     timelineEl.labels = ['2024-21', '2021-19', '2019-18', 'elsewhen']
 
-    document.querySelector('#horizontal_timeline').appendChild(timelineEl)
+    document.querySelector('#horizontal-timeline').appendChild(timelineEl)
 
     const timelineContent = document.querySelector('#timeline-content')
     let edgeScroller, dragScroll
@@ -1486,21 +1486,20 @@ const applyNoAnimation = () => {
         `#square-2,
              #square-3,
              #square-4,
-            .animate-fade-in-logo,
-            .animate-fade-in-name,
-            .animate-fade-in-name>div>p,
-            .animate-fade-in-title,
-            .animate-fade-in-title>p,
-            .animate-fade-in-title .de-highlight-anim span,
-            .animate-fade-in-title .de-highlight-anim-alt span,
-            .animate-fade-in-cta-1,
-            .animate-fade-in-cta-1 #availability_button-bg,
-            .animate-fade-in-cta-1 a>div,
-            .animate-fade-in-cta-2 #menu-bg,
-            .animate-fade-in-cta-2 #menu_email_button-wrapper,
-            .animate-fade-in-cta-2 #menu_link_profile,
-            .animate-fade-in-cta-2 #menu_link_archive,
-            .animate-fade-in-cta-2 #menu_button-wrapper`
+            .intro__logo--animating,
+            .intro__name--animating,
+            .intro__name--animating .intro__name-wrapper>p,
+            .intro__title--animating,
+            .intro__title--animating>p,
+            .intro__title--animating .de-highlight-anim span,
+            .intro__title--animating .de-highlight-anim-alt span,
+            .availability--animating,
+            .availability--animating .availability__background,
+            .availability--animating .availability__content,
+            .menu--animating .menu__background,
+            .menu--animating .menu__email,
+            .menu--animating .menu__link,
+            .menu--animating .menu__toggle`
     )
 
     for (let i = 0; i < elements.length; i++) {
@@ -1534,8 +1533,8 @@ const openDialogOnLoad = () => {
  * Initializes 3D transform effect for modal profile footer art based on scroll
  */
 const initializeModalFooterArt = () => {
-    const footerArtWrapper = document.querySelector('#modal_profile-footer_art-wrapper')
-    const footerArt = document.querySelector('#modal_profile-footer_art')
+    const footerArtWrapper = document.querySelector('#modal-profile .modal__footer-art')
+    const footerArt = document.querySelector('#modal-profile .modal__footer-art-gradient')
     const modalProfile = document.getElementById(DIALOG_CONFIG.PROFILE.id)
 
     if (!footerArtWrapper || !footerArt || !modalProfile) return
@@ -1576,7 +1575,7 @@ window.toggleFullscreen = () => {
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    const ANIMATION_CHECK_SELECTOR = '.animate-fade-in-cta-2 #menu-bg'
+    const ANIMATION_CHECK_SELECTOR = '.menu--animating .menu__background'
     const TOUCH_DEVICE_CLASS = 'touch-device'
     const OVERFLOW_HIDDEN_CLASS = 'overflow-hidden'
 
@@ -1659,10 +1658,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.initializeTimeline()
 
     // Setup timeline positioning
-    const archiveWrapperEl = document.querySelector('#modal_archive-wrapper')
-    const timelineContentSectionEl = document.querySelector('#modal_archive-wrapper [data-timeline-section]')
-    const timelineWrapperEl = document.querySelector('#horizontal_timeline')
-    const modalArchiveContent = document.querySelector('#modal_archive .modal-content')
+    const archiveWrapperEl = document.querySelector('#modal-archive-wrapper')
+    const timelineContentSectionEl = document.querySelector('#modal-archive-wrapper [data-timeline-section]')
+    const timelineWrapperEl = document.querySelector('#horizontal-timeline')
+    const modalArchiveContent = document.querySelector('#modal-archive .modal-content')
 
     const positionTimeline = event => {
         if (event && event.currentTarget !== event.target) return

@@ -431,7 +431,7 @@ class HorizontalTimeline extends HTMLElement {
     }
 
     getModalArchiveEl() {
-        return this.modalArchiveEl ??= document.querySelector('#modal_archive')
+        return this.modalArchiveEl ??= document.querySelector('#modal-archive')
     }
 
     // ========================================================================

@@ -14,6 +14,18 @@ body {
     --ease-in-quad: cubic-bezier(0.55, 0.085, 0.68, 0.53);
     --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --ease-in-out-quad: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+
+    /* Transition timing presets */
+    --transition-quick: calc(var(--animate-in-segment) * 0.67);
+    --transition-standard: var(--animate-in-segment);
+    --transition-emphasis: calc(var(--animate-in-segment) * 2);
+
+    /* Common transition patterns */
+    --transition-fade-in: opacity var(--animate-in-segment) linear;
+    --transition-fade-out: opacity var(--animate-out-segment) linear;
+    --transition-color: color var(--animate-in-segment-2\/3) linear;
+    --transition-background: background-color var(--animate-in-segment-2\/3) linear;
+    --transition-transform: transform var(--animate-in-segment) var(--ease-out-quad);
 }
 
 .quick-animation {
@@ -122,7 +134,7 @@ body {
 
 /* Intro - Logo */
 
-.animate-fade-in-logo {
+.intro__logo--animating {
     animation-name: logo-animate;
     animation-duration: calc(var(--anim-segment) * 2.75);
     animation-delay: calc(var(--anim-segment) * 8.25);
@@ -144,42 +156,42 @@ body {
 
 /* Intro - Text */
 
-.animate-fade-in-name>div>p,
-.animate-fade-in-title>p {
+.intro__name--animating .intro__name-wrapper>p,
+.intro__title--animating>p {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
     animation-duration: calc(var(--anim-segment) * 5);
     animation-timing-function: var(--ease-out-quad);
 }
 
-.animate-fade-in-name>div>p {
+.intro__name--animating .intro__name-wrapper>p {
     animation-delay: calc((var(--anim-segment) * 9) + (var(--anim-segment) * var(--i)));
 }
 
-.animate-fade-in-title>p {
+.intro__title--animating>p {
     animation-delay: calc((var(--anim-segment) * 9) + (var(--anim-segment) * var(--i)));
 }
 
-.animate-fade-in-name,
-.animate-fade-in-title,
-.animate-fade-in-cta-1 {
+.intro__name--animating,
+.intro__title--animating,
+.availability--animating {
     animation-name: change-pointer;
-    animation-duration: 0;
+    animation-duration: 0s;
     animation-timing-function: linear;
     animation-fill-mode: backwards;
 }
 
 
 /* TODO - correct these delay timings */
-.animate-fade-in-name {
+.intro__name--animating {
     animation-delay: calc(var(--anim-segment) * 16);
 }
 
-.animate-fade-in-title {
+.intro__title--animating {
     animation-delay: calc(var(--anim-segment) * 20);
 }
 
-.animate-fade-in-cta-1 {
+.availability--animating {
     animation-delay: calc(var(--anim-segment) * 18.25);
 }
 
@@ -212,20 +224,20 @@ body {
 
 /* Intro - Text De-Highlight */
 
-.animate-fade-in-title .de-highlight-anim span:hover {
+.intro__title--animating .de-highlight-anim span:hover {
     color: var(--highlight-primary) !important;
     transition: color var(--animate-in-segment-2\/3) var(--ease-out-quad);
     /* animation: none !important; */
 }
 
-.animate-fade-in-title .de-highlight-anim-alt span:hover {
+.intro__title--animating .de-highlight-anim-alt span:hover {
     color: var(--yellow) !important;
     transition: color var(--animate-in-segment-2\/3) var(--ease-out-quad);
     /* animation: none !important; */
 }
 
-.animate-fade-in-title .de-highlight-anim span,
-.animate-fade-in-title .de-highlight-anim-alt span {
+.intro__title--animating .de-highlight-anim span,
+.intro__title--animating .de-highlight-anim-alt span {
     animation-fill-mode: backwards;
     animation-duration: calc(var(--anim-segment) * 4);
     animation-timing-function: var(--ease-out-quad);
@@ -233,7 +245,7 @@ body {
     transition: color calc(var(--anim-segment) * 4) var(--ease-out-quad) calc(var(--anim-segment) * 2);
 }
 
-.animate-fade-in-title .de-highlight-anim span {
+.intro__title--animating .de-highlight-anim span {
     animation-name: de-highlight-anim;
     animation-delay: calc((var(--anim-segment) * 14) + var(--i) * 0.1s);
 }
@@ -248,7 +260,7 @@ body {
     }
 }
 
-.animate-fade-in-title .de-highlight-anim-alt span {
+.intro__title--animating .de-highlight-anim-alt span {
     animation-name: de-highlight-anim-alt;
     animation-delay: calc((var(--anim-segment) * 15) + var(--i) * 0.1s);
 }
@@ -266,7 +278,11 @@ body {
 
 /* Intro - CTA Blocks */
 
-.animate-fade-in-cta-1 #availability_button-bg {
+.availability--animating {
+    animation: fade-in-cta-1 both;
+}
+
+.availability--animating .availability__background {
     animation-name: cta-1-animate-init;
     animation-duration: calc(var(--anim-segment) * 1.5);
     animation-delay: calc(var(--anim-segment) * 16);
@@ -274,7 +290,7 @@ body {
     animation-fill-mode: backwards;
 }
 
-.animate-fade-in-cta-1 a>div {
+.availability--animating .availability__content {
     animation-name: fade-in-opacity;
     animation-duration: calc(1.25 * var(--anim-segment));
     animation-delay: calc(var(--anim-segment) * 17);
@@ -298,7 +314,7 @@ body {
     }
 }
 
-.animate-fade-in-cta-2 #menu-bg {
+.menu--animating .menu__background {
     animation-name: cta-2-animate-init;
     animation-duration: calc(var(--anim-segment) * 1.5);
     animation-delay: calc(var(--anim-segment) * 17.5);
@@ -306,10 +322,9 @@ body {
     animation-fill-mode: backwards;
 }
 
-.animate-fade-in-cta-2 #menu_email_button-wrapper,
-.animate-fade-in-cta-2 #menu_link_profile,
-.animate-fade-in-cta-2 #menu_link_archive,
-.animate-fade-in-cta-2 #menu_button-wrapper {
+.menu--animating .menu__email,
+.menu--animating .menu__link,
+.menu--animating .menu__toggle {
     animation-name: fade-in-opacity;
     animation-duration: calc(1.25 * var(--anim-segment));
     animation-delay: calc((var(--anim-segment) * 18.5) + ((var(--anim-segment) * 0.75) * var(--i)));
@@ -436,8 +451,8 @@ body {
 #archive:target~main footer #rectangle,
 #profile:target~main footer #square-1,
 #archive:target~main footer #square-1,
-#profile:target~main #availability_button_dot,
-#archive:target~main #availability_button_dot {
+#profile:target~main .availability__dot,
+#archive:target~main .availability__dot {
     animation-play-state: paused;
 }
 
@@ -479,16 +494,18 @@ body {
     animation-fill-mode: forwards; */
 }
 
-#intro_left-column h2>div:hover .corner-wrapper,
-#logo:hover .corner-wrapper {
+.intro__name-wrapper:hover .corner-wrapper,
+#logo:hover .corner-wrapper,
+.intro__logo-wrapper:hover .corner-wrapper {
     opacity: 1;
     transition: opacity calc(var(--animate-in-segment) * 0.75) var(--ease-out-quad);
 }
 
 
 /* TODO - add states for focus and active and similar - keyboard navigation */
-#intro_left-column h2>div:hover .corner,
-#logo:hover .corner {
+.intro__name-wrapper:hover .corner,
+#logo:hover .corner,
+.intro__logo-wrapper:hover .corner {
     animation: corner-flicker;
     animation-timing-function: var(--ease-out-quad);
     animation-fill-mode: forwards;
@@ -496,25 +513,28 @@ body {
     transition: transform calc(var(--animate-in-segment) * 0.75) var(--ease-out-quad);
 }
 
-#intro_left-column h2>div:hover .corner {
+.intro__name-wrapper:hover .corner {
     animation-duration: calc(var(--animate-in-segment) * 3);
 }
 
-#logo:hover .corner {
+#logo:hover .corner,
+.intro__logo-wrapper:hover .corner {
     animation-duration: calc(var(--animate-in-segment) * 4);
 }
 
-#intro_left-column h2>div:hover .corner::before,
-#intro_left-column h2>div:hover .corner::after,
+.intro__name-wrapper:hover .corner::before,
+.intro__name-wrapper:hover .corner::after,
 #logo:hover .corner::before,
-#logo:hover .corner::after {
+#logo:hover .corner::after,
+.intro__logo-wrapper:hover .corner::before,
+.intro__logo-wrapper:hover .corner::after {
     animation: corner-color-change;
     animation-timing-function: linear;
     animation-fill-mode: forwards;
 }
 
-#intro_left-column h2>div:hover .corner::before,
-#intro_left-column h2>div:hover .corner::after {
+.intro__name-wrapper:hover .corner::before,
+.intro__name-wrapper:hover .corner::after {
     animation-duration: calc(var(--animate-in-segment) * 3);
 }
 
@@ -739,7 +759,8 @@ svg.animate-face-icon path {
     }
 }
 
-#availability_button_dot {
+.availability__dot,
+.availability__dot {
     animation-name: availability-dot-fade-animation;
     animation-fill-mode: both;
     animation-timing-function: linear;
@@ -748,39 +769,41 @@ svg.animate-face-icon path {
     animation-delay: calc(var(--anim-segment) * 5);
 }
 
-#availability_button a:hover #availability_button_dot, #availability_button a:focus #availability_button_dot {
+.availability__button:hover .availability__dot, .availability__button:focus .availability__dot {
     animation: none;
 }
 
-#availability_button_dot::before {
+.availability__dot::before,
+.availability__dot::before {
     transition: opacity calc(2 * var(--animate-out-segment)) var(--ease-out-quad), transform calc(2 * var(--animate-out-segment)) var(--ease-out-quad);
     transform-origin: center;
     z-index: -1;
 }
 
-#availability_button_dot::after {
+.availability__dot::after,
+.availability__dot::after {
     transition: background-color var(--animate-out-segment) linear;
 }
 
-#availability_button a:hover #availability_button_dot::before, #availability_button a:focus #availability_button_dot::before {
+.availability__button:hover .availability__dot::before, .availability__button:focus .availability__dot::before {
     transition: opacity calc(2 * var(--animate-in-segment)) var(--ease-in-quad), transform calc(2 * var(--animate-in-segment)) var(--ease-in-quad);
     transform: scale(135);
 }
 
-#availability_button_dot {
+.availability__dot {
     transition: color var(--animate-out-segment) linear;
 }
 
-#availability_button a:hover #availability_button_dot::after, #availability_button a:focus #availability_button_dot::after {
+.availability__button:hover .availability__dot::after {
     transition: background-color var(--animate-in-segment) linear var(--animate-in-segment);
     background-color: var(--cyan-full-5);
 }
 
-#availability_button_text {
+.availability__text {
     transition: color var(--animate-out-segment) linear;
 }
 
-#availability_button a:hover #availability_button_text, #availability_button a:focus #availability_button_text {
+.availability__button:hover .availability__text {
     transition: color var(--animate-in-segment) linear var(--animate-in-segment);
     color: var(--cyan-full-5);
 }
@@ -788,45 +811,67 @@ svg.animate-face-icon path {
 
 /* Intro Links */
 
-#menu_links>a {
+.menu__link,
+.menu__link {
     transition: background-color var(--animate-out-segment-2\/3) linear, box-shadow var(--animate-out-segment-2\/3) linear;
 }
 
-#menu_links>a:hover, #menu_links>a:focus, #menu_links>a.tooltip-key--active {
+.menu__link:hover, .menu__link:focus, .menu__link.tooltip-key--active,
+.menu__link:hover,
+.menu__link:focus,
+.menu__link.tooltip-key--active {
     transition: background-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear;
     background-color: var(--highlight-secondary);
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-3);
 }
 
-a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.tooltip-key--active {
+a#menu-link-profile:hover, a#menu-link-profile:focus, a#menu-link-profile.tooltip-key--active,
+#menu-link-profile:hover,
+#menu-link-profile:focus,
+#menu-link-profile.tooltip-key--active {
     background-color: var(--highlight-primary);
 }
 
-#menu_links>a svg, #menu_email_button-wrapper>button svg {
+.menu__link svg, .menu__email-button svg,
+.menu__link svg,
+.menu__email-button svg {
     transition: color var(--animate-out-segment-2\/3) linear;
     color: var(--icon);
 }
 
-#menu_links>a:hover svg, #menu_links>a:focus svg, #menu_email_button-wrapper>button:hover svg, #menu_email_button-wrapper>button:focus svg {
+.menu__link:hover svg, .menu__link:focus svg, .menu__email-button:hover svg, .menu__email-button:focus svg,
+.menu__link:hover svg,
+.menu__link:focus svg,
+.menu__email-button:hover svg,
+.menu__email-button:focus svg {
     transition: color var(--animate-in-segment-2\/3) linear;
     color: var(--icon-hover);
 }
 
-#menu_links>a span.button-label, #menu_email_button-wrapper>button span.button-label {
+.menu__link .menu__link-text, .menu__email-button .menu__email-text,
+.menu__link-text,
+.menu__email-text {
     transition: color var(--animate-out-segment-2\/3) linear;
     color: var(--text-2);
 }
 
-#menu_links>a:hover span.button-label, #menu_links>a:focus span.button-label, #menu_email_button-wrapper>button:hover span.button-label, #menu_email_button-wrapper>button:focus span.button-label {
+.menu__link:hover .menu__link-text, .menu__link:focus .menu__link-text, .menu__email-button:hover .menu__email-text, .menu__email-button:focus .menu__email-text,
+.menu__link:hover .menu__link-text,
+.menu__link:focus .menu__link-text,
+.menu__email-button:hover .menu__email-text,
+.menu__email-button:focus .menu__email-text {
     transition: color var(--animate-in-segment-2\/3) linear;
     color: var(--text-1);
 }
 
-#menu_links>a span.button-label u {
+.menu__link .menu__link-text u,
+.menu__link-text u {
     transition: text-decoration var(--animate-out-segment-2\/3) linear;
 }
 
-#menu_links>a:hover span.button-label u, #menu_links>a:focus span.button-label u {
+.menu__link:hover .menu__link-text u, .menu__link:focus .menu__link-text u,
+.menu__link:hover .menu__link-text u,
+.menu__link:focus .menu__link-text u {
     transition: text-decoration var(--animate-in-segment-2\/3) linear;
     text-decoration-color: var(--text-2) !important;
 }
@@ -834,92 +879,116 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 /* Menu Button */
 
-#menu_button--open {
+#menu-button-open {
     z-index: 3;
 }
 
-#menu:target #menu_button--open {
+#menu:target #menu-button-open {
     pointer-events: none;
     visibility: hidden;
 }
 
-#menu_button--close {
+#menu-button-close {
     z-index: 4;
     pointer-events: none;
     visibility: hidden;
 }
 
-#menu:target #menu_button--close {
+#menu:target #menu-button-close {
     pointer-events: auto;
     visibility: visible;
 }
 
-#menu_button {
+#menu-button,
+.menu__button {
     z-index: 2;
     transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, box-shadow var(--animate-out-segment-2\/3) linear, border-radius var(--animate-out-segment) var(--ease-in-quad);
     overflow: clip;
     contain: content;
 }
 
-#menu:target #menu_button {
+#menu:target #menu-button,
+#menu:target .menu__button,
+.menu--open #menu-button,
+.menu--open .menu__button {
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) rgba(0, 0, 0, 0);
 }
 
-#menu_button-wrapper:hover #menu_button {
+#menu-toggle:hover .menu__button {
     border-color: var(--light-2);
 }
 
-#menu:target #menu_button, #menu_button-wrapper.tooltip-key--active #menu_button {
+#menu:target #menu-button, #menu-toggle.tooltip-key--active .menu__button,
+#menu:target .menu__button, #menu-toggle.tooltip-key--active .menu__button,
+.menu--open #menu-button, .menu--open .menu__button {
     border-color: var(--light-3);
 }
 
-#menu_button-wrapper:hover #menu_button, #menu_button-wrapper:focus-within #menu_button, #menu:target #menu_button, #menu_button-wrapper.tooltip-key--active #menu_button {
+#menu-toggle:hover .menu__button, #menu-toggle:focus-within .menu__button, #menu:target .menu__button, #menu-toggle.tooltip-key--active .menu__button,
+.menu--open #menu-button, .menu--open .menu__button {
     transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear, outline var(--animate-in-segment-2\/3) linear;
     color: var(--icon-hover);
     background-color: var(--highlight-secondary);
 }
 
-#menu_button span {
+#menu-button .menu__button-icon span,
+.menu__button-icon span {
     background-color: currentColor;
     animation-fill-mode: forwards;
 }
 
-#menu_button span:nth-child(1) {
+#menu-button .menu__button-icon span:nth-child(1),
+.menu__button-icon span:nth-child(1) {
     animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-top-left-reverse;
 }
 
-#menu:target #menu_button span:nth-child(1) {
+#menu:target #menu-button .menu__button-icon span:nth-child(1),
+#menu:target .menu__button-icon span:nth-child(1),
+.menu--open #menu-button .menu__button-icon span:nth-child(1),
+.menu--open .menu__button-icon span:nth-child(1) {
     animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-top-left;
 }
 
-#menu_button span:nth-child(2) {
+#menu-button .menu__button-icon span:nth-child(2),
+.menu__button-icon span:nth-child(2) {
     animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-top-right-reverse;
 }
 
-#menu:target #menu_button span:nth-child(2) {
+#menu:target #menu-button .menu__button-icon span:nth-child(2),
+#menu:target .menu__button-icon span:nth-child(2),
+.menu--open #menu-button .menu__button-icon span:nth-child(2),
+.menu--open .menu__button-icon span:nth-child(2) {
     animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-top-right;
 }
 
-#menu_button span:nth-child(3) {
+#menu-button .menu__button-icon span:nth-child(3),
+.menu__button-icon span:nth-child(3) {
     animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-bottom-left-reverse;
 }
 
-#menu:target #menu_button span:nth-child(3) {
+#menu:target #menu-button .menu__button-icon span:nth-child(3),
+#menu:target .menu__button-icon span:nth-child(3),
+.menu--open #menu-button .menu__button-icon span:nth-child(3),
+.menu--open .menu__button-icon span:nth-child(3) {
     animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-bottom-left;
 }
 
-#menu_button span:nth-child(4) {
+#menu-button .menu__button-icon span:nth-child(4),
+.menu__button-icon span:nth-child(4) {
     animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-bottom-right-reverse;
 }
 
-#menu:target #menu_button span:nth-child(4) {
+#menu:target #menu-button .menu__button-icon span:nth-child(4),
+#menu:target .menu__button-icon span:nth-child(4),
+.menu--open #menu-button .menu__button-icon span:nth-child(4),
+.menu--open .menu__button-icon span:nth-child(4) {
     animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-bottom-right;
 }
@@ -1071,7 +1140,7 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 
 /* Menu Dropdown */
 
-#menu_dropdown {
+#menu-dropdown {
     visibility: hidden;
     opacity: 0;
     transform: translateY(-0.25rem) scale(0.975);
@@ -1080,86 +1149,86 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
 }
 
 @media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
-    #menu_dropdown {
+    #menu-dropdown {
         transform: translateX(-0.25rem) scale(0.975);
         transform-origin: bottom right;
     }
 }
 
-#menu:target #menu_dropdown {
+#menu:target #menu-dropdown {
     visibility: visible;
     opacity: 1;
     transform: translate(0) scale(1);
     transition: opacity calc(1.25 * var(--animate-in-segment)) var(--ease-out-quad), transform calc(1.25 * var(--animate-in-segment)) var(--ease-out-quad);
 }
 
-#menu_dropdown a:hover::before,
-#menu_dropdown label:hover::before,
-#menu_dropdown a:focus::before,
-#menu_dropdown label:focus::before,
-#menu_dropdown a:focus-within::before,
-#menu_dropdown label:focus-within::before,
-#menu_dropdown a:hover::after,
-#menu_dropdown label:hover::after,
-#menu_dropdown a:focus::after,
-#menu_dropdown label:focus::after,
-#menu_dropdown a:focus-within::after,
-#menu_dropdown label:focus-within::after {
+#menu-dropdown a:hover::before,
+#menu-dropdown label:hover::before,
+#menu-dropdown a:focus::before,
+#menu-dropdown label:focus::before,
+#menu-dropdown a:focus-within::before,
+#menu-dropdown label:focus-within::before,
+#menu-dropdown a:hover::after,
+#menu-dropdown label:hover::after,
+#menu-dropdown a:focus::after,
+#menu-dropdown label:focus::after,
+#menu-dropdown a:focus-within::after,
+#menu-dropdown label:focus-within::after {
     transition: opacity var(--animate-in-segment) linear, inset var(--animate-in-segment) var(--ease-out-quad);
     opacity: 1;
 }
 
-#menu_dropdown a span,
-#menu_dropdown label span {
+#menu-dropdown a span,
+#menu-dropdown label span {
     transition: color var(--animate-out-segment) linear;
     z-index: 1;
 }
 
-#menu_dropdown a:hover span,
-#menu_dropdown label:hover span {
+#menu-dropdown a:hover span,
+#menu-dropdown label:hover span {
     transition: color var(--animate-in-segment) linear;
 }
 
-#menu_dropdown a svg,
-#menu_dropdown label svg {
+#menu-dropdown a svg,
+#menu-dropdown label svg {
     transition: color var(--animate-out-segment) linear;
     color: var(--icon);
     z-index: 1;
 }
 
-#menu_dropdown a:hover svg,
-#menu_dropdown label:hover svg {
+#menu-dropdown a:hover svg,
+#menu-dropdown label:hover svg {
     transition: color var(--animate-out-segment) linear, background-color var(--animate-out-segment) linear;
     color: var(--icon-hover);
 }
 
-#menu_dropdown label#menu_dropdown_light-mode:hover span,
-#menu_dropdown label#menu_dropdown_light-mode:hover svg,
-#menu_dropdown label#menu_dropdown_light-mode:focus span,
-#menu_dropdown label#menu_dropdown_light-mode:focus svg,
-#menu_dropdown label#menu_dropdown_light-mode:focus-within span,
-#menu_dropdown label#menu_dropdown_light-mode:focus-within svg {
+#menu-dropdown label#menu-dropdown-light-mode:hover span,
+#menu-dropdown label#menu-dropdown-light-mode:hover svg,
+#menu-dropdown label#menu-dropdown-light-mode:focus span,
+#menu-dropdown label#menu-dropdown-light-mode:focus svg,
+#menu-dropdown label#menu-dropdown-light-mode:focus-within span,
+#menu-dropdown label#menu-dropdown-light-mode:focus-within svg {
     color: var(--cyan-full-10);
 }
 
-#menu_dropdown label#menu_dropdown_light-mode::before {
+#menu-dropdown label#menu-dropdown-light-mode::before {
     background-image: linear-gradient(to right in oklch, rgba(238, 213, 0, 0.75), rgba(238, 213, 0, 0));
     /* 75, 100, 85  */
 }
 
-#menu_dropdown label#menu_dropdown_light-mode::after {
+#menu-dropdown label#menu-dropdown-light-mode::after {
     background-image: linear-gradient(to right in oklch, rgba(238, 213, 0, 1), rgba(238, 213, 0, 0));
     /* 75, 100, 85  */
 }
 
-#menu_dropdown label#menu_dropdown_debug::before,
-#menu_dropdown label#menu_dropdown_fullscreen::before {
+#menu-dropdown label#menu-dropdown-debug::before,
+#menu-dropdown label#menu-dropdown-fullscreen::before {
     background-image: linear-gradient(to right in oklch, rgba(0, 95, 241, 0.75), rgba(0, 95, 241, 0));
     /* 260, 100, 45 */
 }
 
-#menu_dropdown label#menu_dropdown_debug::after,
-#menu_dropdown label#menu_dropdown_fullscreen::after {
+#menu-dropdown label#menu-dropdown-debug::after,
+#menu-dropdown label#menu-dropdown-fullscreen::after {
     background-image: linear-gradient(to right in oklch, rgba(0, 95, 241, 1), rgba(0, 95, 241, 0));
     /* 260, 100, 45 */
 }
@@ -1175,35 +1244,35 @@ a#menu_link_profile:hover, a#menu_link_profile:focus, a#menu_link_profile.toolti
     transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad), visibility 0s var(--animate-out-segment);
 }
 
-#profile:target~main #modal_profile,
-#archive:target~main #modal_archive {
+#profile:target~main #modal-profile,
+#archive:target~main #modal-archive {
     visibility: visible;
     opacity: 1;
     transform: scale(1);
     transition: opacity var(--animate-in-segment) linear, transform var(--animate-in-segment) var(--ease-out-quad);
 }
 
-/* #profile:target~main #modal_profile-content,
-#archive:target~main #modal_archive-content {
+/* #profile:target~main #modal-profile-content,
+#archive:target~main #modal-archive-content {
     transition: opacity var(--animate-in-segment) linear var(--animate-in-segment);
     opacity: 1;
 } */
 
-#intro_left-column, #intro_right-column {
+.intro__left, .intro__right {
     transition: transform var(--animate-out-segment) var(--ease-in-quad);
     transform-origin: center;
 }
 
 @media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
-    #intro_left-column, #intro_right-column {
+    .intro__left, .intro__right {
         transform-origin: top;
     }
 }
 
-#profile:target~main #intro_left-column,
-#profile:target~main #intro_right-column,
-#archive:target~main #intro_left-column,
-#archive:target~main #intro_right-column {
+#profile:target~main .intro__left,
+#profile:target~main .intro__right,
+#archive:target~main .intro__left,
+#archive:target~main .intro__right {
     transition: transform var(--animate-in-segment) var(--ease-out-quad);
     transform: scale(0.95);
 }
@@ -1222,21 +1291,21 @@ footer {
 
 /* Modals - Archive */
 
-#modal_archive-content_section {
+#modal-archive-content [data-timeline-section] {
     transition: opacity var(--animate-out-segment) linear, padding var(--animate-out-segment) var(--ease-in-quad), height var(--animate-out-segment) var(--ease-in-quad);
 }
 
-input[id^="timeline_section_year-"]:checked~#modal_archive-content [data-timeline-section] {
+input[id^="timeline-section-year-"]:checked~#modal-archive-content [data-timeline-section] {
     transition: opacity var(--animate-in-segment) linear, padding var(--animate-in-segment) var(--ease-out-quad), height var(--animate-in-segment) var(--ease-out-quad);
 }
 
-/* #modal_archive-content_section-title>div label:hover+div svg {} */
+/* #modal-archive-content [data-timeline-section-title]>div label:hover+div svg {} */
 
-#modal_archive-content_section-title>div svg {
+#modal-archive-content [data-timeline-section-title]>div svg {
     transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, border var(--animate-out-segment-2\/3) linear;
 }
 
-#modal_archive-content_section-title>div label:hover+div svg, #modal_archive-content_section-title>div label:focus+div svg {
+#modal-archive-content [data-timeline-section-title]>div label:hover+div svg, #modal-archive-content [data-timeline-section-title]>div label:focus+div svg {
     transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border var(--animate-in-segment-2\/3) linear;
     color: var(--modal-icon-hover);
     background-color: var(--highlight-secondary);
@@ -1255,14 +1324,14 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:hover {
 
 /* Modals - Horizontal Timeline */
 
-#horizontal_timeline {
+#horizontal-timeline {
     transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad);
     transform: scale(0.95);
     transform-origin: bottom;
     opacity: 0;
 }
 
-#archive:target~main #modal_archive #horizontal_timeline {
+#archive:target~main #modal-archive #horizontal-timeline {
     transition: opacity var(--animate-in-segment) linear var(--anim-segment), transform var(--animate-in-segment) var(--ease-out-quad) var(--anim-segment);
     transform: scale(1);
     opacity: 1;
@@ -1337,33 +1406,33 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:hover {
 
 /* Modals - Close Button */
 
-#modal_button-close, #modal_button-close svg,
-#modal_button-fullscreen, #modal_button-fullscreen svg {
+#modal-button-close, #modal-button-close svg,
+#modal-button-fullscreen, #modal-button-fullscreen svg {
     transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, border var(--animate-out-segment-2\/3) linear;
 }
 
-#modal_button-close:hover, #modal_button-close:focus,
-#modal_button-fullscreen:hover, #modal_button-fullscreen:focus {
+#modal-button-close:hover, #modal-button-close:focus,
+#modal-button-fullscreen:hover, #modal-button-fullscreen:focus {
     transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border var(--animate-in-segment-2\/3) linear;
     color: var(--modal-icon-hover);
     background-color: var(--highlight-secondary);
 }
 
-#modal_button-close:hover svg, #modal_button-close:focus svg,
-#modal_button-fullscreen:hover svg, #modal_button-fullscreen:focus svg {
+#modal-button-close:hover svg, #modal-button-close:focus svg,
+#modal-button-fullscreen:hover svg, #modal-button-fullscreen:focus svg {
     color: var(--modal-icon-hover);
 }
 
 
 /* Modal Footer Art */
 
-#modal_profile-footer_art-wrapper {
+#modal-profile .modal__footer-art-gradient {
     opacity: 0;
     visibility: hidden;
     transition: opacity var(--animate-out-segment) linear, visibility 0s var(--animate-out-segment);
 }
 
-#debug:not(:checked)~#profile:target~main #modal_profile-footer_art-wrapper {
+#debug:not(:checked)~#profile:target~main #modal-profile .modal__footer-art-gradient {
     visibility: visible;
     opacity: 1;
     transition: opacity var(--animate-in-segment) linear var(--anim-segment), visibility 0s var(--anim-segment);
@@ -1372,21 +1441,21 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:hover {
 
 /* Underlay */
 
-#debug:not(:checked)~#profile:target~main #underlay_modal,
-#debug:not(:checked)~#archive:target~main #underlay_modal {
+#debug:not(:checked)~#profile:target~main #underlay-modal,
+#debug:not(:checked)~#archive:target~main #underlay-modal {
     /* z-index: 1; */
     opacity: 1;
     pointer-events: auto;
     transition: opacity var(--animate-in-segment) linear;
 }
 
-#debug:not(:checked)~#archive:target~main #underlay_modal {
+#debug:not(:checked)~#archive:target~main #underlay-modal {
     background-color: rgb(0, 20, 23, 0.5);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
 }
 
-#debug:not(:checked)~main #menu:target #underlay_menu {
+#debug:not(:checked)~main #menu:target #underlay-menu {
     z-index: 1;
     opacity: 1;
     pointer-events: auto;

@@ -7,9 +7,9 @@ var aria = aria || {}
  * Centralized dialog identifiers used throughout the application
  */
 aria.DIALOG_IDS = Object.freeze({
-    PROFILE: 'modal_profile',
-    ARCHIVE: 'modal_archive',
-    MENU: 'menu_button-wrapper'
+    PROFILE: 'modal-profile',
+    ARCHIVE: 'modal-archive',
+    MENU: 'menu-button-wrapper'
 })
 
 /**
