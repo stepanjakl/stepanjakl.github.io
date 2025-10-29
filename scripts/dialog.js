@@ -263,6 +263,12 @@ aria.Dialog.prototype.setupFocusElements = function (focusAfterClosed, focusFirs
     this.focusFirst = typeof focusFirst === 'string'
         ? document.getElementById(focusFirst)
         : focusFirst || null
+
+    // Validate focusFirst has a focus method if it's not null
+    if (this.focusFirst && typeof this.focusFirst.focus !== 'function') {
+        console.warn('aria.Dialog: focusFirst element does not have a focus() method, will use default focus behavior', this.focusFirst)
+        this.focusFirst = null
+    }
 }
 
 /**
@@ -293,7 +299,7 @@ aria.Dialog.prototype.handleInitialFocus = function (hash) {
         requestAnimationFrame(() => {
             if (hash) window.location.hash = hash
 
-            if (this.focusFirst) {
+            if (this.focusFirst && typeof this.focusFirst.focus === 'function') {
                 this.focusFirst.focus()
             } else {
                 aria.Utils.focusFirstDescendant(this.dialogNode)

@@ -18,13 +18,21 @@ const isAnimationFinished = (selector) => {
     return !animations || animations.length === 0 || animations[0].playState === 'finished'
 }
 
+// Shared animation gate selector (used across handlers)
+const ANIMATION_CHECK_SELECTOR = '.animate-fade-in-cta-2 #menu-bg'
+
 const getCurrentHash = () => window.location.hash
 
 const getHashWithoutParams = () => getCurrentHash().split('?')[0]
 
+// Exact hash match (e.g., getCurrentHash() === '#profile')
 const isHash = (hash) => getCurrentHash() === hash
 
+// Partial hash match - for deep links with params (e.g., '#archive?year=2024' includes '#archive')
 const hashIncludes = (hash) => getCurrentHash().includes(hash)
+
+// WeakMap to track one-time blur handlers for touch buttons without mutating elements
+const touchBlurHandlers = new WeakMap()
 
 // Shared navigation constants
 const NAVIGATION_HASHES = Object.freeze({
@@ -39,11 +47,10 @@ const MODAL_SELECTORS = Object.freeze({
 })
 
 // Dialog configuration for consistent ID references
-// Note: aria.DIALOG_IDS is defined in dialog.js but we keep these for backward compatibility
 const DIALOG_CONFIG = Object.freeze({
     PROFILE: {
         id: 'modal_profile',
-        trigger: 'menu_link_profile'
+        trigger: 'menu_link_profile'  // Element to focus when dialog closes
     },
     ARCHIVE: {
         id: 'modal_archive',
@@ -52,7 +59,7 @@ const DIALOG_CONFIG = Object.freeze({
     MENU: {
         id: 'menu_button-wrapper',
         trigger: 'menu_button--open',
-        close: 'menu_button--close'
+        close: 'menu_button--close'   // Element to focus when dialog opens
     }
 })
 
@@ -100,8 +107,6 @@ class KeyHandler {
     constructor() {
         this.tooltipElements = null
         this.debugElement = null
-
-        this.ANIMATION_CHECK_SELECTOR = '.animate-fade-in-cta-2 #menu-bg'
         this.TOOLTIP_ITEMS_SELECTOR = '#menu_link_profile, #menu_link_archive, #menu_button-wrapper'
         this.TOOLTIP_ACTIVE_CLASS = 'tooltip-key--active'
 
@@ -128,28 +133,31 @@ class KeyHandler {
     }
 
     handleKeydown(event) {
-        if (!isAnimationFinished(this.ANIMATION_CHECK_SELECTOR)) return
+        const rawKey = event.key
+        const key = rawKey?.toLowerCase()
 
-        const key = event.key?.toLowerCase()
-
-        switch (key) {
-            case this.KEYS.ESCAPE:
-                if (aria.getCurrentDialog()) {
-                    closeDialog('#')
-                }
-                break
-            case this.KEYS.KEY_P:
-                this.toggleDialog(event, NAVIGATION_HASHES.PROFILE, DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger)
-                break
-            case this.KEYS.KEY_A:
-                this.toggleDialog(event, NAVIGATION_HASHES.ARCHIVE, DIALOG_CONFIG.ARCHIVE.id, DIALOG_CONFIG.ARCHIVE.trigger, true)
-                break
-            case this.KEYS.KEY_M:
-                this.toggleDialog(event, NAVIGATION_HASHES.MENU, DIALOG_CONFIG.MENU.id, DIALOG_CONFIG.MENU.trigger, false, DIALOG_CONFIG.MENU.close)
-                break
-            case this.KEYS.KEY_D:
-                this.toggleDebug(event)
-                break
+        // Always allow Escape to close dialogs, regardless of animation state
+        if (rawKey === this.KEYS.ESCAPE) {
+            if (aria.getCurrentDialog()) {
+                closeDialog('#')
+            }
+        } else {
+            if (!isAnimationFinished(ANIMATION_CHECK_SELECTOR)) return
+            switch (key) {
+                case this.KEYS.KEY_P:
+                    this.toggleDialog(event, NAVIGATION_HASHES.PROFILE, DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger)
+                    break
+                case this.KEYS.KEY_A:
+                    // null = no focusFirst, true = use partial hash match for deep links (#archive?year=2024)
+                    this.toggleDialog(event, NAVIGATION_HASHES.ARCHIVE, DIALOG_CONFIG.ARCHIVE.id, DIALOG_CONFIG.ARCHIVE.trigger, null, true)
+                    break
+                case this.KEYS.KEY_M:
+                    this.toggleDialog(event, NAVIGATION_HASHES.MENU, DIALOG_CONFIG.MENU.id, DIALOG_CONFIG.MENU.trigger, DIALOG_CONFIG.MENU.close, false)
+                    break
+                case this.KEYS.KEY_D:
+                    this.toggleDebug(event)
+                    break
+            }
         }
 
         requestAnimationFrame(() => this.handleTooltipActiveClass(event))
@@ -167,16 +175,25 @@ class KeyHandler {
         }
     }
 
-    toggleDialog(event, hash, ...openDialogArgs) {
+    /**
+     * Toggle dialog open/closed based on current hash
+     * @param {Event} event - The triggering event
+     * @param {string} hash - Target hash (e.g., '#profile')
+     * @param {string} dialogId - Dialog element ID
+     * @param {string} triggerId - Element to focus when closing
+     * @param {string|null} focusFirst - Element to focus when opening (optional)
+     * @param {boolean} useIncludes - If true, match hash with includes() instead of === (for deep links)
+     */
+    toggleDialog(event, hash, dialogId, triggerId, focusFirst = null, useIncludes = false) {
         event.preventDefault()
-        const useIncludes = openDialogArgs[3] === true
+
+        // useIncludes: true = partial match (#archive?year=2024), false = exact match (#profile)
         const shouldClose = useIncludes ? hashIncludes(hash) : isHash(hash)
 
         if (shouldClose) {
             closeDialog('#')
         } else {
-            const [dialogId, triggerId, closeId] = openDialogArgs
-            openDialog(dialogId, triggerId, closeId || null, hash.substring(1))
+            openDialog(dialogId, triggerId, focusFirst, hash.substring(1))
         }
     }
 
@@ -221,12 +238,10 @@ class WheelHandler {
     constructor() {
         this.modalProfileEl = null
         this.modalArchiveEl = null
-
-        this.ANIMATION_CHECK_SELECTOR = '.animate-fade-in-cta-2 #menu-bg'
         this.SCROLL_MIN_THRESHOLD = 5
 
         this.boundHandleWheelEvent = this.handleWheelEvent.bind(this)
-        window.addEventListener('wheel', this.boundHandleWheelEvent)
+        window.addEventListener('wheel', this.boundHandleWheelEvent, { passive: true })
     }
 
     getModalElement(hash) {
@@ -239,7 +254,7 @@ class WheelHandler {
     }
 
     handleWheelEvent(event) {
-        if (!isAnimationFinished(this.ANIMATION_CHECK_SELECTOR)) return
+        if (!isAnimationFinished(ANIMATION_CHECK_SELECTOR)) return
 
         const deltaX = Math.abs(event.deltaX)
         const deltaY = Math.abs(event.deltaY)
@@ -312,8 +327,6 @@ class TouchHandler {
         this.touchStartY = 0
         this.modalProfileEl = null
         this.modalArchiveEl = null
-
-        this.ANIMATION_CHECK_SELECTOR = '.animate-fade-in-cta-2 #menu-bg'
         this.SCROLL_MIN_THRESHOLD = 5
 
         this.boundHandleTouchStart = this.handleTouchStart.bind(this)
@@ -338,7 +351,7 @@ class TouchHandler {
     }
 
     handleTouchMove(event) {
-        if (!isAnimationFinished(this.ANIMATION_CHECK_SELECTOR)) return
+        if (!isAnimationFinished(ANIMATION_CHECK_SELECTOR)) return
 
         const touch = event.touches[0]
         const deltaX = Math.abs(touch.clientX - this.touchStartX)
@@ -424,7 +437,6 @@ class HorizontalDragScroller {
         this.element.addEventListener('mousemove', this.onMouseMoveBound)
         this.element.addEventListener('mouseup', this.completeDragBound)
         this.element.addEventListener('mouseleave', this.completeDragBound)
-        this.element.addEventListener('mousecancel', this.completeDragBound)
     }
 
     destroy() {
@@ -432,7 +444,6 @@ class HorizontalDragScroller {
         this.element.removeEventListener('mousemove', this.onMouseMoveBound)
         this.element.removeEventListener('mouseup', this.completeDragBound)
         this.element.removeEventListener('mouseleave', this.completeDragBound)
-        this.element.removeEventListener('mousecancel', this.completeDragBound)
     }
 
     onMouseDown(event) {
@@ -716,13 +727,13 @@ class Popup {
             : await this.getImageDimensions(href)
 
         if (!dimensions) {
-            console.log('Could not retrieve media dimensions for the popup.')
+            console.warn('Could not retrieve media dimensions for the popup.')
             this.showFallbackView(href, isVideo, dimensions, placeholderUrl)
             return true
         }
 
         if (Popup.isPopupBlocked) {
-            console.log('Popups are blocked for this session. Using fallback view...')
+            console.info('Popups are blocked for this session. Using fallback view...')
             this.showFallbackView(href, isVideo, dimensions, placeholderUrl)
             return true
         }
@@ -746,7 +757,7 @@ class Popup {
             if (!newTab) {
                 URL.revokeObjectURL(blobUrl)
                 Popup.isPopupBlocked = true
-                console.log('Opening new tab was blocked. Falling back to inline view for the session.')
+                console.info('Opening new tab was blocked. Falling back to inline view for the session.')
                 this.showFallbackView(href, isVideo, dimensions, placeholderUrl)
                 return true
             }
@@ -759,7 +770,7 @@ class Popup {
 
             if (!popup || popup.closed || typeof popup.closed === 'undefined') {
                 Popup.isPopupBlocked = true
-                console.log('Popup was blocked. Using inline fallback for the session.')
+                console.info('Popup was blocked. Using inline fallback for the session.')
                 this.showFallbackView(href, isVideo, dimensions, placeholderUrl)
                 return true
             }
@@ -1343,44 +1354,47 @@ window.initializeProfileModal = () => {
 
 /**
  * Handles touch button click interactions with focus management
+ * On touch devices: first tap focuses, second tap executes callback
+ * On non-touch devices: executes callback immediately
  */
-window.handleTouchButtonClick = (element, event, callback, focusAfterClick) => {
+window.handleTouchButtonClick = (element, event, callback, focusAfterClick = false) => {
     event.preventDefault()
 
+    // Non-touch devices execute immediately
     if (!isTouchDevice) {
         callback()
         return
     }
 
+    // Track click count on the element
     element.clickCount = (element.clickCount || 0) + 1
 
-    if (!element.handleBlur) {
-        element.handleBlur = (() => {
-            const handleBlur = event => {
-                if (event.target !== document.activeElement) {
-                    element.clickCount = 0
-                    delete element.handleBlur
-                    event.target.removeAttribute('data-focus-after-click')
-                    event.target.removeEventListener('blur', handleBlur)
-                }
-            }
-            element.addEventListener('blur', handleBlur)
-        })()
+    // First click: set up blur handler and focus
+    if (element.clickCount === 1) {
+        const handleBlur = () => {
+            element.clickCount = 0
+            element.removeAttribute('data-focus-after-click')
+            touchBlurHandlers.delete(element)
+        }
+
+        touchBlurHandlers.set(element, handleBlur)
+        element.addEventListener('blur', handleBlur, { once: true })
+        element.focus()
+        return
     }
 
+    // Second click: execute callback
     if (element.clickCount === 2 || element.getAttribute('data-focus-after-click') === 'true') {
         callback()
 
+        // If focusAfterClick is true, maintain focus on element after callback
         if (focusAfterClick) {
             element.setAttribute('data-focus-after-click', 'true')
             element.focus()
-
-            element.addEventListener('blur', () => { element.removeAttribute('data-focus-after-click') }, { once: true })
+            element.addEventListener('blur', () => {
+                element.removeAttribute('data-focus-after-click')
+            }, { once: true })
         }
-    } else if (element.clickCount === 1) {
-        element.focus()
-    } else {
-        callback()
     }
 }
 
@@ -1391,7 +1405,7 @@ window.initializeTimeline = () => {
     // Prevent duplicate timeline creation
     if (window.timelineEl) {
         console.warn('Timeline already initialized')
-        return window.timelineCleanup || (() => {})
+        return window.timelineCleanup || (() => { })
     }
 
     window.timelineEl = document.createElement('horizontal-timeline')
@@ -1618,29 +1632,30 @@ document.addEventListener('DOMContentLoaded', () => {
         new Carousel({ id: `carousel-${i + 1}`, element: carouselElements[i] })
     }
 
-    // Initialize popups (persistent throughout page lifetime)
-    // Note: destroy() method exists but is not called since popup handler is used throughout the page
+    // Initialize popups with delegated listeners to reduce per-link handlers
     const popupInstance = new Popup()
-    const popupLinks = document.querySelectorAll('a[target="_blank"][href$=".mp4"], a[target="_blank"][href$=".png"], a[target="_blank"][href$=".jpg"], a[target="_blank"][href$=".svg"]')
+    const preloadedLinks = new WeakSet()
 
-    for (let i = 0; i < popupLinks.length; i++) {
-        const link = popupLinks[i]
+    document.addEventListener('mouseover', (e) => {
+        const link = e.target.closest('a[target="_blank"][href$=".mp4"], a[target="_blank"][href$=".png"], a[target="_blank"][href$=".jpg"], a[target="_blank"][href$=".svg"]')
+        if (!link) return
+        if (preloadedLinks.has(link)) return
+        if (!popupInstance.isVideo(link.href)) {
+            const placeholderUrl = popupInstance.getPlaceholderUrl(link.href)
+            const preloadImg = new Image()
+            preloadImg.src = placeholderUrl
+        }
+        preloadedLinks.add(link)
+    })
 
-        // Preload placeholder on hover
-        link.addEventListener('mouseenter', () => {
-            if (!popupInstance.isVideo(link.href)) {
-                const placeholderUrl = popupInstance.getPlaceholderUrl(link.href)
-                const preloadImg = new Image()
-                preloadImg.src = placeholderUrl
-            }
-        }, { once: true })
-
-        link.addEventListener('click', event => popupInstance.open(link, event))
-    }
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('a[target="_blank"][href$=".mp4"], a[target="_blank"][href$=".png"], a[target="_blank"][href$=".jpg"], a[target="_blank"][href$=".svg"]')
+        if (!link) return
+        popupInstance.open(link, e)
+    })
 
     // Pre-initialize timeline element (but don't start observer yet)
     // Observer will be started when archive modal opens
-    aria.addBackdrop(DIALOG_CONFIG.ARCHIVE.id)
     window.initializeTimeline()
 
     // Setup timeline positioning

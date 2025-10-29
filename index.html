@@ -318,8 +318,8 @@
                                 <button id="menu_button"
                                         type="button"
                                         class="relative flex flex-grow align-items-center justify-content-center"
-                                        aria-hidden="true"
-                                        tabindex="-1">
+                                        tabindex="-1"
+                                        aria-label="Menu toggle">
                                     <div>
                                         <span>&nbsp;</span>
                                         <span>&nbsp;</span>
@@ -332,10 +332,10 @@
                                     <kbd><span>M</span></kbd>
                                 </abbr>
                                 <a href="#"
-                                   aria-hidden="true"
                                    tabindex="-1"
                                    onclick="event.preventDefault(); closeDialog('#')"
                                    id="underlay_menu"
+                                   aria-label="Close menu"
                                    class="z-0 fixed inset-0 cursor-default"></a>
                                 <dialog role="dialog" id="menu_dropdown" class="z-50 absolute pt-1/2">
                                     <div>
@@ -1520,9 +1520,7 @@
                             <!-- <figure id="modal_archive-footer_art-right"></figure> -->
                         </figure>
                     </dialog>
-                    <div aria-hidden="true"
-                         tabindex="-1"
-                         id="underlay_modal"
+                    <div id="underlay_modal"
                          class="z-1 fixed inset-0 pointer-events-none">
                     </div>
                 </header>

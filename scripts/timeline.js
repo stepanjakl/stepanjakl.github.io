@@ -67,7 +67,7 @@ class HorizontalTimeline extends HTMLElement {
     connectedCallback() {
         this.render()
         this.initializeTimeline()
-        this.setupHighlighting()
+        this.setupDelegatedHighlighting()
     }
 
     disconnectedCallback() {
@@ -626,20 +626,31 @@ class HorizontalTimeline extends HTMLElement {
         this.getTimelineAllDivEls()
         this.getSectionEls()
 
-        // Setup event listeners
-        this.setupLabelClickHandlers()
+        // Setup event listeners (delegated)
+        this.setupDelegatedClicks()
         this.setupDeepLinkHandling()
         this.setupMouseLeaveHandler()
         this.setupResizeHandler()
     }
 
-    setupLabelClickHandlers() {
-        const labelEls = this.getLabelEls()
+    setupDelegatedClicks() {
+        this.boundHandleClick = (event) => {
+            const labelButton = event.target.closest('#timeline_labels [data-label-for]')
+            if (labelButton && this.contains(labelButton)) {
+                this.handleLabelClick(labelButton)
+                return
+            }
 
-        for (let i = 0; i < labelEls.length; i++) {
-            const labelEl = labelEls[i]
-            labelEl.addEventListener('click', () => this.handleLabelClick(labelEl))
+            const indicator = event.target.closest('#timeline [data-value]')
+            if (indicator && this.contains(indicator)) {
+                const value = indicator.getAttribute('data-value')
+                const labelEl = this.querySelector(`#timeline_labels [data-label-for="${value}"]`)
+                if (labelEl) {
+                    labelEl.click()
+                }
+            }
         }
+        this.addEventListener('click', this.boundHandleClick)
     }
 
     setupDeepLinkHandling() {
@@ -683,59 +694,43 @@ class HorizontalTimeline extends HTMLElement {
     // Highlighting
     // ========================================================================
 
-    setupHighlighting() {
-        this.setupLabelToIndicatorHighlighting()
-        this.setupIndicatorToLabelHighlighting()
-    }
+    setupDelegatedHighlighting() {
+        this.boundHandleMouseOver = (event) => {
+            const indicator = event.target.closest('#timeline [data-value]')
+            if (indicator && this.contains(indicator)) {
+                const value = indicator.getAttribute('data-value')
+                const labelEl = this.querySelector(`#timeline_labels [data-label-for="${value}"]`)
+                if (labelEl) labelEl.classList.add(this.HIGHLIGHT_CLASS)
+                return
+            }
 
-    /**
-     * Hover and click linkage from the top indicator bar → labels.
-     */
-    setupIndicatorToLabelHighlighting() {
-        const timelineEls = this.querySelectorAll('#timeline [data-value]')
-
-        for (let i = 0; i < timelineEls.length; i++) {
-            const timelineEl = timelineEls[i]
-            const value = timelineEl.getAttribute('data-value')
-            const labelEl = this.querySelector(`#timeline_labels [data-label-for="${value}"]`)
-
-            if (!labelEl) continue
-
-            timelineEl.addEventListener('mouseenter', () => {
-                labelEl.classList.add(this.HIGHLIGHT_CLASS)
-            })
-
-            timelineEl.addEventListener('mouseleave', () => {
-                labelEl.classList.remove(this.HIGHLIGHT_CLASS)
-            })
-
-            timelineEl.addEventListener('click', () => {
-                labelEl.click()
-            })
+            const labelButton = event.target.closest('#timeline_labels [data-label-for]')
+            if (labelButton && this.contains(labelButton)) {
+                const value = labelButton.getAttribute('data-label-for')
+                const timelineEl = this.querySelector(`#timeline div:nth-child(6n + 4)[data-value="${value}"]`)
+                if (timelineEl) timelineEl.classList.add(this.HIGHLIGHT_CLASS)
+            }
         }
-    }
 
-    /**
-     * Hover linkage from labels → matching centered indicator bar element.
-     */
-    setupLabelToIndicatorHighlighting() {
-        const labelEls = this.getLabelEls()
+        this.boundHandleMouseOut = (event) => {
+            const indicator = event.target.closest('#timeline [data-value]')
+            if (indicator && this.contains(indicator)) {
+                const value = indicator.getAttribute('data-value')
+                const labelEl = this.querySelector(`#timeline_labels [data-label-for="${value}"]`)
+                if (labelEl) labelEl.classList.remove(this.HIGHLIGHT_CLASS)
+                return
+            }
 
-        for (let i = 0; i < labelEls.length; i++) {
-            const labelEl = labelEls[i]
-            const value = labelEl.getAttribute('data-label-for')
-            const timelineEl = this.querySelector(`#timeline div:nth-child(6n + 4)[data-value="${value}"]`)
-
-            if (!timelineEl) continue
-
-            labelEl.addEventListener('mouseenter', () => {
-                timelineEl.classList.add(this.HIGHLIGHT_CLASS)
-            })
-
-            labelEl.addEventListener('mouseleave', () => {
-                timelineEl.classList.remove(this.HIGHLIGHT_CLASS)
-            })
+            const labelButton = event.target.closest('#timeline_labels [data-label-for]')
+            if (labelButton && this.contains(labelButton)) {
+                const value = labelButton.getAttribute('data-label-for')
+                const timelineEl = this.querySelector(`#timeline div:nth-child(6n + 4)[data-value="${value}"]`)
+                if (timelineEl) timelineEl.classList.remove(this.HIGHLIGHT_CLASS)
+            }
         }
+
+        this.addEventListener('mouseover', this.boundHandleMouseOver)
+        this.addEventListener('mouseout', this.boundHandleMouseOut)
     }
 
     // ========================================================================
@@ -785,6 +780,21 @@ class HorizontalTimeline extends HTMLElement {
         if (this.boundHandleResize) {
             window.removeEventListener('resize', this.boundHandleResize)
             this.boundHandleResize = null
+        }
+
+        if (this.boundHandleClick) {
+            this.removeEventListener('click', this.boundHandleClick)
+            this.boundHandleClick = null
+        }
+
+        if (this.boundHandleMouseOver) {
+            this.removeEventListener('mouseover', this.boundHandleMouseOver)
+            this.boundHandleMouseOver = null
+        }
+
+        if (this.boundHandleMouseOut) {
+            this.removeEventListener('mouseout', this.boundHandleMouseOut)
+            this.boundHandleMouseOut = null
         }
 
         if (this.boundHandleScrollEnd) {
