@@ -55,9 +55,9 @@
         <link rel="stylesheet" href="styles/style.css">
         <link rel="stylesheet" href="styles/state.css">
         <link rel="stylesheet" href="styles/animation.css">
-        <script defer src="scripts/script.js"></script>
         <script defer src="scripts/dialog.js"></script>
         <script defer src="scripts/timeline.js"></script>
+        <script defer src="scripts/script.js"></script>
         <script>
             console.log('%cŠtěpán Jákl | Full-stack developer & interface designer', `border: max(1px, 0.0625rem) solid #4e7bff; border-radius: 0.125rem; color: #4e7bff; font-size: 0.78125rem; padding: 1.40625rem 2.1875rem 1.25rem 2.1875rem; margin: 1.25rem 1.25rem;`)
             console.log('%cThis website uses HTML, CSS, and optional JavaScript for accessibility and a better user experience.', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;')
@@ -102,14 +102,14 @@
                     style="padding-bottom: var(--segment-half)">
                 <header id="intro" class="intro">
                     <div class="intro__left">
-                        <h2 class="intro__name intro__name--animating tooltip-wrapper highlight-text"
+                        <h2 class="intro__name intro__name--animating tooltip highlight"
                             tabindex="0"
                             onkeypress="this.click()"
                             oncontextmenu="if ('speechSynthesis' in window) { let msg = new SpeechSynthesisUtterance(); msg.volume= 0.25; msg.lang = 'cs-CZ'; msg.voice = speechSynthesis.getVoices().filter(voice => voice.name === 'Zuzana')[0]; msg.text = 'Štěpán Jákl'; speechSynthesis.speak(msg) }"
-                            onclick="handleTouchButtonClick(this, event, () => { navigator?.clipboard?.writeText('Štěpán Jákl'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip-bottom span'), this, 'Copied to the clipboard') }, true)"
+                            onclick="handleTouchButtonClick(this, event, () => { navigator?.clipboard?.writeText('Štěpán Jákl'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip__text--bottom span'), this, 'Copied to the clipboard') }, true)"
                             role="button"
                             aria-label="Click to copy name to clipboard">
-                            <div class="intro__name-wrapper"
+                            <div class="intro__name-frame"
                                  style="--corner-length: 1.5rem;
                                         --corner-width: 0.125rem;
                                         --corner-offset-x: 1rem;
@@ -117,11 +117,11 @@
                                         --corner-color: var(--cyan-full-45);
                                         --corner-color-active: var(--cyan-full-85)"
                                  aria-hidden="true">
-                                <div class="corner-wrapper">
-                                    <span class="top-left corner"></span>
-                                    <span class="top-right corner"></span>
-                                    <span class="bottom-left corner"></span>
-                                    <span class="bottom-right corner"></span>
+                                <div class="corners">
+                                    <span class="corners__item corners__item--tl"></span>
+                                    <span class="corners__item corners__item--tr"></span>
+                                    <span class="corners__item corners__item--bl"></span>
+                                    <span class="corners__item corners__item--br"></span>
                                 </div>
                                 <p style="--i:1">
                                     Štěpán<span>&nbsp;</span>
@@ -130,54 +130,54 @@
                                     Jákl
                                 </p>
                             </div>
-                            <abbr class="tooltip-top tooltip">
+                            <abbr class="tooltip__text--top tooltip__text">
                                 <span aria-hidden="true">Pronounced: shteh-PAHN YAH-kl</span>
                                 <div class="sr-only">
                                     <span lang="en">Pronounced:</span>
                                     <span lang="cs">Štěpán Jákl</span>
                                 </div>
                             </abbr>
-                            <abbr class="tooltip-bottom tooltip">
+                            <abbr class="tooltip__text--bottom tooltip__text">
                                 <span aria-hidden="true">Click to copy</span>
                             </abbr>
                         </h2>
-                        <div id="logo" class="intro__logo intro__logo--animating">
-                            <span class="intro__logo-wrapper"
+                        <div class="intro__logo intro__logo--animating">
+                            <span class="intro__logo-frame"
                                   style="--corner-length: 1rem;
                                          --corner-width: 0.125rem;
                                          --corner-offset-x: 0.5rem;
                                          --corner-offset-y: 0.5rem;
                                          --corner-color: var(--cyan-full-65);
                                          --corner-color-active: var(--yellow)">
-                                <div class="corner-wrapper">
-                                    <figure class="top-right corner">
+                                <div class="corners">
+                                    <figure class="corners__item corners__item--tr">
                                     </figure>
-                                    <figure class="bottom-left corner">
+                                    <figure class="corners__item corners__item--bl">
                                     </figure>
                                 </div>
                             </span>
                         </div>
                     </div>
                     <div class="intro__right">
-                        <h3 class="intro__title intro__title--primary intro__title--animating">
+                        <h3 class="intro__title intro__primary-title intro__title--animating">
                             <p style="--i:3">
                                 <span>F</span><span>u</span><span>l</span><span>l</span><span>-</span><span>s</span><span>t</span><span>a</span><span>c</span><span>k</span>
                             </p>
-                            <p class="de-highlight-anim" style="--i:4">
+                            <p class="intro__animated-text" style="--i:4">
                                 <span>&nbsp;</span><span style="--i:1">d</span><span style="--i:2">e</span><span style="--i:3">v</span><span style="--i:4">e</span><span style="--i:5">l</span><span style="--i:6">o</span><span style="--i:7">p</span><span style="--i:8">e</span><span style="--i:9">r</span>
                             </p>
                         </h3>
-                        <h3 class="intro__title intro__title--secondary intro__title--animating"
+                        <h3 class="intro__title intro__secondary-title intro__title--animating"
                             style="letter-spacing: 0.09375rem">
                             <p style="--i:5">
                                 <span>&</span><span>&nbsp;</span><span>i</span><span>n</span><span>t</span><span>e</span><span>r</span><span>f</span><span>a</span><span>c</span><span>e</span>
                             </p>
-                            <p class="de-highlight-anim-alt" style="--i:6">
+                            <p class="intro__animated-text--alt" style="--i:6">
                                 <span>&nbsp;</span><span style="--i:1">d</span><span style="--i:2">e</span><span style="--i:3">s</span><span style="--i:4">i</span><span style="--i:5">g</span><span style="--i:6">n</span><span style="--i:7">e</span><span style="--i:8">r</span>
                             </p>
                         </h3>
                         <div class="availability availability--animating">
-                            <div class="tooltip-wrapper">
+                            <div class="tooltip">
                                 <a href="https://cal.com/stepanjakl"
                                    tabindex="0"
                                    onclick="handleTouchButtonClick(this, event, () => { window.open(this.getAttribute('href'), '_blank') }, true)"
@@ -192,7 +192,7 @@
                                         <span class="availability__text">Open to new opportunities</span>
                                     </div>
                                 </a>
-                                <abbr class="tooltip-bottom tooltip">
+                                <abbr class="tooltip__text--bottom tooltip__text">
                                     <span>Book a virtual meeting</span>
                                 </abbr>
                             </div>
@@ -201,14 +201,14 @@
                              class="menu menu--animating">
                             <div class="menu__background">
                             </div>
-                            <div class="menu__email tooltip-wrapper"
+                            <div class="menu__email tooltip"
                                  style="--i:0;
                                         place-self: self-start">
-                                <!-- onmousedown="navigator.clipboard.writeText('stepan.jakl@icloud.com'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip span'), this.querySelector('.highlight-text'), 'Copied to the clipboard')"
+                                <!-- onmousedown="navigator.clipboard.writeText('stepan.jakl@icloud.com'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip__text span'), this.querySelector('.highlight'), 'Copied to the clipboard')"
                                      onkeydown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@icloud.com')" -->
                                 <button type="button"
                                         tabindex="0"
-                                        onclick="handleTouchButtonClick(this, event, () => { navigator?.clipboard?.writeText('stepan.jakl@icloud.com'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip span'), this.querySelector('.highlight-text'), 'Copied to the clipboard') })"
+                                        onclick="handleTouchButtonClick(this, event, () => { navigator?.clipboard?.writeText('stepan.jakl@icloud.com'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip__text span'), this.querySelector('.highlight'), 'Copied to the clipboard') })"
                                         class="menu__email-button"
                                         aria-label="Contact me via email">
                                     <span class="menu__email-icon">
@@ -219,8 +219,8 @@
                                             <use xlink:href="images/icons.svg#email"></use>
                                         </svg>
                                     </span>
-                                    <span class="text-sm menu__email-text highlight-text">stepan.jakl@icloud.com</span>
-                                    <abbr class="tooltip-top tooltip">
+                                    <span class="text-sm menu__email-text highlight">stepan.jakl@icloud.com</span>
+                                    <abbr class="tooltip__text--top tooltip__text">
                                         <span>Click to copy</span>
                                     </abbr>
                                 </button>
@@ -229,14 +229,13 @@
                                 <a href="#profile"
                                    id="menu-link-profile"
                                    tabindex="0"
-                                   onclick="handleTouchButtonClick(this, event, () => { openDialog('modal_profile', this, null, 'profile') })"
+                                   onclick="handleTouchButtonClick(this, event, () => { openDialog('modal-profile', this, null, 'profile') })"
                                    aria-label="Learn more about me"
-                                   class="menu__link tooltip-wrapper"
+                                   class="menu__link tooltip"
                                    style="--i:1">
-                                    <span class="menu__link-icon"
+                                    <span class="menu__link-icon menu__link-icon--animated"
                                           style="padding: 0.53125rem">
-                                        <svg class="animate-face-icon"
-                                             style="width: 1.1875rem;
+                                        <svg style="width: 1.1875rem;
                                                     height: 1.1875rem"
                                              height="100%"
                                              width="100%"
@@ -245,13 +244,13 @@
                                             <path d="M14.917 24c-.64 0-1.174-.215-1.605-.646-.43-.43-.645-.965-.645-1.604 0-.639.222-1.173.666-1.604.445-.43.986-.646 1.625-.646.64 0 1.167.215 1.584.646.417.43.625.965.625 1.604 0 .639-.215 1.173-.646 1.604-.43.43-.965.646-1.604.646Zm10.166 0c-.639 0-1.173-.215-1.604-.646-.43-.43-.646-.965-.646-1.604 0-.639.215-1.173.646-1.604.43-.43.965-.646 1.604-.646.64 0 1.181.215 1.625.646.445.43.667.965.667 1.604 0 .639-.222 1.173-.667 1.604a2.25 2.25 0 0 1-1.625.646ZM20 33.667c3.805 0 7.035-1.326 9.688-3.979 2.653-2.653 3.979-5.883 3.979-9.688 0-.695-.049-1.368-.146-2.021a9.868 9.868 0 0 0-.438-1.812 11.41 11.41 0 0 1-1.75.291c-.61.056-1.25.084-1.916.084-2.611 0-5.07-.535-7.375-1.604a16.598 16.598 0 0 1-5.917-4.605A16.73 16.73 0 0 1 12.208 16a18.409 18.409 0 0 1-5.833 3.75v.292c0 3.805 1.32 7.027 3.958 9.666 2.64 2.64 5.862 3.959 9.667 3.959Zm.042 3.666c-2.417 0-4.674-.458-6.771-1.375-2.097-.917-3.93-2.153-5.5-3.708-1.57-1.555-2.812-3.389-3.729-5.5-.917-2.111-1.375-4.361-1.375-6.75 0-2.389.458-4.639 1.375-6.75.917-2.111 2.16-3.945 3.729-5.5 1.57-1.555 3.403-2.791 5.5-3.708 2.097-.917 4.354-1.375 6.771-1.375 2.389 0 4.632.458 6.729 1.375 2.097.917 3.93 2.153 5.5 3.708 1.57 1.555 2.805 3.389 3.708 5.5s1.354 4.361 1.354 6.75c0 2.389-.451 4.639-1.354 6.75-.903 2.111-2.139 3.952-3.708 5.521-1.57 1.57-3.41 2.805-5.521 3.708-2.111.903-4.347 1.354-6.708 1.354Z" />
                                         </svg>
                                     </span>
-                                    <span class="menu__link-text-wrapper">
-                                        <span class="text-xs menu__link-text" style="border-bottom: solid 0.125rem var(--highlight-primary)">Profile</span>
+                                    <span class="menu__link-label">
+                                        <span class="text-xs menu__link-label-text" style="border-bottom: solid 0.125rem var(--highlight-primary)">Profile</span>
                                     </span>
-                                    <abbr class="tooltip-bottom tooltip">
+                                    <abbr class="tooltip__text--bottom tooltip__text">
                                         <span>Learn more about me</span>
                                     </abbr>
-                                    <abbr class="tooltip-bottom tooltip--active tooltip">
+                                    <abbr class="tooltip__text--bottom tooltip__text tooltip__text--active">
                                         <kbd style="background-color: var(--highlight-primary);"><span>⌘</span></kbd>
                                         <kbd><span>P</span></kbd>
                                     </abbr>
@@ -259,9 +258,9 @@
                                 <a href="#archive"
                                    id="menu-link-archive"
                                    tabindex="0"
-                                   onclick="handleTouchButtonClick(this, event, () => { openDialog('modal_archive', this, null, 'archive') })"
+                                   onclick="handleTouchButtonClick(this, event, () => { openDialog('modal-archive', this, null, 'archive') })"
                                    aria-label="Explore snippets of my past work"
-                                   class="menu__link tooltip-wrapper"
+                                   class="menu__link tooltip"
                                    style="--i:2">
                                     <span class="menu__link-icon"
                                           style="padding: 0.59375rem">
@@ -269,14 +268,13 @@
                                             <use xlink:href="images/icons.svg#archive"></use>
                                         </svg>
                                     </span>
-                                    <span class="menu__link-text-wrapper">
-                                        <span class="text-xs menu__link-text">Archive</span>
+                                    <span class="menu__link-label">
+                                        <span class="text-xs menu__link-label-text">Archive</span>
                                     </span>
-                                    </span>
-                                    <abbr class="tooltip-bottom tooltip">
+                                    <abbr class="tooltip__text--bottom tooltip__text">
                                         <span>Explore snippets of my past work</span>
                                     </abbr>
-                                    <abbr class="tooltip-bottom tooltip--active tooltip">
+                                    <abbr class="tooltip__text--bottom tooltip__text tooltip__text--active">
                                         <kbd style="background-color: var(--highlight-primary);"><span>⌘</span></kbd>
                                         <kbd><span>A</span></kbd>
                                     </abbr>
@@ -284,7 +282,7 @@
                             </div>
                             <div role="dialog"
                                  id="menu-toggle"
-                                 class="menu__toggle tooltip-wrapper"
+                                 class="menu__toggle tooltip"
                                  style="--i:3">
                                 <a href="#menu"
                                    tabindex="0"
@@ -312,7 +310,7 @@
                                         <span>&nbsp;</span>
                                     </div>
                                 </button>
-                                <abbr class="tooltip-top tooltip--active tooltip">
+                                <abbr class="tooltip__text--top tooltip__text tooltip__text--active">
                                     <kbd style="background-color: var(--highlight-primary);"><span>⌘</span></kbd>
                                     <kbd><span>M</span></kbd>
                                 </abbr>
@@ -451,10 +449,9 @@
                     </div>
                     <dialog id="modal-profile" class="modal modal--profile" role="dialog" aria-modal="true">
                         <div class="modal__content">
-                            <div class="modal__close-wrapper">
+                            <div class="modal__controls">
                                 <a href="#"
                                    onclick="event.preventDefault(); closeDialog('#')"
-                                   id="modal-button-close"
                                    class="modal__close-button"
                                    aria-label="Close modal">
                                     <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
@@ -690,23 +687,15 @@
                                 </dl>
                             </div>
                             <div class="modal__footer-art">
-                                <figure class="modal__footer-art-gradient"
-                                        style="position: absolute;
-                                               inset:0;
-                                               background: radial-gradient(ellipse 75% 50% at 50% 100% in oklch, rgba(0,0,0,0.75), rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%), radial-gradient(ellipse 25% 25% at 50% 50% in oklch, rgba(125, 172, 59, 1), rgba(125, 172, 59, 1) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 100% at bottom center in oklch, rgba(125, 172, 59, 1), rgba(125, 172, 59, 1) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 75% at bottom left in oklch, rgba(125, 172, 59, 0.5), rgba(125, 172, 59, 0.5) 50%, rgba(125, 172, 59, 0) 100%), radial-gradient(ellipse 50% 75% at bottom right in oklch, rgba(125, 172, 59, 0.5), rgba(125, 172, 59, 0.5) 50%, rgba(125, 172, 59, 0) 100%), linear-gradient(to top in oklch, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 75%);
-                                               filter: blur(4rem);
-                                               transform: scaleY(0);
-                                               transform-origin: bottom">
-                                </figure>
+                                <figure class="modal__footer-art-gradient"></figure>
                             </div>
                         </div>
                     </dialog>
                     <dialog id="modal-archive" class="modal modal--archive" role="dialog" aria-modal="true">
                         <figure class="modal__content">
-                            <div class="modal__close-wrapper">
+                            <div class="modal__controls">
                                 <a href="#"
                                    onclick="event.preventDefault(); closeDialog('#')"
-                                   id="modal-button-close"
                                    class="modal__close-button"
                                    aria-label="Close modal">
                                     <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
@@ -717,8 +706,7 @@
                                        tabindex="0"
                                        onclick="toggleFullscreen()"
                                        onkeypress="if(event.key === 'Enter') { document.getElementById('fullscreen').click(); }"
-                                       id="modal-button-fullscreen"
-                                       class="flex align-items-center justify-content-center">
+                                       class="flex align-items-center justify-content-center modal__fullscreen-button">
                                     <svg class="fullscreen-checked:hidden flex fill-current"
                                          style="width: 1.125rem;
                                                 height: 1.125rem">
@@ -731,16 +719,13 @@
                                     </svg>
                                 </label>
                             </div>
-                            <div style="position: relative;
-                                        z-index: 1;
-                                        height: 100%;
-                                        padding-bottom: var(--segment-half)">
-                                <div id="modal-archive-wrapper">
+                            <div class="modal__body">
+                                <div class="archive-timeline">
                                     <input type="checkbox" id="timeline-section-year-2024-21" checked>
                                     <input type="checkbox" id="timeline-section-year-2021-19">
                                     <input type="checkbox" id="timeline-section-year-2019-18">
                                     <input type="checkbox" id="timeline-section-year-elsewhen">
-                                    <div id="modal-archive-content">
+                                    <div class="archive-timeline__grid">
                                         <!-- 2024-21 -->
                                         <section data-timeline-section-title="2024-21">
                                             <div>
@@ -770,7 +755,7 @@
                                                 <h1>
                                                     <span>ApostropheCMS Fleet of Sites</span>
                                                 </h1>
-                                                <div class="modal-hover_cards">
+                                                <div class="hover-cards">
                                                     <figure>
                                                         <div>
                                                             <img loading="lazy"
@@ -863,7 +848,7 @@
                                                 <h2>
                                                     ApostropheCMS Template & Module Library
                                                 </h2>
-                                                <div class="modal-hover_cards modal-hover_cards-custom-1">
+                                                <div class="hover-cards hover-cards--variant-1">
                                                     <figure>
                                                         <div>
                                                             <a href="projects/2024-21/apostrophe-template/template-widget-live.full.png"
@@ -1123,7 +1108,7 @@
                                                         </div>
                                                     </div>
                                                 </div> -->
-                                                <div class="modal-hover_cards modal-hover_cards-custom-2">
+                                                <div class="hover-cards hover-cards--variant-2">
                                                     <figure>
                                                         <div>
                                                             <a href="projects/2021-19/bohemica-signage/overview-screen.full.png"
@@ -1378,33 +1363,33 @@
                                                 <h1>
                                                     <span class="spark">Logos</span>
                                                 </h1>
-                                                <div class="modal-grid">
-                                                    <figure class="logo-figure">
+                                                <div class="image-grid">
+                                                    <figure>
                                                         <a href="projects/elsewhen/logo/eightshop.full.png" target="_blank">
                                                             <img loading="lazy" src="projects/elsewhen/logo/eightshop.min.png">
                                                         </a>
                                                     </figure>
-                                                    <figure class="logo-figure">
+                                                    <figure>
                                                         <a href="projects/elsewhen/logo/drop-visuals.full.jpg" target="_blank">
                                                             <img loading="lazy" src="projects/elsewhen/logo/drop-visuals.min.jpg">
                                                         </a>
                                                     </figure>
-                                                    <figure class="logo-figure">
+                                                    <figure>
                                                         <a href="projects/elsewhen/logo/moment.svg" target="_blank">
                                                             <img src="projects/elsewhen/logo/moment.svg" loading="lazy">
                                                         </a>
                                                     </figure>
-                                                    <figure class="logo-figure">
+                                                    <figure>
                                                         <a href="projects/elsewhen/logo/w.full.png" target="_blank">
                                                             <img loading="lazy" src="projects/elsewhen/logo/w.min.png">
                                                         </a>
                                                     </figure>
-                                                    <figure class="logo-figure">
+                                                    <figure>
                                                         <a href="projects/elsewhen/logo/us.svg" target="_blank">
                                                             <img src="projects/elsewhen/logo/us.svg" loading="lazy">
                                                         </a>
                                                     </figure>
-                                                    <figure class="logo-figure">
+                                                    <figure>
                                                         <a href="projects/elsewhen/logo/fish.full.png" target="_blank">
                                                             <img loading="lazy" src="projects/elsewhen/logo/fish.min.png">
                                                         </a>
@@ -1495,23 +1480,21 @@
                             </div>
                             <figure id="modal-archive-footer-art-left">
                             </figure>
-                            <!-- TODO remove right art? -->
-                            <!-- <figure id="modal-archive-footer-art-right"></figure> -->
                         </figure>
                     </dialog>
                     <div id="underlay-modal"
                          class="z-1 fixed inset-0 pointer-events-none">
                     </div>
                 </header>
-                <div id="triangle-left"
+                <figure id="triangle-left"
                      class="invisible z-0 fixed inset-0 overflow-hidden pointer-events-none select-none">
-                </div>
-                <div id="triangle-right"
+                </figure>
+                <figure id="triangle-right"
                      class="invisible z-0 fixed inset-0 overflow-hidden pointer-events-none select-none">
-                </div>
-                <div id="triangle-right-alt"
+                </figure>
+                <figure id="triangle-right-alt"
                      class="invisible z-0 fixed inset-0 overflow-hidden pointer-events-none select-none">
-                </div>
+                </figure>
             </figure>
             <footer class="z-1 fixed select-none">
                 <div class="flex px-1/2 py-1/2 w-full h-full">

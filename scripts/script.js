@@ -64,6 +64,86 @@ const DIALOG_CONFIG = Object.freeze({
 })
 
 // ============================================================================
+// Dialog Lifecycle Configuration
+// ============================================================================
+
+/**
+ * Register lifecycle hooks for modal dialogs
+ * This connects the generic dialog.js with project-specific initialization/cleanup
+ */
+function registerDialogLifecycleHooks(retryCount = 0) {
+    if (typeof aria === 'undefined' || typeof aria.registerLifecycleHooks !== 'function') {
+        // Retry up to 50 times (500ms total) if aria isn't ready yet
+        if (retryCount < 50) {
+            setTimeout(() => registerDialogLifecycleHooks(retryCount + 1), 10)
+        } else {
+            console.error('Failed to register dialog lifecycle hooks: aria not available')
+        }
+        return
+    }
+
+    // Archive modal lifecycle
+    aria.registerLifecycleHooks(DIALOG_CONFIG.ARCHIVE.id, {
+        initialize: () => {
+            // Initialize timeline on first modal open
+            if (!window.timelineEl) {
+                window.initializeTimeline()
+
+                // Position timeline after modal transition completes
+                const modalArchiveEl = document.getElementById('modal-archive')
+                if (modalArchiveEl) {
+                    let positioned = false
+
+                    const positionOnce = () => {
+                        if (!positioned) {
+                            positioned = true
+                            window.positionTimeline()
+                        }
+                    }
+
+                    // Primary: Listen for transition end
+                    const handleTransitionEnd = (event) => {
+                        // Only trigger on the modal element's transform transition
+                        if (event.target === modalArchiveEl && event.propertyName === 'transform') {
+                            modalArchiveEl.removeEventListener('transitionend', handleTransitionEnd)
+                            positionOnce()
+                        }
+                    }
+                    modalArchiveEl.addEventListener('transitionend', handleTransitionEnd)
+
+                    // Fallback: Timeout in case transitionend doesn't fire
+                    setTimeout(positionOnce, 150)
+                }
+            }
+
+            // Start the observer when modal opens
+            if (window.timelineEl && window.timelineEl.startIntersectionObserver) {
+                window.timelineEl.startIntersectionObserver()
+            }
+        },
+        cleanup: () => {
+            if (window.timelineEl) {
+                window.timelineEl.stopIntersectionObserver()
+            }
+        }
+    })
+
+    // Profile modal lifecycle
+    aria.registerLifecycleHooks(DIALOG_CONFIG.PROFILE.id, {
+        initialize: () => {
+            // Only initialize if not already initialized
+            if (!window.footerArtCleanup) {
+                window.footerArtCleanup = initializeModalFooterArt()
+            }
+        }
+        // No cleanup needed - footer art persists for the session
+    })
+}
+
+// Register hooks immediately (will retry if aria not loaded yet)
+registerDialogLifecycleHooks()
+
+// ============================================================================
 // TextHighlighter Class
 // ============================================================================
 
@@ -74,7 +154,7 @@ class TextHighlighter {
     constructor() {
         this.originalText = ''
         this.HIGHLIGHT_DURATION = 1000
-        this.HIGHLIGHT_ACTIVE_CLASS = 'highlight-text--active'
+        this.HIGHLIGHT_ACTIVE_CLASS = 'highlight--active'
     }
 
     highlightAndCopyText(event, textElement, highlightElement, temporaryText) {
@@ -217,13 +297,6 @@ class KeyHandler {
             }
         }
     }
-
-    destroy() {
-        document.removeEventListener('keydown', this.boundHandleKeydown)
-        document.removeEventListener('keyup', this.boundHandleKeyup)
-        window.removeEventListener('blur', this.boundRemoveTooltips)
-        document.body.removeEventListener('click', this.boundRemoveTooltips)
-    }
 }
 
 
@@ -306,10 +379,6 @@ class WheelHandler {
         } else if (direction === 'left' && hash === NAVIGATION_HASHES.MENU && scrollX === 0) {
             closeDialog('#')
         }
-    }
-
-    destroy() {
-        window.removeEventListener('wheel', this.boundHandleWheelEvent)
     }
 }
 
@@ -402,11 +471,6 @@ class TouchHandler {
         } else if (direction === 'left' && !hash && scrollX === 0) {
             openDialog(DIALOG_CONFIG.MENU.id, DIALOG_CONFIG.MENU.trigger, DIALOG_CONFIG.MENU.close, 'menu')
         }
-    }
-
-    destroy() {
-        window.removeEventListener('touchstart', this.boundHandleTouchStart)
-        window.removeEventListener('touchmove', this.boundHandleTouchMove)
     }
 }
 
@@ -1114,14 +1178,6 @@ class Popup {
             top: Math.round(top)
         }
     }
-
-    destroy() {
-        this.closeFallbackView()
-        if (this.handleEscapeKey) {
-            document.removeEventListener('keydown', this.handleEscapeKey, true)
-        }
-    }
-
 }
 
 
@@ -1289,63 +1345,6 @@ class Carousel {
             slideEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
         }
     }
-
-    destroy() {
-        if (this.observer) {
-            this.observer.disconnect()
-        }
-    }
-}
-
-// ============================================================================
-// Modal Lifecycle Management
-// ============================================================================
-
-/**
- * Stores cleanup functions for modal-specific features
- */
-const modalCleanupHandlers = {
-    timeline: null,
-    footerArt: null
-}
-
-/**
- * Cleanup function to be called when archive modal closes
- */
-window.cleanupArchiveModal = () => {
-    if (window.timelineEl) {
-        window.timelineEl.stopIntersectionObserver()
-    }
-}
-
-/**
- * Cleanup function to be called when profile modal closes
- */
-window.cleanupProfileModal = () => {
-    if (modalCleanupHandlers.footerArt) {
-        modalCleanupHandlers.footerArt()
-        modalCleanupHandlers.footerArt = null
-    }
-}
-
-/**
- * Initialize features specific to archive modal
- */
-window.initializeArchiveModal = () => {
-    // Start the observer when modal opens
-    if (window.timelineEl && window.timelineEl.startIntersectionObserver) {
-        window.timelineEl.startIntersectionObserver()
-    }
-}
-
-/**
- * Initialize features specific to profile modal
- */
-window.initializeProfileModal = () => {
-    // Only initialize if not already initialized
-    if (!modalCleanupHandlers.footerArt) {
-        modalCleanupHandlers.footerArt = initializeModalFooterArt()
-    }
 }
 
 // ============================================================================
@@ -1400,18 +1399,19 @@ window.handleTouchButtonClick = (element, event, callback, focusAfterClick = fal
 
 /**
  * Initializes the timeline component with scrollers
+ * Timeline persists for the entire session once initialized
  */
 window.initializeTimeline = () => {
     // Prevent duplicate timeline creation
     if (window.timelineEl) {
         console.warn('Timeline already initialized')
-        return window.timelineCleanup || (() => { })
+        return
     }
 
     window.timelineEl = document.createElement('horizontal-timeline')
-    timelineEl.labels = ['2024-21', '2021-19', '2019-18', 'elsewhen']
+    window.timelineEl.labels = ['2024-21', '2021-19', '2019-18', 'elsewhen']
 
-    document.querySelector('#horizontal-timeline').appendChild(timelineEl)
+    document.querySelector('#horizontal-timeline').appendChild(window.timelineEl)
 
     const timelineContent = document.querySelector('#timeline-content')
     let edgeScroller, dragScroll
@@ -1447,17 +1447,6 @@ window.initializeTimeline = () => {
         handleResize()
         window.addEventListener('resize', handleResize)
     }
-
-    // Store cleanup function globally so we can call it later
-    window.timelineCleanup = () => {
-        destroyScrollers()
-        if (timelineContent) {
-            window.removeEventListener('resize', handleResize)
-        }
-    }
-
-    // Return cleanup function
-    return window.timelineCleanup
 }
 
 /**
@@ -1478,21 +1467,25 @@ function initializeDialogs() {
 }
 
 /**
- * Applies quick animation class to skip initial page load animations
+ * Adds class to prevent initial page-load animations
  */
 const applyNoAnimation = () => {
-    const QUICK_ANIMATION_CLASS = 'quick-animation'
+    const SKIP_ANIMATION_CLASS = 'skip-animation'
     const elements = document.querySelectorAll(
         `#square-2,
              #square-3,
              #square-4,
             .intro__logo--animating,
             .intro__name--animating,
-            .intro__name--animating .intro__name-wrapper>p,
-            .intro__title--animating,
-            .intro__title--animating>p,
-            .intro__title--animating .de-highlight-anim span,
-            .intro__title--animating .de-highlight-anim-alt span,
+            .intro__name--animating .intro__name-frame>p,
+            .intro__primary-title.intro__title--animating,
+            .intro__secondary-title.intro__title--animating,
+            .intro__primary-title.intro__title--animating>p,
+            .intro__secondary-title.intro__title--animating>p,
+            .intro__primary-title.intro__title--animating .intro__animated-text span,
+            .intro__secondary-title.intro__title--animating .intro__animated-text span,
+            .intro__primary-title.intro__title--animating .intro__animated-text--alt span,
+            .intro__secondary-title.intro__title--animating .intro__animated-text--alt span,
             .availability--animating,
             .availability--animating .availability__background,
             .availability--animating .availability__content,
@@ -1503,7 +1496,7 @@ const applyNoAnimation = () => {
     )
 
     for (let i = 0; i < elements.length; i++) {
-        elements[i].classList.add(QUICK_ANIMATION_CLASS)
+        elements[i].classList.add(SKIP_ANIMATION_CLASS)
     }
 }
 
@@ -1616,7 +1609,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // Initialize global handlers (persistent throughout page lifetime)
-    // Note: destroy() methods exist but are not called since these are page-level handlers
     new WheelHandler()
     new TouchHandler()
     new KeyHandler()
@@ -1625,7 +1617,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.textHighlighter = new TextHighlighter()
 
     // Initialize carousels (persistent throughout page lifetime)
-    // Note: destroy() methods exist but are not called since carousels are permanent page elements
     const carouselElements = document.querySelectorAll('[data-carousel]')
     for (let i = 0; i < carouselElements.length; i++) {
         new Carousel({ id: `carousel-${i + 1}`, element: carouselElements[i] })
@@ -1653,18 +1644,13 @@ document.addEventListener('DOMContentLoaded', () => {
         popupInstance.open(link, e)
     })
 
-    // Pre-initialize timeline element (but don't start observer yet)
-    // Observer will be started when archive modal opens
-    window.initializeTimeline()
+    // Setup global timeline positioning function
+    window.positionTimeline = () => {
+        const archiveWrapperEl = document.querySelector('.archive-timeline')
+        const timelineContentSectionEl = document.querySelector('.archive-timeline [data-timeline-section]')
+        const timelineWrapperEl = document.querySelector('#horizontal-timeline')
 
-    // Setup timeline positioning
-    const archiveWrapperEl = document.querySelector('#modal-archive-wrapper')
-    const timelineContentSectionEl = document.querySelector('#modal-archive-wrapper [data-timeline-section]')
-    const timelineWrapperEl = document.querySelector('#horizontal-timeline')
-    const modalArchiveContent = document.querySelector('#modal-archive .modal-content')
-
-    const positionTimeline = event => {
-        if (event && event.currentTarget !== event.target) return
+        if (!archiveWrapperEl || !timelineContentSectionEl || !timelineWrapperEl) return
 
         const archiveWrapperRect = archiveWrapperEl.getBoundingClientRect()
         const timelineContentSectionRect = timelineContentSectionEl.getBoundingClientRect()
@@ -1673,10 +1659,10 @@ document.addEventListener('DOMContentLoaded', () => {
         timelineWrapperEl.style.setProperty('right', `${archiveWrapperRect.right - timelineContentSectionRect.right}px`)
     }
 
-    positionTimeline()
-
-    if (modalArchiveContent) {
-        modalArchiveContent.addEventListener('transitionend', positionTimeline)
-    }
-    window.addEventListener('resize', positionTimeline)
+    // Position timeline on resize (if it exists)
+    window.addEventListener('resize', () => {
+        if (window.timelineEl) {
+            window.positionTimeline()
+        }
+    })
 })

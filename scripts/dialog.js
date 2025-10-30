@@ -1,21 +1,69 @@
-/* Inspired by https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/dialog/ */
+/**
+ * ARIA Dialog - Universal Modal Dialog Manager
+ *
+ * A standalone, reusable dialog/modal management system with proper ARIA accessibility.
+ * This file is intentionally generic and can be used in any project.
+ *
+ * Features:
+ * - Accessible modal dialogs with focus trapping
+ * - Keyboard navigation (Escape key support)
+ * - Dialog stacking support
+ * - Lifecycle hooks for custom initialization/cleanup
+ * - Backdrop management
+ * - Self-contained styling (no external CSS dependencies)
+ *
+ * Usage:
+ * 1. Include this file in your project
+ * 2. Call openDialog(dialogId, focusAfterClosed, focusFirst, hash) to open a modal
+ * 3. Call closeDialog(hash) to close the current modal
+ * 4. Register lifecycle hooks with aria.registerLifecycleHooks(dialogId, { initialize, cleanup })
+ *
+ * Inspired by: https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/dialog/
+ */
+
+// Inject backdrop styles (self-contained, no external dependencies)
+(function injectDialogStyles() {
+    const styleId = 'aria-dialog-styles'
+    if (document.getElementById(styleId)) return
+
+    const style = document.createElement('style')
+    style.id = styleId
+    style.textContent = `
+        .dialog-backdrop {
+            display: contents;
+        }
+    `
+    document.head.appendChild(style)
+})()
 
 var aria = aria || {}
-
-/**
- * Dialog ID constants
- * Centralized dialog identifiers used throughout the application
- */
-aria.DIALOG_IDS = Object.freeze({
-    PROFILE: 'modal-profile',
-    ARCHIVE: 'modal-archive',
-    MENU: 'menu-button-wrapper'
-})
 
 /**
  * Valid ARIA roles for dialogs
  */
 aria.VALID_DIALOG_ROLES = Object.freeze(['dialog', 'alertdialog'])
+
+/**
+ * Lifecycle hooks registry
+ * External code can register initialization and cleanup callbacks for specific dialog IDs
+ * @example
+ * aria.registerLifecycleHooks('modal-profile', {
+ *   initialize: () => console.log('Profile modal opened'),
+ *   cleanup: () => console.log('Profile modal closed')
+ * })
+ */
+aria.lifecycleHooks = aria.lifecycleHooks || {}
+
+/**
+ * Register lifecycle hooks for a specific dialog
+ * @param {string} dialogId - The ID of the dialog
+ * @param {Object} hooks - Object containing initialize and/or cleanup functions
+ * @param {Function} hooks.initialize - Called when dialog opens
+ * @param {Function} hooks.cleanup - Called when dialog closes
+ */
+aria.registerLifecycleHooks = (dialogId, hooks) => {
+    aria.lifecycleHooks[dialogId] = hooks
+}
 
 /**
  * Utility functions for dialog accessibility and DOM manipulation
@@ -83,32 +131,15 @@ aria.Utils = aria.Utils || {
 }
 
 /**
- * Modal Lifecycle Manager
- * Handles initialization and cleanup of modal-specific features
+ * Call registered lifecycle hooks for a dialog
+ * @private
+ * @param {string} dialogId - The ID of the dialog
+ * @param {string} hookType - Either 'initialize' or 'cleanup'
  */
-aria.ModalLifecycle = {
-    /**
-     * Initialize modal-specific features based on dialog ID
-     * @param {string} dialogId - The ID of the dialog being initialized
-     */
-    initialize(dialogId) {
-        if (dialogId === aria.DIALOG_IDS.ARCHIVE && typeof window.initializeArchiveModal === 'function') {
-            window.initializeArchiveModal()
-        } else if (dialogId === aria.DIALOG_IDS.PROFILE && typeof window.initializeProfileModal === 'function') {
-            window.initializeProfileModal()
-        }
-    },
-
-    /**
-     * Clean up modal-specific features based on dialog ID
-     * @param {string} dialogId - The ID of the dialog being cleaned up
-     */
-    cleanup(dialogId) {
-        if (dialogId === aria.DIALOG_IDS.ARCHIVE && typeof window.cleanupArchiveModal === 'function') {
-            window.cleanupArchiveModal()
-        } else if (dialogId === aria.DIALOG_IDS.PROFILE && typeof window.cleanupProfileModal === 'function') {
-            window.cleanupProfileModal()
-        }
+aria.callLifecycleHook = (dialogId, hookType) => {
+    const hooks = aria.lifecycleHooks[dialogId]
+    if (hooks && typeof hooks[hookType] === 'function') {
+        hooks[hookType]()
     }
 }
 
@@ -363,7 +394,7 @@ aria.Dialog.prototype.close = function (hash) {
  */
 aria.Dialog.prototype.replace = function (newDialogId, newFocusAfterClosed, newFocusFirst, hash) {
     // Clean up current modal-specific features
-    aria.ModalLifecycle.cleanup(this.dialogId)
+    aria.callLifecycleHook(this.dialogId, 'cleanup')
 
     // Remove from stack
     aria.OpenDialogList.pop()
@@ -385,7 +416,7 @@ aria.Dialog.prototype.replace = function (newDialogId, newFocusAfterClosed, newF
     new aria.Dialog(newDialogId, focusAfterClosed, newFocusFirst, hash)
 
     // Initialize new modal-specific features
-    aria.ModalLifecycle.initialize(newDialogId)
+    aria.callLifecycleHook(newDialogId, 'initialize')
 }
 
 /**
@@ -441,7 +472,7 @@ window.openDialog = (dialogId, focusAfterClosed, focusFirst, hash) => {
     }
 
     // Initialize modal-specific features
-    aria.ModalLifecycle.initialize(dialogId)
+    aria.callLifecycleHook(dialogId, 'initialize')
 }
 
 /**
@@ -456,7 +487,7 @@ window.closeDialog = (hash) => {
 
     // Clean up modal-specific features
     if (topDialog.dialogNode) {
-        aria.ModalLifecycle.cleanup(topDialog.dialogId)
+        aria.callLifecycleHook(topDialog.dialogId, 'cleanup')
     }
 
     topDialog.close(hash)

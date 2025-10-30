@@ -28,7 +28,7 @@ body {
     --transition-transform: transform var(--animate-in-segment) var(--ease-out-quad);
 }
 
-.quick-animation {
+.skip-animation {
     animation: none !important;
 }
 
@@ -156,24 +156,27 @@ body {
 
 /* Intro - Text */
 
-.intro__name--animating .intro__name-wrapper>p,
-.intro__title--animating>p {
+.intro__name--animating .intro__name-frame>p,
+.intro__primary-title.intro__title--animating>p,
+.intro__secondary-title.intro__title--animating>p {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
     animation-duration: calc(var(--anim-segment) * 5);
     animation-timing-function: var(--ease-out-quad);
 }
 
-.intro__name--animating .intro__name-wrapper>p {
+.intro__name--animating .intro__name-frame>p {
     animation-delay: calc((var(--anim-segment) * 9) + (var(--anim-segment) * var(--i)));
 }
 
-.intro__title--animating>p {
+.intro__primary-title.intro__title--animating>p,
+.intro__secondary-title.intro__title--animating>p {
     animation-delay: calc((var(--anim-segment) * 9) + (var(--anim-segment) * var(--i)));
 }
 
 .intro__name--animating,
-.intro__title--animating,
+.intro__primary-title.intro__title--animating,
+.intro__secondary-title.intro__title--animating,
 .availability--animating {
     animation-name: change-pointer;
     animation-duration: 0s;
@@ -187,7 +190,8 @@ body {
     animation-delay: calc(var(--anim-segment) * 16);
 }
 
-.intro__title--animating {
+.intro__primary-title.intro__title--animating,
+.intro__secondary-title.intro__title--animating {
     animation-delay: calc(var(--anim-segment) * 20);
 }
 
@@ -224,20 +228,24 @@ body {
 
 /* Intro - Text De-Highlight */
 
-.intro__title--animating .de-highlight-anim span:hover {
+.intro__primary-title.intro__title--animating .intro__animated-text span:hover,
+.intro__secondary-title.intro__title--animating .intro__animated-text span:hover {
     color: var(--highlight-primary) !important;
     transition: color var(--animate-in-segment-2\/3) var(--ease-out-quad);
     /* animation: none !important; */
 }
 
-.intro__title--animating .de-highlight-anim-alt span:hover {
+.intro__primary-title.intro__title--animating .intro__animated-text--alt span:hover,
+.intro__secondary-title.intro__title--animating .intro__animated-text--alt span:hover {
     color: var(--yellow) !important;
     transition: color var(--animate-in-segment-2\/3) var(--ease-out-quad);
     /* animation: none !important; */
 }
 
-.intro__title--animating .de-highlight-anim span,
-.intro__title--animating .de-highlight-anim-alt span {
+.intro__primary-title.intro__title--animating .intro__animated-text span,
+.intro__primary-title.intro__title--animating .intro__animated-text--alt span,
+.intro__secondary-title.intro__title--animating .intro__animated-text span,
+.intro__secondary-title.intro__title--animating .intro__animated-text--alt span {
     animation-fill-mode: backwards;
     animation-duration: calc(var(--anim-segment) * 4);
     animation-timing-function: var(--ease-out-quad);
@@ -245,12 +253,13 @@ body {
     transition: color calc(var(--anim-segment) * 4) var(--ease-out-quad) calc(var(--anim-segment) * 2);
 }
 
-.intro__title--animating .de-highlight-anim span {
-    animation-name: de-highlight-anim;
+.intro__primary-title.intro__title--animating .intro__animated-text span,
+.intro__secondary-title.intro__title--animating .intro__animated-text span {
+    animation-name: intro-animated-text;
     animation-delay: calc((var(--anim-segment) * 14) + var(--i) * 0.1s);
 }
 
-@keyframes de-highlight-anim {
+@keyframes intro-animated-text {
     0% {
         color: var(--highlight-primary);
     }
@@ -260,12 +269,13 @@ body {
     }
 }
 
-.intro__title--animating .de-highlight-anim-alt span {
-    animation-name: de-highlight-anim-alt;
+.intro__primary-title.intro__title--animating .intro__animated-text--alt span,
+.intro__secondary-title.intro__title--animating .intro__animated-text--alt span {
+    animation-name: intro-animated-text-alt;
     animation-delay: calc((var(--anim-segment) * 15) + var(--i) * 0.1s);
 }
 
-@keyframes de-highlight-anim-alt {
+@keyframes intro-animated-text-alt {
     0% {
         color: var(--yellow);
     }
@@ -278,9 +288,9 @@ body {
 
 /* Intro - CTA Blocks */
 
-.availability--animating {
+/* .availability--animating {
     animation: fade-in-cta-1 both;
-}
+} */
 
 .availability--animating .availability__background {
     animation-name: cta-1-animate-init;
@@ -459,53 +469,48 @@ body {
 
 /* Text Higlight */
 
-.highlight-text:focus {
+.highlight:focus {
     transition: color calc(2 * var(--animate-out-segment)) var(--ease-in-quad);
 }
 
-.highlight-text:hover {
+.highlight:hover {
     transition: color calc(2 * var(--animate-out-segment)) var(--ease-in-quad) !important;
 }
 
-.highlight-text.highlight-text--active {
+.highlight--active {
     transition: color calc(2 * var(--animate-in-segment)) var(--ease-out-quad) !important;
     color: var(--blue-full-65) !important;
 }
 
 
-/* Corner */
-.corner-wrapper {
+/* Corner Decoration */
+.corners {
     position: absolute;
     inset: 0;
     opacity: 0;
     transition: opacity calc(var(--animate-out-segment) * 0.75) var(--ease-in-quad);
 }
 
-.corner {
+.corners__item {
     position: absolute;
     width: var(--corner-length);
     height: var(--corner-length);
     transform: scale(0.75);
     transition: transform calc(var(--animate-out-segment) * 0.75) var(--ease-in-quad);
-    /* opacity: 0; */
-    /* animation: corner-hide;
-    animation-duration: var(--animate-out-segment);
-    animation-timing-function: var(--ease-in-quad);
-    animation-fill-mode: forwards; */
 }
 
-.intro__name-wrapper:hover .corner-wrapper,
-#logo:hover .corner-wrapper,
-.intro__logo-wrapper:hover .corner-wrapper {
+.intro__name:hover .corners,
+.intro__logo:hover .corners,
+.intro__logo-frame:hover .corners {
     opacity: 1;
     transition: opacity calc(var(--animate-in-segment) * 0.75) var(--ease-out-quad);
 }
 
 
 /* TODO - add states for focus and active and similar - keyboard navigation */
-.intro__name-wrapper:hover .corner,
-#logo:hover .corner,
-.intro__logo-wrapper:hover .corner {
+.intro__name:hover .corners__item,
+.intro__logo:hover .corners__item,
+.intro__logo-frame:hover .corners__item {
     animation: corner-flicker;
     animation-timing-function: var(--ease-out-quad);
     animation-fill-mode: forwards;
@@ -513,33 +518,33 @@ body {
     transition: transform calc(var(--animate-in-segment) * 0.75) var(--ease-out-quad);
 }
 
-.intro__name-wrapper:hover .corner {
+.intro__name:hover .corners__item {
     animation-duration: calc(var(--animate-in-segment) * 3);
 }
 
-#logo:hover .corner,
-.intro__logo-wrapper:hover .corner {
+.intro__logo:hover .corners__item,
+.intro__logo-frame:hover .corners__item {
     animation-duration: calc(var(--animate-in-segment) * 4);
 }
 
-.intro__name-wrapper:hover .corner::before,
-.intro__name-wrapper:hover .corner::after,
-#logo:hover .corner::before,
-#logo:hover .corner::after,
-.intro__logo-wrapper:hover .corner::before,
-.intro__logo-wrapper:hover .corner::after {
+.intro__name-frame:hover .corners__item::before,
+.intro__name-frame:hover .corners__item::after,
+.intro__logo:hover .corners__item::before,
+.intro__logo:hover .corners__item::after,
+.intro__logo-frame:hover .corners__item::before,
+.intro__logo-frame:hover .corners__item::after {
     animation: corner-color-change;
     animation-timing-function: linear;
     animation-fill-mode: forwards;
 }
 
-.intro__name-wrapper:hover .corner::before,
-.intro__name-wrapper:hover .corner::after {
+.intro__name-frame:hover .corners__item::before,
+.intro__name-frame:hover .corners__item::after {
     animation-duration: calc(var(--animate-in-segment) * 3);
 }
 
-#logo:hover .corner::before,
-#logo:hover .corner::after {
+.intro__logo:hover .corners__item::before,
+.intro__logo:hover .corners__item::after {
     animation-duration: calc(var(--animate-in-segment) * 4);
 }
 
@@ -591,83 +596,83 @@ body {
     }
 } */
 
-.corner::before,
-.corner::after {
+.corners__item::before,
+.corners__item::after {
     content: '';
     position: absolute;
     background: var(--corner-color-active);
 }
 
-.corner.top-left {
+.corners__item--tl {
     top: 0;
     left: 0;
 }
 
-.corner.top-left::before {
+.corners__item--tl::before {
     top: calc(var(--corner-offset-y) * -1);
     left: calc(var(--corner-offset-x) * -1);
     width: 100%;
     height: var(--corner-width);
 }
 
-.corner.top-left::after {
+.corners__item--tl::after {
     top: calc(var(--corner-offset-y) * -1);
     left: calc(var(--corner-offset-x) * -1);
     width: var(--corner-width);
     height: 100%;
 }
 
-.corner.top-right {
+.corners__item--tr {
     top: 0;
     right: 0;
 }
 
-.corner.top-right::before {
+.corners__item--tr::before {
     top: calc(var(--corner-offset-y) * -1);
     right: calc(var(--corner-offset-x) * -1);
     width: 100%;
     height: var(--corner-width);
 }
 
-.corner.top-right::after {
+.corners__item--tr::after {
     top: calc(var(--corner-offset-y) * -1);
     right: calc(var(--corner-offset-x) * -1);
     width: var(--corner-width);
     height: 100%;
 }
 
-.corner.bottom-left {
+.corners__item--bl {
     bottom: 0;
     left: 0;
 }
 
-.corner.bottom-left::before {
+.corners__item--bl::before {
     bottom: calc(var(--corner-offset-y) * -1);
     left: calc(var(--corner-offset-x) * -1);
     width: 100%;
     height: var(--corner-width);
 }
 
-.corner.bottom-left::after {
+.corners__item--bl::after {
     bottom: calc(var(--corner-offset-y) * -1);
     left: calc(var(--corner-offset-x) * -1);
     width: var(--corner-width);
     height: 100%;
 }
 
-.corner.bottom-right {
+.corners__item--br {
     bottom: 0;
     right: 0;
 }
 
-.corner.bottom-right::before {
+.corners__item--br::before {
     bottom: calc(var(--corner-offset-y) * -1);
     right: calc(var(--corner-offset-x) * -1);
     width: 100%;
     height: var(--corner-width);
 }
 
-.corner.bottom-right::after {
+.corners__item--br::after {
     bottom: calc(var(--corner-offset-y) * -1);
     right: calc(var(--corner-offset-x) * -1);
     width: var(--corner-width);
@@ -684,7 +689,7 @@ body {
     --face-icon-sequence-wink: path("M14.917,24C14.277,24 13.743,23.785 13.312,23.354C12.882,22.924 12.667,22.389 12.667,21.75C12.667,21.111 12.889,20.577 13.333,20.146C13.778,19.716 14.319,19.5 14.958,19.5C15.598,19.5 16.125,19.715 16.542,20.146C16.959,20.576 17.167,21.111 17.167,21.75C17.167,22.389 16.952,22.923 16.521,23.354C16.091,23.784 15.556,24 14.917,24ZM25.083,22.75C24.444,22.75 23.91,22.654 23.479,22.463C23.049,22.272 22.833,22.034 22.833,21.75C22.833,21.466 23.048,21.229 23.479,21.037C23.909,20.846 24.444,20.75 25.083,20.75C25.723,20.75 26.264,20.846 26.708,21.037C27.153,21.228 27.375,21.466 27.375,21.75C27.375,22.034 27.153,22.271 26.708,22.463C26.276,22.652 25.689,22.756 25.083,22.75ZM20,33.667C23.805,33.667 27.035,32.341 29.688,29.688C32.341,27.035 33.667,23.805 33.667,20C33.667,19.305 33.618,18.632 33.521,17.979C33.433,17.363 33.286,16.756 33.083,16.167C32.508,16.309 31.923,16.407 31.333,16.458C30.723,16.514 30.083,16.542 29.417,16.542C26.806,16.542 24.347,16.007 22.042,14.938C19.744,13.874 17.72,12.299 16.125,10.333C15.227,12.473 13.893,14.403 12.208,16C10.519,17.608 8.539,18.881 6.375,19.75L6.375,20.042C6.375,23.847 7.695,27.069 10.333,29.708C12.973,32.348 16.195,33.667 20,33.667ZM20.042,37.333C17.625,37.333 15.368,36.875 13.271,35.958C11.174,35.041 9.341,33.805 7.771,32.25C6.201,30.695 4.959,28.861 4.042,26.75C3.125,24.639 2.667,22.389 2.667,20C2.667,17.611 3.125,15.361 4.042,13.25C4.959,11.139 6.202,9.305 7.771,7.75C9.341,6.195 11.174,4.959 13.271,4.042C15.368,3.125 17.625,2.667 20.042,2.667C22.431,2.667 24.674,3.125 26.771,4.042C28.868,4.959 30.701,6.195 32.271,7.75C33.841,9.305 35.076,11.139 35.979,13.25C36.882,15.361 37.333,17.611 37.333,20C37.333,22.389 36.882,24.639 35.979,26.75C35.076,28.861 33.84,30.702 32.271,32.271C30.701,33.841 28.861,35.076 26.75,35.979C24.639,36.882 22.403,37.333 20.042,37.333Z");
 }
 
-svg.animate-face-icon path {
+.menu__link-icon--animated svg path {
     will-change: d;
     animation-name: face-icon-animation;
     animation-fill-mode: both;
@@ -848,30 +853,30 @@ a#menu-link-profile:hover, a#menu-link-profile:focus, a#menu-link-profile.toolti
     color: var(--icon-hover);
 }
 
-.menu__link .menu__link-text, .menu__email-button .menu__email-text,
-.menu__link-text,
+.menu__link .menu__link-label-text, .menu__email-button .menu__email-text,
+.menu__link-label-text,
 .menu__email-text {
     transition: color var(--animate-out-segment-2\/3) linear;
     color: var(--text-2);
 }
 
-.menu__link:hover .menu__link-text, .menu__link:focus .menu__link-text, .menu__email-button:hover .menu__email-text, .menu__email-button:focus .menu__email-text,
-.menu__link:hover .menu__link-text,
-.menu__link:focus .menu__link-text,
+.menu__link:hover .menu__link-label-text, .menu__link:focus .menu__link-label-text, .menu__email-button:hover .menu__email-text, .menu__email-button:focus .menu__email-text,
+.menu__link:hover .menu__link-label-text,
+.menu__link:focus .menu__link-label-text,
 .menu__email-button:hover .menu__email-text,
 .menu__email-button:focus .menu__email-text {
     transition: color var(--animate-in-segment-2\/3) linear;
     color: var(--text-1);
 }
 
-.menu__link .menu__link-text u,
-.menu__link-text u {
+.menu__link .menu__link-label-text u,
+.menu__link-label-text u {
     transition: text-decoration var(--animate-out-segment-2\/3) linear;
 }
 
-.menu__link:hover .menu__link-text u, .menu__link:focus .menu__link-text u,
-.menu__link:hover .menu__link-text u,
-.menu__link:focus .menu__link-text u {
+.menu__link:hover .menu__link-label-text u, .menu__link:focus .menu__link-label-text u,
+.menu__link:hover .menu__link-label-text u,
+.menu__link:focus .menu__link-label-text u {
     transition: text-decoration var(--animate-in-segment-2\/3) linear;
     text-decoration-color: var(--text-2) !important;
 }
@@ -1253,7 +1258,7 @@ a#menu-link-profile:hover, a#menu-link-profile:focus, a#menu-link-profile.toolti
 }
 
 /* #profile:target~main #modal-profile-content,
-#archive:target~main #modal-archive-content {
+#archive:target~main .archive-timeline-grid {
     transition: opacity var(--animate-in-segment) linear var(--animate-in-segment);
     opacity: 1;
 } */
@@ -1277,35 +1282,35 @@ a#menu-link-profile:hover, a#menu-link-profile:focus, a#menu-link-profile.toolti
     transform: scale(0.95);
 }
 
-footer {
+footer>div {
     transition: transform var(--animate-out-segment) var(--ease-in-quad);
     transform-origin: top;
 }
 
-#profile:target~main footer,
-#archive:target~main footer {
+#profile:target~main footer>div,
+#archive:target~main footer>div {
     transition: transform var(--animate-in-segment) var(--ease-out-quad);
-    transform: scale(0.9825);
+    transform: scale(0.975);
 }
 
 
 /* Modals - Archive */
 
-#modal-archive-content [data-timeline-section] {
+.archive-timeline__grid [data-timeline-section] {
     transition: opacity var(--animate-out-segment) linear, padding var(--animate-out-segment) var(--ease-in-quad), height var(--animate-out-segment) var(--ease-in-quad);
 }
 
-input[id^="timeline-section-year-"]:checked~#modal-archive-content [data-timeline-section] {
+input[id^="timeline-section-year-"]:checked~.archive-timeline__grid [data-timeline-section] {
     transition: opacity var(--animate-in-segment) linear, padding var(--animate-in-segment) var(--ease-out-quad), height var(--animate-in-segment) var(--ease-out-quad);
 }
 
-/* #modal-archive-content [data-timeline-section-title]>div label:hover+div svg {} */
+/* .archive-timeline__grid [data-timeline-section-title]>div label:hover+div svg {} */
 
-#modal-archive-content [data-timeline-section-title]>div svg {
+.archive-timeline__grid [data-timeline-section-title]>div svg {
     transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, border var(--animate-out-segment-2\/3) linear;
 }
 
-#modal-archive-content [data-timeline-section-title]>div label:hover+div svg, #modal-archive-content [data-timeline-section-title]>div label:focus+div svg {
+.archive-timeline__grid [data-timeline-section-title]>div label:hover+div svg, .archive-timeline__grid [data-timeline-section-title]>div label:focus+div svg {
     transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border var(--animate-in-segment-2\/3) linear;
     color: var(--modal-icon-hover);
     background-color: var(--highlight-secondary);
@@ -1324,14 +1329,14 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:hover {
 
 /* Modals - Horizontal Timeline */
 
-#horizontal-timeline {
+#horizontal-timeline > :first-child {
     transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad);
     transform: scale(0.95);
     transform-origin: bottom;
     opacity: 0;
 }
 
-#archive:target~main #modal-archive #horizontal-timeline {
+#archive:target~main #modal-archive #horizontal-timeline > :first-child {
     transition: opacity var(--animate-in-segment) linear var(--anim-segment), transform var(--animate-in-segment) var(--ease-out-quad) var(--anim-segment);
     transform: scale(1);
     opacity: 1;
@@ -1406,20 +1411,20 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:hover {
 
 /* Modals - Close Button */
 
-#modal-button-close, #modal-button-close svg,
-#modal-button-fullscreen, #modal-button-fullscreen svg {
+.modal__close-button, .modal__close-button svg,
+.modal__fullscreen-button, .modal__fullscreen-button svg {
     transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, border var(--animate-out-segment-2\/3) linear;
 }
 
-#modal-button-close:hover, #modal-button-close:focus,
-#modal-button-fullscreen:hover, #modal-button-fullscreen:focus {
+.modal__close-button:hover, .modal__close-button:focus,
+.modal__fullscreen-button:hover, .modal__fullscreen-button:focus {
     transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border var(--animate-in-segment-2\/3) linear;
     color: var(--modal-icon-hover);
     background-color: var(--highlight-secondary);
 }
 
-#modal-button-close:hover svg, #modal-button-close:focus svg,
-#modal-button-fullscreen:hover svg, #modal-button-fullscreen:focus svg {
+.modal__close-button:hover svg, .modal__close-button:focus svg,
+.modal__fullscreen-button:hover svg, .modal__fullscreen-button:focus svg {
     color: var(--modal-icon-hover);
 }
 
@@ -1465,14 +1470,14 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:hover {
 
 /* Tooltip */
 
-.tooltip-wrapper .tooltip {
+.tooltip .tooltip__text {
     transition: var(--animate-out-segment-2\/3) linear;
     opacity: 0;
 
 }
 
-.tooltip-wrapper:hover:not(.tooltip-key--active) .tooltip:not(.tooltip--active), .tooltip-wrapper:focus-within:not(.tooltip-key--active):not([data-focus-after-click]) .tooltip:not(.tooltip--active),
-.tooltip-wrapper.tooltip-key--active .tooltip.tooltip--active, .tooltip-wrapper:focus-within.tooltip-key--active .tooltip.tooltip--active {
+.tooltip:hover:not(.tooltip-key--active) .tooltip__text:not(.tooltip__text--active), .tooltip:focus-within:not(.tooltip-key--active):not([data-focus-after-click]) .tooltip__text:not(.tooltip__text--active),
+.tooltip.tooltip-key--active .tooltip__text--active, .tooltip:focus-within.tooltip-key--active .tooltip__text--active {
     transition: var(--animate-in-segment-2\/3) linear var(--animate-in-segment);
     opacity: 1;
 }
