@@ -46,6 +46,40 @@ const MODAL_SELECTORS = Object.freeze({
     ARCHIVE: '#modal-archive'
 })
 
+// Shared modal element cache
+const modalElementCache = {
+    profile: null,
+    archive: null
+}
+
+/**
+ * Get modal element with caching
+ * Shared utility used by WheelHandler and TouchHandler
+ */
+const getModalElement = (hash) => {
+    if (hash === NAVIGATION_HASHES.PROFILE) {
+        return modalElementCache.profile ??= document.querySelector(MODAL_SELECTORS.PROFILE)
+    } else if (hash === NAVIGATION_HASHES.ARCHIVE) {
+        return modalElementCache.archive ??= document.querySelector(MODAL_SELECTORS.ARCHIVE)
+    }
+    return null
+}
+
+/**
+ * Application namespace for global state and utilities
+ * Reduces global namespace pollution by grouping related functionality
+ */
+window.App = {
+    timeline: null,
+    textHighlighter: null,
+
+    // Public API methods (called from HTML)
+    initializeTimeline: null,
+    positionTimeline: null,
+    handleTouchButtonClick: null,
+    toggleFullscreen: null
+}
+
 // Dialog configuration for consistent ID references
 const DIALOG_CONFIG = Object.freeze({
     PROFILE: {
@@ -70,24 +104,21 @@ const DIALOG_CONFIG = Object.freeze({
 /**
  * Register lifecycle hooks for modal dialogs
  * This connects the generic dialog.js with project-specific initialization/cleanup
+ * Note: Since scripts use defer, aria is always available when this runs
  */
-function registerDialogLifecycleHooks(retryCount = 0) {
-    if (typeof aria === 'undefined' || typeof aria.registerLifecycleHooks !== 'function') {
-        // Retry up to 50 times (500ms total) if aria isn't ready yet
-        if (retryCount < 50) {
-            setTimeout(() => registerDialogLifecycleHooks(retryCount + 1), 10)
-        } else {
-            console.error('Failed to register dialog lifecycle hooks: aria not available')
-        }
-        return
-    }
+function registerDialogLifecycleHooks() {
+    // Store original page title for restoration
+    const originalTitle = document.title
 
     // Archive modal lifecycle
     aria.registerLifecycleHooks(DIALOG_CONFIG.ARCHIVE.id, {
         initialize: () => {
+            // Update page title for better browser history
+            document.title = 'Archive - ' + originalTitle
+
             // Initialize timeline on first modal open
-            if (!window.timelineEl) {
-                window.initializeTimeline()
+            if (!App.timeline) {
+                App.initializeTimeline()
 
                 // Position timeline after modal transition completes
                 const modalArchiveEl = document.getElementById('modal-archive')
@@ -97,7 +128,7 @@ function registerDialogLifecycleHooks(retryCount = 0) {
                     const positionOnce = () => {
                         if (!positioned) {
                             positioned = true
-                            window.positionTimeline()
+                            App.positionTimeline()
                         }
                     }
 
@@ -117,26 +148,47 @@ function registerDialogLifecycleHooks(retryCount = 0) {
             }
 
             // Start the observer when modal opens
-            if (window.timelineEl && window.timelineEl.startIntersectionObserver) {
-                window.timelineEl.startIntersectionObserver()
+            if (App.timeline && App.timeline.startIntersectionObserver) {
+                App.timeline.startIntersectionObserver()
             }
         },
         cleanup: () => {
-            if (window.timelineEl) {
-                window.timelineEl.stopIntersectionObserver()
+            // Restore original page title
+            document.title = originalTitle
+
+            if (App.timeline) {
+                App.timeline.stopIntersectionObserver()
             }
         }
     })
 
     // Profile modal lifecycle
+    let footerArtInitialized = false
     aria.registerLifecycleHooks(DIALOG_CONFIG.PROFILE.id, {
         initialize: () => {
-            // Only initialize if not already initialized
-            if (!window.footerArtCleanup) {
-                window.footerArtCleanup = initializeModalFooterArt()
+            // Update page title for better browser history
+            document.title = 'Profile - ' + originalTitle
+
+            // Only initialize footer art effect once (persists for page lifetime)
+            if (!footerArtInitialized) {
+                initializeModalFooterArt()
+                footerArtInitialized = true
             }
+        },
+        cleanup: () => {
+            // Restore original page title
+            document.title = originalTitle
         }
-        // No cleanup needed - footer art persists for the session
+    })
+
+    // Menu modal lifecycle (for title consistency)
+    aria.registerLifecycleHooks(DIALOG_CONFIG.MENU.id, {
+        initialize: () => {
+            document.title = 'Menu - ' + originalTitle
+        },
+        cleanup: () => {
+            document.title = originalTitle
+        }
     })
 }
 
@@ -309,21 +361,10 @@ class KeyHandler {
  */
 class WheelHandler {
     constructor() {
-        this.modalProfileEl = null
-        this.modalArchiveEl = null
         this.SCROLL_MIN_THRESHOLD = 5
 
         this.boundHandleWheelEvent = this.handleWheelEvent.bind(this)
         window.addEventListener('wheel', this.boundHandleWheelEvent, { passive: true })
-    }
-
-    getModalElement(hash) {
-        if (hash === NAVIGATION_HASHES.PROFILE) {
-            return this.modalProfileEl ??= document.querySelector(MODAL_SELECTORS.PROFILE)
-        } else if (hash === NAVIGATION_HASHES.ARCHIVE) {
-            return this.modalArchiveEl ??= document.querySelector(MODAL_SELECTORS.ARCHIVE)
-        }
-        return null
     }
 
     handleWheelEvent(event) {
@@ -353,7 +394,7 @@ class WheelHandler {
     handleModalVerticalScroll(direction, currentHash) {
         if (direction !== 'up') return
 
-        const modalElement = this.getModalElement(currentHash)
+        const modalElement = getModalElement(currentHash)
         if (modalElement?.scrollTop === 0) {
             closeDialog('#')
         }
@@ -394,8 +435,6 @@ class TouchHandler {
     constructor() {
         this.touchStartX = 0
         this.touchStartY = 0
-        this.modalProfileEl = null
-        this.modalArchiveEl = null
         this.SCROLL_MIN_THRESHOLD = 5
 
         this.boundHandleTouchStart = this.handleTouchStart.bind(this)
@@ -408,15 +447,6 @@ class TouchHandler {
         const touch = event.touches[0]
         this.touchStartX = touch.clientX
         this.touchStartY = touch.clientY
-    }
-
-    getModalElement(hash) {
-        if (hash === NAVIGATION_HASHES.PROFILE) {
-            return this.modalProfileEl ??= document.querySelector(MODAL_SELECTORS.PROFILE)
-        } else if (hash === NAVIGATION_HASHES.ARCHIVE) {
-            return this.modalArchiveEl ??= document.querySelector(MODAL_SELECTORS.ARCHIVE)
-        }
-        return null
     }
 
     handleTouchMove(event) {
@@ -447,7 +477,7 @@ class TouchHandler {
     handleModalScroll(direction, currentHash) {
         if (direction !== 'up') return
 
-        const modalElement = this.getModalElement(currentHash)
+        const modalElement = getModalElement(currentHash)
         if (modalElement?.scrollTop === 0) {
             closeDialog('#')
         }
@@ -1085,10 +1115,6 @@ class Popup {
                 background: rgba(255, 255, 255, 0.25);
                 transition: background-color 150ms linear;
             }
-            .media_fallback-close-button:focus {
-                outline: 2px solid white;
-                outline-offset: 2px;
-            }
         `
         document.head.appendChild(styles)
     }
@@ -1254,24 +1280,28 @@ class Carousel {
     createControlNavigation() {
         this.controlsEl = document.createElement('div')
         this.controlsEl.setAttribute('data-carousel-controls', '')
+
+        // Add ARIA live region for screen reader announcements
         this.controlsEl.innerHTML = `
                 <div data-carousel-nav-wrapper>
-                    <div data-carousel-nav></div>
+                    <div data-carousel-nav role="tablist" aria-label="Carousel navigation"></div>
                 </div>
                 <ul data-carousel-arrows>
-                    <li><button type="button" aria-label="Previous slide"></button></li>
-                    <li><button type="button" aria-label="Next slide"></button></li>
+                    <li><button type="button" aria-label="Previous slide" class="carousel-button-prev"></button></li>
+                    <li><button type="button" aria-label="Next slide" class="carousel-button-next"></button></li>
                 </ul>
+                <div class="sr-only" role="status" aria-live="polite" aria-atomic="true" data-carousel-announcement></div>
             `
         this.carouselEl.appendChild(this.controlsEl)
 
         this.navEl = this.controlsEl.querySelector('[data-carousel-nav]')
         this.prevButtonEl = this.controlsEl.querySelector('[data-carousel-arrows] li:first-child button')
         this.nextButtonEl = this.controlsEl.querySelector('[data-carousel-arrows] li:last-child button')
+        this.announcementEl = this.controlsEl.querySelector('[data-carousel-announcement]')
 
         const navButtons = this.slidesEls.map((slideEl, index) => {
             const val = slideEl.getAttribute('data-value') || index
-            return `<button data-label-for="${val}"><span class="sr-only">Slide ${index + 1}</span></button>`
+            return `<button role="tab" data-label-for="${val}" aria-label="Go to slide ${index + 1}" tabindex="${index === 0 ? '0' : '-1'}"><span class="sr-only">Slide ${index + 1}</span></button>`
         })
 
         this.navEl.innerHTML = navButtons.join('')
@@ -1279,6 +1309,7 @@ class Carousel {
 
         if (this.dotEls.length > 0) {
             this.dotEls[0].setAttribute('aria-current', 'true')
+            this.dotEls[0].setAttribute('aria-selected', 'true')
         }
     }
 
@@ -1295,8 +1326,70 @@ class Carousel {
             }
         })
 
+        // Keyboard navigation for carousel controls
+        this.navEl.addEventListener('keydown', (event) => {
+            const currentButton = event.target.closest('button[data-label-for]')
+            if (!currentButton) return
+
+            let handled = false
+            const currentIndex = this.dotEls.indexOf(currentButton)
+
+            switch (event.key) {
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    // Navigate to previous slide
+                    if (currentIndex > 0) {
+                        this.dotEls[currentIndex - 1].focus()
+                        this.dotEls[currentIndex - 1].click()
+                    }
+                    handled = true
+                    break
+                case 'ArrowRight':
+                case 'ArrowDown':
+                    // Navigate to next slide
+                    if (currentIndex < this.dotEls.length - 1) {
+                        this.dotEls[currentIndex + 1].focus()
+                        this.dotEls[currentIndex + 1].click()
+                    }
+                    handled = true
+                    break
+                case 'Home':
+                    // Go to first slide
+                    this.dotEls[0].focus()
+                    this.dotEls[0].click()
+                    handled = true
+                    break
+                case 'End':
+                    // Go to last slide
+                    const lastIndex = this.dotEls.length - 1
+                    this.dotEls[lastIndex].focus()
+                    this.dotEls[lastIndex].click()
+                    handled = true
+                    break
+            }
+
+            if (handled) {
+                event.preventDefault()
+            }
+        })
+
         this.prevButtonEl.addEventListener('click', () => this.navigateToSlide('prev'))
         this.nextButtonEl.addEventListener('click', () => this.navigateToSlide('next'))
+
+        // Add keyboard shortcuts for prev/next buttons
+        this.prevButtonEl.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                this.navigateToSlide('prev')
+            }
+        })
+
+        this.nextButtonEl.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                this.navigateToSlide('next')
+            }
+        })
     }
 
     setupIntersectionObserver() {
@@ -1309,7 +1402,15 @@ class Carousel {
 
                     const slideIndex = this.slidesEls.indexOf(entry.target)
                     for (let j = 0; j < this.dotEls.length; j++) {
-                        this.dotEls[j].toggleAttribute('aria-current', j === slideIndex)
+                        const isActive = j === slideIndex
+                        this.dotEls[j].toggleAttribute('aria-current', isActive)
+                        this.dotEls[j].setAttribute('aria-selected', isActive ? 'true' : 'false')
+                        this.dotEls[j].setAttribute('tabindex', isActive ? '0' : '-1')
+                    }
+
+                    // Announce slide change to screen readers
+                    if (this.announcementEl) {
+                        this.announcementEl.textContent = `Slide ${slideIndex + 1} of ${this.slidesEls.length}`
                     }
                 } else {
                     entry.target.classList.remove(this.ACTIVE_CLASS)
@@ -1347,6 +1448,138 @@ class Carousel {
 }
 
 // ============================================================================
+// ImageGridNavigator Class
+// ============================================================================
+
+/**
+ * Enables keyboard navigation for image grids
+ * Supports arrow keys, Enter to activate, and proper focus management
+ */
+class ImageGridNavigator {
+    constructor(options = {}) {
+        this.containerSelector = options.containerSelector || '.hover-cards, .image-grid'
+        this.itemSelector = options.itemSelector || 'figure a'
+        this.fallbackSelector = 'figure'
+        this.containers = null
+
+        this.boundHandleKeydown = this.handleKeydown.bind(this)
+        this.init()
+    }
+
+    init() {
+        this.containers = Array.from(document.querySelectorAll(this.containerSelector))
+
+        // Make all images keyboard-focusable
+        this.containers.forEach(container => {
+            let items = Array.from(container.querySelectorAll(this.itemSelector))
+
+            // Fallback: if no links found, make figures themselves focusable
+            if (items.length === 0) {
+                items = Array.from(container.querySelectorAll(this.fallbackSelector))
+            }
+
+            items.forEach((item, index) => {
+                // First item is focusable, rest are not (use arrow keys to navigate)
+                item.setAttribute('tabindex', index === 0 ? '0' : '-1')
+                item.addEventListener('keydown', this.boundHandleKeydown)
+            })
+        })
+    }
+
+    handleKeydown(event) {
+        const currentItem = event.target
+        const container = currentItem.closest(this.containerSelector)
+        if (!container) return
+
+        let items = Array.from(container.querySelectorAll(this.itemSelector))
+
+        // Fallback: if no links found, use figures
+        if (items.length === 0) {
+            items = Array.from(container.querySelectorAll(this.fallbackSelector))
+        }
+
+        const currentIndex = items.indexOf(currentItem)
+        let targetIndex = -1
+        let handled = false
+
+        // Detect grid layout (check if items wrap)
+        const containerWidth = container.offsetWidth
+        const itemWidth = items[0]?.offsetWidth || 0
+        const itemsPerRow = itemWidth > 0 ? Math.floor(containerWidth / itemWidth) : 1
+
+        switch (event.key) {
+            case 'ArrowRight':
+                // Move to next item
+                targetIndex = Math.min(currentIndex + 1, items.length - 1)
+                handled = true
+                break
+            case 'ArrowLeft':
+                // Move to previous item
+                targetIndex = Math.max(currentIndex - 1, 0)
+                handled = true
+                break
+            case 'ArrowDown':
+                // Move to item in next row
+                targetIndex = Math.min(currentIndex + itemsPerRow, items.length - 1)
+                handled = true
+                break
+            case 'ArrowUp':
+                // Move to item in previous row
+                targetIndex = Math.max(currentIndex - itemsPerRow, 0)
+                handled = true
+                break
+            case 'Home':
+                // Move to first item
+                targetIndex = 0
+                handled = true
+                break
+            case 'End':
+                // Move to last item
+                targetIndex = items.length - 1
+                handled = true
+                break
+            case 'Enter':
+            case ' ':
+                // Activate the link/open popup
+                event.preventDefault()
+                currentItem.click()
+                return
+        }
+
+        if (handled && targetIndex !== -1 && targetIndex !== currentIndex) {
+            event.preventDefault()
+
+            // Update tabindex
+            items.forEach((item, index) => {
+                item.setAttribute('tabindex', index === targetIndex ? '0' : '-1')
+            })
+
+            // Focus target item
+            items[targetIndex].focus()
+        }
+    }
+
+    destroy() {
+        if (this.containers) {
+            this.containers.forEach(container => {
+                let items = Array.from(container.querySelectorAll(this.itemSelector))
+
+                // Fallback: if no links found, use figures
+                if (items.length === 0) {
+                    items = Array.from(container.querySelectorAll(this.fallbackSelector))
+                }
+
+                items.forEach(item => {
+                    item.removeEventListener('keydown', this.boundHandleKeydown)
+                    item.removeAttribute('tabindex')
+                })
+            })
+        }
+    }
+}
+
+
+// ============================================================================
 // Global Functions
 // ============================================================================
 
@@ -1355,7 +1588,7 @@ class Carousel {
  * On touch devices: first tap focuses, second tap executes callback
  * On non-touch devices: executes callback immediately
  */
-window.handleTouchButtonClick = (element, event, callback, focusAfterClick = false) => {
+App.handleTouchButtonClick = window.handleTouchButtonClick = (element, event, callback, focusAfterClick = false) => {
     event.preventDefault()
 
     // Non-touch devices execute immediately
@@ -1406,9 +1639,9 @@ window.handleTouchButtonClick = (element, event, callback, focusAfterClick = fal
  * - Handles deep-link URLs with ?year= parameter
  * - Starts intersection observer to track active sections
  */
-window.initializeTimeline = () => {
+App.initializeTimeline = window.initializeTimeline = () => {
     // Prevent duplicate timeline creation
-    if (window.timelineEl) {
+    if (App.timeline) {
         console.warn('Timeline already initialized')
         return
     }
@@ -1425,13 +1658,13 @@ window.initializeTimeline = () => {
     }
 
     // Create and configure timeline element
-    window.timelineEl = document.createElement('horizontal-timeline')
-    window.timelineEl.labels = TIMELINE_CONFIG.labels
-    window.timelineEl.hashPrefix = TIMELINE_CONFIG.hashPrefix
-    window.timelineEl.scrollOffset = TIMELINE_CONFIG.scrollOffset
-    window.timelineEl.scrollEndTimeout = TIMELINE_CONFIG.scrollEndTimeout
-    window.timelineEl.observerRootMargin = TIMELINE_CONFIG.observerRootMargin
-    window.timelineEl.observerThresholds = TIMELINE_CONFIG.observerThresholds
+    App.timeline = document.createElement('horizontal-timeline')
+    App.timeline.labels = TIMELINE_CONFIG.labels
+    App.timeline.hashPrefix = TIMELINE_CONFIG.hashPrefix
+    App.timeline.scrollOffset = TIMELINE_CONFIG.scrollOffset
+    App.timeline.scrollEndTimeout = TIMELINE_CONFIG.scrollEndTimeout
+    App.timeline.observerRootMargin = TIMELINE_CONFIG.observerRootMargin
+    App.timeline.observerThresholds = TIMELINE_CONFIG.observerThresholds
 
     const container = document.querySelector(`#${TIMELINE_CONFIG.containerId}`)
     if (!container) {
@@ -1439,10 +1672,10 @@ window.initializeTimeline = () => {
         return
     }
 
-    container.appendChild(window.timelineEl)
+    container.appendChild(App.timeline)
 
     // Start intersection observer to track active sections
-    window.timelineEl.startIntersectionObserver()
+    App.timeline.startIntersectionObserver()
 
     // Setup horizontal scrolling enhancements
     const timelineContent = document.querySelector('#timeline-content')
@@ -1497,7 +1730,7 @@ function handleTimelineDeepLink() {
     if (!yearParam) return
 
     // Use the same hash prefix as configured for the timeline
-    const hashPrefix = window.timelineEl?.hashPrefix || '#archive'
+    const hashPrefix = App.timeline?.hashPrefix || '#archive'
 
     // Temporarily clear hash to prevent browser's default scroll jump
     window.history.pushState(null, '', `${window.location.pathname}${hashPrefix}`)
@@ -1519,8 +1752,8 @@ function handleTimelineDeepLink() {
         const targetSection = document.querySelector(`[data-timeline-section="${yearParam}"]`)
         const modalArchive = document.querySelector('#modal-archive')
 
-        if (targetSection && modalArchive && window.timelineEl) {
-            window.timelineEl.scrollParentToChildVertical(modalArchive, targetSection, 'instant')
+        if (targetSection && modalArchive && App.timeline) {
+            App.timeline.scrollParentToChildVertical(modalArchive, targetSection, 'instant')
         }
     })
 }
@@ -1548,10 +1781,7 @@ function initializeDialogs() {
 const applyNoAnimation = () => {
     const SKIP_ANIMATION_CLASS = 'skip-animation'
     const elements = document.querySelectorAll(
-        `#square-2,
-             #square-3,
-             #square-4,
-            .intro__logo--animating,
+        `.intro__logo--animating,
             .intro__name--animating,
             .intro__name--animating .intro__name-frame>p,
             .intro__primary-title.intro__title--animating,
@@ -1568,7 +1798,7 @@ const applyNoAnimation = () => {
             .menu--animating .menu__background,
             .menu--animating .menu__email,
             .menu--animating .menu__link,
-            .menu--animating .menu__toggle`
+            .menu--animating #menu-toggle`
     )
 
     for (let i = 0; i < elements.length; i++) {
@@ -1600,6 +1830,7 @@ const openDialogOnLoad = () => {
 
 /**
  * Initializes 3D transform effect for modal profile footer art based on scroll
+ * Event listeners persist for page lifetime - no cleanup needed per YAGNI principle
  */
 const initializeModalFooterArt = () => {
     const footerArtWrapper = document.querySelector('.modal-profile__footer-art')
@@ -1619,24 +1850,66 @@ const initializeModalFooterArt = () => {
     modalProfile.addEventListener('scroll', handleScroll, { passive: true })
     window.addEventListener('resize', handleScroll)
     handleScroll()
-
-    // Return cleanup function
-    return () => {
-        modalProfile.removeEventListener('scroll', handleScroll)
-        window.removeEventListener('resize', handleScroll)
-    }
 }
 
 
 /**
  * Toggles fullscreen mode for the document
  */
-window.toggleFullscreen = () => {
+App.toggleFullscreen = window.toggleFullscreen = () => {
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen()
     } else if (document.exitFullscreen) {
         document.exitFullscreen()
     }
+}
+
+// ============================================================================
+// Accessibility Enhancements
+// ============================================================================
+
+/**
+ * Enhance all external links with security and accessibility features
+ * - Adds rel="noopener noreferrer" for security
+ * - Adds screen reader text indicating link opens in new tab
+ * - Ensures aria-label mentions new tab if not already present
+ */
+function enhanceExternalLinks() {
+    const externalLinks = document.querySelectorAll('a[target="_blank"]')
+
+    externalLinks.forEach(link => {
+        // Add security attributes
+        if (!link.getAttribute('rel')) {
+            link.setAttribute('rel', 'noopener noreferrer')
+        }
+
+        // Check if link already has "(opens in new tab)" text
+        const linkText = link.textContent.toLowerCase()
+        const hasNewTabText = linkText.includes('opens in new tab') ||
+                              linkText.includes('opens in new window')
+
+        // Check if aria-label already mentions new tab
+        const ariaLabel = link.getAttribute('aria-label') || ''
+        const ariaHasNewTab = ariaLabel.toLowerCase().includes('opens in new tab') ||
+                              ariaLabel.toLowerCase().includes('opens in new window')
+
+        // Add screen reader text if not already present
+        if (!hasNewTabText && !ariaHasNewTab) {
+            // Check if link has existing sr-only content
+            const existingSrOnly = link.querySelector('.sr-only')
+            if (!existingSrOnly) {
+                const srText = document.createElement('span')
+                srText.className = 'sr-only'
+                srText.textContent = ' (opens in new tab)'
+                link.appendChild(srText)
+            }
+
+            // Update aria-label if it exists
+            if (ariaLabel) {
+                link.setAttribute('aria-label', `${ariaLabel} (opens in new tab)`)
+            }
+        }
+    })
 }
 
 // ============================================================================
@@ -1656,6 +1929,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { once: true })
 
     initializeDialogs()
+
+    // Enhance all external links for accessibility and security
+    enhanceExternalLinks()
 
     // Detect touch device
     if (isTouchDevice) {
@@ -1690,13 +1966,19 @@ document.addEventListener('DOMContentLoaded', () => {
     new KeyHandler()
 
     // Initialize text highlighter
-    window.textHighlighter = new TextHighlighter()
+    App.textHighlighter = new TextHighlighter()
 
     // Initialize carousels (persistent throughout page lifetime)
     const carouselElements = document.querySelectorAll('[data-carousel]')
     for (let i = 0; i < carouselElements.length; i++) {
         new Carousel({ id: `carousel-${i + 1}`, element: carouselElements[i] })
     }
+
+    // Initialize keyboard navigation for image grids
+    new ImageGridNavigator({
+        containerSelector: '.hover-cards, .image-grid',
+        itemSelector: 'figure a'
+    })
 
     // Initialize popups with delegated listeners to reduce per-link handlers
     const popupInstance = new Popup()
@@ -1721,9 +2003,9 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // Setup global timeline positioning function
-    window.positionTimeline = () => {
-        const archiveWrapperEl = document.querySelector('.archive-timeline')
-        const timelineContentSectionEl = document.querySelector('.archive-timeline [data-timeline-section]')
+    App.positionTimeline = window.positionTimeline = () => {
+        const archiveWrapperEl = document.querySelector('.modal-archive__timeline')
+        const timelineContentSectionEl = document.querySelector('.modal-archive__timeline-grid [data-timeline-section]')
         const timelineWrapperEl = document.querySelector('#horizontal-timeline')
 
         if (!archiveWrapperEl || !timelineContentSectionEl || !timelineWrapperEl) return
@@ -1737,8 +2019,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Position timeline on resize (if it exists)
     window.addEventListener('resize', () => {
-        if (window.timelineEl) {
-            window.positionTimeline()
+        if (App.timeline) {
+            App.positionTimeline()
         }
     })
 })

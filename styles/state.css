@@ -240,40 +240,52 @@
 }
 
 /* Mobile-first: Collapsible timeline sections on small screens */
-#timeline-section-year-2024:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2024"],
-#timeline-section-year-2018:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2018"] {
+#timeline-section-year-2024-21:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2024-21"],
+#timeline-section-year-2021-19:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2021-19"],
+#timeline-section-year-2019-18:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2019-18"],
+#timeline-section-year-elsewhen:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="elsewhen"] {
     visibility: hidden;
     opacity: 0;
     height: 0;
     padding: 0;
 }
 
-#timeline-section-year-2024:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2024"] svg:first-child,
-#timeline-section-year-2018:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2018"] svg:first-child {
+#timeline-section-year-2024-21:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2024-21"] svg:first-child,
+#timeline-section-year-2021-19:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2021-19"] svg:first-child,
+#timeline-section-year-2019-18:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2019-18"] svg:first-child,
+#timeline-section-year-elsewhen:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="elsewhen"] svg:first-child {
     display: none;
 }
 
-#timeline-section-year-2024:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2024"] svg:nth-child(2),
-#timeline-section-year-2018:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2018"] svg:nth-child(2) {
+#timeline-section-year-2024-21:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2024-21"] svg:nth-child(2),
+#timeline-section-year-2021-19:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2021-19"] svg:nth-child(2),
+#timeline-section-year-2019-18:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2019-18"] svg:nth-child(2),
+#timeline-section-year-elsewhen:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="elsewhen"] svg:nth-child(2) {
     display: none;
 }
 
 @media (min-width: 45rem) {
-    #timeline-section-year-2024:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2024"],
-    #timeline-section-year-2018:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2018"] {
+    #timeline-section-year-2024-21:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2024-21"],
+    #timeline-section-year-2021-19:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2021-19"],
+    #timeline-section-year-2019-18:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2019-18"],
+    #timeline-section-year-elsewhen:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="elsewhen"] {
         visibility: visible;
         opacity: 1;
         height: auto;
         padding: revert;
     }
 
-    #timeline-section-year-2024:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2024"] svg:first-child,
-    #timeline-section-year-2018:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2018"] svg:first-child {
+    #timeline-section-year-2024-21:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2024-21"] svg:first-child,
+    #timeline-section-year-2021-19:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2021-19"] svg:first-child,
+    #timeline-section-year-2019-18:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2019-18"] svg:first-child,
+    #timeline-section-year-elsewhen:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="elsewhen"] svg:first-child {
         display: block;
     }
 
-    #timeline-section-year-2024:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2024"] svg:nth-child(2),
-    #timeline-section-year-2018:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2018"] svg:nth-child(2) {
+    #timeline-section-year-2024-21:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2024-21"] svg:nth-child(2),
+    #timeline-section-year-2021-19:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2021-19"] svg:nth-child(2),
+    #timeline-section-year-2019-18:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2019-18"] svg:nth-child(2),
+    #timeline-section-year-elsewhen:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="elsewhen"] svg:nth-child(2) {
         display: block;
     }
 }

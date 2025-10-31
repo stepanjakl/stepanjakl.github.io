@@ -11,12 +11,15 @@
  * - Lifecycle hooks for custom initialization/cleanup
  * - Backdrop management
  * - Self-contained styling (no external CSS dependencies)
+ * - Flexible inert management via data-inert-target attribute
  *
  * Usage:
  * 1. Include this file in your project
  * 2. Call openDialog(dialogId, focusAfterClosed, focusFirst, hash) to open a modal
  * 3. Call closeDialog(hash) to close the current modal
  * 4. Register lifecycle hooks with aria.registerLifecycleHooks(dialogId, { initialize, cleanup })
+ * 5. Optional: Add data-inert-target="childElementId" to apply inert to a child element
+ *    instead of the dialog itself (useful for focus trapping a parent container)
  *
  * Inspired by: https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/dialog/
  */
@@ -33,11 +36,89 @@
         .dialog-backdrop .focus-trap-node {
             display: contents;
         }
+
+        /* Polyfill for inert attribute (browsers pre-2023) */
+        [data-inert-polyfill] {
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
     `
     document.head.appendChild(style)
 })()
 
 var aria = aria || {}
+
+/**
+ * Inert Polyfill - Fallback for browsers without native inert support
+ * Provides aria-hidden and prevents focus for older browsers
+ */
+aria.supportsInert = 'inert' in HTMLElement.prototype
+
+/**
+ * Set element as inert (with polyfill for older browsers)
+ * @param {HTMLElement} element - Element to make inert
+ */
+aria.setInert = (element) => {
+    if (!element) return
+
+    if (aria.supportsInert) {
+        element.setAttribute('inert', '')
+    } else {
+        // Polyfill: prevent interaction and focus
+        element.setAttribute('aria-hidden', 'true')
+        element.setAttribute('data-inert-polyfill', '')
+
+        // Store original tabindex values and set all focusable elements to -1
+        const focusableElements = element.querySelectorAll(
+            'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+
+        if (!element._inertTabindexMap) {
+            element._inertTabindexMap = new WeakMap()
+        }
+
+        focusableElements.forEach(el => {
+            const currentTabindex = el.getAttribute('tabindex')
+            element._inertTabindexMap.set(el, currentTabindex)
+            el.setAttribute('tabindex', '-1')
+        })
+    }
+}
+
+/**
+ * Remove inert from element (with polyfill cleanup)
+ * @param {HTMLElement} element - Element to make interactive
+ */
+aria.removeInert = (element) => {
+    if (!element) return
+
+    if (aria.supportsInert) {
+        element.removeAttribute('inert')
+    } else {
+        // Polyfill cleanup: restore interaction and focus
+        element.removeAttribute('aria-hidden')
+        element.removeAttribute('data-inert-polyfill')
+
+        // Restore original tabindex values
+        if (element._inertTabindexMap) {
+            const focusableElements = element.querySelectorAll('[tabindex="-1"]')
+
+            focusableElements.forEach(el => {
+                const originalTabindex = element._inertTabindexMap.get(el)
+                if (originalTabindex === null) {
+                    el.removeAttribute('tabindex')
+                } else if (originalTabindex !== undefined) {
+                    el.setAttribute('tabindex', originalTabindex)
+                } else {
+                    // Element had tabindex="-1" originally, keep it
+                }
+            })
+
+            element._inertTabindexMap = null
+        }
+    }
+}
 
 /**
  * Valid ARIA roles for dialogs
@@ -241,6 +322,25 @@ aria.Dialog = function (dialogId, focusAfterClosed, focusFirst, hash) {
     this.backdropNode.classList.add(this.ACTIVE_CLASS)
     document.body.classList.add(aria.Utils.dialogOpenClass)
 
+    // Determine which element should receive inert management
+    // This allows focus trapping on a parent container while only applying inert to a child
+    // Example: <div role="dialog" id="parent" data-inert-target="child">
+    //            <button>Close</button> <!-- focusable, outside inert -->
+    //            <div id="child" inert>...</div> <!-- receives inert management -->
+    //          </div>
+    const inertTargetId = this.dialogNode.getAttribute('data-inert-target')
+    this.inertNode = inertTargetId
+        ? document.getElementById(inertTargetId)
+        : this.dialogNode
+
+    if (!this.inertNode) {
+        console.warn(`Inert target "${inertTargetId}" not found, falling back to dialog node`)
+        this.inertNode = this.dialogNode
+    }
+
+    // Remove inert from the target element (with polyfill support)
+    aria.removeInert(this.inertNode)
+
     // Setup focus management
     this.setupFocusElements(focusAfterClosed, focusFirst)
 
@@ -359,6 +459,9 @@ aria.Dialog.prototype.close = function (hash) {
     // Deactivate backdrop
     this.backdropNode.classList.remove(this.ACTIVE_CLASS)
 
+    // Make the inert target element inert when closed (with polyfill support)
+    aria.setInert(this.inertNode)
+
     // Restore focus and handle cleanup
     requestAnimationFrame(() => {
         if (hash) window.location.hash = hash
@@ -409,6 +512,9 @@ aria.Dialog.prototype.replace = function (newDialogId, newFocusAfterClosed, newF
 
     // Deactivate backdrop
     this.backdropNode.classList.remove(this.ACTIVE_CLASS)
+
+    // Make old dialog's inert target inert (with polyfill support)
+    aria.setInert(this.inertNode)
 
     // Preserve focus target if not specified
     const focusAfterClosed = newFocusAfterClosed || this.focusAfterClosed
@@ -493,3 +599,28 @@ window.closeDialog = (hash) => {
 
     topDialog.close(hash)
 }
+
+/**
+ * Initialize inert state for all dialogs on page load
+ * For browsers without native inert support, apply polyfill to all modals
+ */
+;(function initializeDialogInertState() {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', applyInertToDialogs)
+    } else {
+        applyInertToDialogs()
+    }
+
+    function applyInertToDialogs() {
+        // Only apply polyfill if browser doesn't support native inert
+        if (!aria.supportsInert) {
+            // Find all dialog elements with inert attribute
+            const dialogs = document.querySelectorAll('dialog[inert], [role="dialog"][inert], [role="alertdialog"][inert]')
+
+            dialogs.forEach(dialog => {
+                // Apply polyfill instead of native inert
+                aria.setInert(dialog)
+            })
+        }
+    }
+})()

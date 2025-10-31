@@ -39,8 +39,50 @@
  * - observerThresholds: IntersectionObserver thresholds (default: [0, 0.25, 0.5, 0.75, 1])
  */
 class HorizontalTimeline extends HTMLElement {
-    // Internal layout constants (component structure)
+    /**
+     * Index of the first "main" indicator (centered above the first label).
+     *
+     * HTML Structure Explanation:
+     * The timeline HTML is generated with a specific pattern of divs representing vertical bars:
+     * - 2 decorative divs at the start (left edge indicators)
+     * - For each label: 5 divs (pattern: small, centered main bar, small, small, small)
+     * - 1 final decorative div at the end (right edge indicator)
+     *
+     * Index breakdown (0-based):
+     * [0] = First decorative div (left edge)
+     * [1] = Second decorative div (left edge fade)
+     * [2] = First label's leading small bar
+     * [3] = First label's CENTERED MAIN BAR ← This is what we need!
+     * [4] = First label's trailing small bar
+     * ...and so on for subsequent labels
+     *
+     * This constant (3) points to the centered main bar above the first label,
+     * which is marked as "active" when that timeline section is visible.
+     * See CSS selector: `#timeline div:nth-child(6n + 4)` for 66.67% height bars.
+     */
     static TIMELINE_FIRST_INDICATOR_INDEX = 3
+
+    /**
+     * Number of indicator divs per label group.
+     *
+     * Pattern per label (6 divs total):
+     * [0] = Small bar (left padding)
+     * [1] = Medium-tall bar (centered - the "main" indicator at nth-child(6n+4))
+     * [2] = Small bar
+     * [3] = Small bar
+     * [4] = Small bar
+     * [5] = Small bar (right padding before next group)
+     *
+     * When calculating which indicator to highlight for a given label index,
+     * we use: TIMELINE_FIRST_INDICATOR_INDEX + (labelIndex * TIMELINE_INDICATORS_PER_LABEL)
+     *
+     * Example for label index 2:
+     * 3 + (2 × 6) = 3 + 12 = 15 (the centered bar above the 3rd label)
+     *
+     * This constant ensures the calculation stays in sync with the HTML generation
+     * in the render() method, which creates exactly 6 divs per label with specific
+     * data-value attributes for click/hover handling.
+     */
     static TIMELINE_INDICATORS_PER_LABEL = 6
 
     constructor() {
@@ -104,9 +146,9 @@ class HorizontalTimeline extends HTMLElement {
 
         this.innerHTML = `
             <style>
-                /* ============================================================
-                   Timeline Component Styles (Self-Contained)
-                   ============================================================ */
+                /*
+                * Modal - Archive
+                */
 
                 /* Host element */
                 horizontal-timeline {
@@ -448,8 +490,8 @@ class HorizontalTimeline extends HTMLElement {
                                 <div data-value="${label}"><span></span></div>
                             `).join('')}
                         </div>
-                        <div id="timeline_labels">
-                            ${this.labels.map(label => `<button type="button" data-label-for="${label}"><span>${label}<span></span></span></button>`).join('')}
+                        <div id="timeline_labels" role="tablist" aria-label="Timeline navigation">
+                            ${this.labels.map((label, index) => `<button type="button" role="tab" data-label-for="${label}" aria-label="View ${label} projects" tabindex="${index === 0 ? '0' : '-1'}"><span>${label}<span></span></span></button>`).join('')}
                         </div>
                     </div>
                 </div>
@@ -713,6 +755,52 @@ class HorizontalTimeline extends HTMLElement {
         }
         this.addEventListener('click', this.boundHandleClick)
 
+        // Keyboard navigation for timeline labels
+        this.boundHandleKeydown = (event) => {
+            const labelButton = event.target.closest('#timeline_labels [data-label-for]')
+            if (!labelButton || !this.contains(labelButton)) return
+
+            const labelEls = this.getLabelEls()
+            const currentIndex = labelEls.indexOf(labelButton)
+            let targetIndex = -1
+            let handled = false
+
+            switch (event.key) {
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    targetIndex = Math.max(currentIndex - 1, 0)
+                    handled = true
+                    break
+                case 'ArrowRight':
+                case 'ArrowDown':
+                    targetIndex = Math.min(currentIndex + 1, labelEls.length - 1)
+                    handled = true
+                    break
+                case 'Home':
+                    targetIndex = 0
+                    handled = true
+                    break
+                case 'End':
+                    targetIndex = labelEls.length - 1
+                    handled = true
+                    break
+            }
+
+            if (handled && targetIndex !== -1 && targetIndex !== currentIndex) {
+                event.preventDefault()
+
+                // Update tabindex
+                labelEls.forEach((el, index) => {
+                    el.setAttribute('tabindex', index === targetIndex ? '0' : '-1')
+                })
+
+                // Focus and click target
+                labelEls[targetIndex].focus()
+                labelEls[targetIndex].click()
+            }
+        }
+        this.addEventListener('keydown', this.boundHandleKeydown)
+
         // Hover highlighting - bidirectional between indicators and labels
         this.boundHandleMouseOver = (event) => {
             // Indicator hover -> highlight label
@@ -824,6 +912,7 @@ class HorizontalTimeline extends HTMLElement {
         // Remove event listeners
         const listeners = [
             { target: this, type: 'click', handler: 'boundHandleClick' },
+            { target: this, type: 'keydown', handler: 'boundHandleKeydown' },
             { target: this, type: 'mouseover', handler: 'boundHandleMouseOver' },
             { target: this, type: 'mouseout', handler: 'boundHandleMouseOut' },
             { target: this, type: 'mouseleave', handler: 'boundHandleMouseLeave' },

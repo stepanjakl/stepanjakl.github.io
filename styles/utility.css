@@ -47,6 +47,24 @@ body {
     --text-xl_after-margin-top: -0.325em;
 }
 
+/* @media (min-width: 45rem) {
+    body {
+        --text-lg-font-weight: 200;
+        --text-xl-font-weight: 200;
+    }
+} */
+
+/* Shared text utility base */
+[class^="text-"]::before {
+    content: "";
+    display: table;
+}
+
+[class^="text-"]::after {
+    content: "";
+    display: table;
+}
+
 .text-xxs {
     font-weight: var(--text-xxs-font-weight);
     font-size: var(--text-xxs-font-size);
@@ -56,15 +74,11 @@ body {
 }
 
 .text-xxs::before {
-    content: "";
     margin-bottom: var(--text-xxs_before-margin-bottom);
-    display: table;
 }
 
 .text-xxs::after {
-    content: "";
     margin-top: var(--text-xxs_after-margin-top);
-    display: table;
 }
 
 .text-xs {
@@ -76,15 +90,11 @@ body {
 }
 
 .text-xs::before {
-    content: "";
     margin-bottom: var(--text-xs_before-margin-bottom);
-    display: table;
 }
 
 .text-xs::after {
-    content: "";
     margin-top: var(--text-xs_after-margin-top);
-    display: table;
 }
 
 .text-sm {
@@ -95,15 +105,11 @@ body {
 }
 
 .text-sm::before {
-    content: "";
     margin-bottom: var(--text-sm_before-margin-bottom);
-    display: table;
 }
 
 .text-sm::after {
-    content: "";
     margin-top: var(--text-sm_after-margin-top);
-    display: table;
 }
 
 .text-md {
@@ -114,15 +120,11 @@ body {
 }
 
 .text-md::before {
-    content: "";
     margin-bottom: var(--text-md_before-margin-bottom);
-    display: table;
 }
 
 .text-md::after {
-    content: "";
     margin-top: var(--text-md_after-margin-top);
-    display: table;
 }
 
 .text-lg {
@@ -132,15 +134,11 @@ body {
 }
 
 .text-lg::before {
-    content: "";
     margin-bottom: var(--text-lg_before-margin-bottom);
-    display: table;
 }
 
 .text-lg::after {
-    content: "";
     margin-top: var(--text-lg_after-margin-top);
-    display: table;
 }
 
 .text-xl {
@@ -150,15 +148,11 @@ body {
 }
 
 .text-xl::before {
-    content: "";
     margin-bottom: var(--text-xl_before-margin-bottom);
-    display: table;
 }
 
 .text-xl::after {
-    content: "";
     margin-top: var(--text-xl_after-margin-top);
-    display: table;
 }
 
 .text-p {
@@ -168,15 +162,11 @@ body {
 }
 
 .text-p::before {
-    content: "";
     margin-bottom: -0.4333em;
-    display: table;
 }
 
 .text-p::after {
-    content: "";
     margin-top: -0.3833em;
-    display: table;
 }
 
 

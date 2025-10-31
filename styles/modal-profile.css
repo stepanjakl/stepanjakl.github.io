@@ -2,7 +2,8 @@
  * Modal - Profile
  */
 
- /* Modal Profile - Layout */
+
+/* Modal Profile - Layout */
 .modal--profile .modal__body dl {
     padding: var(--segment-quarter) 0 var(--segment-quarter) var(--segment-quarter);
     display: grid;
@@ -163,22 +164,26 @@
     row-gap: 2rem;
 }
 
-.modal-profile__summary > span,
-.modal-profile__summary > p {
+.modal-profile__summary>p:last-child {
+    padding-bottom: var(--segment-third);
+}
+
+.modal-profile__summary>span,
+.modal-profile__summary>p {
     font-size: 1.07143125rem;
     line-height: 1.625rem;
     display: inline;
 }
 
-.modal-profile__summary > span::before,
-.modal-profile__summary > p::before {
+.modal-profile__summary>span::before,
+.modal-profile__summary>p::before {
     content: "";
     margin-bottom: -0.4333em;
     display: table;
 }
 
-.modal-profile__summary > span::after,
-.modal-profile__summary > p::after {
+.modal-profile__summary>span::after,
+.modal-profile__summary>p::after {
     content: "";
     margin-top: -0.3833em;
     display: table;
@@ -237,7 +242,28 @@
 
 /* Modal Profile - Photo */
 .modal-profile__photo {
+    width: calc(4 * var(--segment));
+    height: auto;
+    aspect-ratio: 1/1;
+    margin: 0;
+    border: none;
     border-radius: 9999px;
+}
+
+/* Modal Profile - Flag Images */
+.modal--profile .modal__body img[alt$="flag"] {
+    border-radius: 0.125rem;
+    width: 1.25rem;
+    height: 0.9375rem;
+}
+
+/* Modal Profile - Deliverables & Tools Section Titles */
+.modal--profile .modal__body dt:nth-last-of-type(2) {
+    padding-top: 0.375rem !important;
+}
+
+.modal--profile .modal__body dt:nth-last-of-type(1) {
+    padding-top: 0.625rem !important;
 }
 
 /* Modal Profile - Close Button */
