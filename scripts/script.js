@@ -1023,6 +1023,7 @@ class Popup {
             }
             .media_fallback-content img {
                 position: relative;
+                margin: auto;
                 width: 100%;
                 height: auto;
                 opacity: 1;
@@ -1030,13 +1031,11 @@ class Popup {
             .media_fallback-content.square-ratio img {
                 width: auto;
                 height: 100%;
-                object-fit: contain;
             }
             .media_fallback-content video {
                 position: relative;
                 width: 100%;
                 height: auto;
-                object-fit: contain;
                 opacity: 1;
             }
             .media_fallback-close-overlay {
@@ -1398,8 +1397,14 @@ window.handleTouchButtonClick = (element, event, callback, focusAfterClick = fal
 }
 
 /**
- * Initializes the timeline component with scrollers
- * Timeline persists for the entire session once initialized
+ * Initializes the timeline component with scrollers and deep-link handling.
+ * Timeline persists for the entire session once initialized.
+ *
+ * Integration points:
+ * - Creates <horizontal-timeline> custom element
+ * - Sets up edge and drag scrolling for horizontal navigation
+ * - Handles deep-link URLs with ?year= parameter
+ * - Starts intersection observer to track active sections
  */
 window.initializeTimeline = () => {
     // Prevent duplicate timeline creation
@@ -1408,11 +1413,38 @@ window.initializeTimeline = () => {
         return
     }
 
+    // Timeline configuration
+    const TIMELINE_CONFIG = {
+        labels: ['2024-21', '2021-19', '2019-18', 'elsewhen'],
+        containerId: 'horizontal-timeline',
+        hashPrefix: '#archive',
+        scrollOffset: 24, // px from top when scrolling to sections
+        scrollEndTimeout: 300, // fallback for browsers without scrollend event
+        observerRootMargin: '-50% 0% -50% 0%', // center detection zone vertically
+        observerThresholds: [0, 0.25, 0.5, 0.75, 1] // granular intersection updates
+    }
+
+    // Create and configure timeline element
     window.timelineEl = document.createElement('horizontal-timeline')
-    window.timelineEl.labels = ['2024-21', '2021-19', '2019-18', 'elsewhen']
+    window.timelineEl.labels = TIMELINE_CONFIG.labels
+    window.timelineEl.hashPrefix = TIMELINE_CONFIG.hashPrefix
+    window.timelineEl.scrollOffset = TIMELINE_CONFIG.scrollOffset
+    window.timelineEl.scrollEndTimeout = TIMELINE_CONFIG.scrollEndTimeout
+    window.timelineEl.observerRootMargin = TIMELINE_CONFIG.observerRootMargin
+    window.timelineEl.observerThresholds = TIMELINE_CONFIG.observerThresholds
 
-    document.querySelector('#horizontal-timeline').appendChild(window.timelineEl)
+    const container = document.querySelector(`#${TIMELINE_CONFIG.containerId}`)
+    if (!container) {
+        console.error('Timeline: Container not found')
+        return
+    }
 
+    container.appendChild(window.timelineEl)
+
+    // Start intersection observer to track active sections
+    window.timelineEl.startIntersectionObserver()
+
+    // Setup horizontal scrolling enhancements
     const timelineContent = document.querySelector('#timeline-content')
     let edgeScroller, dragScroll
 
@@ -1447,6 +1479,50 @@ window.initializeTimeline = () => {
         handleResize()
         window.addEventListener('resize', handleResize)
     }
+
+    // Handle deep-link URLs with ?year= parameter
+    handleTimelineDeepLink()
+}
+
+/**
+ * Handle deep-link URLs with ?year= parameter.
+ * Opens archive modal and scrolls to the specified year section.
+ *
+ * Example: https://example.com/#archive?year=2024-21
+ */
+function handleTimelineDeepLink() {
+    if (!window.location.hash.includes('?year=')) return
+
+    const yearParam = window.location.hash.split('?year=')[1]
+    if (!yearParam) return
+
+    // Use the same hash prefix as configured for the timeline
+    const hashPrefix = window.timelineEl?.hashPrefix || '#archive'
+
+    // Temporarily clear hash to prevent browser's default scroll jump
+    window.history.pushState(null, '', `${window.location.pathname}${hashPrefix}`)
+
+    requestAnimationFrame(() => {
+        // Restore hash with year parameter
+        window.history.replaceState(
+            null,
+            '',
+            `${window.location.pathname}${hashPrefix}?year=${yearParam}`
+        )
+
+        // Open archive modal
+        if (typeof openDialog === 'function' && typeof DIALOG_CONFIG !== 'undefined') {
+            openDialog(DIALOG_CONFIG.ARCHIVE.id, DIALOG_CONFIG.ARCHIVE.trigger)
+        }
+
+        // Scroll to target section instantly (no animation to avoid jarring UX)
+        const targetSection = document.querySelector(`[data-timeline-section="${yearParam}"]`)
+        const modalArchive = document.querySelector('#modal-archive')
+
+        if (targetSection && modalArchive && window.timelineEl) {
+            window.timelineEl.scrollParentToChildVertical(modalArchive, targetSection, 'instant')
+        }
+    })
 }
 
 /**
@@ -1526,8 +1602,8 @@ const openDialogOnLoad = () => {
  * Initializes 3D transform effect for modal profile footer art based on scroll
  */
 const initializeModalFooterArt = () => {
-    const footerArtWrapper = document.querySelector('#modal-profile .modal__footer-art')
-    const footerArt = document.querySelector('#modal-profile .modal__footer-art-gradient')
+    const footerArtWrapper = document.querySelector('.modal-profile__footer-art')
+    const footerArt = document.querySelector('.modal-profile__footer-art-gradient')
     const modalProfile = document.getElementById(DIALOG_CONFIG.PROFILE.id)
 
     if (!footerArtWrapper || !footerArt || !modalProfile) return

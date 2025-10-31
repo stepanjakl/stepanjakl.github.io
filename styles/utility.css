@@ -3,13 +3,6 @@
  */
 
 
-/* Font */
-
-.primary-font {
-    font-family: 'Bai Jamjuree', sans-serif;
-}
-
-
 /* Typography */
 
 body {
@@ -174,393 +167,34 @@ body {
     display: inline;
 }
 
-#text-p::before {
+.text-p::before {
     content: "";
     margin-bottom: -0.4333em;
     display: table;
 }
 
-#text-p::after {
+.text-p::after {
     content: "";
     margin-top: -0.3833em;
     display: table;
 }
 
 
-/* Display */
-
-.inline-block {
-    display: inline-block;
-}
+/* Display (Essential for state management and JS) */
 
 .flex {
     display: flex;
-}
-
-.inline-flex {
-    display: inline-flex;
-}
-
-.grid {
-    display: grid;
 }
 
 .hidden {
     display: none;
 }
 
-.contents {
-    display: contents;
-}
 
-
-/* Visibility */
-
-.invisible {
-    visibility: hidden;
-}
-
-
-/* Flex Wrap */
-
-.flex-wrap {
-    flex-wrap: wrap;
-}
-
-.flex-nowrap {
-    flex-wrap: nowrap;
-}
-
-
-/* Flex Direction */
-
-.flex-row {
-    flex-direction: row;
-}
-
-.flex-col {
-    flex-direction: column;
-}
-
-.flex-col-reverse {
-    flex-direction: column-reverse;
-}
-
-
-/* Flex Grow */
-
-.flex-grow {
-    flex-grow: 1;
-}
-
-
-/* Flex Shrink */
-
-.flex-shrink-0 {
-    flex-shrink: 0;
-}
-
-
-/* Align Items */
-
-.align-items-start {
-    align-items: start;
-}
-
-.align-items-center {
-    align-items: center;
-}
-
-.align-items-end {
-    align-items: end;
-}
-
-
-/* Justify Content */
-
-.justify-content-center {
-    justify-content: center;
-}
-
-.justify-content-between {
-    justify-content: space-between;
-}
-
-
-/* Align Self */
-
-.align-self-start {
-    align-self: start;
-}
-
-
-/* Oveflow */
-
-.overflow-auto {
-    overflow: auto;
-}
-
-.overflow-hidden {
-    overflow: hidden;
-}
-
-.overflow-clip {
-    overflow: clip;
-}
-
-
-/* Position */
-
-.relative {
-    position: relative;
-}
-
-.absolute {
-    position: absolute;
-}
-
-.fixed {
-    position: fixed;
-}
-
-.sticky {
-    position: sticky;
-}
-
-
-/* Width */
-
-.w-auto {
-    width: auto;
-}
-
-.w-full {
-    width: 100%;
-}
-
-.h-auto {
-    height: auto;
-}
-
-.h-full {
-    height: 100%;
-}
-
-
-/* Margin */
-
-.ml-auto {
-    margin-left: auto;
-}
-
-.mr-1 {
-    margin-right: var(--segment);
-}
-
-
-/* Padding */
-
-.pt-1 {
-    padding-top: var(--segment);
-}
-
-.pb-1 {
-    padding-bottom: var(--segment);
-}
-
-.pt-1\/2 {
-    padding-top: calc(var(--segment) / 2);
-}
-
-/* .pt-1\/4 {
-    padding-top: calc(var(--segment) / 4);
-} */
-
-/* .pb-1\/2 {
-    padding-bottom: calc(var(--segment) / 2);
-} */
-
-.px-1\/2 {
-    padding-left: calc(var(--segment) / 2);
-    padding-right: calc(var(--segment) / 2);
-}
-
-.py-1\/2 {
-    padding-top: calc(var(--segment) / 2);
-    padding-bottom: calc(var(--segment) / 2);
-}
-
-
-/* Max Width */
-
-.max-w-xs {
-    max-width: var(--width-xs);
-}
-
-.max-w-sm {
-    max-width: var(--width-sm);
-}
-
-.max-w-md {
-    max-width: var(--width-md);
-}
-
-.max-w-lg {
-    max-width: var(--width-lg);
-}
-
-.max-w-xl {
-    max-width: var(--width-xl);
-}
-
-.max-w-2xl {
-    max-width: var(--width-2xl);
-}
-
-
-/* Z-Index */
-
-.z-0 {
-    z-index: 0;
-}
-
-.z-1 {
-    z-index: 1;
-}
-
-.z-2 {
-    z-index: 2;
-}
-
-.z-3 {
-    z-index: 3;
-}
-
-.z-4 {
-    z-index: 4;
-}
-
-.z-5 {
-    z-index: 5;
-}
-
-.z-10 {
-    z-index: 10;
-}
-
-.z-50 {
-    z-index: 50;
-}
-
-.z-100 {
-    z-index: 100;
-}
-
-
-/* Inset */
-
-.inset-0 {
-    inset: 0;
-}
-
-
-/* Box Sizing */
-
-.box-content {
-    box-sizing: content-box;
-}
-
-
-/* User Select */
-
-.select-none {
-    user-select: none;
-    -webkit-user-select: none;
-}
-
-
-/* Cursor */
-
-.cursor-default {
-    cursor: default;
-}
-
-.cursor-pointer {
-    cursor: pointer;
-}
-
-.cursor-text {
-    cursor: text;
-}
-
-
-/* Pointer Events */
-.pointer-events-none {
-    pointer-events: none;
-}
-
-
-/* Whitespace */
-
-.whitespace-nowrap {
-    white-space: nowrap;
-}
-
-
-/* Text Transform */
-
-.uppercase {
-    text-transform: uppercase;
-}
-
-
-/* Border */
-
-.border-none {
-    border-style: none;
-}
-
-
-/* Border Radius */
-
-.rounded-full {
-    border-radius: 999rem;
-}
-
-
-/* Fill */
-
-.fill-current {
-    fill: currentColor;
-}
-
-
-/* Scroll Behavior */
+/* Scroll Behavior (Used in timeline.js) */
 
 .scroll-behavior-auto {
     scroll-behavior: auto !important;
-}
-
-
-/* Filter */
-
-.backdrop-blur-mini {
-    backdrop-filter: blur(max(0.75px, 0.046875rem));
-    -webkit-backdrop-filter: blur(max(0.75px, 0.046875rem));
-}
-
-
-/* Hover */
-
-.hover\:underline {
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    transition: text-decoration-color var(--animate-out-segment-2\/3) linear;
-}
-
-.hover\:underline:hover, .hover\:underline:focus {
-    text-decoration-color: inherit;
-    transition: text-decoration-color var(--animate-in-segment-2\/3) linear;
 }
 
 

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <!-- GlitchTip -->
         <script src="https://browser.sentry-cdn.com/8.25.0/bundle.min.js"
@@ -53,6 +52,9 @@
         <link rel="stylesheet" href="styles/reset.css">
         <link rel="stylesheet" href="styles/utility.css">
         <link rel="stylesheet" href="styles/style.css">
+        <link rel="stylesheet" href="styles/menu.css">
+        <link rel="stylesheet" href="styles/modal-profile.css">
+        <link rel="stylesheet" href="styles/modal-archive.css">
         <link rel="stylesheet" href="styles/state.css">
         <link rel="stylesheet" href="styles/animation.css">
         <script defer src="scripts/dialog.js"></script>
@@ -68,7 +70,7 @@
         </script>
     </head>
 
-    <body class="primary-font">
+    <body>
         <input id="mode"
                type="checkbox"
                hidden
@@ -94,13 +96,11 @@
                hidden
                aria-hidden="true"
                aria-label="Archive dialog">
-        <main class="relative flex flex-col justify-content-between w-full"
-              style="background-color: var(--background)">
-            <div id="background-pattern" class="absolute inset-0">
+        <main style="background-color: var(--background)">
+            <div id="background-pattern" class="bg-pattern">
             </div>
-            <figure class="relative pt-1/2 w-full max-w-xl"
-                    style="padding-bottom: var(--segment-half)">
-                <header id="intro" class="intro">
+            <figure style="padding-bottom: var(--segment-half)">
+                <header class="intro">
                     <div class="intro__left">
                         <h2 class="intro__name intro__name--animating tooltip highlight"
                             tabindex="0"
@@ -212,8 +212,7 @@
                                         class="menu__email-button"
                                         aria-label="Contact me via email">
                                     <span class="menu__email-icon">
-                                        <svg class="fill-current"
-                                             style="width: 1.125rem;
+                                        <svg style="width: 1.125rem;
                                                     height: 1.125rem;
                                                     transform: rotate(-45deg) translate(0.078125rem, 0.046875rem)">
                                             <use xlink:href="images/icons.svg#email"></use>
@@ -231,7 +230,7 @@
                                    tabindex="0"
                                    onclick="handleTouchButtonClick(this, event, () => { openDialog('modal-profile', this, null, 'profile') })"
                                    aria-label="Learn more about me"
-                                   class="menu__link tooltip"
+                                   class="menu__link menu__link--profile tooltip"
                                    style="--i:1">
                                     <span class="menu__link-icon menu__link-icon--animated"
                                           style="padding: 0.53125rem">
@@ -264,7 +263,7 @@
                                    style="--i:2">
                                     <span class="menu__link-icon"
                                           style="padding: 0.59375rem">
-                                        <svg class="fill-current" style="width: 1.0625rem; height: 1.0625rem">
+                                        <svg style="width: 1.0625rem; height: 1.0625rem">
                                             <use xlink:href="images/icons.svg#archive"></use>
                                         </svg>
                                     </span>
@@ -282,21 +281,19 @@
                             </div>
                             <div role="dialog"
                                  id="menu-toggle"
-                                 class="menu__toggle tooltip"
+                                 class="menu-toggle menu__toggle tooltip"
                                  style="--i:3">
                                 <a href="#menu"
                                    tabindex="0"
                                    onclick="event.preventDefault(); openDialog('menu-toggle', this, 'menu-button-close', 'menu');"
                                    id="menu-button-open"
-                                   class="inset-0"
-                                   style="position: absolute"
+                                   class="menu__button-open"
                                    aria-label="Open dropdown menu"></a>
                                 <a href="#"
                                    tabindex="0"
                                    onclick="event.preventDefault(); closeDialog('#')"
                                    id="menu-button-close"
-                                   class="inset-0"
-                                   style="position: absolute"
+                                   class="menu__button-close"
                                    aria-label="Close dropdown menu"></a>
                                 <button id="menu-button"
                                         type="button"
@@ -318,19 +315,19 @@
                                    tabindex="-1"
                                    onclick="event.preventDefault(); closeDialog('#')"
                                    id="underlay-menu"
-                                   aria-label="Close menu"
-                                   class="z-0 fixed inset-0 cursor-default"></a>
-                                <dialog role="dialog" id="menu-dropdown" class="z-50 absolute pt-1/2">
+                                   class="underlay underlay--menu"
+                                   aria-label="Close menu"></a>
+                                <dialog role="dialog" id="menu-dropdown">
                                     <div>
                                         <a href="https://cal.com/stepanjakl"
                                            target="_blank"
                                            tabindex="0"
                                            aria-label="Schedule a call">
-                                            <svg class="fill-current" style="width: 1.5rem; height: 1.5rem">
+                                            <svg style="width: 1.5rem; height: 1.5rem">
                                                 <use xlink:href="images/icons.svg#menu-call"></use>
                                             </svg>
-                                            <span class="text-sm whitespace-nowrap">Virtual meeting</span>
-                                            <svg class="align-self-start fill-current">
+                                            <span class="text-sm">Virtual meeting</span>
+                                            <svg>
                                                 <use xlink:href="images/icons.svg#new-tab"></use>
                                             </svg>
                                         </a>
@@ -338,11 +335,11 @@
                                            target="_blank"
                                            tabindex="0"
                                            aria-label="Find out more about me on LinkedIn">
-                                            <svg class="fill-current" style="width: 1.5rem; height: 1.5rem">
+                                            <svg style="width: 1.5rem; height: 1.5rem">
                                                 <use xlink:href="images/icons.svg#menu-linkedin"></use>
                                             </svg>
-                                            <span class="text-sm whitespace-nowrap">LinkedIn profile</span>
-                                            <svg class="align-self-start fill-current">
+                                            <span class="text-sm">LinkedIn profile</span>
+                                            <svg>
                                                 <use xlink:href="images/icons.svg#new-tab"></use>
                                             </svg>
                                         </a>
@@ -350,11 +347,11 @@
                                            target="_blank"
                                            tabindex="0"
                                            aria-label="Visit my profile on GitHub">
-                                            <svg class="fill-current" style="width: 1.5rem; height: 1.5rem">
+                                            <svg style="width: 1.5rem; height: 1.5rem">
                                                 <use xlink:href="images/icons.svg#menu-github"></use>
                                             </svg>
-                                            <span class="text-sm whitespace-nowrap">GitHub profile</span>
-                                            <svg class="align-self-start fill-current">
+                                            <span class="text-sm">GitHub profile</span>
+                                            <svg>
                                                 <use xlink:href="images/icons.svg#new-tab"></use>
                                             </svg>
                                         </a>
@@ -362,11 +359,11 @@
                                            target="_blank"
                                            tabindex="0"
                                            aria-label="Visit my profile on CodePen">
-                                            <svg class="fill-current" style="width: 1.5rem; height: 1.5rem">
+                                            <svg style="width: 1.5rem; height: 1.5rem">
                                                 <use xlink:href="images/icons.svg#menu-codepen"></use>
                                             </svg>
-                                            <span class="text-sm whitespace-nowrap">CodePen profile</span>
-                                            <svg class="align-self-start fill-current">
+                                            <span class="text-sm">CodePen profile</span>
+                                            <svg>
                                                 <use xlink:href="images/icons.svg#new-tab"></use>
                                             </svg>
                                         </a>
@@ -388,59 +385,58 @@
                                                for="mode"
                                                tabindex="0"
                                                onkeypress="if(event.key === 'Enter') { document.getElementById('mode').click(); document.getElementById('menu-dropdown-dark-mode').focus(); }">
-                                            <svg class="fill-current" style="width: 1.5rem; height: 1.5rem">
+                                            <svg style="width: 1.5rem; height: 1.5rem">
                                                 <use xlink:href="images/icons.svg#menu-light-mode"></use>
                                             </svg>
-                                            <span class="text-sm whitespace-nowrap">Light mode</span>
+                                            <span class="text-sm">Light mode</span>
                                         </label>
                                         <label id="menu-dropdown-dark-mode"
                                                for="mode"
                                                tabindex="0"
                                                onkeypress="if(event.key === 'Enter') { document.getElementById('mode').click(); document.getElementById('menu-dropdown-light-mode').focus(); }">
-                                            <svg class="fill-current"
-                                                 style="color: var(--navy);
+                                            <svg style="color: var(--navy);
                                                         width: 1.5rem;
                                                         height: 1.5rem">
                                                 <use xlink:href="images/icons.svg#menu-dark-mode"></use>
                                             </svg>
-                                            <span class="text-sm whitespace-nowrap">Dark mode</span>
+                                            <span class="text-sm">Dark mode</span>
                                         </label>
                                         <label id="menu-dropdown-fullscreen"
                                                for="fullscreen"
                                                tabindex="0"
                                                onclick="toggleFullscreen()"
                                                onkeypress="if(event.key === 'Enter') { document.getElementById('fullscreen').click(); }">
-                                            <svg class="fullscreen-checked:hidden flex fill-current"
+                                            <svg class="fullscreen-checked:hidden flex"
                                                  style="width: 1.375rem;
                                                         height: 1.375rem;
                                                         padding: max(1px, 0.0625rem);
                                                         box-sizing: content-box">
                                                 <use xlink:href="images/icons.svg#menu-fullscreen"></use>
                                             </svg>
-                                            <svg class="hidden fullscreen-checked:flex fill-current"
+                                            <svg class="hidden fullscreen-checked:flex"
                                                  style="width: 1.375rem;
                                                         height: 1.375rem;
                                                         padding: max(1px, 0.0625rem);
                                                         box-sizing: content-box">
                                                 <use xlink:href="images/icons.svg#menu-fullscreen-off"></use>
                                             </svg>
-                                            <span class="text-sm whitespace-nowrap">Fullscreen</span>
+                                            <span class="text-sm">Fullscreen</span>
                                         </label>
                                         <label id="menu-dropdown-debug"
                                                for="debug"
                                                tabindex="0"
                                                onkeypress="if(event.key === 'Enter') { document.getElementById('debug').click(); }">
-                                            <svg class="debug-checked:hidden flex fill-current"
+                                            <svg class="debug-checked:hidden flex"
                                                  style="width: 1.5rem;
                                                         height: 1.5rem">
                                                 <use xlink:href="images/icons.svg#menu-debug"></use>
                                             </svg>
-                                            <svg class="hidden debug-checked:flex fill-current"
+                                            <svg class="hidden debug-checked:flex"
                                                  style="width: 1.5rem;
                                                         height: 1.5rem">
                                                 <use xlink:href="images/icons.svg#menu-debug-off"></use>
                                             </svg>
-                                            <span class="text-sm whitespace-nowrap">Debug</span>
+                                            <span class="text-sm">Debug</span>
                                         </label>
                                     </div>
                                 </dialog>
@@ -454,7 +450,7 @@
                                    onclick="event.preventDefault(); closeDialog('#')"
                                    class="modal__close-button"
                                    aria-label="Close modal">
-                                    <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
+                                    <svg style="width: 1.125rem; height: 1.125rem">
                                         <use xlink:href="images/icons.svg#close"></use>
                                     </svg>
                                 </a>
@@ -470,7 +466,7 @@
                                              alt="Profile photo"
                                              height="480"
                                              width="480"
-                                             class="modal__photo"
+                                             class="modal-profile__photo"
                                              loading="lazy"
                                              style="width: calc(4 * var(--segment));
                                                     height: auto;
@@ -487,7 +483,7 @@
                                     <dt>
                                         <span>Summary:</span>
                                     </dt>
-                                    <dd class="modal__paragraph">
+                                    <dd class="modal-profile__summary">
                                         <p>
                                             Experienced and detail-oriented user interface engineer who specialises in crafting digital solutions that balance clarity and creativity. Committed to delivering high-quality results for projects with exciting propositions and realistic goals. Proficient across both back-end and front-end development, with a strong emphasis on user-focused outcomes.
                                         </p>
@@ -561,12 +557,12 @@
                                     <dt>
                                         <span>Timezone:</span>
                                     </dt>
-                                    <dd class="modal__timezone">
+                                    <dd class="modal-profile__timezone">
                                         <span>Europe/London</span>
-                                        <span id="modal-profile-timezone-live"></span>
+                                        <span class="modal-profile__timezone-live"></span>
                                         <script>
                                             const liveTimezoneTime = () => {
-                                                document.querySelector('#modal-profile-timezone-live').innerHTML = `(${new Intl.DateTimeFormat([], {
+                                                document.querySelector('.modal-profile__timezone-live').innerHTML = `(${new Intl.DateTimeFormat([], {
                                                 timeZone: 'Europe/London',
                                                 timeZoneName: 'short',
                                                 year: 'numeric',
@@ -583,7 +579,7 @@
                                     <dt style="padding-top: 0.375rem">
                                         <span>Deliverables:</span>
                                     </dt>
-                                    <dd class="modal__tags">
+                                    <dd class="modal-profile__tags">
                                         <ul>
                                             <li>
                                                 <span>Dashboard/Single-page app</span>
@@ -611,7 +607,7 @@
                                     <dt style="padding-top: 0.625rem">
                                         <span>Tools & Languages:</span>
                                     </dt>
-                                    <dd class="modal__tags">
+                                    <dd class="modal-profile__tags">
                                         <ul>
                                             <li>
                                                 <svg>
@@ -686,8 +682,8 @@
                                     </dd>
                                 </dl>
                             </div>
-                            <div class="modal__footer-art">
-                                <figure class="modal__footer-art-gradient"></figure>
+                            <div class="modal-profile__footer-art">
+                                <figure class="modal-profile__footer-art-gradient"></figure>
                             </div>
                         </div>
                     </dialog>
@@ -698,7 +694,7 @@
                                    onclick="event.preventDefault(); closeDialog('#')"
                                    class="modal__close-button"
                                    aria-label="Close modal">
-                                    <svg class="fill-current" style="width: 1.125rem; height: 1.125rem">
+                                    <svg style="width: 1.125rem; height: 1.125rem">
                                         <use xlink:href="images/icons.svg#close"></use>
                                     </svg>
                                 </a>
@@ -706,13 +702,13 @@
                                        tabindex="0"
                                        onclick="toggleFullscreen()"
                                        onkeypress="if(event.key === 'Enter') { document.getElementById('fullscreen').click(); }"
-                                       class="flex align-items-center justify-content-center modal__fullscreen-button">
-                                    <svg class="fullscreen-checked:hidden flex fill-current"
+                                       class="modal__fullscreen-button">
+                                    <svg class="fullscreen-checked:hidden flex"
                                          style="width: 1.125rem;
                                                 height: 1.125rem">
                                         <use xlink:href="images/icons.svg#fullscreen"></use>
                                     </svg>
-                                    <svg class="hidden fullscreen-checked:flex fill-current"
+                                    <svg class="hidden fullscreen-checked:flex"
                                          style="width: 1.125rem;
                                                 height: 1.125rem">
                                         <use xlink:href="images/icons.svg#fullscreen-off"></use>
@@ -720,19 +716,19 @@
                                 </label>
                             </div>
                             <div class="modal__body">
-                                <div class="archive-timeline">
+                                <div class="modal-archive__timeline">
                                     <input type="checkbox" id="timeline-section-year-2024-21" checked>
                                     <input type="checkbox" id="timeline-section-year-2021-19">
                                     <input type="checkbox" id="timeline-section-year-2019-18">
                                     <input type="checkbox" id="timeline-section-year-elsewhen">
-                                    <div class="archive-timeline__grid">
+                                    <div class="modal-archive__timeline-grid">
                                         <!-- 2024-21 -->
-                                        <section data-timeline-section-title="2024-21">
+                                        <section data-timeline-section-title="2024-21" class="modal-archive__timeline-section-title">
                                             <div>
                                                 <label for="timeline-section-year-2024-21" tabindex="0">
                                                     2024
                                                 </label>
-                                                <div class="flex align-items-center"
+                                                <div class="modal-archive__timeline-section-controls"
                                                      style="column-gap: 1rem;
                                                             justify-content: start">
                                                     <svg>
@@ -745,7 +741,7 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="2024-21">
+                                        <section data-timeline-section="2024-21" class="modal-archive__timeline-section">
                                             <figure>
                                                 <hr>
                                                 <hr>
@@ -969,7 +965,7 @@
                                                             <a href="https://github.com/stepanjakl/apostrophe-stripe-examples"
                                                                target="_blank">
                                                                 <span>@stepanjakl/apostrophe-stripe-examples</span>
-                                                                <svg class="align-self-start fill-current">
+                                                                <svg>
                                                                     <use xlink:href="images/icons.svg#new-tab"></use>
                                                                 </svg>
                                                             </a>
@@ -1000,7 +996,7 @@
                                                             <a href="https://www.npmjs.com/package/@bohemicastudio/apostrophe-sync"
                                                                target="_blank">
                                                                 <span>@bohemicastudio/apostrophe-sync</span>
-                                                                <svg class="align-self-start fill-current">
+                                                                <svg>
                                                                     <use xlink:href="images/icons.svg#new-tab"></use>
                                                                 </svg>
                                                             </a>
@@ -1013,12 +1009,12 @@
                                             </div>
                                         </section>
                                         <!-- 2021-19 -->
-                                        <section data-timeline-section-title="2021-19">
+                                        <section data-timeline-section-title="2021-19" class="modal-archive__timeline-section-title">
                                             <div>
                                                 <label for="timeline-section-year-2021-19" tabindex="0">
                                                     2021-19
                                                 </label>
-                                                <div class="flex align-items-center"
+                                                <div class="modal-archive__timeline-section-controls"
                                                      style="column-gap: 1rem;
                                                             justify-content: start">
                                                     <svg>
@@ -1031,7 +1027,7 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="2021-19">
+                                        <section data-timeline-section="2021-19" class="modal-archive__timeline-section">
                                             <figure>
                                                 <hr>
                                                 <hr>
@@ -1053,7 +1049,7 @@
                                                         <li>
                                                             <a href="https://bohemica.studio" target="_blank">
                                                                 <span>bohemica.studio</span>
-                                                                <svg class="align-self-start fill-current">
+                                                                <svg>
                                                                     <use xlink:href="images/icons.svg#new-tab"></use>
                                                                 </svg>
                                                             </a>
@@ -1196,12 +1192,12 @@
                                             </div>
                                         </section>
                                         <!--  /18 -->
-                                        <section data-timeline-section-title="2019-18">
+                                        <section data-timeline-section-title="2019-18" class="modal-archive__timeline-section-title">
                                             <div>
                                                 <label for="timeline-section-year-2019-18" tabindex="0">
                                                     2019-18
                                                 </label>
-                                                <div class="flex align-items-center"
+                                                <div class="modal-archive__timeline-section-controls"
                                                      style="column-gap: 1rem;
                                                             justify-content: start">
                                                     <svg>
@@ -1214,7 +1210,7 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="2019-18">
+                                        <section data-timeline-section="2019-18" class="modal-archive__timeline-section">
                                             <figure>
                                                 <hr>
                                                 <hr>
@@ -1316,7 +1312,7 @@
                                                             <a href="https://github.com/stepanjakl/aeropot-arduino/blob/master/src/aerofyt_clion_platformio_project.cpp"
                                                                target="_blank">
                                                                 <span>@stepanjakl/aeropot-arduino</span>
-                                                                <svg class="align-self-start fill-current">
+                                                                <svg>
                                                                     <use xlink:href="images/icons.svg#new-tab"></use>
                                                                 </svg>
                                                             </a>
@@ -1329,12 +1325,12 @@
                                             </div>
                                         </section>
                                         <!-- Elsewhen -->
-                                        <section data-timeline-section-title="elsewhen">
+                                        <section data-timeline-section-title="elsewhen" class="modal-archive__timeline-section-title">
                                             <div>
                                                 <label for="timeline-section-year-elsewhen" tabindex="0">
                                                     Elsewhen
                                                 </label>
-                                                <div class="flex align-items-center"
+                                                <div class="modal-archive__timeline-section-controls"
                                                      style="column-gap: 1rem;
                                                             justify-content: start">
                                                     <svg>
@@ -1347,7 +1343,7 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="elsewhen">
+                                        <section data-timeline-section="elsewhen" class="modal-archive__timeline-section">
                                             <figure>
                                                 <hr>
                                                 <hr>
@@ -1467,46 +1463,42 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <figure id="modal-archive-footer-art-middle">
+                                                <figure id="modal-archive-footer-art-middle" class="modal-archive__footer-art-middle">
                                                 </figure>
                                             </div>
                                         </section>
                                     </div>
                                 </div>
-                                <div id="horizontal-timeline-wrapper" class="z-50 sticky">
+                                <div id="horizontal-timeline-wrapper">
                                     <div id="horizontal-timeline">
                                     </div>
                                 </div>
                             </div>
-                            <figure id="modal-archive-footer-art-left">
+                            <figure id="modal-archive-footer-art-left" class="modal-archive__footer-art-left">
                             </figure>
                         </figure>
                     </dialog>
-                    <div id="underlay-modal"
-                         class="z-1 fixed inset-0 pointer-events-none">
+                    <div id="underlay-modal" class="underlay underlay--modal">
                     </div>
                 </header>
-                <figure id="triangle-left"
-                     class="invisible z-0 fixed inset-0 overflow-hidden pointer-events-none select-none">
+                <figure class="bg-triangle--left bg-triangle">
                 </figure>
-                <figure id="triangle-right"
-                     class="invisible z-0 fixed inset-0 overflow-hidden pointer-events-none select-none">
+                <figure class="bg-triangle--right bg-triangle">
                 </figure>
-                <figure id="triangle-right-alt"
-                     class="invisible z-0 fixed inset-0 overflow-hidden pointer-events-none select-none">
+                <figure class="bg-triangle--right-alt bg-triangle">
                 </figure>
             </figure>
-            <footer class="z-1 fixed select-none">
-                <div class="flex px-1/2 py-1/2 w-full h-full">
-                    <div class="flex" style="column-gap: 0.5rem">
-                        <span id="square-1"></span>
+            <footer>
+                <div>
+                    <div style="column-gap: 0.5rem">
+                        <span id="square-1" class="intro__footer-square-1"></span>
                     </div>
-                    <div class="flex" style="column-gap: 0.5rem">
-                        <span id="square-2"></span>
-                        <span id="square-3"></span>
-                        <span id="square-4"></span>
+                    <div style="column-gap: 0.5rem">
+                        <span id="square-2" class="intro__footer-square-2"></span>
+                        <span id="square-3" class="intro__footer-square-3"></span>
+                        <span id="square-4" class="intro__footer-square-4"></span>
                     </div>
-                    <div id="rectangle" class="flex-grow">
+                    <div id="rectangle" class="intro__footer-rectangle">
                     </div>
                 </div>
             </footer>

@@ -29,7 +29,8 @@
     const style = document.createElement('style')
     style.id = styleId
     style.textContent = `
-        .dialog-backdrop {
+        .dialog-backdrop,
+        .dialog-backdrop .focus-trap-node {
             display: contents;
         }
     `
@@ -217,7 +218,7 @@ aria.addBackdrop = (dialogId) => {
  */
 aria.Dialog = function (dialogId, focusAfterClosed, focusFirst, hash) {
     // Constants
-    this.FOCUS_TRAP_CLASS = 'contents'
+    this.FOCUS_TRAP_NODE_CLASS = 'focus-trap-node'
     this.ACTIVE_CLASS = 'active'
 
     // Core elements
@@ -310,13 +311,13 @@ aria.Dialog.prototype.createFocusTrapNodes = function () {
     // Pre-dialog focus trap
     this.preNode = document.createElement('div')
     this.preNode.tabIndex = 0
-    this.preNode.className = this.FOCUS_TRAP_CLASS
+    this.preNode.className = this.FOCUS_TRAP_NODE_CLASS
     this.dialogNode.parentNode.insertBefore(this.preNode, this.dialogNode)
 
     // Post-dialog focus trap
     this.postNode = document.createElement('div')
     this.postNode.tabIndex = 0
-    this.postNode.className = this.FOCUS_TRAP_CLASS
+    this.postNode.className = this.FOCUS_TRAP_NODE_CLASS
     this.dialogNode.parentNode.insertBefore(this.postNode, this.dialogNode.nextSibling)
 }
 

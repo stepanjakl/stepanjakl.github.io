@@ -35,7 +35,7 @@ body {
 
 /* Intro - Footer - Rectangle */
 
-#rectangle {
+.intro__footer-rectangle {
     background-size: 200% 100%;
     mask-size: 200% 100%;
     mask-image: linear-gradient(to left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.011) 8.6%, rgba(0, 0, 0, 0.032) 16.29%, rgba(0, 0, 0, 0.063) 23.22%, rgba(0, 0, 0, 0.103) 29.53%, rgba(0, 0, 0, 0.151) 35.37%, rgba(0, 0, 0, 0.208) 40.89%, rgba(0, 0, 0, 0.272) 46.23%, rgba(0, 0, 0, 0.343) 50%, rgba(0, 0, 0, 0.272) 53.77%, rgba(0, 0, 0, 0.208) 59.11%, rgba(0, 0, 0, 0.151) 64.63%, rgba(0, 0, 0, 0.103) 70.47%, rgba(0, 0, 0, 0.063) 76.78%, rgba(0, 0, 0, 0.032) 83.71%, rgba(0, 0, 0, 0.011) 91.4%, rgba(0, 0, 0, 0) 100%);
@@ -82,7 +82,7 @@ body {
 
 /* Intro - Footer - Squares */
 
-#square-1 {
+.intro__footer-square-1 {
     animation-name: square-blink;
     animation-fill-mode: backwards;
     animation-duration: calc(var(--anim-segment) * 3);
@@ -91,22 +91,24 @@ body {
     animation-iteration-count: 3;
 }
 
-#square-2, #square-3, #square-4 {
+.intro__footer-square-2,
+.intro__footer-square-3,
+.intro__footer-square-4 {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
     animation-duration: calc(var(--anim-segment) * 0.5);
     animation-timing-function: linear;
 }
 
-#square-2 {
+.intro__footer-square-2 {
     animation-delay: calc(var(--anim-segment) * 7);
 }
 
-#square-3 {
+.intro__footer-square-3 {
     animation-delay: calc(var(--anim-segment) * 5.5);
 }
 
-#square-4 {
+.intro__footer-square-4 {
     animation-delay: calc(var(--anim-segment) * 4);
 }
 
@@ -123,7 +125,7 @@ body {
 
 /* Intro - Background */
 
-#background-pattern {
+.bg-pattern {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
     animation-duration: calc(var(--anim-segment) * 15);
@@ -183,7 +185,6 @@ body {
     animation-timing-function: linear;
     animation-fill-mode: backwards;
 }
-
 
 /* TODO - correct these delay timings */
 .intro__name--animating {
@@ -361,44 +362,42 @@ body {
 }
 
 
-/* Intro - Triangle */
+/* Intro - Background Triangle */
 
-#triangle-left,
-#triangle-right,
-#triangle-right-alt {
+.bg-triangle {
     animation-name: fade-in-opacity;
     animation-fill-mode: forwards;
     animation-timing-function: var(--ease-out-quad);
 }
 
-#triangle-left {
+.bg-triangle--left {
     animation-duration: calc(var(--anim-segment) * 18);
     animation-delay: calc(var(--anim-segment) * 10);
 }
 
-#triangle-right,
-#triangle-right-alt {
+.bg-triangle--right,
+.bg-triangle--right-alt {
     animation-duration: calc(var(--anim-segment) * 14);
     animation-delay: calc(var(--anim-segment) * 12);
 }
 
-#triangle-right::after,
-#triangle-right-alt::after {
-    animation-fill-mode: forwards;
+.bg-triangle--right::after {
+    animation-name: triangle-after-pulse, flicker;
+}
+
+.bg-triangle--right-alt::after {
+    animation-name: triangle-after-pulse, flicker-alt;
+}
+
+.bg-triangle--right::after,
+.bg-triangle--right-alt::after {
+    animation-fill-mode: both, forwards;
     animation-duration: calc(var(--anim-segment) * 20), calc(var(--anim-segment) * 20);
     animation-delay: calc(var(--anim-segment) * 10), calc(var(--anim-segment) * 20);
     animation-timing-function: var(--ease-out-quad), linear;
     animation-direction: alternate, normal;
-    animation-iteration-count: infinite;
+    animation-iteration-count: infinite, infinite;
     will-change: top, height, width, opacity;
-}
-
-#triangle-right::after {
-    animation-name: triangle-after-pulse, flicker;
-}
-
-#triangle-right-alt::after {
-    animation-name: triangle-after-pulse, flicker-alt;
 }
 
 @keyframes triangle-after-pulse {
@@ -435,9 +434,9 @@ body {
     }
 }
 
-#triangle-right::before {
+.bg-triangle--right::before {
     animation-name: triangle-before-pulse;
-    animation-fill-mode: forwards;
+    animation-fill-mode: both;
     animation-duration: calc(var(--anim-segment) * 20);
     animation-timing-function: var(--ease-out-quad);
     animation-delay: calc(var(--anim-segment) * 10);
@@ -453,17 +452,441 @@ body {
     }
 }
 
-#profile:target~main #triangle-right::after,
-#archive:target~main #triangle-right::after,
-#profile:target~main #triangle-right-alt::after,
-#archive:target~main #triangle-right-alt::after,
-#profile:target~main footer #rectangle,
-#archive:target~main footer #rectangle,
-#profile:target~main footer #square-1,
-#archive:target~main footer #square-1,
+#profile:target~main .bg-triangle::before,
+#archive:target~main .bg-triangle::before,
+#profile:target~main .bg-triangle::after,
+#archive:target~main .bg-triangle::after,
+#profile:target~main footer .intro__footer-rectangle,
+#archive:target~main footer .intro__footer-rectangle,
+#profile:target~main footer .intro__footer-square-1,
+#archive:target~main footer .intro__footer-square-1,
 #profile:target~main .availability__dot,
 #archive:target~main .availability__dot {
     animation-play-state: paused;
+}
+
+
+/* Intro - Triangle - Gradient Transitions */
+
+body {
+    /* Triangle transition patterns */
+    --transition-triangle-profile: 0.6s var(--ease-in-out-quad) 0.3s;
+    --transition-triangle-base: 0.4s var(--ease-in-quad);
+    --transition-triangle-stripe: 0.2s linear;
+}
+
+@property --tri-s-0 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 31, 36, 0);
+}
+
+@property --tri-s-1 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 31, 36, 0.011);
+}
+
+@property --tri-s-2 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 31, 36, 0.032);
+}
+
+@property --tri-s-3 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 31, 36, 0.063);
+}
+
+@property --tri-s-4 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 31, 36, 0.103);
+}
+
+@property --tri-s-5 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 31, 36, 0.151);
+}
+
+@property --tri-s-6 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 31, 36, 0.208);
+}
+
+@property --tri-s-7 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 31, 36, 0.272);
+}
+
+@property --tri-s-8 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 31, 36, 0.343);
+}
+
+@property --tri-s-9 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 31, 36, 0.421);
+}
+
+@property --tri-s-10 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 31, 36, 0.505);
+}
+
+@property --tri-s-11 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 31, 36, 0.595);
+}
+
+@property --tri-s-12 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 31, 36, 0.690);
+}
+
+@property --tri-s-13 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 31, 36, 0.789);
+}
+
+@property --tri-s-14 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 31, 36, 0.893);
+}
+
+@property --tri-s-15 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: #001F24;
+}
+
+@property --tri-m-0 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 52, 141, 0);
+}
+
+@property --tri-m-1 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 52, 141, 0.011);
+}
+
+@property --tri-m-2 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 52, 141, 0.032);
+}
+
+@property --tri-m-3 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 52, 141, 0.063);
+}
+
+@property --tri-m-4 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 52, 141, 0.103);
+}
+
+@property --tri-m-5 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 52, 141, 0.151);
+}
+
+@property --tri-m-6 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 52, 141, 0.208);
+}
+
+@property --tri-m-7 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 52, 141, 0.272);
+}
+
+@property --tri-m-8 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 52, 141, 0.343);
+}
+
+@property --tri-m-9 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 52, 141, 0.421);
+}
+
+@property --tri-m-10 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 52, 141, 0.505);
+}
+
+@property --tri-m-11 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 52, 141, 0.595);
+}
+
+@property --tri-m-12 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 52, 141, 0.690);
+}
+
+@property --tri-m-13 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 52, 141, 0.789);
+}
+
+@property --tri-m-14 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(0, 52, 141, 0.893);
+}
+
+@property --tri-m-15 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: #00348D;
+}
+
+.bg-triangle::before {
+    background: linear-gradient(to top in oklch, var(--triangle-stripe));
+    background-image: linear-gradient(to top in oklch,
+            var(--tri-s-0) 0%, var(--tri-s-1) 8.6%, var(--tri-s-2) 16.29%, var(--tri-s-3) 23.22%,
+            var(--tri-s-4) 29.53%, var(--tri-s-5) 35.37%, var(--tri-s-6) 40.89%, var(--tri-s-7) 46.23%,
+            var(--tri-s-8) 51.53%, var(--tri-s-9) 56.95%, var(--tri-s-10) 62.63%, var(--tri-s-11) 68.71%,
+            var(--tri-s-12) 75.34%, var(--tri-s-13) 82.67%, var(--tri-s-14) 90.84%, var(--tri-s-15) 100%);
+    transition: --tri-s-0 var(--transition-triangle-stripe), --tri-s-1 var(--transition-triangle-stripe), --tri-s-2 var(--transition-triangle-stripe), --tri-s-3 var(--transition-triangle-stripe),
+        --tri-s-4 var(--transition-triangle-stripe), --tri-s-5 var(--transition-triangle-stripe), --tri-s-6 var(--transition-triangle-stripe), --tri-s-7 var(--transition-triangle-stripe),
+        --tri-s-8 var(--transition-triangle-stripe), --tri-s-9 var(--transition-triangle-stripe), --tri-s-10 var(--transition-triangle-stripe), --tri-s-11 var(--transition-triangle-stripe),
+        --tri-s-12 var(--transition-triangle-stripe), --tri-s-13 var(--transition-triangle-stripe), --tri-s-14 var(--transition-triangle-stripe), --tri-s-15 var(--transition-triangle-stripe);
+}
+
+.bg-triangle--right::after,
+.bg-triangle--left::after {
+    background: linear-gradient(to top in oklch, var(--triangle));
+    background-image: linear-gradient(to top in oklch,
+            var(--tri-m-0) 0%, var(--tri-m-1) 8.6%, var(--tri-m-2) 16.29%, var(--tri-m-3) 23.22%,
+            var(--tri-m-4) 29.53%, var(--tri-m-5) 35.37%, var(--tri-m-6) 40.89%, var(--tri-m-7) 46.23%,
+            var(--tri-m-8) 51.53%, var(--tri-m-9) 56.95%, var(--tri-m-10) 62.63%, var(--tri-m-11) 68.71%,
+            var(--tri-m-12) 75.34%, var(--tri-m-13) 82.67%, var(--tri-m-14) 90.84%, var(--tri-m-15) 100%);
+    transition: --tri-m-0 var(--transition-triangle-base), --tri-m-1 var(--transition-triangle-base),
+        --tri-m-2 var(--transition-triangle-base), --tri-m-3 var(--transition-triangle-base), --tri-m-4 var(--transition-triangle-base),
+        --tri-m-5 var(--transition-triangle-base), --tri-m-6 var(--transition-triangle-base), --tri-m-7 var(--transition-triangle-base),
+        --tri-m-8 var(--transition-triangle-base), --tri-m-9 var(--transition-triangle-base), --tri-m-10 var(--transition-triangle-base),
+        --tri-m-11 var(--transition-triangle-base), --tri-m-12 var(--transition-triangle-base), --tri-m-13 var(--transition-triangle-base),
+        --tri-m-14 var(--transition-triangle-base), --tri-m-15 var(--transition-triangle-base);
+}
+
+.bg-triangle--right-alt::after {
+    background: linear-gradient(to top in oklch, var(--triangle-alt));
+    background-image: linear-gradient(to top in oklch,
+            var(--tri-a-0) 0%, var(--tri-a-1) 8.6%, var(--tri-a-2) 16.29%, var(--tri-a-3) 23.22%,
+            var(--tri-a-4) 29.53%, var(--tri-a-5) 35.37%, var(--tri-a-6) 40.89%, var(--tri-a-7) 46.23%,
+            var(--tri-a-8) 51.53%, var(--tri-a-9) 56.95%, var(--tri-a-10) 62.63%, var(--tri-a-11) 68.71%,
+            var(--tri-a-12) 75.34%, var(--tri-a-13) 82.67%, var(--tri-a-14) 90.84%, var(--tri-a-15) 100%);
+    transition: --tri-a-0 var(--transition-triangle-base), --tri-a-1 var(--transition-triangle-base),
+        --tri-a-2 var(--transition-triangle-base), --tri-a-3 var(--transition-triangle-base), --tri-a-4 var(--transition-triangle-base),
+        --tri-a-5 var(--transition-triangle-base), --tri-a-6 var(--transition-triangle-base), --tri-a-7 var(--transition-triangle-base),
+        --tri-a-8 var(--transition-triangle-base), --tri-a-9 var(--transition-triangle-base), --tri-a-10 var(--transition-triangle-base),
+        --tri-a-11 var(--transition-triangle-base), --tri-a-12 var(--transition-triangle-base), --tri-a-13 var(--transition-triangle-base),
+        --tri-a-14 var(--transition-triangle-base), --tri-a-15 var(--transition-triangle-base);
+}
+
+#profile:target~main .bg-triangle::before {
+    --tri-s-0: rgba(0, 45, 15, 0);
+    --tri-s-1: rgba(0, 45, 15, 0.011);
+    --tri-s-2: rgba(0, 45, 15, 0.032);
+    --tri-s-3: rgba(0, 45, 15, 0.063);
+    --tri-s-4: rgba(0, 45, 15, 0.103);
+    --tri-s-5: rgba(0, 45, 15, 0.151);
+    --tri-s-6: rgba(0, 45, 15, 0.208);
+    --tri-s-7: rgba(0, 45, 15, 0.272);
+    --tri-s-8: rgba(0, 45, 15, 0.343);
+    --tri-s-9: rgba(0, 45, 15, 0.421);
+    --tri-s-10: rgba(0, 45, 15, 0.505);
+    --tri-s-11: rgba(0, 45, 15, 0.595);
+    --tri-s-12: rgba(0, 45, 15, 0.690);
+    --tri-s-13: rgba(0, 45, 15, 0.789);
+    --tri-s-14: rgba(0, 45, 15, 0.893);
+    --tri-s-15: var(--green-15);
+    transition: --tri-s-0 var(--transition-triangle-profile), --tri-s-1 var(--transition-triangle-profile),
+        --tri-s-2 var(--transition-triangle-profile), --tri-s-3 var(--transition-triangle-profile),
+        --tri-s-4 var(--transition-triangle-profile), --tri-s-5 var(--transition-triangle-profile),
+        --tri-s-6 var(--transition-triangle-profile), --tri-s-7 var(--transition-triangle-profile),
+        --tri-s-8 var(--transition-triangle-profile), --tri-s-9 var(--transition-triangle-profile),
+        --tri-s-10 var(--transition-triangle-profile), --tri-s-11 var(--transition-triangle-profile),
+        --tri-s-12 var(--transition-triangle-profile), --tri-s-13 var(--transition-triangle-profile),
+        --tri-s-14 var(--transition-triangle-profile), --tri-s-15 var(--transition-triangle-profile);
+}
+
+#profile:target~main .bg-triangle--right::after,
+#profile:target~main .bg-triangle--left::after {
+    --tri-m-0: rgba(0, 138, 60, 0);
+    --tri-m-1: rgba(0, 138, 60, 0.011);
+    --tri-m-2: rgba(0, 138, 60, 0.032);
+    --tri-m-3: rgba(0, 138, 60, 0.063);
+    --tri-m-4: rgba(0, 138, 60, 0.103);
+    --tri-m-5: rgba(0, 138, 60, 0.151);
+    --tri-m-6: rgba(0, 138, 60, 0.208);
+    --tri-m-7: rgba(0, 138, 60, 0.272);
+    --tri-m-8: rgba(0, 138, 60, 0.343);
+    --tri-m-9: rgba(0, 138, 60, 0.421);
+    --tri-m-10: rgba(0, 138, 60, 0.505);
+    --tri-m-11: rgba(0, 138, 60, 0.595);
+    --tri-m-12: rgba(0, 138, 60, 0.690);
+    --tri-m-13: rgba(0, 138, 60, 0.789);
+    --tri-m-14: rgba(0, 138, 60, 0.893);
+    --tri-m-15: #008a3c;
+    transition: --tri-m-0 var(--transition-triangle-profile), --tri-m-1 var(--transition-triangle-profile),
+        --tri-m-2 var(--transition-triangle-profile), --tri-m-3 var(--transition-triangle-profile),
+        --tri-m-4 var(--transition-triangle-profile), --tri-m-5 var(--transition-triangle-profile),
+        --tri-m-6 var(--transition-triangle-profile), --tri-m-7 var(--transition-triangle-profile),
+        --tri-m-8 var(--transition-triangle-profile), --tri-m-9 var(--transition-triangle-profile),
+        --tri-m-10 var(--transition-triangle-profile), --tri-m-11 var(--transition-triangle-profile),
+        --tri-m-12 var(--transition-triangle-profile), --tri-m-13 var(--transition-triangle-profile),
+        --tri-m-14 var(--transition-triangle-profile), --tri-m-15 var(--transition-triangle-profile);
+}
+
+@property --tri-a-0 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(134, 120, 0, 0);
+}
+
+@property --tri-a-1 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(134, 120, 0, 0.011);
+}
+
+@property --tri-a-2 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(134, 120, 0, 0.032);
+}
+
+@property --tri-a-3 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(134, 120, 0, 0.063);
+}
+
+@property --tri-a-4 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(134, 120, 0, 0.103);
+}
+
+@property --tri-a-5 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(134, 120, 0, 0.151);
+}
+
+@property --tri-a-6 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(134, 120, 0, 0.208);
+}
+
+@property --tri-a-7 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(134, 120, 0, 0.272);
+}
+
+@property --tri-a-8 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(134, 120, 0, 0.343);
+}
+
+@property --tri-a-9 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(134, 120, 0, 0.421);
+}
+
+@property --tri-a-10 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(134, 120, 0, 0.505);
+}
+
+@property --tri-a-11 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(134, 120, 0, 0.595);
+}
+
+@property --tri-a-12 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(134, 120, 0, 0.690);
+}
+
+@property --tri-a-13 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(134, 120, 0, 0.789);
+}
+
+@property --tri-a-14 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: rgba(134, 120, 0, 0.893);
+}
+
+@property --tri-a-15 {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: #867800;
+}
+
+#profile:target~main .bg-triangle--right-alt::after {
+    --tri-a-0: rgba(0, 138, 60, 0);
+    --tri-a-1: rgba(0, 138, 60, 0.011);
+    --tri-a-2: rgba(0, 138, 60, 0.032);
+    --tri-a-3: rgba(0, 138, 60, 0.063);
+    --tri-a-4: rgba(0, 138, 60, 0.103);
+    --tri-a-5: rgba(0, 138, 60, 0.151);
+    --tri-a-6: rgba(0, 138, 60, 0.208);
+    --tri-a-7: rgba(0, 138, 60, 0.272);
+    --tri-a-8: rgba(0, 138, 60, 0.343);
+    --tri-a-9: rgba(0, 138, 60, 0.421);
+    --tri-a-10: rgba(0, 138, 60, 0.505);
+    --tri-a-11: rgba(0, 138, 60, 0.595);
+    --tri-a-12: rgba(0, 138, 60, 0.690);
+    --tri-a-13: rgba(0, 138, 60, 0.789);
+    --tri-a-14: rgba(0, 138, 60, 0.893);
+    --tri-a-15: #008a3c;
+    transition: --tri-a-0 var(--transition-triangle-profile), --tri-a-1 var(--transition-triangle-profile),
+        --tri-a-2 var(--transition-triangle-profile), --tri-a-3 var(--transition-triangle-profile),
+        --tri-a-4 var(--transition-triangle-profile), --tri-a-5 var(--transition-triangle-profile),
+        --tri-a-6 var(--transition-triangle-profile), --tri-a-7 var(--transition-triangle-profile),
+        --tri-a-8 var(--transition-triangle-profile), --tri-a-9 var(--transition-triangle-profile),
+        --tri-a-10 var(--transition-triangle-profile), --tri-a-11 var(--transition-triangle-profile),
+        --tri-a-12 var(--transition-triangle-profile), --tri-a-13 var(--transition-triangle-profile),
+        --tri-a-14 var(--transition-triangle-profile), --tri-a-15 var(--transition-triangle-profile);
 }
 
 
@@ -816,12 +1239,10 @@ body {
 
 /* Intro Links */
 
-.menu__link,
 .menu__link {
     transition: background-color var(--animate-out-segment-2\/3) linear, box-shadow var(--animate-out-segment-2\/3) linear;
 }
 
-.menu__link:hover, .menu__link:focus, .menu__link.tooltip-key--active,
 .menu__link:hover,
 .menu__link:focus,
 .menu__link.tooltip-key--active {
@@ -830,21 +1251,18 @@ body {
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-3);
 }
 
-a#menu-link-profile:hover, a#menu-link-profile:focus, a#menu-link-profile.tooltip-key--active,
-#menu-link-profile:hover,
-#menu-link-profile:focus,
-#menu-link-profile.tooltip-key--active {
+.menu__link--profile:hover,
+.menu__link--profile:focus,
+.menu__link--profile.tooltip-key--active {
     background-color: var(--highlight-primary);
 }
 
-.menu__link svg, .menu__email-button svg,
 .menu__link svg,
 .menu__email-button svg {
     transition: color var(--animate-out-segment-2\/3) linear;
     color: var(--icon);
 }
 
-.menu__link:hover svg, .menu__link:focus svg, .menu__email-button:hover svg, .menu__email-button:focus svg,
 .menu__link:hover svg,
 .menu__link:focus svg,
 .menu__email-button:hover svg,
@@ -853,14 +1271,12 @@ a#menu-link-profile:hover, a#menu-link-profile:focus, a#menu-link-profile.toolti
     color: var(--icon-hover);
 }
 
-.menu__link .menu__link-label-text, .menu__email-button .menu__email-text,
 .menu__link-label-text,
 .menu__email-text {
     transition: color var(--animate-out-segment-2\/3) linear;
     color: var(--text-2);
 }
 
-.menu__link:hover .menu__link-label-text, .menu__link:focus .menu__link-label-text, .menu__email-button:hover .menu__email-text, .menu__email-button:focus .menu__email-text,
 .menu__link:hover .menu__link-label-text,
 .menu__link:focus .menu__link-label-text,
 .menu__email-button:hover .menu__email-text,
@@ -869,12 +1285,10 @@ a#menu-link-profile:hover, a#menu-link-profile:focus, a#menu-link-profile.toolti
     color: var(--text-1);
 }
 
-.menu__link .menu__link-label-text u,
 .menu__link-label-text u {
     transition: text-decoration var(--animate-out-segment-2\/3) linear;
 }
 
-.menu__link:hover .menu__link-label-text u, .menu__link:focus .menu__link-label-text u,
 .menu__link:hover .menu__link-label-text u,
 .menu__link:focus .menu__link-label-text u {
     transition: text-decoration var(--animate-in-segment-2\/3) linear;
@@ -884,27 +1298,32 @@ a#menu-link-profile:hover, a#menu-link-profile:focus, a#menu-link-profile.toolti
 
 /* Menu Button */
 
-#menu-button-open {
+.menu__button-open,
+.menu__button-close {
+    position: absolute;
+    inset: 0;
+}
+
+.menu__button-open {
     z-index: 3;
 }
 
-#menu:target #menu-button-open {
+#menu:target .menu__button-open {
     pointer-events: none;
     visibility: hidden;
 }
 
-#menu-button-close {
+.menu__button-close {
     z-index: 4;
     pointer-events: none;
     visibility: hidden;
 }
 
-#menu:target #menu-button-close {
+#menu:target .menu__button-close {
     pointer-events: auto;
     visibility: visible;
 }
 
-#menu-button,
 .menu__button {
     z-index: 2;
     transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, box-shadow var(--animate-out-segment-2\/3) linear, border-radius var(--animate-out-segment) var(--ease-in-quad);
@@ -912,88 +1331,69 @@ a#menu-link-profile:hover, a#menu-link-profile:focus, a#menu-link-profile.toolti
     contain: content;
 }
 
-#menu:target #menu-button,
-#menu:target .menu__button,
-.menu--open #menu-button,
-.menu--open .menu__button {
+#menu:target .menu__button {
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) rgba(0, 0, 0, 0);
 }
 
-#menu-toggle:hover .menu__button {
+.menu-toggle:hover .menu__button {
     border-color: var(--light-2);
 }
 
-#menu:target #menu-button, #menu-toggle.tooltip-key--active .menu__button,
-#menu:target .menu__button, #menu-toggle.tooltip-key--active .menu__button,
-.menu--open #menu-button, .menu--open .menu__button {
+#menu:target .menu__button,
+.menu-toggle.tooltip-key--active .menu__button {
     border-color: var(--light-3);
 }
 
-#menu-toggle:hover .menu__button, #menu-toggle:focus-within .menu__button, #menu:target .menu__button, #menu-toggle.tooltip-key--active .menu__button,
-.menu--open #menu-button, .menu--open .menu__button {
+.menu-toggle:hover .menu__button,
+.menu-toggle:focus-within .menu__button,
+#menu:target .menu__button,
+.menu-toggle.tooltip-key--active .menu__button {
     transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear, outline var(--animate-in-segment-2\/3) linear;
     color: var(--icon-hover);
     background-color: var(--highlight-secondary);
 }
 
-#menu-button .menu__button-icon span,
 .menu__button-icon span {
     background-color: currentColor;
     animation-fill-mode: forwards;
 }
 
-#menu-button .menu__button-icon span:nth-child(1),
 .menu__button-icon span:nth-child(1) {
     animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-top-left-reverse;
 }
 
-#menu:target #menu-button .menu__button-icon span:nth-child(1),
-#menu:target .menu__button-icon span:nth-child(1),
-.menu--open #menu-button .menu__button-icon span:nth-child(1),
-.menu--open .menu__button-icon span:nth-child(1) {
+#menu:target .menu__button-icon span:nth-child(1) {
     animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-top-left;
 }
 
-#menu-button .menu__button-icon span:nth-child(2),
 .menu__button-icon span:nth-child(2) {
     animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-top-right-reverse;
 }
 
-#menu:target #menu-button .menu__button-icon span:nth-child(2),
-#menu:target .menu__button-icon span:nth-child(2),
-.menu--open #menu-button .menu__button-icon span:nth-child(2),
-.menu--open .menu__button-icon span:nth-child(2) {
+#menu:target .menu__button-icon span:nth-child(2) {
     animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-top-right;
 }
 
-#menu-button .menu__button-icon span:nth-child(3),
 .menu__button-icon span:nth-child(3) {
     animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-bottom-left-reverse;
 }
 
-#menu:target #menu-button .menu__button-icon span:nth-child(3),
-#menu:target .menu__button-icon span:nth-child(3),
-.menu--open #menu-button .menu__button-icon span:nth-child(3),
-.menu--open .menu__button-icon span:nth-child(3) {
+#menu:target .menu__button-icon span:nth-child(3) {
     animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-bottom-left;
 }
 
-#menu-button .menu__button-icon span:nth-child(4),
 .menu__button-icon span:nth-child(4) {
     animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-bottom-right-reverse;
 }
 
-#menu:target #menu-button .menu__button-icon span:nth-child(4),
-#menu:target .menu__button-icon span:nth-child(4),
-.menu--open #menu-button .menu__button-icon span:nth-child(4),
-.menu--open .menu__button-icon span:nth-child(4) {
+#menu:target .menu__button-icon span:nth-child(4) {
     animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-bottom-right;
 }
@@ -1258,7 +1658,7 @@ a#menu-link-profile:hover, a#menu-link-profile:focus, a#menu-link-profile.toolti
 }
 
 /* #profile:target~main #modal-profile-content,
-#archive:target~main .archive-timeline-grid {
+#archive:target~main .modal-archive__timeline-grid {
     transition: opacity var(--animate-in-segment) linear var(--animate-in-segment);
     opacity: 1;
 } */
@@ -1296,21 +1696,21 @@ footer>div {
 
 /* Modals - Archive */
 
-.archive-timeline__grid [data-timeline-section] {
+.modal-archive__timeline-grid [data-timeline-section] {
     transition: opacity var(--animate-out-segment) linear, padding var(--animate-out-segment) var(--ease-in-quad), height var(--animate-out-segment) var(--ease-in-quad);
 }
 
-input[id^="timeline-section-year-"]:checked~.archive-timeline__grid [data-timeline-section] {
+input[id^="timeline-section-year-"]:checked~.modal-archive__timeline-grid [data-timeline-section] {
     transition: opacity var(--animate-in-segment) linear, padding var(--animate-in-segment) var(--ease-out-quad), height var(--animate-in-segment) var(--ease-out-quad);
 }
 
-/* .archive-timeline__grid [data-timeline-section-title]>div label:hover+div svg {} */
+/* .modal-archive__timeline-grid [data-timeline-section-title]>div label:hover+div svg {} */
 
-.archive-timeline__grid [data-timeline-section-title]>div svg {
+.modal-archive__timeline-grid [data-timeline-section-title]>div svg {
     transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, border var(--animate-out-segment-2\/3) linear;
 }
 
-.archive-timeline__grid [data-timeline-section-title]>div label:hover+div svg, .archive-timeline__grid [data-timeline-section-title]>div label:focus+div svg {
+.modal-archive__timeline-grid [data-timeline-section-title]>div label:hover+div svg, .modal-archive__timeline-grid [data-timeline-section-title]>div label:focus+div svg {
     transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border var(--animate-in-segment-2\/3) linear;
     color: var(--modal-icon-hover);
     background-color: var(--highlight-secondary);
@@ -1329,14 +1729,14 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:hover {
 
 /* Modals - Horizontal Timeline */
 
-#horizontal-timeline > :first-child {
+#horizontal-timeline> :first-child {
     transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad);
     transform: scale(0.95);
     transform-origin: bottom;
     opacity: 0;
 }
 
-#archive:target~main #modal-archive #horizontal-timeline > :first-child {
+#archive:target~main #modal-archive #horizontal-timeline> :first-child {
     transition: opacity var(--animate-in-segment) linear var(--anim-segment), transform var(--animate-in-segment) var(--ease-out-quad) var(--anim-segment);
     transform: scale(1);
     opacity: 1;
@@ -1429,15 +1829,15 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:hover {
 }
 
 
-/* Modal Footer Art */
+/* Modal Profile - Footer Art */
 
-#modal-profile .modal__footer-art-gradient {
+.modal-profile__footer-art-gradient {
     opacity: 0;
     visibility: hidden;
     transition: opacity var(--animate-out-segment) linear, visibility 0s var(--animate-out-segment);
 }
 
-#debug:not(:checked)~#profile:target~main #modal-profile .modal__footer-art-gradient {
+#debug:not(:checked)~#profile:target~main .modal-profile__footer-art-gradient {
     visibility: visible;
     opacity: 1;
     transition: opacity var(--animate-in-segment) linear var(--anim-segment), visibility 0s var(--anim-segment);
