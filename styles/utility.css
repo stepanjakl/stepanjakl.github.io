@@ -34,17 +34,29 @@ body {
     --text-md_before-margin-bottom: -0.235em;
     --text-md_after-margin-top: -0.185em;
 
-    --text-lg-font-weight: 200;
+    --text-lg-font-weight: 300;
     --text-lg-font-size: 2.85714375rem;
     --text-lg-line-height: 4rem;
+    --text-lg-letter-spacing: -0.03125rem;
     --text-lg_before-margin-bottom: -0.375em;
     --text-lg_after-margin-top: -0.325em;
 
-    --text-xl-font-weight: 200;
+    --text-xl-font-weight: 300;
     --text-xl-font-size: 4.2857125rem;
     --text-xl-line-height: 6rem;
+    --text-xl-letter-spacing: -0.0625rem;
     --text-xl_before-margin-bottom: -0.375em;
     --text-xl_after-margin-top: -0.325em;
+}
+
+@media (min-width: 45rem) {
+    body {
+        --text-lg-font-weight: 200;
+        --text-lg-letter-spacing: normal;
+
+        --text-xl-font-weight: 200;
+        --text-xl-letter-spacing: normal;
+    }
 }
 
 /* @media (min-width: 45rem) {
@@ -131,6 +143,7 @@ body {
     font-weight: var(--text-lg-font-weight);
     font-size: var(--text-lg-font-size);
     line-height: var(--text-lg-line-height);
+    letter-spacing: var(--text-lg-letter-spacing);
 }
 
 .text-lg::before {
@@ -145,6 +158,7 @@ body {
     font-weight: var(--text-xl-font-weight);
     font-size: var(--text-xl-font-size);
     line-height: var(--text-xl-line-height);
+    letter-spacing: var(--text-xl-letter-spacing);
 }
 
 .text-xl::before {

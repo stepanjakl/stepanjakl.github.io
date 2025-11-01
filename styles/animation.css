@@ -27,26 +27,52 @@ body {
     --transition-background: background-color var(--animate-in-segment-2\/3) linear;
     --transition-transform: transform var(--animate-in-segment) var(--ease-out-quad);
 
-    /* Footer shrink animation variables */
-    --footer-shrink-duration: calc(var(--anim-segment) * 9);
-    /* --footer-shrink-steps: 9; */ /* Total number of steps */
-    --footer-shrink-easing: var(--ease-out-quad); /* steps(var(--footer-shrink-steps), jump-none) */
-    --footer-shrink-delay: 0s;
-    --footer-shrink-start-size: calc(var(--footer-shrink-end-size) * 2);
-    --footer-shrink-end-size: 0.75rem;
-    --footer-gap-main-start: calc(var(--footer-gap-main-end) * 4);
-    --footer-gap-main-end: 1.125rem;
-    --footer-gap-inner-start: calc(var(--footer-gap-inner-end) * 4);
-    --footer-gap-inner-end: 0.5rem;
-    --footer-shrink-margin-start: calc(var(--footer-shrink-end-size) / 2);
-    /* Pop-in step numbers for squares (0 = start immediately, 6 = end) */
-    /* --footer-square-4-pop-step: 3;
-    --footer-square-3-pop-step: 4;
-    --footer-square-2-pop-step: 5; */
-    /* Calculated delays based on step numbers */
-    /* --footer-square-4-pop-delay: calc(var(--footer-shrink-duration) * (var(--footer-square-4-pop-step) / var(--footer-shrink-steps)));
-    --footer-square-3-pop-delay: calc(var(--footer-shrink-duration) * (var(--footer-square-3-pop-step) / var(--footer-shrink-steps)));
-    --footer-square-2-pop-delay: calc(var(--footer-shrink-duration) * (var(--footer-square-2-pop-step) / var(--footer-shrink-steps))); */
+    /* Intro animation timings */
+    --duration-logo-animate: calc(var(--anim-segment) * 2.75);
+    --delay-logo-animate: calc(var(--anim-segment) * 1);
+    --duration-bg-pattern-fade-in: calc(var(--anim-segment) * 15);
+    --delay-bg-pattern-fade-in: calc(var(--anim-segment) * 1);
+    --duration-intro-text-fade-in: calc(var(--anim-segment) * 5);
+    --delay-intro-name-fade-in: calc(var(--anim-segment) * 3.75);
+    --delay-intro-title-fade-in: calc(var(--anim-segment) * 3.75);
+    --delay-intro-name-pointer: calc(var(--anim-segment) * 8.75);
+    --duration-intro-animated-text: calc(var(--anim-segment) * 4);
+    --delay-intro-animated-text: calc(var(--anim-segment) * 9);
+    --delay-intro-animated-text-alt: calc(var(--anim-segment) * 10);
+    --delay-intro-title-pointer: calc(var(--anim-segment) * 15);
+
+    --duration-bg-triangle-left-fade-in: calc(var(--anim-segment) * 10);
+    --delay-bg-triangle-left-fade-in: calc(var(--anim-segment) * 5.75);
+    --duration-bg-triangle-right-fade-in: calc(var(--anim-segment) * 15);
+    --delay-bg-triangle-right-fade-in: calc(var(--anim-segment) * 7.75);
+
+    --duration-triangle-right-after-pulse: calc(var(--anim-segment) * 20);
+    --delay-triangle-right-after-pulse: calc(var(--anim-segment) * 7.75);
+    --duration-triangle-before-pulse: calc(var(--anim-segment) * 20);
+    --delay-triangle-before-pulse: calc(var(--anim-segment) * 7.75);
+
+    --duration-availability-background-animate: calc(var(--anim-segment) * 1.5);
+    --delay-availability-background-animate: calc(var(--anim-segment) * 9.75);
+    --duration-availability-content-fade-in: calc(var(--anim-segment) * 1.25);
+    --delay-availability-content-fade-in: calc(var(--anim-segment) * 10.75);
+    --delay-availability-pointer: calc(var(--anim-segment) * 10.25);
+    --duration-menu-background-animate: calc(var(--anim-segment) * 1.5);
+    --delay-menu-background-animate: calc(var(--anim-segment) * 11.25);
+    --duration-menu-links-fade-in: calc(var(--anim-segment) * 1.25);
+    --delay-menu-links-fade-in: calc(var(--anim-segment) * 12.25);
+
+    --duration-triangle-flicker: calc(var(--anim-segment) * 20);
+    --delay-triangle-flicker: calc(var(--anim-segment) * 14.75);
+
+    --duration-footer-fade-in: calc(var(--anim-segment) * 10);
+    --delay-footer-fade-in: calc(var(--anim-segment) * 12.75);
+    --duration-rectangle-mask-animate: 20s;
+    --delay-rectangle-bg-animate: calc(var(--anim-segment) * 12.75);
+    --delay-rectangle-mask-animate: calc(var(--anim-segment) * 22.75);
+    --duration-rectangle-bg-animate: 120s;
+    --duration-footer-square-1-blink: 20s;
+    --delay-footer-square-1-blink: calc(var(--anim-segment) * 22.75);
+
 }
 
 .skip-animation {
@@ -56,28 +82,28 @@ body {
 
 /* Intro - Footer - Rectangle */
 
+footer {
+    animation-name: fade-in-opacity;
+    animation-fill-mode: backwards;
+    animation-duration: var(--duration-footer-fade-in);
+    animation-delay: var(--delay-footer-fade-in);
+    animation-timing-function: linear;
+    animation-direction: normal;
+    animation-iteration-count: 1;
+}
+
 .intro__footer-rectangle {
     background-size: 200% 100%;
     mask-size: 200% 100%;
     mask-image: linear-gradient(to left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.011) 8.6%, rgba(0, 0, 0, 0.032) 16.29%, rgba(0, 0, 0, 0.063) 23.22%, rgba(0, 0, 0, 0.103) 29.53%, rgba(0, 0, 0, 0.151) 35.37%, rgba(0, 0, 0, 0.208) 40.89%, rgba(0, 0, 0, 0.272) 46.23%, rgba(0, 0, 0, 0.343) 50%, rgba(0, 0, 0, 0.272) 53.77%, rgba(0, 0, 0, 0.208) 59.11%, rgba(0, 0, 0, 0.151) 64.63%, rgba(0, 0, 0, 0.103) 70.47%, rgba(0, 0, 0, 0.063) 76.78%, rgba(0, 0, 0, 0.032) 83.71%, rgba(0, 0, 0, 0.011) 91.4%, rgba(0, 0, 0, 0) 100%);
-    animation-name: footer-rectangle-shrink, fade-in-opacity, rectangle-bg-animate-init, rectangle-mask-animate, rectangle-bg-animate;
-    animation-fill-mode: both, backwards, both, forwards, both;
-    animation-duration: var(--footer-shrink-duration), calc(var(--anim-segment) * 6), calc(var(--anim-segment) * 12), calc(var(--anim-segment) * 3), 120s;
-    animation-timing-function: var(--footer-shrink-easing), var(--ease-out-quad), linear, linear, linear;
-    animation-delay: var(--footer-shrink-delay), 0s, 0s, 0s /* calc(var(--anim-segment) * 3) */, calc(var(--anim-segment) * 12);
-    animation-direction: normal, normal, normal, normal, normal;
-    animation-iteration-count: 1, 1, 1, 1, infinite;
-    animation-composition: replace, replace, replace, replace, accumulate;
-}
-
-@keyframes rectangle-bg-animate-init {
-    0% {
-        background-position: 0% 0%;
-    }
-
-    100% {
-        background-position: 5% 0%;
-    }
+    animation-name: rectangle-mask-animate, rectangle-bg-animate;
+    animation-fill-mode: both, forwards, both;
+    animation-duration: var(--duration-rectangle-mask-animate), var(--duration-rectangle-bg-animate);
+    animation-timing-function: linear, linear;
+    animation-delay: var(--delay-rectangle-mask-animate), var(--delay-rectangle-bg-animate);
+    animation-direction: normal, normal;
+    animation-iteration-count: infinite, infinite;
+    animation-composition: replace, accumulate;
 }
 
 @keyframes rectangle-bg-animate {
@@ -95,142 +121,67 @@ body {
         mask-position: 0% 0%;
     }
 
-    100% {
+    10%, 45% {
         mask-position: 100% 0%;
     }
-}
 
+    49.999999999% {
+        mask-position: 200% 0%;
+    }
 
-/* Intro - Footer - Container Gaps */
+    50% {
+        mask-position: 0% 0%;
+    }
 
-footer>div {
-    animation-name: footer-gap-main-shrink;
-    animation-fill-mode: both;
-    animation-duration: var(--footer-shrink-duration);
-    animation-timing-function: var(--footer-shrink-easing);
-    animation-delay: var(--footer-shrink-delay);
-}
+    60%, 95% {
+        mask-position: 100% 0%;
+    }
 
-footer>div>div {
-    animation-name: footer-gap-inner-shrink;
-    animation-fill-mode: both;
-    animation-duration: var(--footer-shrink-duration);
-    animation-timing-function: var(--footer-shrink-easing);
-    animation-delay: var(--footer-shrink-delay);
+    99.999999999% {
+        mask-position: 200% 0%;
+    }
+
+    100% {
+        mask-position: 0% 0%;
+    }
 }
 
 
 /* Intro - Footer - Squares */
 
 .intro__footer-square-1 {
-    animation-name: footer-square-shrink, square-blink;
-    animation-fill-mode: both, backwards;
-    animation-duration: var(--footer-shrink-duration), calc(var(--anim-segment) * 3);
-    animation-timing-function: var(--footer-shrink-easing), linear;
-    animation-direction: normal, normal;
-    animation-iteration-count: 1, 3;
-    animation-delay: var(--footer-shrink-delay), 0s;
-}
-
-.intro__footer-square-2,
-.intro__footer-square-3,
-.intro__footer-square-4 {
-    animation-name: fade-in-opacity;
+    animation-name: square-blink;
     animation-fill-mode: backwards;
-    animation-duration: calc(var(--anim-segment) * 0.5);
+    animation-duration: var(--duration-footer-square-1-blink);
     animation-timing-function: linear;
-
-    /* animation-name: footer-square-shrink, footer-square-pop-in;
-    animation-fill-mode: both, backwards;
-    animation-duration: var(--footer-shrink-duration), 0.001s;
-    animation-timing-function: var(--footer-shrink-easing), step-end;
-    animation-direction: normal, normal;
-    animation-iteration-count: 1, 1; */
-}
-
-.intro__footer-square-2 {
-        animation-delay: calc(var(--anim-segment) * 7);
-
-    /* animation-delay: var(--footer-shrink-delay), var(--footer-square-2-pop-delay); */
-}
-
-.intro__footer-square-3 {
-        animation-delay: calc(var(--anim-segment) * 5.5);
-
-    /* animation-delay: var(--footer-shrink-delay), var(--footer-square-3-pop-delay); */
-}
-
-.intro__footer-square-4 {
-        animation-delay: calc(var(--anim-segment) * 4);
-
-    /* animation-delay: var(--footer-shrink-delay), var(--footer-square-4-pop-delay); */
+    animation-direction: normal;
+    animation-iteration-count: infinite;
+    animation-delay: var(--delay-footer-square-1-blink);
 }
 
 @keyframes square-blink {
-    0%, 49.999% {
+    0% {
+        background-color: var(--footer-square-1);
+    }
+
+    9.999% {
+        background-color: var(--footer-square-1);
+    }
+
+    10%, 14.999999999% {
         background-color: var(--footer-square-1-hover);
     }
 
-    50%, 100% {
+    15%, 59.999999999% {
         background-color: var(--footer-square-1);
     }
-}
 
-@keyframes footer-square-pop-in {
-    0%, 49.999% {
-        opacity: 0;
+    60%, 64.999999999% {
+        background-color: var(--footer-square-1-hover);
     }
 
-    50%, 100% {
-        opacity: 1;
-    }
-}
-
-@keyframes footer-square-shrink {
-    0% {
-        width: var(--footer-shrink-start-size);
-        height: var(--footer-shrink-start-size);
-        margin: calc(var(--footer-shrink-margin-start) * -1);
-    }
-
-    100% {
-        width: var(--footer-shrink-end-size);
-        height: var(--footer-shrink-end-size);
-        margin: 0;
-    }
-}
-
-@keyframes footer-rectangle-shrink {
-    0% {
-        height: var(--footer-shrink-start-size);
-        margin-top: calc(var(--footer-shrink-margin-start) * -1);
-        margin-bottom: calc(var(--footer-shrink-margin-start) * -1);
-    }
-
-    100% {
-        height: var(--footer-shrink-end-size);
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-}
-
-@keyframes footer-gap-main-shrink {
-    0% {
-        column-gap: var(--footer-gap-main-start);
-    }
-
-    100% {
-        column-gap: var(--footer-gap-main-end);
-    }
-}
-
-@keyframes footer-gap-inner-shrink {
-    0% {
-        column-gap: var(--footer-gap-inner-start);
-    }
-
-    100% {
-        column-gap: var(--footer-gap-inner-end);
+    65%, 100% {
+        background-color: var(--footer-square-1);
     }
 }
 
@@ -240,9 +191,9 @@ footer>div>div {
 .bg-pattern {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
-    animation-duration: calc(var(--anim-segment) * 15);
+    animation-duration: var(--duration-bg-pattern-fade-in);
     animation-timing-function: var(--ease-out-quad);
-    animation-delay: calc(var(--anim-segment) * 9);
+    animation-delay: var(--delay-bg-pattern-fade-in);
 }
 
 
@@ -250,8 +201,8 @@ footer>div>div {
 
 .intro__logo--animating {
     animation-name: logo-animate;
-    animation-duration: calc(var(--anim-segment) * 2.75);
-    animation-delay: calc(var(--anim-segment) * 8.25);
+    animation-duration: var(--duration-logo-animate);
+    animation-delay: var(--delay-logo-animate);
     animation-timing-function: var(--ease-out-quad);
     animation-fill-mode: backwards;
     transform-origin: center;
@@ -275,17 +226,17 @@ footer>div>div {
 .intro__secondary-title.intro__title--animating>p {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
-    animation-duration: calc(var(--anim-segment) * 5);
+    animation-duration: var(--duration-intro-text-fade-in);
     animation-timing-function: var(--ease-out-quad);
 }
 
 .intro__name--animating .intro__name-frame>p {
-    animation-delay: calc((var(--anim-segment) * 9) + (var(--anim-segment) * var(--i)));
+    animation-delay: calc(var(--delay-intro-name-fade-in) + (var(--anim-segment) * var(--i)));
 }
 
 .intro__primary-title.intro__title--animating>p,
 .intro__secondary-title.intro__title--animating>p {
-    animation-delay: calc((var(--anim-segment) * 9) + (var(--anim-segment) * var(--i)));
+    animation-delay: calc(var(--delay-intro-title-fade-in) + (var(--anim-segment) * var(--i)));
 }
 
 .intro__name--animating,
@@ -300,16 +251,16 @@ footer>div>div {
 
 /* TODO - correct these delay timings i.e. sync with the relevant animation end so the pointer becomes available just after */
 .intro__name--animating {
-    animation-delay: calc(var(--anim-segment) * 16);
+    animation-delay: var(--delay-intro-name-pointer);
 }
 
 .intro__primary-title.intro__title--animating,
 .intro__secondary-title.intro__title--animating {
-    animation-delay: calc(var(--anim-segment) * 20);
+    animation-delay: var(--delay-intro-title-pointer);
 }
 
 .availability--animating {
-    animation-delay: calc(var(--anim-segment) * 18.25);
+    animation-delay: var(--delay-availability-pointer);
 }
 
 @keyframes fade-in-opacity {
@@ -360,16 +311,16 @@ footer>div>div {
 .intro__secondary-title.intro__title--animating .intro__animated-text span,
 .intro__secondary-title.intro__title--animating .intro__animated-text--alt span {
     animation-fill-mode: backwards;
-    animation-duration: calc(var(--anim-segment) * 4);
+    animation-duration: var(--duration-intro-animated-text);
     animation-timing-function: var(--ease-out-quad);
     animation-iteration-count: 1;
-    transition: color calc(var(--anim-segment) * 4) var(--ease-out-quad) calc(var(--anim-segment) * 2);
+    transition: color var(--duration-intro-animated-text) var(--ease-out-quad) calc(var(--anim-segment) * 2);
 }
 
 .intro__primary-title.intro__title--animating .intro__animated-text span,
 .intro__secondary-title.intro__title--animating .intro__animated-text span {
     animation-name: intro-animated-text;
-    animation-delay: calc((var(--anim-segment) * 14) + var(--i) * 0.1s);
+    animation-delay: calc(var(--delay-intro-animated-text) + var(--i) * 0.1s);
 }
 
 @keyframes intro-animated-text {
@@ -385,7 +336,7 @@ footer>div>div {
 .intro__primary-title.intro__title--animating .intro__animated-text--alt span,
 .intro__secondary-title.intro__title--animating .intro__animated-text--alt span {
     animation-name: intro-animated-text-alt;
-    animation-delay: calc((var(--anim-segment) * 15) + var(--i) * 0.1s);
+    animation-delay: calc(var(--delay-intro-animated-text-alt) + var(--i) * 0.1s);
 }
 
 @keyframes intro-animated-text-alt {
@@ -407,16 +358,16 @@ footer>div>div {
 
 .availability--animating .availability__background {
     animation-name: cta-1-animate-init;
-    animation-duration: calc(var(--anim-segment) * 1.5);
-    animation-delay: calc(var(--anim-segment) * 16);
+    animation-duration: var(--duration-availability-background-animate);
+    animation-delay: var(--delay-availability-background-animate);
     animation-timing-function: var(--ease-in-out-quad);
     animation-fill-mode: backwards;
 }
 
 .availability--animating .availability__content {
     animation-name: fade-in-opacity;
-    animation-duration: calc(1.25 * var(--anim-segment));
-    animation-delay: calc(var(--anim-segment) * 17);
+    animation-duration: var(--duration-availability-content-fade-in);
+    animation-delay: var(--delay-availability-content-fade-in);
     animation-timing-function: var(--ease-out-quad);
     animation-fill-mode: backwards;
 }
@@ -439,8 +390,8 @@ footer>div>div {
 
 .menu--animating .menu__background {
     animation-name: cta-2-animate-init;
-    animation-duration: calc(var(--anim-segment) * 1.5);
-    animation-delay: calc(var(--anim-segment) * 17.5);
+    animation-duration: var(--duration-menu-background-animate);
+    animation-delay: var(--delay-menu-background-animate);
     animation-timing-function: var(--ease-in-out-quad);
     animation-fill-mode: backwards;
 }
@@ -449,8 +400,8 @@ footer>div>div {
 .menu--animating .menu__link,
 .menu--animating #menu-toggle {
     animation-name: fade-in-opacity;
-    animation-duration: calc(1.25 * var(--anim-segment));
-    animation-delay: calc((var(--anim-segment) * 18.5) + ((var(--anim-segment) * 0.75) * var(--i)));
+    animation-duration: var(--duration-menu-links-fade-in);
+    animation-delay: calc(var(--delay-menu-links-fade-in) + ((var(--anim-segment) * 0.75) * var(--i)));
     animation-timing-function: var(--ease-out-quad);
     animation-fill-mode: backwards;
 }
@@ -483,36 +434,81 @@ footer>div>div {
 }
 
 .bg-triangle--left {
-    animation-duration: calc(var(--anim-segment) * 18);
-    animation-delay: calc(var(--anim-segment) * 10);
+    animation-duration: var(--duration-bg-triangle-left-fade-in);
+    animation-delay: var(--delay-bg-triangle-left-fade-in);
 }
 
-.bg-triangle--right,
+.bg-triangle--right {
+    animation-duration: var(--duration-bg-triangle-right-fade-in);
+    animation-delay: var(--delay-bg-triangle-right-fade-in);
+}
+
+.bg-triangle--right::after{
+    animation-fill-mode: both;
+    animation-name: triangle-right-after-pulse;
+    animation-duration: var(--duration-triangle-right-after-pulse);
+    animation-timing-function: var(--ease-out-quad);
+    animation-delay: var(--delay-triangle-right-after-pulse);
+}
+
+@keyframes triangle-right-after-pulse {
+    0% {
+        top: calc(2 * 14.6446609406725vh);
+        height: calc(2 * 70.710678118655vh);
+        width: calc(2 * 70.710678118655vh);
+    }
+
+    100% {
+        top: 14.6446609406725vh;
+        height: 70.710678118655vh;
+        width: 70.710678118655vh;
+    }
+}
+
+.bg-triangle--right::before {
+    animation-name: triangle-before-pulse;
+    animation-fill-mode: both;
+    animation-duration: var(--duration-triangle-before-pulse);
+    animation-timing-function: var(--ease-out-quad);
+    animation-delay: var(--delay-triangle-before-pulse);
+}
+
+@keyframes triangle-before-pulse {
+    0% {
+        height: calc(2 * 70.710678118655vh);
+    }
+
+    100% {
+        height: 70.710678118655vh;
+    }
+}
+
+/* .bg-triangle--right,
 .bg-triangle--right-alt {
-    animation-duration: calc(var(--anim-segment) * 14);
-    animation-delay: calc(var(--anim-segment) * 12);
+    animation-duration: var(--duration-bg-triangle-right-fade-in);
+    animation-delay: var(--delay-bg-triangle-right-fade-in);
 }
 
 .bg-triangle--right::after {
-    animation-name: triangle-after-pulse, flicker;
+    animation-name: triangle-right-after-pulse, flicker;
 }
 
 .bg-triangle--right-alt::after {
-    animation-name: triangle-after-pulse, flicker-alt;
+    animation-name: triangle-right-after-pulse, flicker-alt;
 }
 
 .bg-triangle--right::after,
 .bg-triangle--right-alt::after {
     animation-fill-mode: both, forwards;
-    animation-duration: calc(var(--anim-segment) * 20), calc(var(--anim-segment) * 20);
-    animation-delay: calc(var(--anim-segment) * 10), calc(var(--anim-segment) * 20);
+    animation-duration: var(--duration-triangle-right-after-pulse), var(--duration-triangle-flicker);
+    animation-delay: var(--delay-triangle-right-after-pulse), var(--delay-triangle-flicker);
     animation-timing-function: var(--ease-out-quad), linear;
     animation-direction: alternate, normal;
     animation-iteration-count: infinite, infinite;
     will-change: top, height, width, opacity;
 }
 
-@keyframes triangle-after-pulse {
+@keyframes triangle-right-after-pulse {
     0% {
         top: calc(2 * 14.6446609406725vh);
         height: calc(2 * 70.710678118655vh);
@@ -549,9 +545,9 @@ footer>div>div {
 .bg-triangle--right::before {
     animation-name: triangle-before-pulse;
     animation-fill-mode: both;
-    animation-duration: calc(var(--anim-segment) * 20);
+    animation-duration: var(--duration-triangle-before-pulse);
     animation-timing-function: var(--ease-out-quad);
-    animation-delay: calc(var(--anim-segment) * 10);
+    animation-delay: var(--delay-triangle-before-pulse);
 }
 
 @keyframes triangle-before-pulse {
@@ -567,7 +563,7 @@ footer>div>div {
 #profile:target~main .bg-triangle::before,
 #archive:target~main .bg-triangle::before,
 #profile:target~main .bg-triangle::after,
-#archive:target~main .bg-triangle::after,
+#archive:target~main .bg-triangle::after, */
 #profile:target~main footer .intro__footer-rectangle,
 #archive:target~main footer .intro__footer-rectangle,
 #profile:target~main footer .intro__footer-square-1,

@@ -136,7 +136,7 @@
     column-gap: 1rem;
 }
 
-.modal-profile__timezone-live {
+.modal-profile__table dd .modal-profile__timezone-live {
     font-family: 'Chakra Petch', monospace;
     text-transform: uppercase;
     font-weight: 600;
@@ -145,15 +145,38 @@
     line-height: 0.875rem;
 }
 
-.modal-profile__timezone-live::before {
+.modal-profile__table dd .modal-profile__timezone-live::before {
     content: "";
     margin-bottom: -0.025em;
     display: table;
 }
 
-.modal-profile__timezone-live::after {
+.modal-profile__table dd .modal-profile__timezone-live::after {
     content: "";
     margin-top: 0.025em;
+    display: table;
+}
+
+/* Modal Profile - Table Content Text */
+
+.modal-profile__table dd>span,
+.modal-profile__table dd>p {
+    font-size: 1.07143125rem;
+    line-height: 1.625rem;
+    display: inline;
+}
+
+.modal-profile__table dd>span::before,
+.modal-profile__table dd>p::before {
+    content: "";
+    margin-bottom: -0.4333em;
+    display: table;
+}
+
+.modal-profile__table dd>span::after,
+.modal-profile__table dd>p::after {
+    content: "";
+    margin-top: -0.3833em;
     display: table;
 }
 
@@ -166,27 +189,6 @@
 
 .modal-profile__summary>p:last-child {
     padding-bottom: var(--segment-third);
-}
-
-.modal-profile__summary>span,
-.modal-profile__summary>p {
-    font-size: 1.07143125rem;
-    line-height: 1.625rem;
-    display: inline;
-}
-
-.modal-profile__summary>span::before,
-.modal-profile__summary>p::before {
-    content: "";
-    margin-bottom: -0.4333em;
-    display: table;
-}
-
-.modal-profile__summary>span::after,
-.modal-profile__summary>p::after {
-    content: "";
-    margin-top: -0.3833em;
-    display: table;
 }
 
 /* Modal Profile - Tags List */
@@ -207,7 +209,8 @@
     justify-content: center;
     column-gap: 0.25rem;
     border-radius: 999rem;
-    background-color: var(--modal-tag-bg);
+    border: min(2px, 0.125rem) solid var(--modal-tag-bg);
+    /* background-color: var(--modal-tag-bg); */
     padding: 0.609375rem 0.75rem 0.5rem;
 }
 
@@ -252,9 +255,8 @@
 
 /* Modal Profile - Flag Images */
 .modal--profile .modal__body img[alt$="flag"] {
-    border-radius: 0.125rem;
-    width: 1.25rem;
-    height: 0.9375rem;
+    width: 1.5rem;
+    height: 1.5rem;
 }
 
 /* Modal Profile - Deliverables & Tools Section Titles */

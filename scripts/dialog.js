@@ -339,7 +339,11 @@ aria.Dialog = function (dialogId, focusAfterClosed, focusFirst, hash) {
     }
 
     // Remove inert from the target element (with polyfill support)
-    aria.removeInert(this.inertNode)
+    try {
+        aria.removeInert(this.inertNode)
+    } catch (error) {
+        console.error(`Failed to remove inert from dialog "${dialogId}":`, error)
+    }
 
     // Setup focus management
     this.setupFocusElements(focusAfterClosed, focusFirst)

@@ -753,18 +753,22 @@ class HorizontalEdgeScroller {
  */
 class Popup {
     constructor() {
-        this.widthRatio = 0.9
-        this.heightRatio = 0.9
+        // Popup size configuration
+        this.POPUP_SCREEN_WIDTH_RATIO = 0.9
+        this.POPUP_SCREEN_HEIGHT_RATIO = 0.9
+
+        // Aspect ratio thresholds
+        this.ASPECT_RATIO_TALL_THRESHOLD = 0.85
+        this.SQUARE_RATIO_MIN = 0.95
+        this.SQUARE_RATIO_MAX = 1.05
+        this.SQUARE_RATIO_CLASS = 'square-ratio'
+
+        // State management
         this.fallbackContainer = null
         this.wrapperElement = null
         this.stylesInjected = false
         this.handleEscapeKey = null
         this.handleFallbackClick = null
-
-        this.ASPECT_RATIO_TALL_THRESHOLD = 0.85
-        this.SQUARE_RATIO_MIN = 0.95
-        this.SQUARE_RATIO_MAX = 1.05
-        this.SQUARE_RATIO_CLASS = 'square-ratio'
 
         // Static property to track popup blocking across all instances
         if (typeof Popup.isPopupBlocked === 'undefined') {
@@ -1177,8 +1181,8 @@ class Popup {
     }
 
     calculateWindowSize(dimensions) {
-        const screenWidth = screen.availWidth * this.widthRatio
-        const screenHeight = screen.availHeight * this.heightRatio
+        const screenWidth = screen.availWidth * this.POPUP_SCREEN_WIDTH_RATIO
+        const screenHeight = screen.availHeight * this.POPUP_SCREEN_HEIGHT_RATIO
         const imageRatio = dimensions.width / dimensions.height
 
         let width = dimensions.width

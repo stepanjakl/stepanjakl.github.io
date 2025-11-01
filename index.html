@@ -25,6 +25,23 @@
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="color-scheme" content="dark light">
         <meta name="keywords" content="developer, designer">
+        <!-- Open Graph -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://stepanjakl.github.io">
+        <meta property="og:title" content="Štěpán Jákl | Full-stack web developer & interface designer">
+        <meta property="og:description" content="Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.">
+        <meta property="og:image" content="https://stepanjakl.github.io/images/selfie.jpg">
+        <meta property="og:image:width" content="960">
+        <meta property="og:image:height" content="960">
+        <meta property="og:image:alt" content="Profile photo of Štěpán Jákl">
+        <meta property="og:locale" content="en_GB">
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:url" content="https://stepanjakl.github.io">
+        <meta name="twitter:title" content="Štěpán Jákl | Full-stack web developer & interface designer">
+        <meta name="twitter:description" content="Experienced and detail-oriented user interface engineer specializing in crafting intuitive digital solutions.">
+        <meta name="twitter:image" content="https://stepanjakl.github.io/images/selfie.jpg">
+        <meta name="twitter:image:alt" content="Profile photo of Štěpán Jákl">
         <!-- Viewport -->
         <!-- <meta name="viewport"
               content="width=440, shrink-to-fit=yes, viewport-fit=contain"> -->
@@ -57,9 +74,82 @@
         <link rel="stylesheet" href="styles/modal-archive.css">
         <link rel="stylesheet" href="styles/state.css">
         <link rel="stylesheet" href="styles/animation.css">
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "Štěpán Jákl",
+            "url": "https://stepanjakl.github.io",
+            "image": "https://stepanjakl.github.io/images/selfie.jpg",
+            "jobTitle": "Full-stack Web Developer & Interface Designer",
+            "description": "Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions",
+            "nationality": {
+                "@type": "Country",
+                "name": "Czech Republic"
+            },
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Manchester",
+                "addressCountry": "GB"
+            },
+            "alumniOf": {
+                "@type": "EducationalOrganization",
+                "name": "Brock University"
+            },
+            "knowsAbout": [
+                "HTML",
+                "CSS",
+                "JavaScript",
+                "React",
+                "Vue.js",
+                "Alpine.js",
+                "TailwindCSS",
+                "ApostropheCMS",
+                "MongoDB",
+                "UI/UX Design",
+                "Figma",
+                "Framer"
+            ],
+            "sameAs": [
+                "https://www.linkedin.com/in/stepanjakl",
+                "https://github.com/stepanjakl",
+                "https://codepen.io/stepj/pens/public"
+            ]
+        }
+        </script>
         <script defer src="scripts/dialog.js"></script>
         <script defer src="scripts/timeline.js"></script>
         <script defer src="scripts/script.js"></script>
+        <!-- Service Worker Registration -->
+        <!-- <script>
+            // Register service worker for offline support
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then((registration) => {
+                            console.log('[App] ServiceWorker registered:', registration.scope)
+
+                            // Handle updates
+                            registration.addEventListener('updatefound', () => {
+                                const newWorker = registration.installing
+                                console.log('[App] ServiceWorker update found')
+
+                                newWorker.addEventListener('statechange', () => {
+                                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                        console.log('[App] New ServiceWorker available')
+                                        // Optional: Show user a notification about update
+                                        // You can add UI here to prompt user to refresh
+                                    }
+                                })
+                            })
+                        })
+                        .catch((error) => {
+                            console.error('[App] ServiceWorker registration failed:', error)
+                        })
+                })
+            }
+        </script> -->
         <script>
             console.log('%cŠtěpán Jákl | Full-stack developer & interface designer', `border: max(1px, 0.0625rem) solid #4e7bff; border-radius: 0.125rem; color: #4e7bff; font-size: 0.78125rem; padding: 1.40625rem 2.1875rem 1.25rem 2.1875rem; margin: 1.25rem 1.25rem;`)
             console.log('%cThis website uses HTML, CSS, and optional JavaScript for accessibility and a better user experience.', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;')
@@ -116,7 +206,7 @@
                                     <span class="corners__item corners__item--bl"></span>
                                     <span class="corners__item corners__item--br"></span>
                                 </div>
-                                <p style="--i:1">
+                                <p style="--i:0">
                                     <span style="--i:1">Š</span>
                                     <span style="--i:2">t</span>
                                     <span style="--i:3">ě</span>
@@ -125,7 +215,7 @@
                                     <span style="--i:6">n</span>
                                     <span style="--i:7">&nbsp;</span>
                                 </p>
-                                <p style="--i:2">
+                                <p style="--i:1">
                                     <span style="--i:8">J</span>
                                     <span style="--i:9">á</span>
                                     <span style="--i:10">k</span>
@@ -156,18 +246,18 @@
                     </div>
                     <div class="intro__right">
                         <h3 class="intro__title intro__primary-title intro__title--animating">
-                            <p style="--i:3">
+                            <p style="--i:2">
                                 <span>F</span><span>u</span><span>l</span><span>l</span><span>-</span><span>s</span><span>t</span><span>a</span><span>c</span><span>k</span>
                             </p>
-                            <p class="intro__animated-text" style="--i:4">
+                            <p class="intro__animated-text" style="--i:3">
                                 <span>&nbsp;</span><span style="--i:1">d</span><span style="--i:2">e</span><span style="--i:3">v</span><span style="--i:4">e</span><span style="--i:5">l</span><span style="--i:6">o</span><span style="--i:7">p</span><span style="--i:8">e</span><span style="--i:9">r</span>
                             </p>
                         </h3>
                         <h3 class="intro__title intro__secondary-title intro__title--animating">
-                            <p style="--i:5">
+                            <p style="--i:4">
                                 <span>&</span><span>&nbsp;</span><span>i</span><span>n</span><span>t</span><span>e</span><span>r</span><span>f</span><span>a</span><span>c</span><span>e</span>
                             </p>
-                            <p class="intro__animated-text--alt" style="--i:6">
+                            <p class="intro__animated-text--alt" style="--i:5">
                                 <span>&nbsp;</span><span style="--i:1">d</span><span style="--i:2">e</span><span style="--i:3">s</span><span style="--i:4">i</span><span style="--i:5">g</span><span style="--i:6">n</span><span style="--i:7">e</span><span style="--i:8">r</span>
                             </p>
                         </h3>
@@ -422,7 +512,7 @@
                                 </a>
                             </div>
                             <div class="modal__body">
-                                <dl>
+                                <dl class="modal-profile__table">
                                     <dt>
                                         <span>Photo:</span>
                                     </dt>
@@ -484,9 +574,9 @@
                                                aria-label="See where I am from (opens in new tab)">
                                                 <span lang="cs">Czech</span>
                                                 <img alt="Czech flag"
-                                                     src="images/cs-2.svg"
-                                                     width="20"
-                                                     height="15"
+                                                     src="images/cs.svg"
+                                                     width="512"
+                                                     height="512"
                                                      loading="lazy">
                                                 <span class="sr-only">(opens in new tab)</span>
                                             </a>
@@ -498,14 +588,13 @@
                                     <dd>
                                         <span>
                                             <a href="https://www.google.com/maps/place/Manchester"
-                                               class="hover:underline"
                                                target="_blank"
                                                aria-label="See where I currently live (opens in new tab)">
                                                 <span lang="en-GB">Manchester, United Kingdom</span>
                                                 <img alt="United Kingdom flag"
-                                                     src="images/gb-2.svg"
-                                                     width="20"
-                                                     height="15"
+                                                     src="images/gb.svg"
+                                                     width="512"
+                                                     height="512"
                                                      loading="lazy">
                                                 <span class="sr-only">(opens in new tab)</span>
                                             </a>
@@ -519,14 +608,14 @@
                                         <span class="modal-profile__timezone-live" aria-live="polite" aria-atomic="true"></span>
                                         <script>
                                             const liveTimezoneTime = () => {
-                                                document.querySelector('.modal-profile__timezone-live').innerHTML = `(${new Intl.DateTimeFormat([], {
+                                                document.querySelector('.modal-profile__timezone-live').innerHTML = `(${new Intl.DateTimeFormat('de-DE', {
                                                 timeZone: 'Europe/London',
                                                 timeZoneName: 'short',
+                                                day: '2-digit',
+                                                month: '2-digit',
                                                 year: 'numeric',
-                                                month: 'numeric',
-                                                day: 'numeric',
-                                                hour: 'numeric',
-                                                minute: 'numeric'
+                                                hour: '2-digit',
+                                                minute: '2-digit'
                                             }).format(new Date())})`
                                             }
                                             liveTimezoneTime()

@@ -188,6 +188,7 @@
     font-weight: var(--text-lg-font-weight);
     font-size: var(--text-lg-font-size);
     line-height: var(--text-lg-line-height);
+    letter-spacing: var(--text-lg-letter-spacing);
 }
 
 .modal-archive__timeline-section h1::before {
