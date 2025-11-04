@@ -179,7 +179,7 @@ class HorizontalTimeline extends HTMLElement {
                     max-width: 100%;
                     border-radius: 0.75rem;
                     background-color: rgba(0, 91, 102, 0.95);
-                    overflow: clip;
+                    overflow: hidden;
                     contain: content;
                 }
 

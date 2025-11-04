@@ -13,21 +13,21 @@ body {
     --text-xxs_before-margin-bottom: -0.2194em;
     --text-xxs_after-margin-top: -0.1694em;
 
-    --text-xs-font-weight: 500;
+    --text-xs-font-weight: 600;
     --text-xs-font-size: 0.89285625rem;
     --text-xs-line-height: 1rem;
     --text-xs-letter-spacing: 0.15625rem;
     --text-xs_before-margin-bottom: -0.235em;
     --text-xs_after-margin-top: -0.185em;
 
-    --text-sm-font-weight: 400;
+    --text-sm-font-weight: 500;
     --text-sm-font-size: 1.07143125rem;
     --text-sm-line-height: 1.25rem;
     --text-sm-letter-spacing: 0.03125rem;
     --text-sm_before-margin-bottom: -0.2583em;
     --text-sm_after-margin-top: -0.2083em;
 
-    --text-md-font-weight: 300;
+    --text-md-font-weight: 400;
     --text-md-font-size: 1.7857125rem;
     --text-md-line-height: 2rem;
     --text-md-letter-spacing: 0.040625rem;
@@ -51,6 +51,12 @@ body {
 
 @media (min-width: 45rem) {
     body {
+        --text-xs-font-weight: 500;
+
+        --text-sm-font-weight: 400;
+
+        --text-md-font-weight: 300;
+
         --text-lg-font-weight: 200;
         --text-lg-letter-spacing: normal;
 
@@ -167,20 +173,6 @@ body {
 
 .text-xl::after {
     margin-top: var(--text-xl_after-margin-top);
-}
-
-.text-p {
-    font-size: 1.07143125rem;
-    line-height: 1.625rem;
-    display: inline;
-}
-
-.text-p::before {
-    margin-bottom: -0.4333em;
-}
-
-.text-p::after {
-    margin-top: -0.3833em;
 }
 
 

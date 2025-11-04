@@ -96,12 +96,18 @@
     display: inline-flex;
     font-family: 'Chakra Petch', monospace;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.25rem;
     font-size: 0.80356875rem;
     line-height: 0.5625rem;
     padding-top: 0.125rem;
     vertical-align: top;
+}
+
+@media (min-width: 45rem) {
+    .modal--profile .modal__body dt span {
+        font-weight: 600;
+    }
 }
 
 .modal--profile .modal__body dt span::before {
@@ -163,7 +169,16 @@
 .modal-profile__table dd>p {
     font-size: 1.07143125rem;
     line-height: 1.625rem;
+    font-weight: 500;
     display: inline;
+}
+
+@media (min-width: 45rem) {
+
+    .modal-profile__table dd>span,
+    .modal-profile__table dd>p {
+        font-weight: 400;
+    }
 }
 
 .modal-profile__table dd>span::before,
@@ -281,6 +296,13 @@
     height: 50vh;
     transform: none !important;
     margin-top: calc(var(--segment) * -1);
+    display: none;
+}
+
+@media (min-width: 45rem) {
+    .modal-profile__footer-art {
+        display: block;
+    }
 }
 
 .modal-profile__footer-art-gradient {

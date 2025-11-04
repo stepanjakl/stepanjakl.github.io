@@ -239,7 +239,7 @@
     border-width: max(1px, 0.0625rem);
 }
 
-/* Mobile-first: Collapsible timeline sections on small screens */
+/* Collapsible timeline sections on small screens */
 #timeline-section-year-2024-21:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2024-21"],
 #timeline-section-year-2021-19:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2021-19"],
 #timeline-section-year-2019-18:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2019-18"],
@@ -265,27 +265,11 @@
 }
 
 @media (min-width: 45rem) {
-    #timeline-section-year-2024-21:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2024-21"],
-    #timeline-section-year-2021-19:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2021-19"],
-    #timeline-section-year-2019-18:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2019-18"],
-    #timeline-section-year-elsewhen:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="elsewhen"] {
-        visibility: visible;
-        opacity: 1;
-        height: auto;
-        padding: revert;
-    }
-
-    #timeline-section-year-2024-21:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2024-21"] svg:first-child,
-    #timeline-section-year-2021-19:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2021-19"] svg:first-child,
-    #timeline-section-year-2019-18:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2019-18"] svg:first-child,
-    #timeline-section-year-elsewhen:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="elsewhen"] svg:first-child {
-        display: block;
-    }
-
-    #timeline-section-year-2024-21:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2024-21"] svg:nth-child(2),
-    #timeline-section-year-2021-19:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2021-19"] svg:nth-child(2),
-    #timeline-section-year-2019-18:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2019-18"] svg:nth-child(2),
-    #timeline-section-year-elsewhen:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="elsewhen"] svg:nth-child(2) {
-        display: block;
+    .modal-archive__timeline-grid [data-timeline-section] {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        height: auto !important;
+        padding: revert !important;
     }
 }

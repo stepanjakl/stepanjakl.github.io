@@ -147,10 +147,16 @@ main {
 
 main>figure {
     position: relative;
-    padding-top: var(--segment-half);
-    padding-bottom: var(--segment-half);
+    padding-top: 1.75rem;
+    /* padding-bottom: 1.75rem; */
     width: 100%;
-    /* max-width: 67.5rem; TODO set responsive max-width for bigger screens */
+}
+
+@media (min-width: 45rem) {
+    main>figure {
+        padding-top: var(--segment-half);
+        padding-bottom: var(--segment-half);
+    }
 }
 
 
@@ -292,9 +298,13 @@ body {
 /* Root font-size */
 
 :root {
-    /* font-size: 0.75rem; */
-    /* font-size: 0.8125rem; */
-    font-size: 0.875rem;
+    font-size: 0.75rem;
+}
+
+@media (min-width: 25rem) {
+    :root {
+        font-size: 0.875rem;
+    }
 }
 
 @media (min-width: 45rem) {
@@ -359,17 +369,17 @@ body, main {
 .intro {
     position: relative;
     z-index: 1;
-    padding-left: var(--segment-half);
-    padding-bottom: var(--segment);
+    padding-left: 1.75rem;
     display: grid;
     grid-template-columns: auto;
-    row-gap: calc(4.75rem + 0.1875rem);
+    row-gap: 3.75rem;
     max-width: var(--breakpoint-xl);
     margin: auto;
 }
 
-@media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
+@media (min-width: 45rem) {
     .intro {
+        padding-left: var(--segment-half);
         padding-top: calc((var(--segment) * 1.5) - var(--segment-quarter) - max(1px, 0.0625rem));
         padding-bottom: var(--segment-half);
         grid-template-columns: calc(var(--segment) * 4) min-content;
@@ -379,7 +389,7 @@ body, main {
 }
 
 @media (min-width: 50rem) {
-.intro {
+    .intro {
         grid-template-columns: calc(var(--segment) * 5) min-content;
     }
 }
@@ -391,13 +401,6 @@ body, main {
     }
 }
 
-/* Mobile-first: Taller viewports get extra padding */
-@media (min-width: 67.5rem) and (min-height: 50rem) {
-    .intro {
-        padding-top: calc((var(--segment) * 2.5) - var(--segment-quarter) - max(1px, 0.0625rem));
-    }
-}
-
 
 /* Intro - Left Column */
 
@@ -405,11 +408,11 @@ body, main {
     display: flex;
     flex-direction: column-reverse;
     align-items: start;
-    row-gap: calc(var(--segment) * 1.6);
+    row-gap: calc(4.75rem - max(1px, 0.0625rem));
     justify-content: space-between;
 }
 
-@media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
+@media (min-width: 45rem) {
     .intro__left {
         row-gap: 0;
         flex-direction: column;
@@ -465,11 +468,7 @@ body, main {
     display: table;
 }
 
-@media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
-    .intro__name-frame>p[style*="--i:2"] {
-        flex-basis: 100%;
-        height: 0;
-    }
+@media (min-width: 45rem) {
 
     .intro__name-frame>p>span[style*="--i:8"] {
         padding-top: var(--segment-quarter);
@@ -492,11 +491,6 @@ body, main {
 }
 
 @media (min-width: 60rem) {
-    .intro__name-frame>p[style*="--i:2"] {
-        flex-basis: unset;
-        height: unset;
-    }
-
     .intro__name-frame>p>span[style*="--i:8"] {
         padding-top: unset;
     }
@@ -584,13 +578,13 @@ body, main {
 .intro__secondary-title span {
     display: inline-block;
     font-family: "Newsreader";
-    font-weight: 600;
+    font-weight: 400;
     font-style: italic;
     font-size: 2.985075rem;
     line-height: 4rem;
     padding: 0.0624375rem 0.625rem 0 0.625rem;
     margin: 0 -0.625rem;
-    letter-spacing: 0.03125rem;
+    letter-spacing: 0.046875rem;
     /* font-variation-settings: "opsz" 24; */
 }
 
@@ -618,15 +612,21 @@ body, main {
 
 .availability {
     --availability-border-radius: 0.75rem;
-    padding-top: calc(var(--segment) + max(1px, 0.0625rem));
+    padding-top: calc(3.5rem + max(1px, 0.0625rem));
 }
 
 .availability__button {
     position: relative;
     display: flex;
-    overflow: clip;
-    padding: 0.6875rem 0.9375rem;
+    overflow: hidden;
+    padding: 0.8125rem 1.125rem;
     border-radius: var(--availability-border-radius);
+}
+
+@media (min-width: 45rem) {
+    .availability__button {
+        padding: 0.6875rem 0.9375rem;
+    }
 }
 
 .availability__content {
@@ -646,7 +646,7 @@ body, main {
     background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.035) 0.5rem, transparent 0.5rem, transparent 1rem);
 }
 
-@media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
+@media (min-width: 45rem) {
     .availability {
         padding-top: var(--segment);
     }
@@ -696,7 +696,7 @@ body, main {
 
 .availability__text {
     font-family: 'Chakra Petch', monospace;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--blue-full-95);
     letter-spacing: 0.375rem;
     font-size: 0.89285625rem;
@@ -704,6 +704,13 @@ body, main {
     text-transform: uppercase;
     white-space: nowrap;
     user-select: none;
+}
+
+@media (min-width: 45rem) {
+    .availability__text {
+        font-weight: 600;
+        /* letter-spacing: 0.5rem; */
+    }
 }
 
 .availability__text::before {
@@ -726,13 +733,13 @@ body, main {
     pointer-events: none;
     z-index: 2;
     inset: 0;
-    overflow: hidden;
     padding: calc(var(--segment) / 5);
+    overflow: hidden;
     scroll-behavior: smooth;
     overscroll-behavior: none;
 }
 
-@media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
+@media (min-width: 45rem) {
     .modal {
         padding: var(--segment-quarter);
     }
@@ -767,19 +774,24 @@ body, main {
     contain: layout style paint;
 }
 
+.modal__content>* {
+    transform: translateY(calc((var(--segment) / 5) * -1));
+}
+
 .modal__content::before {
     content: "";
     position: absolute;
     inset: 0;
-    background-image: linear-gradient(to bottom right in oklch, var(--modal-bg-blur)), url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='13.25' y='13.25' width='1.5' height='1.5' fill='%23FFFF' fill-opacity='0.075'/%3E%3C/svg%3E%0A");
+    background-image: linear-gradient(to bottom right in oklch, var(--modal-bg-blur)), url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='13.25' y='13.25' width='1.5' height='1.5' fill='%23FFFF' fill-opacity='0.1'/%3E%3C/svg%3E%0A");
     background-repeat: repeat;
     background-origin: content-box;
     background-position: 100% 0%;
     backdrop-filter: saturate(1.25) blur(3rem);
     -webkit-backdrop-filter: saturate(1.25) blur(3rem);
+    z-index: -1;
 }
 
-@media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
+@media (min-width: 45rem) {
     .modal__content {
         padding-top: var(--segment-quarter);
     }
@@ -812,8 +824,15 @@ body, main {
 /* Modal - Body */
 
 .modal__body {
+    --modal-margin-bottom: var(--segment-half);
     margin-right: calc(var(--modal-button-size) + var(--modal-button-inset) + (var(--segment) / 5));
-    margin-bottom: var(--segment-half);
+    margin-bottom: var(--modal-margin-bottom);
+}
+
+@media (min-width: 45rem) {
+    .modal__body {
+        --modal-margin-bottom: var(--segment);
+    }
 }
 
 .modal__body a svg {
@@ -877,14 +896,26 @@ body {
 }
 
 .underlay--menu {
-    backdrop-filter: blur(0.375rem);
-    -webkit-backdrop-filter: blur(0.375rem);
+    backdrop-filter: blur(0.75rem);
+    -webkit-backdrop-filter: blur(0.75rem);
 }
 
 .underlay--modal {
     background-color: var(--modal-underlay-bg);
-    backdrop-filter: blur(0.5rem);
-    -webkit-backdrop-filter: blur(0.5rem);
+    backdrop-filter: blur(1rem);
+    -webkit-backdrop-filter: blur(1rem);
+}
+
+@media (min-width: 45rem) {
+    .underlay--menu {
+        backdrop-filter: blur(0.375rem);
+        -webkit-backdrop-filter: blur(0.375rem);
+    }
+
+    .underlay--modal {
+        backdrop-filter: blur(0.5rem);
+        -webkit-backdrop-filter: blur(0.5rem);
+    }
 }
 
 
@@ -965,7 +996,7 @@ body {
     align-self: flex-start;
 }
 
-@media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
+@media (min-width: 45rem) {
     .intro__logo {
         margin-top: 0;
     }
@@ -1050,7 +1081,7 @@ body {
     position: absolute;
     right: 0;
     top: 0;
-    height: calc(2 * 70.710678118655vh);
+    /* height: calc(2 * 70.710678118655vh); */
     width: 8vh;
     transform: rotate(45deg);
     transform-origin: top right;
@@ -1060,10 +1091,10 @@ body {
 .bg-triangle--right::after {
     content: "";
     position: absolute;
-    top: calc(2 * 14.6446609406725vh);
+    /* top: calc(2 * 14.6446609406725vh); */
     right: 0;
-    height: calc(2 * 70.710678118655vh);
-    width: calc(2 * 70.710678118655vh);
+    /* height: calc(2 * 70.710678118655vh); */
+    /* width: calc(2 * 70.710678118655vh); */
     transform-origin: center;
     transform: translateX(50%) rotate(45deg);
     background-image: linear-gradient(to top in oklch, var(--triangle));
@@ -1073,10 +1104,10 @@ body {
 .bg-triangle--right-alt::after {
     content: "";
     position: absolute;
-    top: calc(2 * 14.6446609406725vh);
+    /* top: calc(2 * 14.6446609406725vh); */
     right: 0;
-    height: calc(2 * 70.710678118655vh);
-    width: calc(2 * 70.710678118655vh);
+    /* height: calc(2 * 70.710678118655vh); */
+    /* width: calc(2 * 70.710678118655vh); */
     transform-origin: center;
     transform: translateX(50%) rotate(45deg);
     background-image: linear-gradient(to top in oklch, var(--triangle-alt));
@@ -1440,8 +1471,6 @@ body {
     padding: 0.5625rem;
     border-radius: 0.375rem;
     background-color: var(--context-bg);
-    /* background-image: url("data:image/svg+xml,%3Csvg width='5' height='5' viewBox='0 0 5 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='2' y='2' width='1' height='1' fill='%23333d3f' fill-opacity='0.5'/%3E%3C/svg%3E%0A"); */
-    /* background-position: 0 0; */
     background-image:
         radial-gradient(circle at 0.046875rem 0.046875rem, #333d3f65 0.046875rem, transparent 0.046875rem),
         radial-gradient(circle at 0.046875rem 0.046875rem, #333d3f65 0.046875rem, transparent 0.046875rem);
@@ -1453,8 +1482,8 @@ body {
     text-align: center;
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--context-border-dark);
     border: solid max(1px, 0.0625rem) var(--context-border-light);
-    backdrop-filter: blur(0.1875rem);
-    -webkit-backdrop-filter: blur(0.1875rem);
+    backdrop-filter: blur(0.625rem);
+    -webkit-backdrop-filter: blur(0.625rem);
     pointer-events: none;
     line-height: 0;
     white-space: nowrap;
@@ -1542,13 +1571,18 @@ body {
 /* Footer */
 
 footer {
-    /* height: calc(0.75rem + var(--segment)); */
-    left: 0;
-    right: 0;
-    bottom: 0;
-    position: fixed;
+    position: relative;
     z-index: 1;
-    user-select: none;
+    pointer-events: none;
+}
+
+@media (min-width: 45rem) {
+    footer {
+        left: 0;
+        right: 0;
+        bottom: 0;
+        position: fixed;
+    }
 }
 
 footer::before {
@@ -1556,17 +1590,25 @@ footer::before {
     position: absolute;
     z-index: -1;
     inset: 0;
-    background: linear-gradient(to top in oklch, var(--background), rgba(0, 20, 23, 0));
+    background: linear-gradient(180deg, rgba(0, 20, 23, 0) 0%, rgba(0, 20, 23, 0.000296296) 0.03%, rgba(0, 20, 23, 0.00237037) 0.24%, rgba(0, 20, 23, 0.008) 0.8%, rgba(0, 20, 23, 0.018963) 1.9%, rgba(0, 20, 23, 0.037037) 3.7%, rgba(0, 20, 23, 0.064) 6.4%, rgba(0, 20, 23, 0.10163) 10.16%, rgba(0, 20, 23, 0.151704) 15.17%, rgba(0, 20, 23, 0.216) 21.6%, rgba(0, 20, 23, 0.296296) 29.63%, rgba(0, 20, 23, 0.39437) 39.44%, rgba(0, 20, 23, 0.512) 51.2%, rgba(0, 20, 23, 0.650963) 65.1%, rgba(0, 20, 23, 0.813037) 81.3%, #001417 100%);
+    /* 0.00, 0.00, 0.00, 1.00 */
 }
 
 footer>div {
     display: flex;
-    padding: calc(var(--segment) / 2);
+    padding: calc(var(--segment) * 0.75) 1.75rem var(--segment-half) 1.75rem;
     width: 100%;
     height: 100%;
     column-gap: 1.125rem;
     max-width: var(--breakpoint-xl);
     margin: auto;
+    pointer-events: none;
+}
+
+@media (min-width: 45rem) {
+    footer>div {
+        padding: calc(var(--segment) * 0.75) var(--segment-half) var(--segment-half) var(--segment-half);
+    }
 }
 
 footer>div>div {
@@ -1594,10 +1636,11 @@ footer>div>div {
 
 .intro__footer-square-1 {
     background-color: var(--footer-square-1);
+    pointer-events: auto;
 }
 
 .intro__footer-square-1:hover {
-    background-color: var(--footer-square-1-hover);
+    background-color: var(--footer-square-1-hover) !important;
 }
 
 .intro__footer-square-2 {
@@ -1621,6 +1664,7 @@ footer>div>div {
 /* Images - Dark mode */
 
 @media (prefers-color-scheme: dark) {
+
     .modal__content img,
     .hover-cards img,
     .modal-profile__photo {

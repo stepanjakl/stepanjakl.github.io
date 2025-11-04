@@ -759,6 +759,7 @@ class Popup {
 
         // Aspect ratio thresholds
         this.ASPECT_RATIO_TALL_THRESHOLD = 0.85
+        this.TALL_RATIO_CLASS = 'tall-ratio'
         this.SQUARE_RATIO_MIN = 0.95
         this.SQUARE_RATIO_MAX = 1.05
         this.SQUARE_RATIO_CLASS = 'square-ratio'
@@ -891,6 +892,7 @@ class Popup {
         const wrapper = this.wrapperElement
 
         // Reset wrapper state
+        wrapper.classList.remove(this.TALL_RATIO_CLASS)
         wrapper.classList.remove(this.SQUARE_RATIO_CLASS)
 
         // Build content based on media type
@@ -904,10 +906,12 @@ class Popup {
             fragment.appendChild(overlay)
         }
 
-        // Handle square ratio for images
+        // Handle square and tall ratio for images
         if (!isVideo && dimensions) {
             const aspectRatio = dimensions.width / dimensions.height
-            if (aspectRatio >= this.SQUARE_RATIO_MIN && aspectRatio <= this.SQUARE_RATIO_MAX) {
+            if (aspectRatio < this.ASPECT_RATIO_TALL_THRESHOLD) {
+                wrapper.classList.add(this.TALL_RATIO_CLASS)
+            } else if (aspectRatio >= this.SQUARE_RATIO_MIN && aspectRatio <= this.SQUARE_RATIO_MAX) {
                 wrapper.classList.add(this.SQUARE_RATIO_CLASS)
             }
         }
@@ -929,9 +933,9 @@ class Popup {
             if (placeholderUrl) {
                 placeholder = document.createElement('img')
                 placeholder.src = placeholderUrl
-                placeholder.style.position = 'absolute'
-                placeholder.style.inset = '0'
-                placeholder.style.margin = 'auto'
+                // placeholder.style.position = 'absolute'
+                // placeholder.style.inset = '0'
+                // placeholder.style.margin = 'auto'
                 placeholder.style.transition = 'opacity 0.3s linear'
                 placeholder.style.opacity = '0'
 
@@ -1013,7 +1017,7 @@ class Popup {
         button.className = 'media_fallback-close-button'
         button.setAttribute('aria-label', 'Close')
         button.type = 'button'
-        button.innerHTML = '<svg class="fill-current" style="width: 1.125rem; height: 1.125rem"><use xlink:href="images/icons.svg#close"></use></svg>'
+        button.innerHTML = '<svg style="fill: currentColor; width: 1.125rem; height: 1.125rem"><use xlink:href="images/icons.svg#close"></use></svg>'
         return button
     }
 
@@ -1048,23 +1052,59 @@ class Popup {
                 width: 100%;
                 height: auto;
                 min-height: 100%;
-            }
-            .media_fallback-content.square-ratio {
-                height: 100%;
-                min-height: auto;
-                align-items: center;
-                justify-content: center;
+                // background-color: rgba(0, 0, 0, 0.5);
+                // animation: fade-in-opacity var(--anim-segment) var(--ease-out-quad);
             }
             .media_fallback-content img {
-                position: relative;
-                margin: auto;
-                width: 100%;
+                position: absolute;
+                width: auto;
                 height: auto;
+                max-width: 100svh;
+                max-height: 100svw;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(-90deg);
+                transform-origin: center center;
                 opacity: 1;
             }
+            @media (min-width: 45rem) {
+                .media_fallback-content img {
+                    position: relative;
+                    width: 100%;
+                    height: auto;
+                    max-width: 100%;
+                    margin: auto;
+                    top: 0;
+                    left: 0;
+                    transform: none;
+                }
+                .media_fallback-content img:nth-child(2) {
+                    position: absolute;
+                    inset: 0;
+                }
+            }
+            .media_fallback-content.square-ratio {
+                height: auto;
+            }
             .media_fallback-content.square-ratio img {
+                position: absolute;
                 width: auto;
-                height: 100%;
+                height: auto;
+                max-height: 100vh;
+                max-width: 100vw;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+            .media_fallback-content.tall-ratio img {
+                position: relative;
+                width: 100%;
+                height: auto;
+                max-width: 100%;
+                max-height: none;
+                top: 0;
+                left: 0;
+                transform: none;
             }
             .media_fallback-content video {
                 position: relative;
@@ -1112,7 +1152,6 @@ class Popup {
                 inset: 0;
                 border-radius: 50%;
                 background: rgba(255, 255, 255, 0.15);
-                mix-blend-mode: lighten;
                 transition: background-color 200ms linear;
             }
             .media_fallback-close-button:hover::after {

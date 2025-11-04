@@ -66,13 +66,29 @@ body {
 
     --duration-footer-fade-in: calc(var(--anim-segment) * 10);
     --delay-footer-fade-in: calc(var(--anim-segment) * 12.75);
-    --duration-rectangle-mask-animate: 20s;
+    --duration-rectangle-mask-animate: 10s;
     --delay-rectangle-bg-animate: calc(var(--anim-segment) * 12.75);
     --delay-rectangle-mask-animate: calc(var(--anim-segment) * 22.75);
-    --duration-rectangle-bg-animate: 120s;
-    --duration-footer-square-1-blink: 20s;
+    --duration-rectangle-bg-animate: 45s;
+    --duration-footer-square-1-blink: 10s;
     --delay-footer-square-1-blink: calc(var(--anim-segment) * 22.75);
 
+}
+
+@media (min-width: 45rem) {
+    body {
+        --duration-rectangle-mask-animate: 15s;
+        --duration-footer-square-1-blink: 15s;
+        --duration-rectangle-bg-animate: 90s;
+    }
+}
+
+@media (min-width: 75rem) {
+    body {
+        --duration-rectangle-mask-animate: 20s;
+        --duration-footer-square-1-blink: 20s;
+        --duration-rectangle-bg-animate: 120s;
+    }
 }
 
 .skip-animation {
@@ -82,7 +98,7 @@ body {
 
 /* Intro - Footer - Rectangle */
 
-footer {
+footer>* {
     animation-name: fade-in-opacity;
     animation-fill-mode: backwards;
     animation-duration: var(--duration-footer-fade-in);
@@ -443,6 +459,24 @@ footer {
     animation-delay: var(--delay-bg-triangle-right-fade-in);
 }
 
+.bg-triangle--right::before {
+    animation-name: triangle-before-pulse;
+    animation-fill-mode: both;
+    animation-duration: var(--duration-triangle-before-pulse);
+    animation-timing-function: var(--ease-out-quad);
+    animation-delay: var(--delay-triangle-before-pulse);
+}
+
+@keyframes triangle-before-pulse {
+    0% {
+        height: calc(2 * 70.710678118655vh);
+    }
+
+    100% {
+        height: calc(1.25 * 70.710678118655vh);
+    }
+}
+
 .bg-triangle--right::after{
     animation-fill-mode: both;
     animation-name: triangle-right-after-pulse;
@@ -459,27 +493,9 @@ footer {
     }
 
     100% {
-        top: 14.6446609406725vh;
-        height: 70.710678118655vh;
-        width: 70.710678118655vh;
-    }
-}
-
-.bg-triangle--right::before {
-    animation-name: triangle-before-pulse;
-    animation-fill-mode: both;
-    animation-duration: var(--duration-triangle-before-pulse);
-    animation-timing-function: var(--ease-out-quad);
-    animation-delay: var(--delay-triangle-before-pulse);
-}
-
-@keyframes triangle-before-pulse {
-    0% {
-        height: calc(2 * 70.710678118655vh);
-    }
-
-    100% {
-        height: 70.710678118655vh;
+        top: calc(1.25 * 14.6446609406725vh);
+        height: calc(1.25 * 70.710678118655vh);
+        width: calc(1.25 * 70.710678118655vh);
     }
 }
 
@@ -1012,7 +1028,7 @@ body {
 .menu__button {
     z-index: 2;
     transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, box-shadow var(--animate-out-segment-2\/3) linear, border-radius var(--animate-out-segment) var(--ease-in-quad);
-    overflow: clip;
+    overflow: hidden;
     contain: content;
 }
 
@@ -1238,7 +1254,7 @@ body {
     transition: opacity calc(1.25 * var(--animate-out-segment)) var(--ease-in-quad), transform calc(1.25 * var(--animate-out-segment)) var(--ease-in-quad), visibility 0s calc(1.25 * var(--animate-out-segment));
 }
 
-@media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
+@media (min-width: 45rem) {
     #menu-dropdown {
         transform: translateX(-0.25rem) scale(0.975);
         transform-origin: bottom right;
@@ -1353,7 +1369,7 @@ body {
     transform-origin: center;
 }
 
-@media (min-width: 45rem) and (min-aspect-ratio: 3/4) {
+@media (min-width: 45rem) {
     .intro__left, .intro__right {
         transform-origin: top;
     }
@@ -1387,13 +1403,13 @@ footer>div {
     -webkit-backdrop-filter: none;
 }
 
-.modal-archive__timeline-grid [data-timeline-section] {
-    transition: opacity var(--animate-out-segment) linear, padding var(--animate-out-segment) var(--ease-in-quad), height var(--animate-out-segment) var(--ease-in-quad);
+/* .modal-archive__timeline-grid [data-timeline-section] {
+    transition: opacity var(--animate-out-segment) linear, padding var(--animate-out-segment) var(--ease-in-quad), height var(--animate-out-segment) var(--ease-in-quad), visibility var(--animate-out-segment) var(--ease-in-quad) var(--animate-out-segment);
 }
 
 input[id^="timeline-section-year-"]:checked~.modal-archive__timeline-grid [data-timeline-section] {
     transition: opacity var(--animate-in-segment) linear, padding var(--animate-in-segment) var(--ease-out-quad), height var(--animate-in-segment) var(--ease-out-quad);
-}
+} */
 
 /* .modal-archive__timeline-grid [data-timeline-section-title]>div label:hover+div svg {} */
 
