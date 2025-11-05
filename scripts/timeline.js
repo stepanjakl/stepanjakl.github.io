@@ -180,7 +180,6 @@ class HorizontalTimeline extends HTMLElement {
                     border-radius: 0.75rem;
                     background-color: rgba(0, 91, 102, 0.95);
                     overflow: hidden;
-                    contain: content;
                 }
 
                 horizontal-timeline:hover #timeline-wrapper {

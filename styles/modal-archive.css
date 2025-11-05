@@ -411,7 +411,8 @@
 }
 
 @media (min-width: 45rem) {
-    .modal-archive__timeline-section nav li:nth-child(2) {
+    .modal-archive__timeline-section nav li:nth-child(2),
+    .modal-archive__timeline-section nav li:nth-child(2) p {
         margin-left: 0;
     }
 }
@@ -421,6 +422,7 @@
     font-family: 'Chakra Petch', monospace;
     font-size: 0.98214375rem;
     line-height: 1.625rem;
+    letter-spacing: 0.0234375rem;
     font-weight: 500;
     white-space: nowrap;
 }
@@ -477,7 +479,6 @@
         gap: calc(var(--gap-ratio) * 100%);
         flex-direction: row;
         overflow: hidden;
-        contain: content;
     }
 }
 
@@ -502,7 +503,7 @@
 }
 
 .hover-cards>figure:hover,
-.hover-cards>figure:has(a:focus-visible) {
+.hover-cards>figure:focus-within {
     --effective-width: calc(var(--container-aspect-w) - ((var(--items) - 1) * var(--gap-ratio) * var(--container-aspect-w)));
     flex-grow: calc(((var(--items) - 1) * var(--aspect-w) * var(--container-aspect-h)) / (var(--aspect-h) * var(--effective-width) - var(--aspect-w) * var(--container-aspect-h)));
 }
@@ -597,7 +598,6 @@
 [data-carousel-slides-wrapper] {
     position: relative;
     overflow: hidden;
-    contain: content;
 }
 
 [data-carousel-slides] {

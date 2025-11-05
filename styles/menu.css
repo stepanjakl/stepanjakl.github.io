@@ -470,11 +470,18 @@ body {
     align-items: center;
     width: auto;
     margin: 0 max(1px, 0.0625rem);
-    padding: 0.75rem 1.125rem 0.625rem 1rem;
+    padding: 0.875rem 2rem 0.75rem 1.125rem;
     box-shadow: 0 min(-1px, -0.0625rem) 0 0 var(--context-border-light-2);
     border-top: solid max(1px, 0.0625rem) var(--context-border-dark-2);
     user-select: none;
     -webkit-user-select: none;
+}
+
+@media (min-width: 45rem) {
+    #menu-dropdown a,
+    #menu-dropdown label {
+        padding: 0.75rem 1.125rem 0.625rem 1rem;
+    }
 }
 
 #menu-dropdown a span,

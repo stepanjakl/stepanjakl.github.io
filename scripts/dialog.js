@@ -238,29 +238,17 @@ aria.getCurrentDialog = () => aria.OpenDialogList[aria.OpenDialogList.length - 1
 
 /**
  * Close the current dialog if one exists
+ * @param {string} hash - Optional hash to set after closing
  * @returns {boolean} True if a dialog was closed, false otherwise
  */
-aria.closeCurrentDialog = () => {
+aria.closeCurrentDialog = (hash) => {
     const currentDialog = aria.getCurrentDialog()
     if (currentDialog) {
-        currentDialog.close()
+        currentDialog.close(hash)
         return true
     }
     return false
 }
-
-/**
- * Handle escape key press to close dialogs
- * @param {KeyboardEvent} event - The keyboard event
- */
-aria.handleEscape = (event) => {
-    const key = event.which || event.keyCode
-    if (key === 27 && aria.closeCurrentDialog()) {
-        event.stopPropagation()
-    }
-}
-
-document.addEventListener('keyup', aria.handleEscape)
 
 /**
  * Add or retrieve backdrop element for a dialog

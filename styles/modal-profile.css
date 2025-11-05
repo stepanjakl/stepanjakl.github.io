@@ -242,8 +242,15 @@
 .modal-profile__tags span {
     font-family: 'Chakra Petch', monospace;
     font-size: 0.98214375rem;
+    letter-spacing: 0.0234375rem;
     line-height: 1.625rem;
-    font-weight: 400;
+    font-weight: 500;
+}
+
+@media (min-width: 45rem) {
+    .modal-profile__tags span {
+        font-weight: 400;
+    }
 }
 
 .modal-profile__tags span::before {

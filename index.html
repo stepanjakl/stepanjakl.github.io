@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <style>main { opacity: 0; }</style>
         <!-- GlitchTip -->
         <script src="https://browser.sentry-cdn.com/8.25.0/bundle.min.js"
                 crossorigin="anonymous"></script>
@@ -121,14 +122,6 @@
         <script defer src="scripts/dialog.js"></script>
         <script defer src="scripts/timeline.js"></script>
         <script defer src="scripts/script.js"></script>
-        <script>
-            console.log('%cŠtěpán Jákl | Full-stack developer & interface designer', `border: max(1px, 0.0625rem) solid #4e7bff; border-radius: 0.125rem; color: #4e7bff; font-size: 0.78125rem; padding: 1.40625rem 2.1875rem 1.25rem 2.1875rem; margin: 1.25rem 1.25rem;`)
-            console.log('%cThis website uses HTML, CSS, and optional JavaScript for accessibility and a better user experience.', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;')
-            console.log('%cThe goal was to create a fast, pixel-perfect, and responsive site.', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;')
-            console.log('%cNo frameworks, no compilers, no site generators. Only pure joy.', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;')
-            /* console.log('%cMade with tears, stress and anxiety. Just joking, of course it was crafted with love ;-)', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;') */
-            console.log('%cInterested in working together? Reach out to me via email at %cstepan.jakl@icloud.com', 'color: #4e7bff; margin: 0.9375rem 0 0.9375rem 1.25rem;', 'color: #4e7bff; text-decoration: underline;')
-        </script>
     </head>
 
     <body>
@@ -167,7 +160,7 @@
                             tabindex="0"
                             onkeypress="this.click()"
                             oncontextmenu="if ('speechSynthesis' in window) { let msg = new SpeechSynthesisUtterance(); msg.volume= 0.25; msg.lang = 'cs-CZ'; msg.voice = speechSynthesis.getVoices().filter(voice => voice.name === 'Zuzana')[0]; msg.text = 'Štěpán Jákl'; speechSynthesis.speak(msg) }"
-                            onclick="handleTouchButtonClick(this, event, () => { navigator?.clipboard?.writeText('Štěpán Jákl'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip__text--bottom span'), this, 'Copied to the clipboard') }, true)"
+                            onclick="App.handleTouchButtonClick(this, event, () => { copyToClipboard('Štěpán Jákl'); App.textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip__text--bottom span'), this, 'Copied to the clipboard') }, true)"
                             role="button"
                             aria-label="Click to copy name to clipboard">
                             <div class="intro__name-frame" aria-hidden="true">
@@ -236,7 +229,7 @@
                             <div class="tooltip">
                                 <a href="https://cal.com/stepanjakl"
                                    tabindex="0"
-                                   onclick="handleTouchButtonClick(this, event, () => { window.open(this.getAttribute('href'), '_blank') }, true)"
+                                   onclick="App.handleTouchButtonClick(this, event, () => { window.open(this.getAttribute('href'), '_blank') }, true)"
                                    target="_blank"
                                    aria-label="Open to new opportunities, book a virtual meeting"
                                    class="availability__button">
@@ -257,11 +250,9 @@
                             <div class="menu__background">
                             </div>
                             <div class="menu__email tooltip" style="--i:0">
-                                <!-- onmousedown="navigator.clipboard.writeText('stepan.jakl@icloud.com'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip__text span'), this.querySelector('.highlight'), 'Copied to the clipboard')"
-                                     onkeydown="window.prompt('Copy to the clipboard: `Cmd/Ctrl + C` and then press `Enter`', 'stepan.jakl@icloud.com')" -->
                                 <button type="button"
                                         tabindex="0"
-                                        onclick="handleTouchButtonClick(this, event, () => { navigator?.clipboard?.writeText('stepan.jakl@icloud.com'); textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip__text span'), this.querySelector('.highlight'), 'Copied to the clipboard') })"
+                                        onclick="App.handleTouchButtonClick(this, event, () => { copyToClipboard('stepan.jakl@icloud.com'); App.textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip__text span'), this.querySelector('.highlight'), 'Copied to the clipboard') })"
                                         class="menu__email-button"
                                         aria-label="Contact me via email">
                                     <span class="menu__email-icon">
@@ -279,7 +270,7 @@
                                 <a href="#profile"
                                    id="menu-link-profile"
                                    tabindex="0"
-                                   onclick="handleTouchButtonClick(this, event, () => { openDialog('modal-profile', this, null, 'profile') })"
+                                   onclick="App.handleTouchButtonClick(this, event, () => { openDialog('modal-profile', this, null, 'profile') })"
                                    aria-label="Learn more about me"
                                    class="menu__link menu__link--profile tooltip"
                                    style="--i:1">
@@ -305,7 +296,7 @@
                                 <a href="#archive"
                                    id="menu-link-archive"
                                    tabindex="0"
-                                   onclick="handleTouchButtonClick(this, event, () => { openDialog('modal-archive', this, null, 'archive') })"
+                                   onclick="App.handleTouchButtonClick(this, event, () => { openDialog('modal-archive', this, null, 'archive') })"
                                    aria-label="Explore snippets of my past work"
                                    class="menu__link tooltip"
                                    style="--i:2">
@@ -416,12 +407,6 @@
                                             </svg>
                                         </a>
                                         <hr>
-                                        <!-- <a href="#" onclick="event.preventDefault(); toggleFullscreen()" tabindex="0" aria-label="Fullscreen mode">
-                                            <svg class="fill-current" style="width: 1.3125rem; height: 1.3125rem; padding: 0.09375rem; box-sizing: content-box;">
-                                                <use xlink:href="images/icons.svg#menu-fullscreen"></use>
-                                            </svg>
-                                            <span class="text-sm whitespace-nowrap">Fullscreen mode</span>
-                                        </a> -->
                                         <label id="menu-dropdown-light-mode"
                                                for="mode"
                                                tabindex="0"
@@ -443,7 +428,7 @@
                                         <label id="menu-dropdown-fullscreen"
                                                for="fullscreen"
                                                tabindex="0"
-                                               onclick="toggleFullscreen()"
+                                               onclick="App.toggleFullscreen()"
                                                onkeypress="if(event.key === 'Enter') { document.getElementById('fullscreen').click(); }">
                                             <svg class="fullscreen-checked:hidden flex">
                                                 <use xlink:href="images/icons.svg#menu-fullscreen"></use>
@@ -717,7 +702,7 @@
                                 </a>
                                 <label for="fullscreen"
                                        tabindex="0"
-                                       onclick="toggleFullscreen()"
+                                       onclick="App.toggleFullscreen()"
                                        onkeypress="if(event.key === 'Enter') { document.getElementById('fullscreen').click(); }"
                                        class="modal__fullscreen-button">
                                     <svg class="fullscreen-checked:hidden flex">
@@ -1227,7 +1212,7 @@
                                                             <span>Mock-up:</span>
                                                         </li>
                                                         <li>
-                                                            <a href="projects/2021-19/mmt/mmt-landing-page-mockup.full.png"
+                                                            <a href="projects/2021-19/mmt/mmt-landing-page-mockup.full.jpg"
                                                                target="_blank">Landing page</a>
                                                         </li>
                                                     </ul>
@@ -1485,7 +1470,7 @@
                                                         <li>
                                                             <a href="projects/elsewhen/mockup-wireframe/document-data-extraction-ui-ux-task.full.png"
                                                                target="_blank">Document Data Extraction UI/UX Task</a>
-                                                               <a href="projects/elsewhen/mockup-wireframe/full-mockup-with-measurements.full.png"
+                                                               <a href="projects/elsewhen/mockup-wireframe/full-mockup-with-measurements.full.jpg"
                                                                   target="_blank">Full Mockup with Measurements</a>
                                                                   <a href="projects/elsewhen/mockup-wireframe/website-service-wireframe.full.png"
                                                                      target="_blank">Website Service Wireframe</a>

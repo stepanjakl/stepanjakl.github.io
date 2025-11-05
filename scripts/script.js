@@ -34,6 +34,9 @@ const hashIncludes = (hash) => getCurrentHash().includes(hash)
 // WeakMap to track one-time blur handlers for touch buttons without mutating elements
 const touchBlurHandlers = new WeakMap()
 
+// WeakMap to track click counts for touch button interactions
+const touchClickCounts = new WeakMap()
+
 // Shared navigation constants
 const NAVIGATION_HASHES = Object.freeze({
     PROFILE: '#profile',
@@ -211,19 +214,21 @@ class TextHighlighter {
 
     highlightAndCopyText(event, textElement, highlightElement, temporaryText) {
         const target = event.target
-        if (target.getAttribute('data-copying') !== '') {
-            this.originalText = textElement.textContent
-            if (temporaryText) {
-                textElement.textContent = temporaryText
-            }
-            highlightElement.classList.add(this.HIGHLIGHT_ACTIVE_CLASS)
 
-            setTimeout(() => {
-                target.removeAttribute('data-copying')
-                textElement.textContent = this.originalText
-                highlightElement.classList.remove(this.HIGHLIGHT_ACTIVE_CLASS)
-            }, this.HIGHLIGHT_DURATION)
+        // Set attribute to mark as copying in progress
+        target.setAttribute('data-copying', 'true')
+
+        this.originalText = textElement.textContent
+        if (temporaryText) {
+            textElement.textContent = temporaryText
         }
+        highlightElement.classList.add(this.HIGHLIGHT_ACTIVE_CLASS)
+
+        setTimeout(() => {
+            target.removeAttribute('data-copying')
+            textElement.textContent = this.originalText
+            highlightElement.classList.remove(this.HIGHLIGHT_ACTIVE_CLASS)
+        }, this.HIGHLIGHT_DURATION)
     }
 }
 
@@ -745,6 +750,94 @@ class HorizontalEdgeScroller {
 
 
 // ============================================================================
+// CursorIdleDetector Class
+// ============================================================================
+
+/**
+ * Detects cursor idle state and manages fade-out/fade-in of target element
+ */
+class CursorIdleDetector {
+    constructor(options = {}) {
+        this.targetElement = options.targetElement || null
+        this.container = options.container || document
+        this.idleTimeout = options.idleTimeout || 2000 // 2 seconds default
+        this.fadedClass = options.fadedClass || 'cursor-idle-fade'
+
+        this.idleTimer = null
+        this.isIdle = false
+
+        this.boundHandleMouseMove = this.handleMouseMove.bind(this)
+        this.boundHandleMouseLeave = this.handleMouseLeave.bind(this)
+    }
+
+    start() {
+        if (!this.targetElement) return
+
+        // Only enable cursor idle detection on non-touch devices
+        if (isTouchDevice) return
+
+        this.container.addEventListener('mousemove', this.boundHandleMouseMove, { passive: true })
+        this.container.addEventListener('mouseleave', this.boundHandleMouseLeave)
+
+        // Start idle timer immediately
+        this.startIdleTimer()
+    }
+
+    stop() {
+        this.container.removeEventListener('mousemove', this.boundHandleMouseMove)
+        this.container.removeEventListener('mouseleave', this.boundHandleMouseLeave)
+        this.clearIdleTimer()
+        this.showTarget()
+    }
+
+    handleMouseMove() {
+        this.showTarget()
+        this.clearIdleTimer()
+        this.startIdleTimer()
+    }
+
+    handleMouseLeave() {
+        this.clearIdleTimer()
+        this.showTarget()
+    }
+
+    startIdleTimer() {
+        this.idleTimer = setTimeout(() => {
+            this.hideTarget()
+        }, this.idleTimeout)
+    }
+
+    clearIdleTimer() {
+        if (this.idleTimer) {
+            clearTimeout(this.idleTimer)
+            this.idleTimer = null
+        }
+    }
+
+    hideTarget() {
+        if (!this.targetElement || this.isIdle) return
+        this.isIdle = true
+        this.targetElement.classList.add(this.fadedClass)
+    }
+
+    showTarget() {
+        if (!this.targetElement || !this.isIdle) return
+        this.isIdle = false
+        this.targetElement.classList.remove(this.fadedClass)
+    }
+
+    updateTarget(newTarget) {
+        this.targetElement = newTarget
+        this.isIdle = false
+        this.clearIdleTimer()
+        if (newTarget) {
+            this.startIdleTimer()
+        }
+    }
+}
+
+
+// ============================================================================
 // Popup Class
 // ============================================================================
 
@@ -770,6 +863,8 @@ class Popup {
         this.stylesInjected = false
         this.handleEscapeKey = null
         this.handleFallbackClick = null
+        this.triggeringElement = null // Track element that opened the viewer for focus restoration
+        this.cursorIdleDetector = null // Cursor idle detector for close button
 
         // Static property to track popup blocking across all instances
         if (typeof Popup.isPopupBlocked === 'undefined') {
@@ -779,10 +874,10 @@ class Popup {
 
     generatePopupHTML(href, isVideo, placeholderUrl, includeOverlay = false) {
         const mediaElementHtml = isVideo
-            ? `<video src="${href}" controls autoplay playsinline></video>`
+            ? `<video src="${href}" controls autoplay playsinline onerror="console.error('Video file not found or failed to load: ${href}')"></video>`
             : placeholderUrl
-                ? `<img src="${href}" onload="requestAnimationFrame(()=>requestAnimationFrame(()=>{this.nextElementSibling.style.opacity='0'}))" style="width:100%;height:auto"><img src="${placeholderUrl}" style="position:absolute;inset:0;width:100%;height:auto;transition:opacity .3s linear">`
-                : `<img src="${href}" />`
+                ? `<img src="${href}" onload="requestAnimationFrame(()=>requestAnimationFrame(()=>{this.nextElementSibling.style.opacity='0'}))" onerror="console.error('Image file not found or failed to load: ${href}')" style="width:100%;height:auto"><img src="${placeholderUrl}" onerror="console.warn('Placeholder image not found or failed to load: ${placeholderUrl}')" style="position:absolute;inset:0;width:100%;height:auto;transition:opacity .3s linear">`
+                : `<img src="${href}" onerror="console.error('Image file not found or failed to load: ${href}')" />`
 
         const overlayHtml = includeOverlay
             ? `<div style="position:absolute;inset:0;cursor:zoom-out;z-index:1" onclick="window.close()" aria-label="Close" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){window.close()}"></div>`
@@ -817,6 +912,9 @@ class Popup {
     async open(element, event) {
         event.preventDefault()
         const { href } = element
+
+        // Store triggering element for focus restoration
+        this.triggeringElement = element
 
         const isVideo = this.isVideo(href)
         const placeholderUrl = !isVideo ? this.getPlaceholderUrl(href) : null
@@ -884,6 +982,9 @@ class Popup {
             this.initializeFallbackContainer()
         }
 
+        // Re-add event handlers if they were removed (container reused after close)
+        this.addFallbackEventHandlers()
+
         // Cache wrapper element reference
         if (!this.wrapperElement) {
             this.wrapperElement = this.fallbackContainer.querySelector('.media_fallback-content')
@@ -898,8 +999,9 @@ class Popup {
         // Build content based on media type
         const fragment = document.createDocumentFragment()
 
+        let closeButton = null
         if (isVideo) {
-            const closeButton = this.createCloseButton()
+            closeButton = this.createCloseButton()
             fragment.appendChild(closeButton)
         } else {
             const overlay = this.createCloseOverlay()
@@ -922,22 +1024,35 @@ class Popup {
             video.src = url
             video.controls = true
             video.autoplay = true
+
+            // Add error handler for video loading
+            video.addEventListener('error', () => {
+                console.error(`Video file not found or failed to load: ${url}`)
+            }, { once: true })
+
             fragment.appendChild(video)
         } else {
             // Full image
             const img = document.createElement('img')
             img.src = url
 
+            // Add error handler for main image
+            img.addEventListener('error', () => {
+                console.error(`Image file not found or failed to load: ${url}`)
+            }, { once: true })
+
             // Placeholder image (if available)
             let placeholder = null
             if (placeholderUrl) {
                 placeholder = document.createElement('img')
                 placeholder.src = placeholderUrl
-                // placeholder.style.position = 'absolute'
-                // placeholder.style.inset = '0'
-                // placeholder.style.margin = 'auto'
                 placeholder.style.transition = 'opacity 0.3s linear'
                 placeholder.style.opacity = '0'
+
+                // Add error handler for placeholder image
+                placeholder.addEventListener('error', () => {
+                    console.warn(`Placeholder image not found or failed to load: ${placeholderUrl}`)
+                }, { once: true })
 
                 const onPlaceholderLoad = () => {
                     if (!img.complete) placeholder.style.opacity = '1'
@@ -978,6 +1093,24 @@ class Popup {
         if (!this.fallbackContainer.parentElement) {
             document.body.appendChild(this.fallbackContainer)
         }
+
+        // Initialize cursor idle detector for video close button
+        if (isVideo && closeButton) {
+            // Stop any existing detector
+            if (this.cursorIdleDetector) {
+                this.cursorIdleDetector.stop()
+            }
+
+            // Create new detector for this close button
+            this.cursorIdleDetector = new CursorIdleDetector({
+                targetElement: closeButton,
+                container: this.fallbackContainer,
+                idleTimeout: 2000,
+                fadedClass: 'cursor-idle-fade'
+            })
+
+            this.cursorIdleDetector.start()
+        }
     }
 
     initializeFallbackContainer() {
@@ -991,25 +1124,42 @@ class Popup {
             this.stylesInjected = true
         }
 
-        // Set up event delegation for close actions
-        this.handleFallbackClick = (e) => {
-            if (e.target.classList.contains('media_fallback-close-overlay') ||
-                e.target.classList.contains('media_fallback-close-button') ||
-                e.target.closest('.media_fallback-close-button')) {
-                this.closeFallbackView()
-            }
-        }
-        this.fallbackContainer.addEventListener('click', this.handleFallbackClick)
+        // Add event handlers
+        this.addFallbackEventHandlers()
+    }
 
-        // Set up escape key handler once
-        this.handleEscapeKey = (e) => {
-            if (e.key === 'Escape' && this.fallbackContainer?.parentElement) {
-                e.stopPropagation()
-                e.preventDefault()
-                this.closeFallbackView()
+    addFallbackEventHandlers() {
+        // Set up event delegation for close actions
+        if (!this.handleFallbackClick) {
+            this.handleFallbackClick = (e) => {
+                // Check if click is on close overlay or button
+                const isCloseOverlay = e.target.classList.contains('media_fallback-close-overlay')
+                const isCloseButton = e.target.classList.contains('media_fallback-close-button')
+                const isInsideCloseButton = e.target.closest('.media_fallback-close-button')
+
+                if (isCloseOverlay || isCloseButton || isInsideCloseButton) {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    this.closeFallbackView()
+                }
             }
+            this.fallbackContainer.addEventListener('click', this.handleFallbackClick)
         }
-        document.addEventListener('keydown', this.handleEscapeKey, true)
+
+        // Set up escape key handler for this fallback instance
+        // Use capture phase to run before other keydown handlers (KeyHandler, aria.handleEscape)
+        // stopImmediatePropagation prevents ALL other handlers from running
+        if (!this.handleEscapeKey) {
+            this.handleEscapeKey = (e) => {
+                console.log('escape key pressed in fallback view')
+
+                if (e.key === 'Escape' && this.fallbackContainer?.parentElement) {
+                    e.stopImmediatePropagation()
+                    this.closeFallbackView()
+                }
+            }
+            document.addEventListener('keydown', this.handleEscapeKey, { capture: true })
+        }
     }
 
     createCloseButton() {
@@ -1052,8 +1202,6 @@ class Popup {
                 width: 100%;
                 height: auto;
                 min-height: 100%;
-                // background-color: rgba(0, 0, 0, 0.5);
-                // animation: fade-in-opacity var(--anim-segment) var(--ease-out-quad);
             }
             .media_fallback-content img {
                 position: absolute;
@@ -1121,9 +1269,9 @@ class Popup {
             .media_fallback-close-button {
                 position: fixed;
                 top: 0;
-                right: 0;
+                right: 50%;
+                transform: translateX(50%);
                 margin-top: var(--modal-button-inset);
-                margin-right: var(--modal-button-inset);
                 width: var(--modal-button-size);
                 height: var(--modal-button-size);
                 border-radius: 50%;
@@ -1139,24 +1287,28 @@ class Popup {
                 justify-content: center;
                 font-size: 1.5rem;
                 line-height: 1;
-                transition: color 200ms linear, background-color 200ms linear;
+                transition: color 200ms linear, background-color 200ms linear, opacity 300ms ease-out;
             }
             .media_fallback-close-button:hover {
                 background: rgba(0, 0, 0, 0.45);
                 color: rgba(255,255,255,0.95);
-                transition: color 150ms linear, background-color 150ms linear;
+                transition: color 150ms linear, background-color 150ms linear, opacity 300ms ease-out;
             }
             .media_fallback-close-button::after {
                 content: '';
                 position: absolute;
                 inset: 0;
                 border-radius: 50%;
-                background: rgba(255, 255, 255, 0.15);
+                background: rgba(255, 255, 255, 0.35);
                 transition: background-color 200ms linear;
             }
             .media_fallback-close-button:hover::after {
-                background: rgba(255, 255, 255, 0.25);
+                background: rgba(255, 255, 255, 0.45);
                 transition: background-color 150ms linear;
+            }
+            .media_fallback-close-button.cursor-idle-fade {
+                opacity: 0;
+                pointer-events: none;
             }
         `
         document.head.appendChild(styles)
@@ -1164,9 +1316,38 @@ class Popup {
 
     closeFallbackView() {
         if (this.fallbackContainer && this.fallbackContainer.parentElement) {
+            // Stop cursor idle detector
+            if (this.cursorIdleDetector) {
+                this.cursorIdleDetector.stop()
+                this.cursorIdleDetector = null
+            }
+
+            // Remove escape key handler
+            if (this.handleEscapeKey) {
+                document.removeEventListener('keydown', this.handleEscapeKey, { capture: true })
+                this.handleEscapeKey = null
+            }
+
+            // Remove click handler
+            if (this.handleFallbackClick) {
+                this.fallbackContainer.removeEventListener('click', this.handleFallbackClick)
+                this.handleFallbackClick = null
+            }
+
+            // Remove from DOM
             this.fallbackContainer.remove()
-            // Note: We keep the Escape key event listener attached since it's added only once
-            // during initialization and checks if container is in DOM
+
+            // Don't nullify container - we'll reuse it and need to re-add handlers
+            // Reset cached wrapper reference to force fresh content queries
+            this.wrapperElement = null
+
+            // Restore focus to the element that triggered the viewer
+            // The hash should remain unchanged (modal stays open with its hash)
+            if (this.triggeringElement && typeof this.triggeringElement.focus === 'function') {
+                requestAnimationFrame(() => {
+                    this.triggeringElement.focus()
+                })
+            }
         }
     }
 
@@ -1186,12 +1367,16 @@ class Popup {
                 if (img.naturalWidth && img.naturalHeight) {
                     resolve({ width: img.naturalWidth, height: img.naturalHeight })
                 } else {
+                    console.error(`Image file not found or failed to load: ${url}`)
                     resolve(null)
                 }
             }
 
             img.addEventListener('load', handleLoad, { once: true })
-            img.addEventListener('error', () => resolve(null), { once: true })
+            img.addEventListener('error', () => {
+                console.error(`Image file not found or failed to load: ${url}`)
+                resolve(null)
+            }, { once: true })
 
             img.src = url
 
@@ -1208,10 +1393,16 @@ class Popup {
             video.preload = 'metadata'
 
             video.addEventListener('loadedmetadata', () => {
-                resolve({ width: video.videoWidth, height: video.videoHeight })
+                if (video.videoWidth && video.videoHeight) {
+                    resolve({ width: video.videoWidth, height: video.videoHeight })
+                } else {
+                    console.error(`Video file not found or failed to load: ${url}`)
+                    resolve(null)
+                }
             }, { once: true })
 
             video.addEventListener('error', () => {
+                console.error(`Video file not found or failed to load: ${url}`)
                 resolve(null)
             }, { once: true })
 
@@ -1271,11 +1462,7 @@ class Carousel {
         this.leftEdgeEl = null
         this.rightEdgeEl = null
         this.observer = null
-        this.activeSlide = {
-            element: null,
-            get: () => this.activeSlide.element,
-            set: (el) => this.activeSlide.element = el
-        }
+        this.activeSlide = null
 
         this.ACTIVE_CLASS = 'active'
 
@@ -1305,17 +1492,15 @@ class Carousel {
     setupEdgeNavigationEventListeners() {
         this.leftEdgeEl.addEventListener('click', (e) => {
             e.stopPropagation()
-            const activeSlide = this.activeSlide.get()
-            if (activeSlide?.previousElementSibling) {
-                this.scrollToSlide(activeSlide.previousElementSibling)
+            if (this.activeSlide?.previousElementSibling) {
+                this.scrollToSlide(this.activeSlide.previousElementSibling)
             }
         })
 
         this.rightEdgeEl.addEventListener('click', (e) => {
             e.stopPropagation()
-            const activeSlide = this.activeSlide.get()
-            if (activeSlide?.nextElementSibling) {
-                this.scrollToSlide(activeSlide.nextElementSibling)
+            if (this.activeSlide?.nextElementSibling) {
+                this.scrollToSlide(this.activeSlide.nextElementSibling)
             }
         })
     }
@@ -1337,6 +1522,7 @@ class Carousel {
             `
         this.carouselEl.appendChild(this.controlsEl)
 
+        this.navWrapperEl = this.controlsEl.querySelector('[data-carousel-nav-wrapper]')
         this.navEl = this.controlsEl.querySelector('[data-carousel-nav]')
         this.prevButtonEl = this.controlsEl.querySelector('[data-carousel-arrows] li:first-child button')
         this.nextButtonEl = this.controlsEl.querySelector('[data-carousel-arrows] li:last-child button')
@@ -1357,6 +1543,50 @@ class Carousel {
     }
 
     setupControlNavigationEventListeners() {
+        // Touch device: first touch focuses active button, then normal behavior
+        /* if (isTouchDevice) {
+            let isFirstTouch = true
+
+            // Disable non-active buttons initially
+            this.dotEls.forEach(button => {
+                if (button.getAttribute('aria-current') !== 'true') {
+                    button.style.pointerEvents = 'none'
+                }
+            })
+
+            this.navWrapperEl.addEventListener('touchstart', (event) => {
+                if (isFirstTouch) {
+                    event.preventDefault()
+                    const activeButton = this.navEl.querySelector('button[aria-current="true"]')
+                    if (activeButton) {
+                        activeButton.focus()
+                        isFirstTouch = false
+
+                        // Enable all buttons
+                        this.dotEls.forEach(button => {
+                            button.style.pointerEvents = ''
+                        })
+
+                        // Reset on focus-out
+                        this.navEl.addEventListener('focusout', (e) => {
+                            console.log('focusout');
+
+                            if (!this.navEl.contains(e.relatedTarget)) {
+                                isFirstTouch = true
+
+                                // Disable non-active buttons again
+                                this.dotEls.forEach(button => {
+                                    if (button.getAttribute('aria-current') !== 'true') {
+                                        button.style.pointerEvents = 'none'
+                                    }
+                                })
+                            }
+                        }, { once: true })
+                    }
+                }
+            })
+        } */
+
         // Use event delegation for dot buttons
         this.navEl.addEventListener('click', (event) => {
             const button = event.target.closest('button[data-label-for]')
@@ -1440,7 +1670,7 @@ class Carousel {
             for (let i = 0; i < entries.length; i++) {
                 const entry = entries[i]
                 if (entry.isIntersecting) {
-                    this.activeSlide.set(entry.target)
+                    this.activeSlide = entry.target
                     entry.target.classList.add(this.ACTIVE_CLASS)
 
                     const slideIndex = this.slidesEls.indexOf(entry.target)
@@ -1471,12 +1701,11 @@ class Carousel {
     }
 
     navigateToSlide(direction) {
-        const currentSlideEl = this.activeSlide.get()
-        if (!currentSlideEl) return
+        if (!this.activeSlide) return
 
         const targetSlideEl = direction === 'prev'
-            ? currentSlideEl.previousElementSibling
-            : currentSlideEl.nextElementSibling
+            ? this.activeSlide.previousElementSibling
+            : this.activeSlide.nextElementSibling
 
         if (targetSlideEl) {
             this.scrollToSlide(targetSlideEl)
@@ -1627,26 +1856,72 @@ class ImageGridNavigator {
 // ============================================================================
 
 /**
- * Handles touch button click interactions with focus management
- * On touch devices: first tap focuses, second tap executes callback
- * On non-touch devices: executes callback immediately
+ * Copy text to clipboard with iOS Safari fallback
+ * @param {string} text - The text to copy to clipboard
+ * @returns {Promise<boolean>} - True if copy succeeded, false otherwise
  */
-App.handleTouchButtonClick = window.handleTouchButtonClick = (element, event, callback, focusAfterClick = false) => {
-    event.preventDefault()
-
-    // Non-touch devices execute immediately
-    if (!isTouchDevice) {
-        callback()
-        return
+async function copyToClipboard(text) {
+    // Try modern Clipboard API first
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+            await navigator.clipboard.writeText(text)
+            return true
+        } catch (err) {
+            console.warn('Clipboard API failed, trying fallback:', err)
+        }
     }
 
-    // Track click count on the element
-    element.clickCount = (element.clickCount || 0) + 1
+    // Fallback: legacy execCommand (better iOS Safari support)
+    try {
+        const textarea = document.createElement('textarea')
+        textarea.value = text
+        textarea.style.position = 'absolute'
+        textarea.style.left = '-999rem'
+        textarea.style.top = window.pageYOffset + 'px'
+        textarea.setAttribute('readonly', '')
+        document.body.appendChild(textarea)
+        textarea.select()
+        textarea.setSelectionRange(0, text.length)
+        const successful = document.execCommand('copy')
+        document.body.removeChild(textarea)
+        return successful
+    } catch (err) {
+        console.error('Clipboard copy failed:', err)
+        return false
+    }
+}
+
+/**
+ * Handles touch button/link click interactions with focus management
+ * On touch devices: first tap focuses, second tap executes callback or allows default behavior
+ * On non-touch devices: executes callback immediately or allows default behavior
+ *
+ * @param {HTMLElement} element - The element being clicked
+ * @param {Event} event - The click event
+ * @param {Function|null} callback - Optional callback to execute on second tap. If null, allows default behavior
+ * @param {boolean} focusAfterClick - Whether to maintain focus after callback execution
+ * @returns {boolean} - True if event was handled (default prevented), false if default should proceed
+ */
+App.handleTouchButtonClick = (element, event, callback = null, focusAfterClick = false) => {
+    // Non-touch devices: execute callback or allow default
+    if (!isTouchDevice) {
+        if (callback) {
+            event.preventDefault()
+            callback()
+            return true
+        }
+        return false
+    }
+
+    // Track click count on the element using WeakMap
+    const currentCount = touchClickCounts.get(element) || 0
+    const clickCount = currentCount + 1
+    touchClickCounts.set(element, clickCount)
 
     // First click: set up blur handler and focus
-    if (element.clickCount === 1) {
+    if (clickCount === 1) {
         const handleBlur = () => {
-            element.clickCount = 0
+            touchClickCounts.delete(element)
             element.removeAttribute('data-focus-after-click')
             touchBlurHandlers.delete(element)
         }
@@ -1654,22 +1929,34 @@ App.handleTouchButtonClick = window.handleTouchButtonClick = (element, event, ca
         touchBlurHandlers.set(element, handleBlur)
         element.addEventListener('blur', handleBlur, { once: true })
         element.focus()
-        return
+        event.preventDefault()
+        return true
     }
 
-    // Second click: execute callback
-    if (element.clickCount === 2 || element.getAttribute('data-focus-after-click') === 'true') {
-        callback()
+    // Second click: execute callback or allow default behavior
+    if (clickCount === 2 || element.getAttribute('data-focus-after-click') === 'true') {
+        if (callback) {
+            event.preventDefault()
+            callback()
 
-        // If focusAfterClick is true, maintain focus on element after callback
-        if (focusAfterClick) {
-            element.setAttribute('data-focus-after-click', 'true')
-            element.focus()
-            element.addEventListener('blur', () => {
-                element.removeAttribute('data-focus-after-click')
-            }, { once: true })
+            // If focusAfterClick is true, maintain focus on element after callback
+            if (focusAfterClick) {
+                element.setAttribute('data-focus-after-click', 'true')
+                element.focus()
+                element.addEventListener('blur', () => {
+                    element.removeAttribute('data-focus-after-click')
+                }, { once: true })
+            }
+            return true
+        } else {
+            // No callback: allow default behavior (for links)
+            return false
         }
     }
+
+    // Fallback: prevent default
+    event.preventDefault()
+    return true
 }
 
 /**
@@ -1682,7 +1969,7 @@ App.handleTouchButtonClick = window.handleTouchButtonClick = (element, event, ca
  * - Handles deep-link URLs with ?year= parameter
  * - Starts intersection observer to track active sections
  */
-App.initializeTimeline = window.initializeTimeline = () => {
+App.initializeTimeline = () => {
     // Prevent duplicate timeline creation
     if (App.timeline) {
         console.warn('Timeline already initialized')
@@ -1860,7 +2147,11 @@ const openDialogOnLoad = () => {
         case '#archive':
             const yearParam = window.location.hash.split('?year=')[1]
             if (yearParam) {
-                localStorage.setItem('archiveYear', yearParam)
+                try {
+                    localStorage.setItem('archiveYear', yearParam)
+                } catch (error) {
+                    console.warn('Failed to save archive year to localStorage:', error)
+                }
             }
             openDialog(DIALOG_CONFIG.ARCHIVE.id, DIALOG_CONFIG.ARCHIVE.trigger, null, window.location.hash)
             break
@@ -1897,13 +2188,46 @@ const initializeModalFooterArt = () => {
 
 
 /**
- * Toggles fullscreen mode for the document
+ * Check if browser supports fullscreen API
+ * @returns {boolean} True if fullscreen is supported
  */
-App.toggleFullscreen = window.toggleFullscreen = () => {
+const isFullscreenSupported = () => {
+    return !!(
+        document.fullscreenEnabled ||
+        document.webkitFullscreenEnabled ||
+        document.mozFullScreenEnabled ||
+        document.msFullscreenEnabled
+    )
+}
+
+/**
+ * Toggles fullscreen mode for the document
+ * Only called if fullscreen is supported
+ */
+App.toggleFullscreen = () => {
+    if (!isFullscreenSupported()) {
+        console.warn('Fullscreen API is not supported in this browser')
+        return
+    }
+
     if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen()
-    } else if (document.exitFullscreen) {
-        document.exitFullscreen()
+        const requestMethod = document.documentElement.requestFullscreen ||
+            document.documentElement.webkitRequestFullscreen ||
+            document.documentElement.mozRequestFullScreen ||
+            document.documentElement.msRequestFullscreen
+
+        if (requestMethod) {
+            requestMethod.call(document.documentElement)
+        }
+    } else {
+        const exitMethod = document.exitFullscreen ||
+            document.webkitExitFullscreen ||
+            document.mozCancelFullScreen ||
+            document.msExitFullscreen
+
+        if (exitMethod) {
+            exitMethod.call(document)
+        }
     }
 }
 
@@ -1929,12 +2253,12 @@ function enhanceExternalLinks() {
         // Check if link already has "(opens in new tab)" text
         const linkText = link.textContent.toLowerCase()
         const hasNewTabText = linkText.includes('opens in new tab') ||
-                              linkText.includes('opens in new window')
+            linkText.includes('opens in new window')
 
         // Check if aria-label already mentions new tab
         const ariaLabel = link.getAttribute('aria-label') || ''
         const ariaHasNewTab = ariaLabel.toLowerCase().includes('opens in new tab') ||
-                              ariaLabel.toLowerCase().includes('opens in new window')
+            ariaLabel.toLowerCase().includes('opens in new window')
 
         // Add screen reader text if not already present
         if (!hasNewTabText && !ariaHasNewTab) {
@@ -1962,6 +2286,7 @@ function enhanceExternalLinks() {
 document.addEventListener('DOMContentLoaded', () => {
     const ANIMATION_CHECK_SELECTOR = '.menu--animating .menu__background'
     const TOUCH_DEVICE_CLASS = 'touch-device'
+    const NO_FULLSCREEN_CLASS = 'no-fullscreen'
     const OVERFLOW_HIDDEN_CLASS = 'overflow-hidden'
 
     // Apply no animation on first click
@@ -1979,6 +2304,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Detect touch device
     if (isTouchDevice) {
         document.body.classList.add(TOUCH_DEVICE_CLASS)
+    }
+
+    // Detect fullscreen support and add class if not supported
+    if (!isFullscreenSupported()) {
+        document.body.classList.add(NO_FULLSCREEN_CLASS)
     }
 
     // Initialize the UI elements based on the current hash
@@ -2046,7 +2376,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // Setup global timeline positioning function
-    App.positionTimeline = window.positionTimeline = () => {
+    App.positionTimeline = () => {
         const archiveWrapperEl = document.querySelector('.modal-archive__timeline')
         const timelineContentSectionEl = document.querySelector('.modal-archive__timeline-grid [data-timeline-section]')
         const timelineWrapperEl = document.querySelector('#horizontal-timeline')
@@ -2066,4 +2396,52 @@ document.addEventListener('DOMContentLoaded', () => {
             App.positionTimeline()
         }
     })
-})
+});
+
+// ============================================================================
+// Console Welcome Message
+// ============================================================================
+
+/**
+ * Display styled welcome message in browser console
+ * Uses green-lime color scheme with margin/padding/border for supporting browsers
+ * Browsers without spacing support get separate log statements
+ */
+(function () {
+    const color = '#7cce00' // 115, 100, 75
+    const bgColor = 'rgba(124, 206, 0, 0.075)'
+
+    // Message text
+    const header = 'Štěpán Jákl | Full-stack developer & interface designer'
+    const line1 = 'This website is built with HTML, CSS, and vanilla JavaScript.'
+    const line2 = 'The goal: a fast, pixel-perfect, and fully responsive experience.'
+    const line3 = 'No frameworks, no build tools, no generators. Just pure craftsmanship.'
+    const line4 = 'Interested in working together? Reach out via email at'
+    const email = 'stepan.jakl@icloud.com'
+
+    // Detect if browser supports margin/padding in console (Chrome, Firefox, Edge do; Safari doesn't)
+    const supportsSpacing = !navigator.userAgent.includes('Safari') || navigator.userAgent.includes('Chrome')
+
+    if (supportsSpacing) {
+        // Bordered box style with padding and margin for the header
+        const boxStyle = `border: max(1px, 0.0625rem) solid ${color}; border-radius: 0.125rem; color: ${color}; background: ${bgColor}; font-size: 0.8125rem; padding: 1.40625rem 2.1875rem 1.25rem 2.1875rem; margin: 1.25rem 1.25rem;`
+        const textStyle = `color: ${color}; font-size: 0.75rem; margin: 0.9375rem 0 0.9375rem 1.25rem;`
+        const linkStyle = `color: ${color}; font-size: 0.75rem; text-decoration: underline;;`
+
+        console.log(`%c${header}`, boxStyle)
+        console.log(`%c${line1}`, textStyle)
+        console.log(`%c${line2}`, textStyle)
+        console.log(`%c${line3}`, textStyle)
+        console.log(`%c${line4} %c${email}`, textStyle, linkStyle)
+    } else {
+        // Separate log statements for browsers without spacing support
+        const headerStyle = `color: ${color}; font-size: 0.78125rem; font-weight: bold;`
+        const textStyle = `color: ${color};`
+
+        console.log(`%c${header}`, headerStyle)
+        console.log(`%c${line1}`, textStyle)
+        console.log(`%c${line2}`, textStyle)
+        console.log(`%c${line3}`, textStyle)
+        console.log(`%c${line4} ${email}`, textStyle)
+    }
+})()

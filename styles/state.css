@@ -2,6 +2,13 @@
  * State
  */
 
+/* No Fullscreen Support */
+
+body.no-fullscreen #menu-dropdown-fullscreen,
+body.no-fullscreen .modal__fullscreen-button {
+    display: none;
+}
+
 /* Light mode */
 
 #mode:checked~main {

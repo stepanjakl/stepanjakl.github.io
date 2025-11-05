@@ -173,10 +173,6 @@ main>figure {
 
 /* Dark mode (default) */
 
-body, html {
-    background-color: var(--cyan-full-5);
-}
-
 body {
     font-family: 'Bai Jamjuree', sans-serif;
     --background: var(--cyan-full-5);
@@ -236,6 +232,9 @@ body {
     --footer-rectangle: var(--cyan-full-65);
 }
 
+body, html {
+    background-color: var(--background);
+}
 
 /* Experimental CSS property for rounded corners */
 
@@ -657,6 +656,7 @@ body, main {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
     z-index: -1;
     width: 1.125rem;
     height: 1.125rem;
@@ -698,18 +698,19 @@ body, main {
     font-family: 'Chakra Petch', monospace;
     font-weight: 700;
     color: var(--blue-full-95);
-    letter-spacing: 0.375rem;
+    letter-spacing: 0.3125rem;
     font-size: 0.89285625rem;
     line-height: 0.625rem;
     text-transform: uppercase;
     white-space: nowrap;
     user-select: none;
+    margin-top: 0.03125rem;
 }
 
 @media (min-width: 45rem) {
     .availability__text {
         font-weight: 600;
-        /* letter-spacing: 0.5rem; */
+        letter-spacing: 0.375rem;
     }
 }
 
@@ -771,7 +772,6 @@ body, main {
     border: solid max(1px, 0.0625rem) var(--modal-border-inner);
     border-radius: var(--segment-eighth) calc((var(--modal-button-border-radius) + var(--modal-button-inset)) + min(-1px, -0.0625rem)) var(--segment-eighth) var(--segment-eighth);
     overflow: clip;
-    contain: layout style paint;
 }
 
 .modal__content>* {
@@ -825,13 +825,14 @@ body, main {
 
 .modal__body {
     --modal-margin-bottom: var(--segment-half);
-    margin-right: calc(var(--modal-button-size) + var(--modal-button-inset) + (var(--segment) / 5));
+    margin-right: calc(var(--modal-button-size) + var(--modal-button-inset) + (var(--segment) / 8));
     margin-bottom: var(--modal-margin-bottom);
 }
 
 @media (min-width: 45rem) {
     .modal__body {
         --modal-margin-bottom: var(--segment);
+        margin-right: calc(var(--modal-button-size) + var(--modal-button-inset) + (var(--segment) / 5));
     }
 }
 
@@ -843,9 +844,17 @@ body, main {
 /* Modal - Control Buttons */
 
 body {
-    --modal-button-size: 2.5rem;
+    --modal-button-size: 2.75rem;
     --modal-button-border-radius: 0.875rem;
-    --modal-button-inset: 0.875rem;
+    --modal-button-inset: 0.5rem;
+}
+
+@media (min-width: 45rem) {
+    body {
+        --modal-button-size: 2.5rem;
+        --modal-button-border-radius: 0.875rem;
+        --modal-button-inset: 0.875rem;
+    }
 }
 
 .modal__controls {
