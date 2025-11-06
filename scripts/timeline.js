@@ -98,7 +98,10 @@ class HorizontalTimeline extends HTMLElement {
 
         // Private state
         this.activeSection = null
-        this.isScrolling = false        // Cached DOM references (lazy-initialized)
+        this.isScrolling = false
+        this.hasUserScrolled = false    // Track if user has manually scrolled
+
+        // Cached DOM references (lazy-initialized)
         this.timelineContentEl = null
         this.labelEls = null
         this.timelineAllDivEls = null
@@ -646,10 +649,17 @@ class HorizontalTimeline extends HTMLElement {
         const targetLabel = this.querySelector(`[data-label-for="${targetSection}"]`)
         if (!targetLabel) return
 
-        // Update URL query parameter for deep-linking
+        // Only update URL if modal is open AND user has a year parameter or has scrolled
+        // This prevents automatically adding ?year= when opening modal without params
         if (window.location.hash.includes(this.hashPrefix)) {
             const currentYear = window.location.hash.split('?year=')[1]
-            if (currentYear !== targetSection) {
+
+            // Only update if:
+            // 1. There's already a year parameter that's different, OR
+            // 2. User has actively scrolled the modal
+            const shouldUpdateHash = (currentYear && currentYear !== targetSection) || this.hasUserScrolled
+
+            if (shouldUpdateHash) {
                 const baseHash = window.location.hash.split('?')[0]
                 window.history.replaceState(
                     null,
@@ -666,9 +676,8 @@ class HorizontalTimeline extends HTMLElement {
         this.setActiveLabel(targetSection)
         this.setActiveIndicator(targetSection)
 
-        // Store for persistence
+        // Store active section reference
         this.activeSection = targetSection
-        localStorage.setItem('archiveYear', targetSection)
     }
 
     handleMouseLeave() {

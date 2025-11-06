@@ -116,12 +116,19 @@ function registerDialogLifecycleHooks() {
     // Archive modal lifecycle
     aria.registerLifecycleHooks(DIALOG_CONFIG.ARCHIVE.id, {
         initialize: () => {
+            // Add modal-specific class to body for CSS
+            document.body.classList.add('modal-open', 'modal-archive-open')
+
             // Update page title for better browser history
             document.title = 'Archive - ' + originalTitle
 
+            // Check if there's a year parameter for deep-linking
+            const yearParam = window.location.hash.split('?year=')[1]
+
             // Initialize timeline on first modal open
             if (!App.timeline) {
-                App.initializeTimeline()
+                // Don't start observer if we have a year parameter (will start after deep-link scroll)
+                App.initializeTimeline(!yearParam)
 
                 // Position timeline after modal transition completes
                 const modalArchiveEl = document.getElementById('modal-archive')
@@ -148,19 +155,89 @@ function registerDialogLifecycleHooks() {
                     // Fallback: Timeout in case transitionend doesn't fire
                     setTimeout(positionOnce, 150)
                 }
+            } else {
+                // Timeline already exists, restart observer if no year parameter
+                if (!yearParam && App.timeline.startIntersectionObserver) {
+                    App.timeline.startIntersectionObserver()
+                }
             }
 
-            // Start the observer when modal opens
-            if (App.timeline && App.timeline.startIntersectionObserver) {
-                App.timeline.startIntersectionObserver()
+            // Track user scrolling on the modal to enable hash updates
+            const modalArchive = document.querySelector(MODAL_SELECTORS.ARCHIVE)
+            if (modalArchive && App.timeline) {
+                const handleUserScroll = () => {
+                    if (App.timeline) {
+                        App.timeline.hasUserScrolled = true
+                    }
+                }
+                modalArchive.addEventListener('scroll', handleUserScroll, { once: true, passive: true })
+            }
+
+            // Handle deep-link scrolling if ?year= parameter is present
+            if (yearParam) {
+                const modalArchiveEl = document.getElementById('modal-archive')
+
+                // Wait for modal transition to complete before scrolling
+                const handleDeepLinkScroll = () => {
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            // Scroll to the section title (header) rather than the content section
+                            const targetSection = document.querySelector(`[data-timeline-section="${yearParam}"]`)
+                            const modalArchive = document.querySelector(MODAL_SELECTORS.ARCHIVE)
+
+                            if (targetSection && modalArchive && App.timeline) {
+                                App.timeline.scrollParentToChildVertical(modalArchive, targetSection, 'instant')
+                            }
+
+                            // Update timeline to show correct active section
+                            if (App.timeline) {
+                                App.timeline.setActiveLabel(yearParam)
+                                App.timeline.setActiveIndicator(yearParam)
+
+                                // Center the active label in timeline
+                                const activeLabel = App.timeline.querySelector(`[data-label-for="${yearParam}"]`)
+                                if (activeLabel) {
+                                    App.timeline.scrollParentToChildCenterHorizontal(
+                                        App.timeline.getTimelineContentEl(),
+                                        activeLabel
+                                    )
+                                }
+                            }
+
+                            // Start observer after scrolling and timeline updates
+                            if (App.timeline && App.timeline.startIntersectionObserver) {
+                                App.timeline.startIntersectionObserver()
+                            }
+                        })
+                    })
+                }
+
+                // Listen for modal transition end before scrolling
+                if (modalArchiveEl) {
+                    const handleModalTransition = (event) => {
+                        if (event.target === modalArchiveEl && event.propertyName === 'transform') {
+                            modalArchiveEl.removeEventListener('transitionend', handleModalTransition)
+                            handleDeepLinkScroll()
+                        }
+                    }
+                    modalArchiveEl.addEventListener('transitionend', handleModalTransition)
+
+                    // Fallback timeout in case transitionend doesn't fire
+                    setTimeout(handleDeepLinkScroll, 200)
+                }
             }
         },
         cleanup: () => {
+            // Remove modal-specific class from body
+            document.body.classList.remove('modal-open', 'modal-archive-open')
+
             // Restore original page title
             document.title = originalTitle
 
             if (App.timeline) {
                 App.timeline.stopIntersectionObserver()
+                // Reset user scroll flag for next modal open
+                App.timeline.hasUserScrolled = false
             }
         }
     })
@@ -169,6 +246,9 @@ function registerDialogLifecycleHooks() {
     let footerArtInitialized = false
     aria.registerLifecycleHooks(DIALOG_CONFIG.PROFILE.id, {
         initialize: () => {
+            // Add modal-specific class to body for CSS
+            document.body.classList.add('modal-open', 'modal-profile-open')
+
             // Update page title for better browser history
             document.title = 'Profile - ' + originalTitle
 
@@ -179,6 +259,9 @@ function registerDialogLifecycleHooks() {
             }
         },
         cleanup: () => {
+            // Remove modal-specific class from body
+            document.body.classList.remove('modal-open', 'modal-profile-open')
+
             // Restore original page title
             document.title = originalTitle
         }
@@ -187,9 +270,15 @@ function registerDialogLifecycleHooks() {
     // Menu modal lifecycle (for title consistency)
     aria.registerLifecycleHooks(DIALOG_CONFIG.MENU.id, {
         initialize: () => {
+            // Add modal-specific class to body for CSS
+            document.body.classList.add('modal-open', 'modal-menu-open')
+
             document.title = 'Menu - ' + originalTitle
         },
         cleanup: () => {
+            // Remove modal-specific class from body
+            document.body.classList.remove('modal-open', 'modal-menu-open')
+
             document.title = originalTitle
         }
     })
@@ -1960,16 +2049,17 @@ App.handleTouchButtonClick = (element, event, callback = null, focusAfterClick =
 }
 
 /**
- * Initializes the timeline component with scrollers and deep-link handling.
+ * Initializes the timeline component with scrollers.
  * Timeline persists for the entire session once initialized.
  *
  * Integration points:
  * - Creates <horizontal-timeline> custom element
  * - Sets up edge and drag scrolling for horizontal navigation
- * - Handles deep-link URLs with ?year= parameter
  * - Starts intersection observer to track active sections
+ *
+ * @param {boolean} startObserver - Whether to start the intersection observer immediately
  */
-App.initializeTimeline = () => {
+App.initializeTimeline = (startObserver = true) => {
     // Prevent duplicate timeline creation
     if (App.timeline) {
         console.warn('Timeline already initialized')
@@ -2004,8 +2094,10 @@ App.initializeTimeline = () => {
 
     container.appendChild(App.timeline)
 
-    // Start intersection observer to track active sections
-    App.timeline.startIntersectionObserver()
+    // Only start observer if requested (skip for deep-link scenarios)
+    if (startObserver) {
+        App.timeline.startIntersectionObserver()
+    }
 
     // Setup horizontal scrolling enhancements
     const timelineContent = document.querySelector('#timeline-content')
@@ -2042,50 +2134,6 @@ App.initializeTimeline = () => {
         handleResize()
         window.addEventListener('resize', handleResize)
     }
-
-    // Handle deep-link URLs with ?year= parameter
-    handleTimelineDeepLink()
-}
-
-/**
- * Handle deep-link URLs with ?year= parameter.
- * Opens archive modal and scrolls to the specified year section.
- *
- * Example: https://example.com/#archive?year=2024-21
- */
-function handleTimelineDeepLink() {
-    if (!window.location.hash.includes('?year=')) return
-
-    const yearParam = window.location.hash.split('?year=')[1]
-    if (!yearParam) return
-
-    // Use the same hash prefix as configured for the timeline
-    const hashPrefix = App.timeline?.hashPrefix || '#archive'
-
-    // Temporarily clear hash to prevent browser's default scroll jump
-    window.history.pushState(null, '', `${window.location.pathname}${hashPrefix}`)
-
-    requestAnimationFrame(() => {
-        // Restore hash with year parameter
-        window.history.replaceState(
-            null,
-            '',
-            `${window.location.pathname}${hashPrefix}?year=${yearParam}`
-        )
-
-        // Open archive modal
-        if (typeof openDialog === 'function' && typeof DIALOG_CONFIG !== 'undefined') {
-            openDialog(DIALOG_CONFIG.ARCHIVE.id, DIALOG_CONFIG.ARCHIVE.trigger)
-        }
-
-        // Scroll to target section instantly (no animation to avoid jarring UX)
-        const targetSection = document.querySelector(`[data-timeline-section="${yearParam}"]`)
-        const modalArchive = document.querySelector('#modal-archive')
-
-        if (targetSection && modalArchive && App.timeline) {
-            App.timeline.scrollParentToChildVertical(modalArchive, targetSection, 'instant')
-        }
-    })
 }
 
 /**
@@ -2140,20 +2188,16 @@ const applyNoAnimation = () => {
  * Opens the appropriate dialog based on URL hash on page load
  */
 const openDialogOnLoad = () => {
-    switch (window.location.hash.split('?')[0]) {
+    const fullHash = window.location.hash
+    const baseHash = fullHash.split('?')[0]
+
+    switch (baseHash) {
         case '#profile':
             openDialog(DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger, null, 'profile')
             break
         case '#archive':
-            const yearParam = window.location.hash.split('?year=')[1]
-            if (yearParam) {
-                try {
-                    localStorage.setItem('archiveYear', yearParam)
-                } catch (error) {
-                    console.warn('Failed to save archive year to localStorage:', error)
-                }
-            }
-            openDialog(DIALOG_CONFIG.ARCHIVE.id, DIALOG_CONFIG.ARCHIVE.trigger, null, window.location.hash)
+            const yearParam = fullHash.split('?year=')[1]
+            openDialog(DIALOG_CONFIG.ARCHIVE.id, DIALOG_CONFIG.ARCHIVE.trigger)
             break
         case '#menu':
             openDialog(DIALOG_CONFIG.MENU.id, DIALOG_CONFIG.MENU.trigger, DIALOG_CONFIG.MENU.close, 'menu')
@@ -2325,6 +2369,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true })
 
     window.addEventListener('hashchange', () => {
+        const fullHash = window.location.hash
+        const baseHash = fullHash.split('?')[0]
+        const yearParam = fullHash.split('?year=')[1]
+
+        // Handle archive year parameter changes during session
+        if (baseHash === '#archive' && yearParam) {
+            // Check if modal is currently open (to distinguish from initial page load)
+            const modalArchive = document.querySelector(MODAL_SELECTORS.ARCHIVE)
+            const isModalOpen = document.body.classList.contains('modal-open')
+
+            if (isModalOpen) {
+                // Modal is already open (via body.modal-open class), just scroll to new section
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        const targetSection = document.querySelector(`[data-timeline-section="${yearParam}"]`)
+
+                        if (targetSection && modalArchive && App.timeline) {
+                            App.timeline.scrollParentToChildVertical(modalArchive, targetSection, 'smooth')
+
+                            // Update timeline state
+                            App.timeline.setActiveLabel(yearParam)
+                            App.timeline.setActiveIndicator(yearParam)
+
+                            const activeLabel = App.timeline.querySelector(`[data-label-for="${yearParam}"]`)
+                            if (activeLabel) {
+                                App.timeline.scrollParentToChildCenterHorizontal(
+                                    App.timeline.getTimelineContentEl(),
+                                    activeLabel
+                                )
+                            }
+                        }
+                    })
+                })
+            }
+        }
+
+        // Prevent default scroll behavior
         document.body.classList.add(OVERFLOW_HIDDEN_CLASS)
         window.scroll(0, scrollTop)
 

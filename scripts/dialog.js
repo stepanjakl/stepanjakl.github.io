@@ -308,7 +308,6 @@ aria.Dialog = function (dialogId, focusAfterClosed, focusFirst, hash) {
 
     // Activate dialog
     this.backdropNode.classList.add(this.ACTIVE_CLASS)
-    document.body.classList.add(aria.Utils.dialogOpenClass)
 
     // Determine which element should receive inert management
     // This allows focus trapping on a parent container while only applying inert to a child

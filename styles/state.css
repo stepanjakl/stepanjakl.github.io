@@ -164,36 +164,43 @@ body.no-fullscreen .modal__fullscreen-button {
 
 /* Modals */
 
+/* Works without JS (hash-based) and with JS (body class-based) */
 #profile:target~main #modal-profile,
-#archive:target~main #modal-archive {
+body.modal-profile-open #modal-profile,
+#archive:target~main #modal-archive,
+body.modal-archive-open #modal-archive {
     pointer-events: auto;
-    /* z-index: 2; */
 }
 
 #profile:target~main footer,
-#archive:target~main footer {
+#archive:target~main footer,
+body.modal-open footer {
     z-index: 0;
 }
 
 
 /* Modal - Profile */
 
-#profile:target~main #modal-profile {
+#profile:target~main #modal-profile,
+body.modal-profile-open #modal-profile {
     overflow: auto;
 }
 
-#profile:target~main #modal-profile .modal__content {
+#profile:target~main #modal-profile .modal__content,
+body.modal-profile-open #modal-profile .modal__content {
     pointer-events: auto;
 }
 
 
 /* Modal - Archive */
 
-#archive:target~main #modal-archive {
+#archive:target~main #modal-archive,
+body.modal-archive-open #modal-archive {
     overflow: auto;
 }
 
-#archive:target~main #modal-archive .modal__content {
+#archive:target~main #modal-archive .modal__content,
+body.modal-archive-open #modal-archive .modal__content {
     pointer-events: auto;
 }
 

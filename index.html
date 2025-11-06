@@ -807,15 +807,6 @@
                                                 <nav>
                                                     <ul>
                                                         <li>
-                                                            <span>Video:</span>
-                                                        </li>
-                                                        <li>
-                                                            <a href="projects/2024-21/cloudraker-tfp/showreel-front.mp4" target="_blank">Showreel - Front <span class="mid">(2:10)</span></a>
-                                                            <a href="projects/2024-21/cloudraker-tfp/showreel-back.mp4" target="_blank">Showreel - Back <span class="mid">(1:02)</span></a>
-                                                        </li>
-                                                    </ul>
-                                                    <ul>
-                                                        <li>
                                                             <span>Screencapture:</span>
                                                         </li>
                                                         <li>
@@ -825,26 +816,35 @@
                                                     </ul>
                                                     <ul>
                                                         <li>
+                                                            <span>Video:</span>
+                                                        </li>
+                                                        <li>
+                                                            <a href="projects/2024-21/cloudraker-tfp/showreel-front.mp4" target="_blank">Showreel - Front <span class="mid">(2:10)</span></a>
+                                                            <a href="projects/2024-21/cloudraker-tfp/showreel-back.mp4" target="_blank">Showreel - Back <span class="mid">(1:02)</span></a>
+                                                        </li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li>
                                                             <span>Role:</span>
                                                         </li>
                                                         <li>
-                                                            <p class="text-sm">
+                                                            <p>
                                                                 Client liaison, full-stack developer, quality overseer, and technical lead
                                                             </p>
                                                         </li>
                                                     </ul>
                                                 </nav>
                                                 <p>
-                                                    Between 2021 and 2024, I worked with CloudRaker to build and maintain a network of websites for The Fertility Partners (TFP) — one of North America’s largest fertility clinic groups. Over this period, I led the planning, development, and ongoing maintenance of seven full marketing sites and several existing ones, totalling around 4,000 hours of work.
+                                                    Between 2021 and 2024, I collaborated with CloudRaker, a digital consulting agency, to design, build and maintain a network of websites for The Fertility Partners (TFP) — one of North America&rsquo;s largest fertility clinic groups. Over this period, I led the planning, development and long-term maintenance of seven full marketing sites and several existing ones, representing roughly 4,000 hours of work.
                                                     <br>
                                                     <br>
-                                                    I was the main technical lead and point of contact between CloudRaker, TFP, and my own team at Bohemica Studio. My role went far beyond coding: I translated business needs into technical plans, coordinated designers and developers, and ensured every launch met high standards for accessibility, SEO, and performance.
+                                                    I was the main technical lead and point of contact between CloudRaker, TFP, and my own team at Bohemica Studio. My role went far beyond coding: I translated business goals into robust technical strategies, coordinated designers and developers, and ensured every launch met high standards of performance, accessibility and SEO.
                                                     <br>
                                                     <br>
-                                                    All sites were built on ApostropheCMS (v2 and v3), where I created a system of reusable components and custom widgets to make content editing intuitive for non-technical users. I implemented multilingual content, CI/CD pipelines, analytics, and error monitoring, while continuously improving load times, accessibility, and editor UX.
+                                                    All sites were built on ApostropheCMS (versions 2 and 3). I architected a system of reusable modules and custom widgets to make content editing intuitive for non-technical users. This included implementing multilingual content, continuous integration/deployment pipelines, analytics tracking and error monitoring. Throughout the project we continuously optimised load times, improved accessibility and refined the CMS editor&rsquo;s user experience. Post-launch, I managed the full suite under a long-term support agreement: applying updates, monitoring performance, and rolling out iterative improvements. The result was a unified, scalable platform that empowered the client&rsquo;s marketing teams to manage content independently across the entire clinic network.
                                                     <br>
                                                     <br>
-                                                    Post-launch, I maintained the full suite—handling updates, monitoring performance, and implementing improvements under a long-term support agreement. The result was a unified, scalable platform that empowered the client’s marketing teams to manage content independently.
+                                                    The project&rsquo;s scale and impact were substantial. Each site comprised hundreds of pages of content in multiple languages, serving a combined audience of thousands of visitors per month. We created a centralised template system so that enhancements (new widgets, scripts or layouts) could be shared across all sites. Performance and SEO were optimised to handle high traffic, and analytics dashboards were set up to measure user engagement and guide ongoing refinements. In sum, this effort not only modernised TFP&rsquo;s digital presence but also delivered a repeatable, efficient platform for future growth.
                                                 </p>
                                             </div>
                                             <figure>
@@ -857,7 +857,7 @@
                                                     <span>ApostropheCMS Extensions</span>
                                                 </h1>
                                                 <p>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
+                                                    Alongside the main TFP project, I developed several ApostropheCMS extensions to streamline development and add functionality. These tools supported TFP&rsquo;s ecosystem and became reusable assets for future Apostrophe projects.
                                                 </p>
                                                 <h2>
                                                     ApostropheCMS Template & Module Library
@@ -911,7 +911,41 @@
                                                     </ul>
                                                 </nav>
                                                 <p>
-                                                    Private - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
+                                                    I created a shared template and module library, implemented as a Git submodule for all Apostrophe 3 sites. It included base code, Tailwind styling, configuration and reusable components. Each new project linked this template at the start, enabling rapid deployment of common features.
+                                                    <br>
+                                                    <br>
+                                                    As development continued, new modules and enhancements were merged back into the library so that every site benefitted from the latest improvements. The setup also supported advanced integrations such as form validation, scroll animations and WebGL content, all configurable directly through the CMS. This approach made development faster, more consistent and highly adaptable.
+                                                </p>
+                                                <h2>
+                                                    ApostropheCMS Sync Extension
+                                                </h2>
+                                                <nav>
+                                                    <ul>
+                                                        <li>
+                                                            <span>Repo:</span>
+                                                        </li>
+                                                        <li>
+                                                            <a href="https://www.npmjs.com/package/@bohemicastudio/apostrophe-sync"
+                                                               target="_blank">
+                                                                <span>@bohemicastudio/apostrophe-sync</span>
+                                                                <svg>
+                                                                    <use xlink:href="images/icons.svg#new-tab"></use>
+                                                                </svg>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li>
+                                                            <span>Video:</span>
+                                                        </li>
+                                                        <li>
+                                                            <a href="projects/2024-21/apostrophe-sync/terminal-demo.mp4"
+                                                               target="_blank">Terminal Demo <span class="mid">(0:10)</span></a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                                <p>
+                                                    Together with the team at Bohemica Studio, we developed a terminal-based Node.js utility for synchronising MongoDB collections and uploaded assets across local, staging and production environments. The tool allowed developers to pull or push complete site data with a single command, replacing manual export and import processes. The extension improved reliability, saved time, and ensured consistent, up-to-date content across all environments, greatly simplifying both testing and deployment.
                                                 </p>
                                                 <h2>
                                                     ApostropheCMS Stripe Extension
@@ -985,19 +1019,6 @@
                                                 <nav>
                                                     <ul>
                                                         <li>
-                                                            <span>Videos:</span>
-                                                        </li>
-                                                        <li>
-                                                            <a href="projects/2024-21/apostrophe-stripe-extension/admin-ux-walkthrough-demo.mp4"
-                                                               target="_blank">CMS Demo <span class="mid">(0:51)</span></a>
-                                                               <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-js-example-userflow.mp4"
-                                                                  target="_blank">User Demo w/ Alpine.js <span class="mid">(0:35)</span></a>
-                                                                  <a href="projects/2024-21/apostrophe-stripe-extension/store-htmx-example-userflow.mp4"
-                                                                     target="_blank">User Demo w/ HTMX <span class="mid">(0:31)</span></a>
-                                                        </li>
-                                                    </ul>
-                                                    <ul>
-                                                        <li>
                                                             <span>Repo:</span>
                                                         </li>
                                                         <li>
@@ -1010,40 +1031,22 @@
                                                             </a>
                                                         </li>
                                                     </ul>
-                                                </nav>
-                                                <p>
-                                                    Public - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
-                                                </p>
-                                                <h2>
-                                                    ApostropheCMS Sync Extension
-                                                </h2>
-                                                <nav>
                                                     <ul>
                                                         <li>
-                                                            <span>Videos:</span>
+                                                            <span>Video:</span>
                                                         </li>
                                                         <li>
-                                                            <a href="projects/2024-21/apostrophe-sync/terminal-demo.mp4"
-                                                               target="_blank">Terminal Demo <span class="mid">(0:10)</span></a>
-                                                        </li>
-                                                    </ul>
-                                                    <ul>
-                                                        <li>
-                                                            <span>Repo:</span>
-                                                        </li>
-                                                        <li>
-                                                            <a href="https://www.npmjs.com/package/@bohemicastudio/apostrophe-sync"
-                                                               target="_blank">
-                                                                <span>@bohemicastudio/apostrophe-sync</span>
-                                                                <svg>
-                                                                    <use xlink:href="images/icons.svg#new-tab"></use>
-                                                                </svg>
-                                                            </a>
+                                                            <a href="projects/2024-21/apostrophe-stripe-extension/admin-ux-walkthrough-demo.mp4"
+                                                               target="_blank">CMS Demo <span class="mid">(0:51)</span></a>
+                                                               <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-js-example-userflow.mp4"
+                                                                  target="_blank">User Demo w/ Alpine.js <span class="mid">(0:35)</span></a>
+                                                                  <a href="projects/2024-21/apostrophe-stripe-extension/store-htmx-example-userflow.mp4"
+                                                                     target="_blank">User Demo w/ HTMX <span class="mid">(0:31)</span></a>
                                                         </li>
                                                     </ul>
                                                 </nav>
                                                 <p>
-                                                    Public - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
+                                                    This side project grew out of my learnings and experiences with Apostrophe development. It was created as an open-source solution for the Apostrophe community, providing a full-featured Stripe integration for the CMS. It allows content editors to manage products, pricing, and checkout flows directly within the CMS, while providing developers with reusable patterns for secure payment implementation. Designed as a plug-and-play solution, it makes adding e-commerce or transactional features to any Apostrophe project fast and straightforward.
                                                 </p>
                                             </div>
                                         </section>
@@ -1095,9 +1098,25 @@
                                                             </a>
                                                         </li>
                                                     </ul>
+                                                    <ul>
+                                                        <li>
+                                                            <span>Role:</span>
+                                                        </li>
+                                                        <li>
+                                                            <p>
+                                                                Co-founder, creative and technical director
+                                                            </p>
+                                                        </li>
+                                                    </ul>
                                                 </nav>
                                                 <p>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
+                                                    As a co-founder of Bohemica Studio, I established the agency&rsquo;s creative vision and technical direction. My first task was to build our own brand from the ground up, designing a complete identity and developing our website to serve as the benchmark for the quality and craftsmanship we promised our clients.
+                                                    <br>
+                                                    <br>
+                                                    I led our multidisciplinary team of designers and developers, fostering a culture of open communication and mutual trust. I believe great work comes from empowering talented people, so I focused on creating an environment where team members felt confident to take initiative, share their ideas, and contribute to our shared goals.
+                                                    <br>
+                                                    <br>
+                                                    A key part of my role was ensuring we stayed at the cutting edge of our industry. I championed the continuous adoption of modern tools and best practices, keeping our technical stack current and our workflows efficient. This commitment to innovation ensured that we consistently delivered solutions that were not only beautifully designed but also technically excellent and built to last.
                                                 </p>
                                                 <h2>
                                                     Bohemica Store
@@ -1116,7 +1135,7 @@
                                                     </ul>
                                                 </nav>
                                                 <p>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
+                                                    I developed reusable component templates for the e-commerce platform and advised on UI/UX improvements. The templates streamlined feature development and ensured a consistent user experience across the store.
                                                 </p>
                                                 <h2>
                                                     Bohemica Signage
@@ -1187,7 +1206,10 @@
                                                     </ul>
                                                 </nav>
                                                 <p>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue.
+                                                    I led the design and architecture of Bohemica Signage, a cloud-based digital signage platform that simplifies content distribution across multiple displays. I shaped the user experience to prioritise clarity and efficiency, allowing businesses to manage playlists, schedule content, and control display groups from a centralised dashboard.
+                                                    <br>
+                                                    <br>
+                                                    My role extended beyond design; I coordinated cross-functional teams, guided technical decisions, and ensured the interface remained intuitive as we expanded features like calendar scheduling and multi-location display grouping. I worked closely with developers and stakeholders to balance powerful functionality with ease of use, creating a product that feels effortless to use yet robust enough to manage thousands of screens reliably.
                                                 </p>
                                             </div>
                                             <figure>
@@ -1218,7 +1240,10 @@
                                                     </ul>
                                                 </nav>
                                                 <p>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
+                                                    We partnered with MMT s.r.o., a Czech industrial automation and robotics company, to redesign their brand identity and website. I created a new logo and visual identity that reflected their technical expertise and professionalism, then developed the site on Apostrophe CMS to showcase their custom machinery and solutions to potential clients and partners across Europe.
+                                                    <br>
+                                                    <br>
+                                                    Working with their management team, we prioritised a professional, modern aesthetic with content-first design that made complex industrial solutions accessible. The multilingual CMS ensured they could easily manage and expand their presence into new markets whilst maintaining a cohesive brand experience.
                                                 </p>
                                             </div>
                                         </section>
@@ -1326,17 +1351,6 @@
                                                 <nav>
                                                     <ul>
                                                         <li>
-                                                            <span>Videos:</span>
-                                                        </li>
-                                                        <li>
-                                                            <a href="projects/2019-18/aeropot/plant-growth-timelapse.mp4"
-                                                               target="_blank">Plant Growth Timelapse <span class="mid">(0:27)</span></a>
-                                                               <a href="projects/2019-18/aeropot/top-cover-light-effect.mp4"
-                                                                  target="_blank">Top Cover Light Effect <span class="mid">(0:16)</span></a>
-                                                        </li>
-                                                    </ul>
-                                                    <ul>
-                                                        <li>
                                                             <span>Documents:</span>
                                                         </li>
                                                         <li>
@@ -1345,6 +1359,17 @@
                                                                <a href="projects/2019-18/aeropot/dissertation.pdf" target="_blank">Dissertation</a>
                                                                <a href="projects/2019-18/aeropot/development-report.pdf"
                                                                   target="_blank">Development Report</a>
+                                                        </li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li>
+                                                            <span>Video:</span>
+                                                        </li>
+                                                        <li>
+                                                            <a href="projects/2019-18/aeropot/plant-growth-timelapse.mp4"
+                                                               target="_blank">Plant Growth Timelapse <span class="mid">(0:27)</span></a>
+                                                               <a href="projects/2019-18/aeropot/top-cover-light-effect.mp4"
+                                                                  target="_blank">Top Cover Light Effect <span class="mid">(0:16)</span></a>
                                                         </li>
                                                     </ul>
                                                     <ul>
@@ -1363,7 +1388,19 @@
                                                     </ul>
                                                 </nav>
                                                 <p>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus dignissim nibh pulvinar molestie. Nullam urna mauris, consectetur at euismod non, dapibus accumsan nulla. Cras aliquet aliquam congue. In dignissim iaculis nunc vel commodo. Suspendisse pretium, massa sed consequat dapibus, augue nibh varius odio, in rhoncus velit tortor et ligula. Nunc a iaculis nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque id tortor sit amet metus luctus facilisis vel eu nisi. Fusce a tellus at orci varius sollicitudin. Ut ultrices velit mi, ac molestie enim ultrices sit amet. Ut molestie non sem vitae pretium.
+                                                    Aéropot was born from my Master's thesis in Sustainability, Entrepreneurship, and Design at Brunel University. The project was a deep dive into solving real-world challenges like urbanisation and resource scarcity through technology. The goal was to create a smart indoor gardening system that not only makes plant cultivation accessible and efficient but also serves as an educational tool. It was a multidisciplinary venture that blended environmental science with product design, software engineering, and hardware prototyping to create a fully functional proof-of-concept.
+                                                    <br>
+                                                    <br>
+                                                    The vision was to design a device that was both useful and beautiful, fitting seamlessly into a modern home. I handled the end-to-end design process, from initial market research and competitor analysis to the final 3D CAD modelling and product rendering. The planter’s form was carefully considered, using principles like the golden ratio and continuous curvature to create an ergonomic and aesthetically pleasing chassis. This design-led approach ensured that every technical component was housed within a structure that prioritised user experience and a clean, unobtrusive look.
+                                                    <br>
+                                                    <br>
+                                                    The most demanding technical hurdle was engineering a custom ultrasonic atomizer circuit. After discovering off-the-shelf solutions were unreliable, I had to reverse-engineer a driver circuit from scratch. This involved a deep dive into high-frequency oscillators, where I learned that component tolerances were critical; identical transistors from different manufacturers yielded vastly different results. The solution required hand-winding copper inductor coils and using an oscilloscope to meticulously fine-tune the circuit until it produced a stable 1.7MHz mist. This process of trial, error, and persistence was a powerful lesson in practical, hands-on engineering.
+                                                    <br>
+                                                    <br>
+                                                    The system's automation is handled by an Arduino microcontroller, which I programmed in C++ to execute a control loop that manages the plant's environment. The microcontroller continuously polls an array of sensors monitoring pH, nutrient concentration (TDS), temperature, and humidity. Based on this incoming data and pre-defined optimal ranges, it actuates the LED grow lights, ventilation fans, and nutrient atomization cycles. For remote access, I integrated an ESP8266 WiFi module to establish a complete IoT communication pipeline. Sensor data is transmitted via the Blynk platform to a Google Firebase real-time database, which is then visualised on a custom smartphone application, giving the user a live data dashboard and the ability to manually override the automated routines.
+                                                    <br>
+                                                    <br>
+                                                    From a single concept on paper to a tangible, working prototype, Aéropot was a comprehensive exercise in turning an idea into reality. The project spanned the full product development lifecycle: business planning, user-centric design, hardware engineering, and full-stack software development. It was a rewarding challenge that pushed my skills in everything from circuit design and embedded programming to cloud-based data systems and user interface development, ultimately creating a product that is functional, sustainable, and engaging.
                                                 </p>
                                             </div>
                                         </section>

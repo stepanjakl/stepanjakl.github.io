@@ -584,7 +584,13 @@ footer>* {
 #profile:target~main footer .intro__footer-square-1,
 #archive:target~main footer .intro__footer-square-1,
 #profile:target~main .availability__dot,
-#archive:target~main .availability__dot {
+#archive:target~main .availability__dot,
+body.modal-profile-open footer .intro__footer-rectangle,
+body.modal-profile-open footer .intro__footer-square-1,
+body.modal-profile-open .availability__dot,
+body.modal-archive-open footer .intro__footer-rectangle,
+body.modal-archive-open footer .intro__footer-square-1,
+body.modal-archive-open .availability__dot {
     animation-play-state: paused;
 }
 
@@ -1362,7 +1368,15 @@ body {
 }
 
 #profile:target~main #modal-profile,
-#archive:target~main #modal-archive {
+body.modal-profile-open #modal-profile {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity var(--animate-in-segment) linear, transform var(--animate-in-segment) var(--ease-out-quad);
+}
+
+#archive:target~main #modal-archive,
+body.modal-archive-open #modal-archive {
     visibility: visible;
     opacity: 1;
     transform: scale(1);
@@ -1389,7 +1403,11 @@ body {
 #profile:target~main .intro__left,
 #profile:target~main .intro__right,
 #archive:target~main .intro__left,
-#archive:target~main .intro__right {
+#archive:target~main .intro__right,
+body.modal-profile-open .intro__left,
+body.modal-profile-open .intro__right,
+body.modal-archive-open .intro__left,
+body.modal-archive-open .intro__right {
     transition: transform var(--animate-in-segment) var(--ease-out-quad);
     transform: scale(0.95);
 }
@@ -1400,7 +1418,9 @@ footer>div {
 }
 
 #profile:target~main footer>div,
-#archive:target~main footer>div {
+#archive:target~main footer>div,
+body.modal-profile-open footer>div,
+body.modal-archive-open footer>div {
     transition: transform var(--animate-in-segment) var(--ease-out-quad);
     transform: scale(0.975);
 }
@@ -1438,7 +1458,8 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:focus {
     opacity: 0;
 }
 
-#archive:target~main #modal-archive #horizontal-timeline> :first-child {
+#archive:target~main #modal-archive #horizontal-timeline> :first-child,
+body.modal-archive-open #modal-archive #horizontal-timeline> :first-child {
     transition: opacity var(--animate-in-segment) linear var(--anim-segment), transform var(--animate-in-segment) var(--ease-out-quad) var(--anim-segment);
     transform: scale(1);
     opacity: 1;

@@ -407,7 +407,22 @@
 }
 
 .modal-archive__timeline-section nav li:nth-child(2) p {
+    font-family: 'Chakra Petch', monospace;
+    font-size: 1.07143125rem;
+    line-height: 1.25rem;
     margin: 0.3125rem 0 0.25rem 0.6875rem;
+}
+
+.modal-archive__timeline-section nav li:nth-child(2) p::before {
+  content: "";
+  margin-bottom: -0.2253em;
+  display: table;
+}
+
+.modal-archive__timeline-section nav li:nth-child(2) p::after {
+  content: "";
+  margin-top: -0.2413em;
+  display: table;
 }
 
 @media (min-width: 45rem) {
@@ -549,6 +564,10 @@
 .hover-cards--variant-cloudraker-tfp {
     --items: 5;
     max-width: 16rem;
+}
+
+.hover-cards--variant-cloudraker-tfp>figure>div>a {
+    cursor: default;
 }
 
 .hover-cards--variant-apostrophe-template {
