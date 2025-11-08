@@ -162,7 +162,7 @@
                             oncontextmenu="if ('speechSynthesis' in window) { let msg = new SpeechSynthesisUtterance(); msg.volume= 0.25; msg.lang = 'cs-CZ'; msg.voice = speechSynthesis.getVoices().filter(voice => voice.name === 'Zuzana')[0]; msg.text = 'Štěpán Jákl'; speechSynthesis.speak(msg) }"
                             onclick="App.handleTouchButtonClick(this, event, () => { copyToClipboard('Štěpán Jákl'); App.textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip__text--bottom span'), this, 'Copied to the clipboard') }, true)"
                             role="button"
-                            aria-label="Click to copy name to clipboard">
+                            aria-label="Left click to copy name to clipboard; Right click to hear pronunciation">
                             <div class="intro__name-frame" aria-hidden="true">
                                 <div class="corners">
                                     <span class="corners__item corners__item--tl"></span>
@@ -194,7 +194,7 @@
                                 </div>
                             </abbr>
                             <abbr class="tooltip__text--bottom tooltip__text">
-                                <span aria-hidden="true">Click to copy</span>
+                                <span aria-hidden="true">L-click to copy / R-click to pronounce</span>
                             </abbr>
                         </h2>
                         <div class="intro__logo intro__logo--animating has-corners">
@@ -1391,7 +1391,7 @@
                                                     Aéropot was born from my Master's thesis in Sustainability, Entrepreneurship, and Design at Brunel University. The project was a deep dive into solving real-world challenges like urbanisation and resource scarcity through technology. The goal was to create a smart indoor gardening system that not only makes plant cultivation accessible and efficient but also serves as an educational tool. It was a multidisciplinary venture that blended environmental science with product design, software engineering, and hardware prototyping to create a fully functional proof-of-concept.
                                                     <br>
                                                     <br>
-                                                    The vision was to design a device that was both useful and beautiful, fitting seamlessly into a modern home. I handled the end-to-end design process, from initial market research and competitor analysis to the final 3D CAD modelling and product rendering. The planter’s form was carefully considered, using principles like the golden ratio and continuous curvature to create an ergonomic and aesthetically pleasing chassis. This design-led approach ensured that every technical component was housed within a structure that prioritised user experience and a clean, unobtrusive look.
+                                                    The vision was to design a device that was both useful and beautiful, fitting seamlessly into a modern home. I handled the end-to-end design process, from initial market research and competitor analysis to the final 3D CAD modelling and product rendering. The planter&rsquo;s form was carefully considered, using principles like the golden ratio and continuous curvature to create an ergonomic and aesthetically pleasing chassis. This design-led approach ensured that every technical component was housed within a structure that prioritised user experience and a clean, unobtrusive look.
                                                     <br>
                                                     <br>
                                                     The most demanding technical hurdle was engineering a custom ultrasonic atomizer circuit. After discovering off-the-shelf solutions were unreliable, I had to reverse-engineer a driver circuit from scratch. This involved a deep dive into high-frequency oscillators, where I learned that component tolerances were critical; identical transistors from different manufacturers yielded vastly different results. The solution required hand-winding copper inductor coils and using an oscilloscope to meticulously fine-tune the circuit until it produced a stable 1.7MHz mist. This process of trial, error, and persistence was a powerful lesson in practical, hands-on engineering.
@@ -1601,7 +1601,9 @@
                             </figure>
                         </figure>
                     </dialog>
-                    <div id="underlay-modal" class="underlay underlay--modal">
+                    <div id="underlay-modal-profile" class="underlay underlay--modal-profile">
+                    </div>
+                    <div id="underlay-modal-archive" class="underlay underlay--modal-archive">
                     </div>
                 </header>
                 <figure class="bg-triangle--left bg-triangle">

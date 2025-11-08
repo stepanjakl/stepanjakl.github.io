@@ -13,6 +13,69 @@
 
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
 
+// ============================================================================
+// Theme Persistence
+// ============================================================================
+
+/**
+ * Manages light/dark mode persistence using localStorage
+ */
+class ThemeManager {
+    constructor() {
+        this.STORAGE_KEY = 'theme-mode'
+        this.modeCheckbox = null
+
+        this.init()
+    }
+
+    init() {
+        // Get mode checkbox element
+        this.modeCheckbox = document.getElementById('mode')
+        if (!this.modeCheckbox) {
+            console.warn('Theme mode checkbox not found')
+            return
+        }
+
+        // Apply saved theme on page load
+        this.applySavedTheme()
+
+        // Listen for theme changes and persist them
+        this.modeCheckbox.addEventListener('change', () => {
+            this.saveTheme()
+        })
+    }
+
+    applySavedTheme() {
+        try {
+            const savedTheme = localStorage.getItem(this.STORAGE_KEY)
+
+            if (savedTheme === 'light') {
+                // Light mode: checkbox should be checked
+                this.modeCheckbox.checked = true
+            } else if (savedTheme === 'dark') {
+                // Dark mode: checkbox should be unchecked
+                this.modeCheckbox.checked = false
+            }
+            // If no saved preference, leave checkbox in its default state
+        } catch (error) {
+            console.warn('Failed to load theme preference:', error)
+        }
+    }
+
+    saveTheme() {
+        try {
+            const theme = this.modeCheckbox.checked ? 'light' : 'dark'
+            localStorage.setItem(this.STORAGE_KEY, theme)
+        } catch (error) {
+            console.warn('Failed to save theme preference:', error)
+        }
+    }
+}
+
+// Initialize theme manager when DOM is ready
+// Since this script uses defer, DOM is already loaded
+new ThemeManager()
+
 const isAnimationFinished = (selector) => {
     const animations = document.querySelector(selector)?.getAnimations()
     return !animations || animations.length === 0 || animations[0].playState === 'finished'
@@ -2162,14 +2225,10 @@ const applyNoAnimation = () => {
         `.intro__logo--animating,
             .intro__name--animating,
             .intro__name--animating .intro__name-frame>p,
-            .intro__primary-title.intro__title--animating,
-            .intro__secondary-title.intro__title--animating,
-            .intro__primary-title.intro__title--animating>p,
-            .intro__secondary-title.intro__title--animating>p,
-            .intro__primary-title.intro__title--animating .intro__animated-text span,
-            .intro__secondary-title.intro__title--animating .intro__animated-text span,
-            .intro__primary-title.intro__title--animating .intro__animated-text--alt span,
-            .intro__secondary-title.intro__title--animating .intro__animated-text--alt span,
+            .intro__title--animating,
+            .intro__title--animating>p,
+            .intro__title--animating .intro__animated-text span,
+            .intro__title--animating .intro__animated-text--alt span,
             .availability--animating,
             .availability--animating .availability__background,
             .availability--animating .availability__content,

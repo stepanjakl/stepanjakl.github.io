@@ -41,11 +41,11 @@
     border-radius: 1.75rem 1.75rem 1rem 1rem;
     backdrop-filter: blur(0.09375rem);
     -webkit-backdrop-filter: blur(0.09375rem);
-    border: solid max(1px, 0.0625rem) var(--context-border-light);
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--context-border-dark);
+    border: solid max(1px, 0.0625rem) var(--light-1);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--dark-2);
     background-image:
-        radial-gradient(circle at 0.09375rem 0.09375rem, #333d3f55 max(1px, 0.0625rem), transparent max(1px, 0.0625rem)),
-        radial-gradient(circle at 0.09375rem 0.09375rem, #333d3f55 max(1px, 0.0625rem), transparent max(1px, 0.0625rem));
+        radial-gradient(circle at 0.09375rem 0.09375rem, var(--menu-bg) max(1px, 0.0625rem), transparent max(1px, 0.0625rem)),
+        radial-gradient(circle at 0.09375rem 0.09375rem, var(--menu-bg) max(1px, 0.0625rem), transparent max(1px, 0.0625rem));
     background-size: 0.875rem 0.875rem;
     background-position: 0.1875rem 0.0625rem, 0.625rem 0.5rem;
     background-repeat: repeat;
@@ -107,7 +107,7 @@
     display: inline-flex;
     padding: 0.6875rem;
     border-radius: 9999px;
-    background-color: var(--dark-3);
+    background-color: var(--dark-4);
 }
 
 .menu__email-icon svg {
@@ -162,7 +162,7 @@
 .menu__link-icon {
     display: inline-flex;
     border-radius: 9999px;
-    background-color: var(--dark-3);
+    background-color: var(--dark-4);
 }
 
 .menu__link-icon--animated {
@@ -259,7 +259,7 @@
     border-radius: 0.4375rem 0.4375rem 0.625rem 0.625rem;
     outline: solid max(1px, 0.0625rem) var(--dark-1);
     border: solid max(1px, 0.0625rem) var(--light-1);
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--context-border-dark);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--dark-2);
 }
 
 @media (min-width: 45rem) {
@@ -386,7 +386,7 @@ body {
     }
 }
 
-/* Menu Dropdown */
+/* Menu dropdown */
 
 #menu-dropdown {
     --menu-border-radius: 0.5rem;
@@ -409,8 +409,8 @@ body {
 #menu-dropdown>div {
     display: flex;
     flex-direction: column;
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--context-border-light-2);
-    outline: solid max(1px, 0.0625rem) var(--dark-3);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-2);
+    outline: solid max(1px, 0.0625rem) var(--dark-4);
     border-radius: var(--menu-border-radius);
     background-color: var(--context-bg-2);
 }
@@ -471,8 +471,8 @@ body {
     width: auto;
     margin: 0 max(1px, 0.0625rem);
     padding: 0.875rem 2rem 0.75rem 1.125rem;
-    box-shadow: 0 min(-1px, -0.0625rem) 0 0 var(--context-border-light-2);
-    border-top: solid max(1px, 0.0625rem) var(--context-border-dark-2);
+    box-shadow: 0 min(-1px, -0.0625rem) 0 0 var(--light-2);
+    border-top: solid max(1px, 0.0625rem) var(--dark-3);
     user-select: none;
     -webkit-user-select: none;
 }
@@ -512,25 +512,25 @@ body {
 }
 
 #menu-dropdown>div>*:first-child {
-    margin-top: 0;
-    border-top-color: transparent;
-    box-shadow: none;
+    margin-top: 0 !important;
+    border-top-color: transparent !important;
+    box-shadow: none !important;
 }
 
-/* Menu Dropdown - HR Separator */
+/* Menu dropdown - Divider */
 
 #menu-dropdown hr {
     width: auto;
     height: 0.5rem;
     margin: 0 max(1px, 0.0625rem);
     border: 0;
-    background-color: rgba(0, 0, 0, 0.15);
-    box-shadow: 0 min(-1px, -0.0625rem) 0 0 var(--context-border-light-2);
+    background-color: var(--dark-2);
+    box-shadow: 0 min(-1px, -0.0625rem) 0 0 var(--light-2);
     box-sizing: content-box;
     overflow: visible;
 }
 
-/* Menu Dropdown - Fullscreen Icons */
+/* Menu dropdown - Fullscreen Icons */
 
 #menu-dropdown-fullscreen svg {
     width: 1.375rem;
@@ -539,14 +539,14 @@ body {
     box-sizing: content-box;
 }
 
-/* Menu Dropdown - Dark Mode Icon */
+/* Menu dropdown - Dark Mode Icon */
 
 #menu-dropdown-dark-mode svg {
-    color: var(--navy);
+    color: var(--navy-25);
 }
 
-/* Menu Dropdown - Light Mode Icon */
+/* Menu dropdown - Light Mode Icon */
 
 #menu-dropdown #menu-dropdown-light-mode svg {
-    color: var(--yellow);
+    color: var(--yellow-85);
 }
