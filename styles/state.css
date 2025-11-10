@@ -1,5 +1,9 @@
 /*
  * State
+ *
+ * NOTE: Some selectors in this file have high specificity (e.g., #mode:checked~main #menu-dropdown label#menu-dropdown-debug)
+ * This is intentional for the checkbox-based state management pattern used throughout the site.
+ * Future refactoring could introduce utility classes to reduce specificity and improve maintainability.
  */
 
 /* No fullscreen support */
@@ -13,36 +17,45 @@ body.no-fullscreen .modal__fullscreen-button {
 
 #mode:checked~main {
     --background: var(--cyan-quarter-95);
+    /* 210, 50, 75 */
     --background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
-    --triangle: #93d0dd00, var(--cyan-half-80); /* 210, 100, 75 */
+    --triangle: #93d0dd00, var(--cyan-half-80);
     --triangle-stripe: transparent;
 
     --text-1: var(--cyan-half-25);
     --text-2: var(--cyan-half-35);
     --text-3: var(--cyan-quarter-65);
-    --highlight-primary: var(--blue-full-75);
-    --highlight-secondary: var(--cyan-half-75);
+    --highlight-primary: var(--blue-full-80);
+    --highlight-secondary: var(--cyan-half-80);
 
     --icon: var(--cyan-half-45);
-    --icon-hover: var(--cyan-half-35);
+    --icon--hover: var(--cyan-half-35);
     --icon-bg: var(--cyan-quarter-75);
 
     /* 210, 25, 70 */
     --context-bg: rgba(176, 203, 210, 0.5);
     /* 210, 25, 80 */
-    --context-bg-2:rgba(176, 203, 210, 0.75);
+    --context-bg-2: rgba(176, 203, 210, 0.75);
+    --context-bg-modal: var(--cyan-quarter-80);
+    --context-bg-modal--hover: var(--cyan-quarter-85);
 
-    --modal-border-outer: var(--dark-2);
-    --modal-border-inner: var(--light-5);
-    /* --modal-bg: var(--cyan-three-quarters-95); */
-    --modal-bg-blur: rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.35);
+    --modal-border-outer: var(--dark-15);
+    --modal-border-inner: var(--light-50);
+    --modal-bg-blur: var(--light-15), var(--light-35);
     --modal-underlay-bg-profile: rgba(255, 255, 255, 0);
     --modal-underlay-bg-archive: rgba(255, 255, 255, 0);
-
+    --modal-icon: var(--cyan-half-45);
+    --modal-icon--hover: var(--cyan-full-35);
+    --modal-icon-bg: var(--light-25);
+    --modal-icon--hover: var(--text-1);
+    --modal-line: var(--cyan-quarter-60);
+    --modal-line-2: var(--cyan-quarter-70);
+    --modal-line-3: var(--cyan-quarter-80);
     --modal-tag-bg: var(--cyan-three-quarters-80);
+    --modal-tag-bg--hover: var(--cyan-three-quarters-85);
 
     --footer-square-1: var(--blue-full-75);
-    --footer-square-1-hover: var(--yellow-75);
+    --footer-square-1--hover: var(--yellow-75);
     --footer-square-2: var(--cyan-half-55);
     --footer-square-3: var(--cyan-half-65);
     --footer-square-4: var(--cyan-half-75);
@@ -69,23 +82,23 @@ body.no-fullscreen .modal__fullscreen-button {
 /* Light mode - Menu */
 
 #mode:checked~main .menu__background {
-    border-color: var(--dark-2);
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-5);
+    border-color: var(--dark-15);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-50);
 }
 
 #mode:checked~main .menu__email,
 #mode:checked~main .menu__link {
-    background-color: var(--light-4);
-    outline-color: var(--dark-3);
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-5);
+    background-color: var(--light-35);
+    outline-color: var(--dark-20);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-50);
 }
 
 #mode:checked~main .menu__email-icon,
 #mode:checked~main .menu__link-icon {
-    background-color: var(--light-1);
-    outline: solid max(1px, 0.0625rem) var(--dark-1);
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-3);
-    /* border: solid max(1px, 0.0625rem) var(--light-3); */
+    background-color: var(--light-10);
+    outline: solid max(1px, 0.0625rem) var(--dark-10);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-25);
+    /* border: solid max(1px, 0.0625rem) var(--light-25); */
 }
 
 #mode:checked~main .menu__link:hover .menu__email-icon,
@@ -94,7 +107,7 @@ body.no-fullscreen .modal__fullscreen-button {
 #mode:checked~main .menu__link:focus .menu__link-icon,
 #mode:checked~main .menu__link.tooltip-key--active .menu__email-icon,
 #mode:checked~main .menu__link.tooltip-key--active .menu__link-icon {
-    background-color: var(--light-4);
+    background-color: var(--light-35);
     outline-color: transparent;
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) transparent;
 }
@@ -106,15 +119,15 @@ body.no-fullscreen .modal__fullscreen-button {
 }
 
 #mode:checked~main .menu__button {
-    background-color: var(--light-4);
+    background-color: var(--light-35);
     outline-color: transparent;
-    border-color: var(--dark-3);
+    border-color: var(--dark-20);
     background-clip: padding-box;
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-5);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-50);
 }
 
 #mode:checked~main #menu:target .menu__button {
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-3);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-25);
 }
 
 #mode:checked~main .menu__link--profile .menu__link-label-text {
@@ -125,7 +138,7 @@ body.no-fullscreen .modal__fullscreen-button {
 #mode:checked~main .menu__link--profile:hover .menu__link-label-text,
 #mode:checked~main .menu__link--profile:focus .menu__link-label-text,
 #mode:checked~main .menu__link--profile.tooltip-key--active .menu__link-label-text {
-    border-bottom-color: var(--blue-full-75);
+    border-bottom-color: var(--highlight-primary);
     transition: border-color var(--animate-in-segment-2\/3) linear;
 }
 
@@ -145,17 +158,33 @@ body.no-fullscreen .modal__fullscreen-button {
 /* Light mode - Menu dropdown */
 
 #mode:checked~main #menu-dropdown>div {
-    background-color: var(--light-5);
-    outline-color: var(--dark-3);
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-5);
+    background-color: var(--light-50);
+    outline-color: transparent;
+    border-color: var(--dark-20);
+    /* box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-50); */
+}
+
+#mode:checked~main #menu-dropdown>div>*:first-child {
+    border-top: none;
+}
+
+#mode:checked~main #menu-dropdown>div>*:first-child:before {
+    border-radius: calc(var(--menu-border-radius) - max(1px, 0.0625rem)) calc(var(--menu-border-radius) - max(1px, 0.0625rem)) 0 0;
+}
+
+#mode:checked~main #menu-dropdown>div>*:last-child {
+    box-shadow: inset 0 max(1px, 0.0625rem) 0 0 var(--light-50), inset max(1px, 0.0625rem) 0 0 0 var(--light-50), inset min(-1px, -0.0625rem) 0 0 0 var(--light-50), inset 0 min(-1px, -0.0625rem) 0 0 var(--light-50);
+}
+
+#mode:checked~main #menu-dropdown>div>*:last-child:before {
+    border-radius: 0 0 calc(var(--menu-border-radius) - max(1px, 0.0625rem)) calc(var(--menu-border-radius) - max(1px, 0.0625rem));
 }
 
 #mode:checked~main #menu-dropdown a,
 #mode:checked~main #menu-dropdown label {
-    margin: 0;
-    border-color: var(--dark-3);
-    box-shadow: inset 0 max(1px, 0.0625rem) 0 0 var(--light-5);
-    background-image: repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.0125), rgba(0, 0, 0, 0.0125) 0.5rem, transparent 0.5rem, transparent 1rem);
+    border-color: var(--dark-20);
+    box-shadow: inset 0 max(1px, 0.0625rem) 0 0 var(--light-50), inset max(1px, 0.0625rem) 0 0 0 var(--light-50), inset min(-1px, -0.0625rem) 0 0 0 var(--light-50);
+    background-image: repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.01), rgba(0, 0, 0, 0.01) 0.5rem, transparent 0.5rem, transparent 1rem);
 }
 
 #mode:checked~main #menu-dropdown a::before,
@@ -178,10 +207,10 @@ body.no-fullscreen .modal__fullscreen-button {
     bottom: 0;
 }
 
-#mode:checked~main #menu-dropdown a:first-child:before,
+/* #mode:checked~main #menu-dropdown a:first-child:before,
 #mode:checked~main #menu-dropdown a:first-child:after {
     top: min(-1px, -0.0625rem);
-}
+} */
 
 #mode:checked~main #menu-dropdown label#menu-dropdown-debug::before,
 #mode:checked~main #menu-dropdown label#menu-dropdown-fullscreen::before {
@@ -195,17 +224,16 @@ body.no-fullscreen .modal__fullscreen-button {
 }
 
 #mode:checked~main #menu-dropdown a svg:nth-of-type(2) {
-    background-color: var(--dark-2);
+    background-color: var(--dark-15);
 }
 
 
 /* Light mode - Menu dropdown - Divider */
 
 #mode:checked~main #menu-dropdown hr {
-    margin: 0;
-    border-top: solid max(1px, 0.0625rem) var(--dark-3);
+    border-top: solid max(1px, 0.0625rem) var(--dark-20);
     background-clip: padding-box;
-    background-color: var(--dark-1);
+    background-color: var(--dark-10);
 }
 
 
@@ -231,7 +259,7 @@ body.no-fullscreen .modal__fullscreen-button {
 /* Light mode - Debug */
 
 #mode:not(:checked)~#debug:checked~main * {
-    outline: max(1px, 0.0625rem) solid var(--blue-full-45) !important;
+    outline: solid max(1px, 0.0625rem) var(--blue-full-45) !important;
     outline-offset: min(-1px, -0.0625rem);
 }
 
@@ -258,11 +286,29 @@ body.no-fullscreen .modal__fullscreen-button {
     background-image: url(../images/logo-animated-light.svg)
 }
 
+#mode:checked~main .intro__logo-frame {
+    --corner-color: var(--cyan-full-65);
+    --corner-color--active: var(--blue-full-65);
+}
+
 
 /* Light mode - Intro */
 
 #mode:checked~main .intro__name {
     color: var(--cyan-half-30);
+}
+
+#mode:checked~main .intro__name-frame {
+    --corner-color: var(--cyan-full-70);
+    --corner-color--active: var(--cyan-full-70);
+}
+
+#mode:checked~main .intro__name.highlight--active .intro__name-frame {
+    --corner-color--active: var(--green-lime-75);
+}
+
+#mode:checked~main .highlight--active {
+    color: var(--green-lime-75) !important;
 }
 
 #mode:checked~main .intro__primary-title span,
@@ -323,8 +369,8 @@ body.no-fullscreen .modal__fullscreen-button {
 
 #mode:checked~main .tooltip .tooltip__text {
     /* background-color: var(--context-bg); */
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-5);
-    border: solid max(1px, 0.0625rem) var(--dark-2);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-35);
+    border: solid max(1px, 0.0625rem) var(--dark-15);
 }
 
 
@@ -353,7 +399,7 @@ body.no-fullscreen .modal__fullscreen-button {
 /* Debug - Dark mode */
 
 #mode:not(:checked)~#debug:checked~main * {
-    outline: max(1px, 0.0625rem) solid var(--blue-full-55);
+    outline: solid max(1px, 0.0625rem) var(--blue-full-55);
     outline-offset: min(-1px, -0.0625rem);
     transition: none !important;
 }
@@ -394,7 +440,23 @@ body.modal-open footer {
 #mode:checked~main .modal__content {
     outline: none;
     border-color: var(--modal-border-outer);
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-6);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-50);
+}
+
+#mode:checked~main .modal__close-button,
+#mode:checked~main .modal__fullscreen-button {
+    outline: solid max(1px, 0.0625rem) var(--dark-20);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-35);
+}
+
+#mode:checked~main .modal__close-button:hover,
+#mode:checked~main .modal__close-button:focus,
+#mode:checked~main .modal__fullscreen-button:hover,
+#mode:checked~main .modal__fullscreen-button:focus {
+    outline-color: var(--highlight-secondary);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--highlight-secondary);
+    /* outline-color: var(--dark-25);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-50); */
 }
 
 
@@ -410,16 +472,12 @@ body.modal-profile-open #modal-profile .modal__content {
     pointer-events: auto;
 }
 
-#profile:target~main .modal-profile__footer-art {
+#mode:checked~main .modal-profile__footer-art {
     display: none;
 }
 
 
 /* Modal - Archive */
-
-#mode:checked~main #modal-archive .modal__content::before {
-    background-color: rgba(234, 242, 244, 0.975);
-}
 
 #archive:target~main #modal-archive,
 body.modal-archive-open #modal-archive {
@@ -431,17 +489,59 @@ body.modal-archive-open #modal-archive .modal__content {
     pointer-events: auto;
 }
 
-#debug:checked~#archive:target~main::before {
+#archive:target~main .modal-archive__timeline-section-title span {
+    color: var(--text-2);
+}
+
+#mode:checked~main #modal-archive .modal__content::before {
+    background-color: rgba(234, 242, 244, 0.975);
+}
+
+#mode:checked~main [data-carousel-nav] button {
+    background-color: var(--dark-25);
+}
+
+#mode:checked~main [data-carousel-nav] button[aria-current] {
+    background-color: var(--dark-50);
+}
+
+#mode:checked~main [data-carousel-nav] button:hover,
+#mode:checked~main [data-carousel-nav] button:focus {
+    background-color: var(--dark-40);
+}
+
+#mode:checked~main [data-carousel-arrows] li button:hover,
+#mode:checked~main [data-carousel-arrows] li button:focus {
+    background-color: var(--context-bg-modal--hover);
+}
+
+#mode:checked~main [data-carousel-arrows] li button::before {
+    background-color: var(--dark-35);
+}
+
+#mode:checked~main [data-carousel-arrows] li button:hover::before {
+    background-color: var(--dark-50);
+}
+
+#mode:checked~main .modal-archive__footer-art-left {
+    /* 210, 25, 60 */
+    background-image: url("data:image/svg+xml,%3Csvg width='192' height='192' viewBox='0 0 192 192' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%23809499' stroke-width='1' vector-effect='non-scaling-stroke' d='M32 16v34.74L149.26 168H192'/%3E%3C/svg%3E%0A");
+}
+
+
+/* Modal - Archive - Debug */
+
+/* #debug:checked~#archive:target~main::before {
     content: '';
     position: fixed;
     inset: 0;
     margin: auto 0;
-    width: 100%;
     height: min(2px, 0.125rem);
+    width: 100%;
     background-color: var(--blue-full-65);
     pointer-events: none;
     z-index: 100;
-}
+} */
 
 #debug:checked~#archive:target~main [data-carousel-slides-wrapper]::before {
     content: '';
@@ -480,29 +580,28 @@ body.modal-archive-open #modal-archive .modal__content {
     border-width: max(1px, 0.0625rem);
 }
 
-
 /* Collapsible timeline sections on small screens */
-#timeline-section-year-2024-21:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2024-21"],
-#timeline-section-year-2021-19:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2021-19"],
-#timeline-section-year-2019-18:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="2019-18"],
-#timeline-section-year-elsewhen:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section="elsewhen"] {
+#timeline-section-year-2024-21:not(:checked)~.modal-archive__timeline-grid [data-timeline-section="2024-21"],
+#timeline-section-year-2021-19:not(:checked)~.modal-archive__timeline-grid [data-timeline-section="2021-19"],
+#timeline-section-year-2019-18:not(:checked)~.modal-archive__timeline-grid [data-timeline-section="2019-18"],
+#timeline-section-year-elsewhen:not(:checked)~.modal-archive__timeline-grid [data-timeline-section="elsewhen"] {
     visibility: hidden;
     opacity: 0;
     height: 0;
     padding: 0;
 }
 
-#timeline-section-year-2024-21:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2024-21"] svg:first-child,
-#timeline-section-year-2021-19:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2021-19"] svg:first-child,
-#timeline-section-year-2019-18:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="2019-18"] svg:first-child,
-#timeline-section-year-elsewhen:checked ~ .modal-archive__timeline-grid [data-timeline-section-title="elsewhen"] svg:first-child {
+#timeline-section-year-2024-21:checked~.modal-archive__timeline-grid [data-timeline-section-title="2024-21"] svg:first-child,
+#timeline-section-year-2021-19:checked~.modal-archive__timeline-grid [data-timeline-section-title="2021-19"] svg:first-child,
+#timeline-section-year-2019-18:checked~.modal-archive__timeline-grid [data-timeline-section-title="2019-18"] svg:first-child,
+#timeline-section-year-elsewhen:checked~.modal-archive__timeline-grid [data-timeline-section-title="elsewhen"] svg:first-child {
     display: none;
 }
 
-#timeline-section-year-2024-21:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2024-21"] svg:nth-child(2),
-#timeline-section-year-2021-19:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2021-19"] svg:nth-child(2),
-#timeline-section-year-2019-18:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="2019-18"] svg:nth-child(2),
-#timeline-section-year-elsewhen:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title="elsewhen"] svg:nth-child(2) {
+#timeline-section-year-2024-21:not(:checked)~.modal-archive__timeline-grid [data-timeline-section-title="2024-21"] svg:nth-child(2),
+#timeline-section-year-2021-19:not(:checked)~.modal-archive__timeline-grid [data-timeline-section-title="2021-19"] svg:nth-child(2),
+#timeline-section-year-2019-18:not(:checked)~.modal-archive__timeline-grid [data-timeline-section-title="2019-18"] svg:nth-child(2),
+#timeline-section-year-elsewhen:not(:checked)~.modal-archive__timeline-grid [data-timeline-section-title="elsewhen"] svg:nth-child(2) {
     display: none;
 }
 

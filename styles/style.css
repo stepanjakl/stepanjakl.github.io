@@ -25,6 +25,7 @@
     --cyan-full-45: #007684;
     --cyan-full-55: #0091a2;
     --cyan-full-65: #00aec2;
+    --cyan-full-70: #00bcd2;
     --cyan-full-75: #00CBE2;
     --cyan-full-85: #4ce7ff;
     --cyan-full-90: #a0efff;
@@ -36,9 +37,11 @@
     --cyan-three-quarters-50: #3e808c;
     --cyan-three-quarters-55: #468e9b;
     --cyan-three-quarters-65: #55aab9;
+    --cyan-three-quarters-70: #5cb8c8;
     --cyan-three-quarters-75: #64c6d8;
     --cyan-three-quarters-80: #6cd5e8;
     --cyan-three-quarters-85: #83e2f5;
+    --cyan-three-quarters-90: #b4ecf8;
     --cyan-three-quarters-95: #dcf5fb;
     /* 210, 50, 10-95 */
     --cyan-half-10: #121d20;
@@ -88,6 +91,9 @@
     --blue-full-55: #4e7bff;
     --blue-full-65: #7e98ff;
     --blue-full-75: #a6b5ff;
+    --blue-full-80: #b8c3ff;
+    --blue-full-85: #cad2ff;
+    --blue-full-90: #dce1ff;
     --blue-full-95: #EEF0FF;
 
     /* Colours - Accent colors */
@@ -96,7 +102,8 @@
     --yellow-85: #EED500;
     /* 110, 85, 65 */
     --green-forest-65: #7dac3b;
-    /* 125, 100, 80-85 */
+    /* 125, 100, 75-85 */
+    --green-lime-75: #3fd400;
     --green-lime-80: #44e400;
     --green-lime-85: #49f400;
     --green-lime-85-opacity: rgba(73, 244, 0, 0.25);
@@ -110,16 +117,32 @@
     --navy-25: #6b0076;
 
     /* Opacity tokens */
-    --light-1: rgba(255, 255, 255, 0.1);
-    --light-2: rgba(255, 255, 255, 0.15);
-    --light-3: rgba(255, 255, 255, 0.25);
-    --light-4: rgba(255, 255, 255, 0.35);
-    --light-5: rgba(255, 255, 255, 0.5);
-    --light-6: rgba(255, 255, 255, 0.75);
-    --dark-1: rgba(0, 0, 0, 0.1);
-    --dark-2: rgba(0, 0, 0, 0.15);
-    --dark-3: rgba(0, 0, 0, 0.2);
-    --dark-4: rgba(0, 0, 0, 0.25);
+    --light-10: rgba(255, 255, 255, 0.1);
+    --light-15: rgba(255, 255, 255, 0.15);
+    --light-20: rgba(255, 255, 255, 0.2);
+    --light-25: rgba(255, 255, 255, 0.25);
+    --light-35: rgba(255, 255, 255, 0.35);
+    --light-45: rgba(255, 255, 255, 0.45);
+    --light-50: rgba(255, 255, 255, 0.5);
+    --light-55: rgba(255, 255, 255, 0.55);
+    --light-60: rgba(255, 255, 255, 0.6);
+    --light-65: rgba(255, 255, 255, 0.65);
+    --light-70: rgba(255, 255, 255, 0.7);
+    --light-75: rgba(255, 255, 255, 0.75);
+    --light-95: rgba(255, 255, 255, 0.95);
+    --dark-10: rgba(0, 0, 0, 0.1);
+    --dark-15: rgba(0, 0, 0, 0.15);
+    --dark-20: rgba(0, 0, 0, 0.2);
+    --dark-25: rgba(0, 0, 0, 0.25);
+    --dark-35: rgba(0, 0, 0, 0.35);
+    --dark-40: rgba(0, 0, 0, 0.4);
+    --dark-45: rgba(0, 0, 0, 0.45);
+    --dark-50: rgba(0, 0, 0, 0.5);
+    --dark-55: rgba(0, 0, 0, 0.55);
+    --dark-60: rgba(0, 0, 0, 0.6);
+    --dark-65: rgba(0, 0, 0, 0.65);
+    --dark-70: rgba(0, 0, 0, 0.7);
+    --dark-75: rgba(0, 0, 0, 0.75);
 
     /* Breakpoints */
     --breakpoint-xs: 30rem;
@@ -196,7 +219,7 @@ main {
 
     /* Icon colors */
     --icon: var(--cyan-quarter-80);
-    --icon-hover: var(--cyan-quarter-85);
+    --icon--hover: var(--cyan-quarter-85);
     --icon-bg: var(--cyan-quarter-45);
 
     /* Context menu colors */
@@ -204,30 +227,33 @@ main {
     --context-bg: rgba(51, 61, 63, 0.5);
     /* 210, 25, 35 */
     --context-bg-2: rgba(62, 73, 75, 0.75);
+    --context-bg-modal: var(--light-15);
 
     /* 210, 25, 25 */
     --menu-bg: #333d3f55;
     --tooltip-bg: #333d3f65;
 
     /* Modal colors */
-    --modal-border-outer: var(--dark-1);
-    --modal-border-inner: var(--light-2);
+    --modal-border-outer: var(--dark-10);
+    --modal-border-inner: var(--light-15);
     /* 210, 100, 25 */
     --modal-bg-blur: rgba(0, 66, 75, 0.35), rgba(0, 66, 75, 0.65);
     /* 210, 100, 5 */
     --modal-underlay-bg-profile: rgb(0, 20, 23, 0.25);
     --modal-underlay-bg-archive: rgb(0, 20, 23, 0.5);
     --modal-icon: var(--cyan-half-85);
-    --modal-icon-hover: var(--cyan-half-95);
+    --modal-icon--hover: var(--cyan-half-95);
+    --modal-icon-bg: var(--light-15);
+    --modal-icon-bg--hover: var(--highlight-secondary);
     --modal-line: var(--cyan-half-75);
     --modal-line-2: var(--cyan-half-65);
     --modal-line-3: var(--cyan-half-55);
     --modal-tag-bg: var(--cyan-three-quarters-45);
-    --modal-tag-bg-hover: var(--cyan-three-quarters-55);
+    --modal-tag-bg--hover: var(--cyan-three-quarters-55);
 
     /* Footer colors */
     --footer-square-1: var(--highlight-primary);
-    --footer-square-1-hover: var(--yellow-85);
+    --footer-square-1--hover: var(--yellow-85);
     --footer-square-2: var(--cyan-full-85);
     --footer-square-3: var(--cyan-full-65);
     --footer-square-4: var(--cyan-full-45);
@@ -444,7 +470,7 @@ body, main {
     --corner-offset-x: 1rem;
     --corner-offset-y: 0.5rem;
     --corner-color: var(--cyan-full-45);
-    --corner-color-active: var(--cyan-full-85);
+    --corner-color--active: var(--cyan-full-85);
 }
 
 .intro__name-frame>p {
@@ -529,7 +555,7 @@ body, main {
     --corner-offset-x: 0.5rem;
     --corner-offset-y: 0.5rem;
     --corner-color: var(--cyan-full-65);
-    --corner-color-active: var(--yellow-85);
+    --corner-color--active: var(--yellow-85);
 }
 
 
@@ -743,6 +769,8 @@ body, main {
     overflow: hidden;
     scroll-behavior: smooth;
     overscroll-behavior: none;
+    /* CSS containment for performance - isolate rendering from rest of page */
+    contain: layout style paint;
 }
 
 @media (min-width: 45rem) {
@@ -886,7 +914,7 @@ body {
     width: var(--modal-button-size);
     height: var(--modal-button-size);
     border-radius: var(--modal-button-border-radius);
-    background-color: var(--light-2);
+    background-color: var(--modal-icon-bg);
 }
 
 .modal__close-button svg,
@@ -1499,8 +1527,8 @@ body {
     background-origin: content-box;
     color: var(--text-2);
     text-align: center;
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--dark-2);
-    border: solid max(1px, 0.0625rem) var(--light-1);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--dark-15);
+    border: solid max(1px, 0.0625rem) var(--light-10);
     backdrop-filter: blur(0.625rem);
     -webkit-backdrop-filter: blur(0.625rem);
     pointer-events: none;
@@ -1554,7 +1582,7 @@ body {
     justify-content: center;
     width: 1.5rem;
     height: 1.5rem;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: var(--light-15);
     border-radius: 0.25rem;
 }
 
@@ -1659,7 +1687,7 @@ footer>div>div {
 }
 
 .intro__footer-square-1:hover {
-    background-color: var(--footer-square-1-hover) !important;
+    background-color: var(--footer-square-1--hover) !important;
 }
 
 .intro__footer-square-2 {

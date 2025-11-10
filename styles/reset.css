@@ -139,4 +139,5 @@ dialog {
 
 *:focus-visible {
     outline: none;
+    outline-offset: unset;
 }

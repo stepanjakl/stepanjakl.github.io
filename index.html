@@ -3,6 +3,10 @@
     <head>
         <style>main { opacity: 0; }</style>
         <!-- GlitchTip -->
+        <link rel="preconnect" href="https://browser.sentry-cdn.com">
+        <link rel="dns-prefetch" href="https://browser.sentry-cdn.com">
+        <link rel="preconnect" href="https://app.glitchtip.com">
+        <link rel="dns-prefetch" href="https://app.glitchtip.com">
         <script src="https://browser.sentry-cdn.com/8.25.0/bundle.min.js"
                 crossorigin="anonymous"></script>
         <script>
@@ -44,8 +48,6 @@
         <meta name="twitter:image" content="https://stepanjakl.github.io/images/selfie.jpg">
         <meta name="twitter:image:alt" content="Profile photo of Štěpán Jákl">
         <!-- Viewport -->
-        <!-- <meta name="viewport"
-              content="width=440, shrink-to-fit=yes, viewport-fit=contain"> -->
         <meta name="viewport"
        content="width=device-width, initial-scale=1, viewport-fit=contain">
         <!-- Cache -->
@@ -475,11 +477,12 @@
                                     <dd>
                                         <img src="images/selfie.jpg"
                                              id="profile-photo"
-                                             alt="Profile photo"
+                                             alt="Profile photo of Štěpán Jákl showing professional headshot"
                                              height="960"
                                              width="960"
                                              class="modal-profile__photo"
-                                             loading="lazy">
+                                             fetchpriority="high"
+                                             loading="eager">
                                     </dd>
                                     <dt>
                                         <span>Full name:</span>
@@ -747,62 +750,64 @@
                                                 <h1>
                                                     <span>ApostropheCMS Fleet of Sites</span>
                                                 </h1>
-                                                <div class="hover-cards hover-cards--variant-cloudraker-tfp">
-                                                    <figure>
-                                                        <div>
-                                                            <a href="projects/2024-21/cloudraker-tfp/landing-hero-ovo.full.png" target="_blank">
-                                                                <img loading="lazy"
-                                                                     src="projects/2024-21/cloudraker-tfp/landing-hero-ovo.min.png"
-                                                                     alt="OVO Fertility landing page hero section"
-                                                                     width="1600"
-                                                                     height="899">
-                                                            </a>
-                                                        </div>
-                                                    </figure>
-                                                    <figure>
-                                                        <div>
-                                                            <a href="projects/2024-21/cloudraker-tfp/landing-hero-olive.full.png" target="_blank">
-                                                                <img loading="lazy"
-                                                                     src="projects/2024-21/cloudraker-tfp/landing-hero-olive.min.png"
-                                                                     alt="Olive Fertility landing page hero section"
-                                                                     width="1600"
-                                                                     height="899">
-                                                            </a>
-                                                        </div>
-                                                    </figure>
-                                                    <figure>
-                                                        <div>
-                                                            <a href="projects/2024-21/cloudraker-tfp/landing-hero-heartland.full.png" target="_blank">
-                                                                <img loading="lazy"
-                                                                     src="projects/2024-21/cloudraker-tfp/landing-hero-heartland.min.png"
-                                                                     alt="Heartland Fertility landing page hero section"
-                                                                     width="1600"
-                                                                     height="899">
-                                                            </a>
-                                                        </div>
-                                                    </figure>
-                                                    <figure>
-                                                        <div>
-                                                            <a href="projects/2024-21/cloudraker-tfp/landing-hero-conceptia.full.png" target="_blank">
-                                                                <img loading="lazy"
-                                                                     src="projects/2024-21/cloudraker-tfp/landing-hero-conceptia.min.png"
-                                                                     alt="Conceptia Fertility landing page hero section"
-                                                                     width="1600"
-                                                                     height="899">
-                                                            </a>
-                                                        </div>
-                                                    </figure>
-                                                    <figure>
-                                                        <div>
-                                                            <a href="projects/2024-21/cloudraker-tfp/landing-hero-grace.full.png" target="_blank">
-                                                                <img loading="lazy"
-                                                                     src="projects/2024-21/cloudraker-tfp/landing-hero-grace.min.png"
-                                                                     alt="Grace Fertility landing page hero section"
-                                                                     width="1600"
-                                                                     height="899">
-                                                            </a>
-                                                        </div>
-                                                    </figure>
+                                                <div class="hover-cards-wrapper">
+                                                    <div class="hover-cards hover-cards--variant-cloudraker-tfp">
+                                                        <figure>
+                                                            <div>
+                                                                <a href="projects/2024-21/cloudraker-tfp/landing-hero-ovo.full.png" target="_blank">
+                                                                    <img loading="lazy"
+                                                                         src="projects/2024-21/cloudraker-tfp/landing-hero-ovo.min.png"
+                                                                         alt="OVO Fertility landing page hero section"
+                                                                         width="1600"
+                                                                         height="899">
+                                                                </a>
+                                                            </div>
+                                                        </figure>
+                                                        <figure>
+                                                            <div>
+                                                                <a href="projects/2024-21/cloudraker-tfp/landing-hero-olive.full.png" target="_blank">
+                                                                    <img loading="lazy"
+                                                                         src="projects/2024-21/cloudraker-tfp/landing-hero-olive.min.png"
+                                                                         alt="Olive Fertility landing page hero section"
+                                                                         width="1600"
+                                                                         height="899">
+                                                                </a>
+                                                            </div>
+                                                        </figure>
+                                                        <figure>
+                                                            <div>
+                                                                <a href="projects/2024-21/cloudraker-tfp/landing-hero-heartland.full.png" target="_blank">
+                                                                    <img loading="lazy"
+                                                                         src="projects/2024-21/cloudraker-tfp/landing-hero-heartland.min.png"
+                                                                         alt="Heartland Fertility landing page hero section"
+                                                                         width="1600"
+                                                                         height="899">
+                                                                </a>
+                                                            </div>
+                                                        </figure>
+                                                        <figure>
+                                                            <div>
+                                                                <a href="projects/2024-21/cloudraker-tfp/landing-hero-conceptia.full.png" target="_blank">
+                                                                    <img loading="lazy"
+                                                                         src="projects/2024-21/cloudraker-tfp/landing-hero-conceptia.min.png"
+                                                                         alt="Conceptia Fertility landing page hero section"
+                                                                         width="1600"
+                                                                         height="899">
+                                                                </a>
+                                                            </div>
+                                                        </figure>
+                                                        <figure>
+                                                            <div>
+                                                                <a href="projects/2024-21/cloudraker-tfp/landing-hero-grace.full.png" target="_blank">
+                                                                    <img loading="lazy"
+                                                                         src="projects/2024-21/cloudraker-tfp/landing-hero-grace.min.png"
+                                                                         alt="Grace Fertility landing page hero section"
+                                                                         width="1600"
+                                                                         height="899">
+                                                                </a>
+                                                            </div>
+                                                        </figure>
+                                                    </div>
                                                 </div>
                                                 <nav>
                                                     <ul>
@@ -862,43 +867,45 @@
                                                 <h2>
                                                     ApostropheCMS Template & Module Library
                                                 </h2>
-                                                <div class="hover-cards hover-cards--variant-apostrophe-template">
-                                                    <figure>
-                                                        <div>
-                                                            <a href="projects/2024-21/apostrophe-template/template-widget-live.full.png"
-                                                               target="_blank">
-                                                                <img loading="lazy"
-                                                                     src="projects/2024-21/apostrophe-template/template-widget-live.min.png"
-                                                                     alt="ApostropheCMS template widget displayed in live preview mode"
-                                                                     width="1600"
-                                                                     height="933">
-                                                            </a>
-                                                        </div>
-                                                    </figure>
-                                                    <figure>
-                                                        <div>
-                                                            <a href="projects/2024-21/apostrophe-template/template-widget-setting.full.png"
-                                                               target="_blank">
-                                                                <img loading="lazy"
-                                                                     src="projects/2024-21/apostrophe-template/template-widget-setting.min.png"
-                                                                     alt="ApostropheCMS template widget configuration settings interface"
-                                                                     width="1600"
-                                                                     height="933">
-                                                            </a>
-                                                        </div>
-                                                    </figure>
-                                                    <figure>
-                                                        <div>
-                                                            <a href="projects/2024-21/apostrophe-template/template-widget-code-ide.full.png"
-                                                               target="_blank">
-                                                                <img loading="lazy"
-                                                                     src="projects/2024-21/apostrophe-template/template-widget-code-ide.min.png"
-                                                                     alt="ApostropheCMS template widget code editor interface"
-                                                                     width="1600"
-                                                                     height="933">
-                                                            </a>
-                                                        </div>
-                                                    </figure>
+                                                <div class="hover-cards-wrapper">
+                                                    <div class="hover-cards hover-cards--variant-apostrophe-template">
+                                                        <figure>
+                                                            <div>
+                                                                <a href="projects/2024-21/apostrophe-template/template-widget-live.full.png"
+                                                                   target="_blank">
+                                                                    <img loading="lazy"
+                                                                         src="projects/2024-21/apostrophe-template/template-widget-live.min.png"
+                                                                         alt="ApostropheCMS template widget displayed in live preview mode"
+                                                                         width="1600"
+                                                                         height="933">
+                                                                </a>
+                                                            </div>
+                                                        </figure>
+                                                        <figure>
+                                                            <div>
+                                                                <a href="projects/2024-21/apostrophe-template/template-widget-setting.full.png"
+                                                                   target="_blank">
+                                                                    <img loading="lazy"
+                                                                         src="projects/2024-21/apostrophe-template/template-widget-setting.min.png"
+                                                                         alt="ApostropheCMS template widget configuration settings interface"
+                                                                         width="1600"
+                                                                         height="933">
+                                                                </a>
+                                                            </div>
+                                                        </figure>
+                                                        <figure>
+                                                            <div>
+                                                                <a href="projects/2024-21/apostrophe-template/template-widget-code-ide.full.png"
+                                                                   target="_blank">
+                                                                    <img loading="lazy"
+                                                                         src="projects/2024-21/apostrophe-template/template-widget-code-ide.min.png"
+                                                                         alt="ApostropheCMS template widget code editor interface"
+                                                                         width="1600"
+                                                                         height="933">
+                                                                </a>
+                                                            </div>
+                                                        </figure>
+                                                    </div>
                                                 </div>
                                                 <nav>
                                                     <ul>
@@ -1140,57 +1147,59 @@
                                                 <h2>
                                                     Bohemica Signage
                                                 </h2>
-                                                <div class="hover-cards hover-cards--variant-bohemica-signage">
-                                                    <figure>
-                                                        <div>
-                                                            <a href="projects/2021-19/bohemica-signage/overview-screen.full.png"
-                                                               target="_blank">
-                                                                <img style="object-position: left"
-                                                                     loading="lazy"
-                                                                     src="projects/2021-19/bohemica-signage/overview-screen.min.png"
-                                                                     alt="Bohemica Signage dashboard overview screen"
-                                                                     width="1600"
-                                                                     height="912">
-                                                            </a>
-                                                        </div>
-                                                    </figure>
-                                                    <figure>
-                                                        <div>
-                                                            <a href="projects/2021-19/bohemica-signage/groups-screen.full.png"
-                                                               target="_blank">
-                                                                <img loading="lazy"
-                                                                     src="projects/2021-19/bohemica-signage/groups-screen.min.png"
-                                                                     alt="Bohemica Signage groups management screen"
-                                                                     width="1600"
-                                                                     height="912">
-                                                            </a>
-                                                        </div>
-                                                    </figure>
-                                                    <figure>
-                                                        <div>
-                                                            <a href="projects/2021-19/bohemica-signage/display-detail-live-screen.full.jpg"
-                                                               target="_blank">
-                                                                <img loading="lazy"
-                                                                     src="projects/2021-19/bohemica-signage/display-detail-live-screen.min.jpg"
-                                                                     alt="Bohemica Signage display detail with live preview"
-                                                                     width="1600"
-                                                                     height="912">
-                                                            </a>
-                                                        </div>
-                                                    </figure>
-                                                    <figure>
-                                                        <div>
-                                                            <a href="projects/2021-19/bohemica-signage/wireframe-screens.full.png"
-                                                               target="_blank">
-                                                                <img style="object-position: left"
-                                                                     loading="lazy"
-                                                                     src="projects/2021-19/bohemica-signage/wireframe-screens.min.png"
-                                                                     alt="Bohemica Signage wireframe mockups showing multiple screens"
-                                                                     width="1600"
-                                                                     height="912">
-                                                            </a>
-                                                        </div>
-                                                    </figure>
+                                                <div class="hover-cards-wrapper">
+                                                    <div class="hover-cards hover-cards--variant-bohemica-signage">
+                                                        <figure>
+                                                            <div>
+                                                                <a href="projects/2021-19/bohemica-signage/overview-screen.full.png"
+                                                                   target="_blank">
+                                                                    <img style="object-position: left"
+                                                                         loading="lazy"
+                                                                         src="projects/2021-19/bohemica-signage/overview-screen.min.png"
+                                                                         alt="Bohemica Signage dashboard overview screen"
+                                                                         width="1600"
+                                                                         height="912">
+                                                                </a>
+                                                            </div>
+                                                        </figure>
+                                                        <figure>
+                                                            <div>
+                                                                <a href="projects/2021-19/bohemica-signage/groups-screen.full.png"
+                                                                   target="_blank">
+                                                                    <img loading="lazy"
+                                                                         src="projects/2021-19/bohemica-signage/groups-screen.min.png"
+                                                                         alt="Bohemica Signage groups management screen"
+                                                                         width="1600"
+                                                                         height="912">
+                                                                </a>
+                                                            </div>
+                                                        </figure>
+                                                        <figure>
+                                                            <div>
+                                                                <a href="projects/2021-19/bohemica-signage/display-detail-live-screen.full.jpg"
+                                                                   target="_blank">
+                                                                    <img loading="lazy"
+                                                                         src="projects/2021-19/bohemica-signage/display-detail-live-screen.min.jpg"
+                                                                         alt="Bohemica Signage display detail with live preview"
+                                                                         width="1600"
+                                                                         height="912">
+                                                                </a>
+                                                            </div>
+                                                        </figure>
+                                                        <figure>
+                                                            <div>
+                                                                <a href="projects/2021-19/bohemica-signage/wireframe-screens.full.png"
+                                                                   target="_blank">
+                                                                    <img style="object-position: left"
+                                                                         loading="lazy"
+                                                                         src="projects/2021-19/bohemica-signage/wireframe-screens.min.png"
+                                                                         alt="Bohemica Signage wireframe mockups showing multiple screens"
+                                                                         width="1600"
+                                                                         height="912">
+                                                                </a>
+                                                            </div>
+                                                        </figure>
+                                                    </div>
                                                 </div>
                                                 <nav>
                                                     <ul>
@@ -1610,8 +1619,6 @@
                 </figure>
                 <figure class="bg-triangle--right bg-triangle">
                 </figure>
-                <!-- <figure class="bg-triangle--right-alt bg-triangle">
-                </figure> -->
             </figure>
             <footer>
                 <div>

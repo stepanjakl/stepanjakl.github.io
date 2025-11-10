@@ -11,7 +11,26 @@
 // Utility Functions
 // ============================================================================
 
+/** Detect if device supports touch input */
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
+
+/**
+ * Debounce function - limits how often a function can be called
+ * @param {Function} func - The function to debounce
+ * @param {number} wait - Time in milliseconds to wait before calling
+ * @returns {Function} Debounced function
+ */
+function debounce(func, wait) {
+    let timeout
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout)
+            func(...args)
+        }
+        clearTimeout(timeout)
+        timeout = setTimeout(later, wait)
+    }
+}
 
 // ============================================================================
 // Theme Persistence
@@ -23,6 +42,7 @@ const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 |
 class ThemeManager {
     constructor() {
         this.STORAGE_KEY = 'theme-mode'
+        this.DISABLE_TRANSITIONS_CLASS = 'disable-transitions'
         this.modeCheckbox = null
 
         this.init()
@@ -42,6 +62,7 @@ class ThemeManager {
         // Listen for theme changes and persist them
         this.modeCheckbox.addEventListener('change', () => {
             this.saveTheme()
+            this.disableTransitionsDuringSwitch()
         })
     }
 
@@ -70,49 +91,90 @@ class ThemeManager {
             console.warn('Failed to save theme preference:', error)
         }
     }
+
+    /**
+     * Temporarily disable all transitions during theme switch for instant change.
+     * Re-enables transitions after a single frame to allow normal animations.
+     */
+    disableTransitionsDuringSwitch() {
+        const html = document.documentElement
+
+        // Add class to disable all transitions
+        html.classList.add(this.DISABLE_TRANSITIONS_CLASS)
+
+        // Use double rAF to ensure the theme change has been painted
+        // before re-enabling transitions
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                html.classList.remove(this.DISABLE_TRANSITIONS_CLASS)
+            })
+        })
+    }
 }
 
 // Initialize theme manager when DOM is ready
 // Since this script uses defer, DOM is already loaded
-new ThemeManager()
+try {
+    window.App = window.App || {}
+    window.App.themeManager = new ThemeManager()
+} catch (error) {
+    console.error('Failed to initialize theme manager:', error)
+    // Fallback: theme will use browser/system default without localStorage persistence
+}
 
+/**
+ * Check if CSS animation has finished on a specific element
+ * @param {string} selector - CSS selector for element to check
+ * @returns {boolean} True if animation is finished or element not found
+ */
 const isAnimationFinished = (selector) => {
     const animations = document.querySelector(selector)?.getAnimations()
     return !animations || animations.length === 0 || animations[0].playState === 'finished'
 }
 
-// Shared animation gate selector (used across handlers)
+/** Shared animation gate selector (used across handlers) */
 const ANIMATION_CHECK_SELECTOR = '.menu--animating .menu__background'
 
+/** Get current URL hash */
 const getCurrentHash = () => window.location.hash
 
+/** Get hash without query parameters (e.g., '#archive?year=2024' returns '#archive') */
 const getHashWithoutParams = () => getCurrentHash().split('?')[0]
 
-// Exact hash match (e.g., getCurrentHash() === '#profile')
+/**
+ * Check if current hash exactly matches target
+ * @param {string} hash - Hash to compare (e.g., '#profile')
+ * @returns {boolean} True if exact match
+ */
 const isHash = (hash) => getCurrentHash() === hash
 
-// Partial hash match - for deep links with params (e.g., '#archive?year=2024' includes '#archive')
+/**
+ * Check if current hash includes target (for deep links with params)
+ * @param {string} hash - Hash to search for (e.g., '#archive')
+ * @returns {boolean} True if hash includes target
+ */
 const hashIncludes = (hash) => getCurrentHash().includes(hash)
 
-// WeakMap to track one-time blur handlers for touch buttons without mutating elements
+/** WeakMap to track one-time blur handlers for touch buttons without mutating elements */
 const touchBlurHandlers = new WeakMap()
 
-// WeakMap to track click counts for touch button interactions
+/** WeakMap to track click counts for touch button interactions */
 const touchClickCounts = new WeakMap()
 
-// Shared navigation constants
+/** Shared navigation hash constants for consistent routing */
 const NAVIGATION_HASHES = Object.freeze({
     PROFILE: '#profile',
     ARCHIVE: '#archive',
     MENU: '#menu'
 })
 
+/** Modal element selectors for DOM querying */
 const MODAL_SELECTORS = Object.freeze({
     PROFILE: '#modal-profile',
     ARCHIVE: '#modal-archive'
 })
 
-// Shared modal element cache
+/** Shared modal element cache to avoid repeated DOM queries */
 const modalElementCache = {
     profile: null,
     archive: null
@@ -121,6 +183,8 @@ const modalElementCache = {
 /**
  * Get modal element with caching
  * Shared utility used by WheelHandler and TouchHandler
+ * @param {string} hash - Navigation hash (e.g., '#profile')
+ * @returns {HTMLElement|null} Cached modal element or null if not found
  */
 const getModalElement = (hash) => {
     if (hash === NAVIGATION_HASHES.PROFILE) {
@@ -129,6 +193,54 @@ const getModalElement = (hash) => {
         return modalElementCache.archive ??= document.querySelector(MODAL_SELECTORS.ARCHIVE)
     }
     return null
+}
+
+/**
+ * Centralized Resize Handler
+ * Reduces redundant resize calculations by consolidating all resize handlers
+ */
+const ResizeManager = {
+    handlers: [],
+    initialized: false,
+
+    /**
+     * Register a resize handler function
+     * @param {Function} handler - Function to call on resize
+     * @returns {Function} Unregister function
+     */
+    register(handler) {
+        if (!this.initialized) {
+            this.init()
+        }
+
+        this.handlers.push(handler)
+
+        // Return unregister function for cleanup
+        return () => {
+            const index = this.handlers.indexOf(handler)
+            if (index > -1) {
+                this.handlers.splice(index, 1)
+            }
+        }
+    },
+
+    /**
+     * Initialize the debounced resize listener
+     */
+    init() {
+        const handleResize = debounce(() => {
+            this.handlers.forEach(handler => {
+                try {
+                    handler()
+                } catch (error) {
+                    console.error('Resize handler error:', error)
+                }
+            })
+        }, 150)
+
+        window.addEventListener('resize', handleResize, { passive: true })
+        this.initialized = true
+    }
 }
 
 /**
@@ -146,7 +258,7 @@ window.App = {
     toggleFullscreen: null
 }
 
-// Dialog configuration for consistent ID references
+/** Dialog configuration for consistent ID references and focus management */
 const DIALOG_CONFIG = Object.freeze({
     PROFILE: {
         id: 'modal-profile',
@@ -364,6 +476,13 @@ class TextHighlighter {
         this.HIGHLIGHT_ACTIVE_CLASS = 'highlight--active'
     }
 
+    /**
+     * Highlight element and optionally change text temporarily
+     * @param {Event} event - The triggering event
+     * @param {HTMLElement} textElement - Element containing text to change
+     * @param {HTMLElement} highlightElement - Element to highlight
+     * @param {string} temporaryText - Optional temporary text to display
+     */
     highlightAndCopyText(event, textElement, highlightElement, temporaryText) {
         const target = event.target
 
@@ -743,6 +862,7 @@ class HorizontalEdgeScroller {
         this.edgeWidth = 0
         this.mediaQuery = window.matchMedia('(min-width: 45rem)')
         this.styleElement = null
+        this.unregisterResize = null
 
         this.DRAGGING_CLASS = 'x-drag-scroll--dragging'
         this.EDGE_SCROLLING_CLASS = 'edge-x-scroll--scrolling'
@@ -755,7 +875,8 @@ class HorizontalEdgeScroller {
             this.handleMouseMoveBound = this.handleMouseMove.bind(this)
             this.onResizeBound = this.onResize.bind(this)
             document.addEventListener('mousemove', this.handleMouseMoveBound)
-            window.addEventListener('resize', this.onResizeBound)
+            // Use centralized resize manager instead of direct window listener
+            this.unregisterResize = ResizeManager.register(this.onResizeBound)
             this.onResize()
         }
     }
@@ -889,7 +1010,11 @@ class HorizontalEdgeScroller {
     destroy() {
         if (!isTouchDevice && this.handleMouseMoveBound) {
             document.removeEventListener('mousemove', this.handleMouseMoveBound)
-            window.removeEventListener('resize', this.onResizeBound)
+            // Unregister from centralized resize manager
+            if (this.unregisterResize) {
+                this.unregisterResize()
+                this.unregisterResize = null
+            }
         }
         if (this.styleElement && this.styleElement.parentElement) {
             this.styleElement.remove()
@@ -1427,8 +1552,8 @@ class Popup {
                 width: var(--modal-button-size);
                 height: var(--modal-button-size);
                 border-radius: 50%;
-                color: rgba(255,255,255,0.75);
-                background: rgba(0, 0, 0, 0.55);
+                color: var(--light-70);
+                background: var(--dark-55);
                 backdrop-filter: saturate(1.75) blur(1rem);
                 color: white;
                 border: none;
@@ -1442,8 +1567,8 @@ class Popup {
                 transition: color 200ms linear, background-color 200ms linear, opacity 300ms ease-out;
             }
             .media_fallback-close-button:hover {
-                background: rgba(0, 0, 0, 0.45);
-                color: rgba(255,255,255,0.95);
+                background: var(--dark-45);
+                color: var(--light-95);
                 transition: color 150ms linear, background-color 150ms linear, opacity 300ms ease-out;
             }
             .media_fallback-close-button::after {
@@ -1451,11 +1576,11 @@ class Popup {
                 position: absolute;
                 inset: 0;
                 border-radius: 50%;
-                background: rgba(255, 255, 255, 0.35);
+                background: var(--light-35);
                 transition: background-color 200ms linear;
             }
             .media_fallback-close-button:hover::after {
-                background: rgba(255, 255, 255, 0.45);
+                background: var(--light-45);
                 transition: background-color 150ms linear;
             }
             .media_fallback-close-button.cursor-idle-fade {
@@ -2474,46 +2599,71 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // Initialize global handlers (persistent throughout page lifetime)
-    new WheelHandler()
-    new TouchHandler()
-    new KeyHandler()
+    try {
+        new WheelHandler()
+        new TouchHandler()
+        new KeyHandler()
+    } catch (error) {
+        console.error('Failed to initialize global handlers:', error)
+        // Navigation will still work via links and buttons
+    }
 
     // Initialize text highlighter
-    App.textHighlighter = new TextHighlighter()
+    try {
+        App.textHighlighter = new TextHighlighter()
+    } catch (error) {
+        console.error('Failed to initialize text highlighter:', error)
+        // Copy functionality will still work, just without visual feedback
+    }
 
     // Initialize carousels (persistent throughout page lifetime)
-    const carouselElements = document.querySelectorAll('[data-carousel]')
-    for (let i = 0; i < carouselElements.length; i++) {
-        new Carousel({ id: `carousel-${i + 1}`, element: carouselElements[i] })
+    try {
+        const carouselElements = document.querySelectorAll('[data-carousel]')
+        for (let i = 0; i < carouselElements.length; i++) {
+            new Carousel({ id: `carousel-${i + 1}`, element: carouselElements[i] })
+        }
+    } catch (error) {
+        console.error('Failed to initialize carousels:', error)
+        // Images will still be visible, just without carousel navigation
     }
 
     // Initialize keyboard navigation for image grids
-    new ImageGridNavigator({
-        containerSelector: '.hover-cards, .image-grid',
-        itemSelector: 'figure a'
-    })
+    try {
+        new ImageGridNavigator({
+            containerSelector: '.hover-cards, .image-grid',
+            itemSelector: 'figure a'
+        })
+    } catch (error) {
+        console.error('Failed to initialize image grid navigator:', error)
+        // Image grids will still be visible, mouse interaction will work
+    }
 
     // Initialize popups with delegated listeners to reduce per-link handlers
-    const popupInstance = new Popup()
-    const preloadedLinks = new WeakSet()
+    try {
+        const popupInstance = new Popup()
+        const preloadedLinks = new WeakSet()
 
-    document.addEventListener('mouseover', (e) => {
-        const link = e.target.closest('a[target="_blank"][href$=".mp4"], a[target="_blank"][href$=".png"], a[target="_blank"][href$=".jpg"], a[target="_blank"][href$=".svg"]')
-        if (!link) return
-        if (preloadedLinks.has(link)) return
-        if (!popupInstance.isVideo(link.href)) {
-            const placeholderUrl = popupInstance.getPlaceholderUrl(link.href)
-            const preloadImg = new Image()
-            preloadImg.src = placeholderUrl
-        }
-        preloadedLinks.add(link)
-    })
+        document.addEventListener('mouseover', (e) => {
+            const link = e.target.closest('a[target="_blank"][href$=".mp4"], a[target="_blank"][href$=".png"], a[target="_blank"][href$=".jpg"], a[target="_blank"][href$=".svg"]')
+            if (!link) return
+            if (preloadedLinks.has(link)) return
+            if (!popupInstance.isVideo(link.href)) {
+                const placeholderUrl = popupInstance.getPlaceholderUrl(link.href)
+                const preloadImg = new Image()
+                preloadImg.src = placeholderUrl
+            }
+            preloadedLinks.add(link)
+        })
 
-    document.addEventListener('click', (e) => {
-        const link = e.target.closest('a[target="_blank"][href$=".mp4"], a[target="_blank"][href$=".png"], a[target="_blank"][href$=".jpg"], a[target="_blank"][href$=".svg"]')
-        if (!link) return
-        popupInstance.open(link, e)
-    })
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a[target="_blank"][href$=".mp4"], a[target="_blank"][href$=".png"], a[target="_blank"][href$=".jpg"], a[target="_blank"][href$=".svg"]')
+            if (!link) return
+            popupInstance.open(link, e)
+        })
+    } catch (error) {
+        console.error('Failed to initialize popups:', error)
+        // Links will still open in new tabs/windows
+    }
 
     // Setup global timeline positioning function
     App.positionTimeline = () => {
@@ -2530,8 +2680,8 @@ document.addEventListener('DOMContentLoaded', () => {
         timelineWrapperEl.style.setProperty('right', `${archiveWrapperRect.right - timelineContentSectionRect.right}px`)
     }
 
-    // Position timeline on resize (if it exists)
-    window.addEventListener('resize', () => {
+    // Register timeline positioning with centralized resize manager
+    ResizeManager.register(() => {
         if (App.timeline) {
             App.positionTimeline()
         }

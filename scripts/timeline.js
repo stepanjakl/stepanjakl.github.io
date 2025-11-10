@@ -111,8 +111,10 @@ class HorizontalTimeline extends HTMLElement {
         // Observer instance
         this.intersectionObserver = null
 
+        // Resize handler cleanup (registered with centralized ResizeManager)
+        this.unregisterResize = null
+
         // Bound event handlers (for cleanup)
-        this.boundHandleResize = null
         this.boundHandleMouseLeave = null
         this.boundHandleScrollEnd = null
         this.boundHandleClick = null
@@ -150,20 +152,50 @@ class HorizontalTimeline extends HTMLElement {
         this.innerHTML = `
             <style>
                 /*
-                * Modal - Archive
+                * Modal - Archive - Horizontal Timeline Component
                 */
+
+                /* CSS Variables for component configuration */
+                horizontal-timeline {
+                    /* Spacing */
+                    --timeline-margin: 3rem;
+                    --timeline-margin--hover: 1rem;
+                    --timeline-padding: 0.5rem 1.5rem 0.25rem 1.5rem;
+                    --timeline-padding--hover: 0.875rem 5.5rem 0.625rem 5.5rem;
+
+                    /* Heights */
+                    --timeline-height: 1.125rem;
+                    --timeline-height--hover: 1.75rem;
+
+                    /* Border radius */
+                    --timeline-radius: 0.75rem;
+                    --timeline-radius--hover: 1.125rem;
+
+                    /* Indicator bar widths/heights (percentages) */
+                    --indicator-height-sm: 33.33%;
+                    --indicator-height-md: 44.44%;
+                    --indicator-height-lg: 55.56%;
+                    --indicator-height-xl: 66.67%;
+                    --indicator-height-xxl: 77.78%;
+
+                    /* Common transitions */
+                    --transition--hover: var(--animate-in-segment, 150ms) var(--ease-out-quad, ease-out);
+                    --transition--default: var(--animate-out-segment, 150ms) var(--ease-in-quad, ease-in);
+                    --transition-indicator: 100ms var(--ease-out-quad, ease-out);
+                    --transition-color: 100ms linear;
+                }
 
                 /* Host element */
                 horizontal-timeline {
                     display: flex;
                     justify-content: center;
-                    transition: margin var(--animate-out-segment, 150ms) var(--ease-in-quad, ease-in);
-                    margin: 0 3rem;
+                    transition: margin var(--transition--default);
+                    margin: 0 var(--timeline-margin);
                 }
 
                 horizontal-timeline:hover {
-                    transition: margin var(--animate-in-segment, 150ms) var(--ease-out-quad, ease-out);
-                    margin: 0 1rem;
+                    transition: margin var(--transition--hover);
+                    margin: 0 var(--timeline-margin--hover);
                 }
 
                 horizontal-timeline::before {
@@ -174,35 +206,31 @@ class HorizontalTimeline extends HTMLElement {
 
                 /* Wrapper */
                 #timeline-wrapper {
-                    transition:
-                        border-radius var(--animate-out-segment, 150ms) var(--ease-in-quad, ease-in),
-                        transform var(--animate-out-segment, 150ms) var(--ease-in-quad, ease-in);
+                    transition: border-radius var(--transition--default), transform var(--transition--default);
                     position: relative;
                     width: auto;
                     max-width: 100%;
-                    border-radius: 0.75rem;
-                    background-color: rgba(0, 91, 102, 0.95);
+                    border-radius: var(--timeline-radius);
+                    background-color: rgba(0, 91, 102, 0.95); /* HSL 210, 100, 35 */
                     overflow: hidden;
                 }
 
                 horizontal-timeline:hover #timeline-wrapper {
-                    transition:
-                        border-radius var(--animate-in-segment, 150ms) var(--ease-out-quad, ease-out),
-                        transform var(--animate-in-segment, 150ms) var(--ease-out-quad, ease-out);
-                    border-radius: 1.125rem;
+                    transition: border-radius var(--transition--hover), transform var(--transition--hover);
+                    border-radius: var(--timeline-radius--hover);
                     transform: translateY(0.5625rem);
                 }
 
                 /* Scrollable content area */
                 #timeline-content {
-                    transition: padding var(--animate-out-segment, 150ms) var(--ease-in-quad, ease-in);
+                    transition: padding var(--transition--default);
                     overflow-x: scroll;
                     overflow-y: hidden;
                     scroll-behavior: auto;
                     white-space: nowrap;
                     scrollbar-width: none;
                     -ms-overflow-style: none;
-                    padding: 0.5rem 1.5rem 0.25rem 1.5rem;
+                    padding: var(--timeline-padding);
                     mask-image: linear-gradient(
                         90deg,
                         rgba(0, 0, 0, 0) 0%,
@@ -221,8 +249,8 @@ class HorizontalTimeline extends HTMLElement {
                 }
 
                 horizontal-timeline:hover #timeline-content {
-                    transition: padding var(--animate-in-segment, 150ms) var(--ease-out-quad, ease-out);
-                    padding: 0.875rem 5.5rem 0.625rem 5.5rem;
+                    transition: padding var(--transition--hover);
+                    padding: var(--timeline-padding--hover);
                 }
 
                 #timeline-content > div {
@@ -233,13 +261,13 @@ class HorizontalTimeline extends HTMLElement {
                 /* Timeline bar */
                 #timeline {
                     display: flex;
-                    transition: height var(--animate-out-segment, 150ms) var(--ease-in-quad, ease-in);
-                    height: 1.125rem;
+                    transition: height var(--transition--default);
+                    height: var(--timeline-height);
                 }
 
                 horizontal-timeline:hover #timeline {
-                    transition: height var(--animate-in-segment, 150ms) var(--ease-out-quad, ease-out);
-                    height: 1.75rem;
+                    transition: height var(--transition--hover);
+                    height: var(--timeline-height--hover);
                 }
 
                 /* Timeline indicators (vertical bars) */
@@ -254,41 +282,28 @@ class HorizontalTimeline extends HTMLElement {
                 }
 
                 #timeline div span {
-                    transition:
-                        background-color 100ms linear,
-                        height 100ms var(--ease-in-quad, ease-in);
-                    background-color: rgba(255, 255, 255, 0.45);
+                    transition: background-color var(--transition-color), height var(--transition-indicator);
+                    background-color: var(--light-45);
                     width: max(1.5px, 0.09375rem);
-                    height: 33.33%;
+                    height: var(--indicator-height-sm);
                     border-radius: max(0.5px, 0.09375rem);
                 }
 
-                /* Pattern-based indicator heights */
-                #timeline div:nth-child(6n + 4) span {
-                    height: 66.67%;
-                }
-
+                /* Pattern-based indicator heights - organized by size */
+                #timeline div:nth-child(6n + 4) span { height: var(--indicator-height-xl); }
                 #timeline div:nth-child(6n + 3) span,
-                #timeline div:nth-child(6n + 5) span {
-                    height: 44.44%;
-                }
+                #timeline div:nth-child(6n + 5) span { height: var(--indicator-height-md); }
 
+                /* Edge indicators with reduced opacity */
                 #timeline div:nth-child(2) span,
-                #timeline div:nth-last-child(2) span {
-                    background-color: rgba(255, 255, 255, 0.35);
-                }
-
+                #timeline div:nth-last-child(2) span { background-color: var(--light-35); }
                 #timeline div:first-child span,
-                #timeline div:last-child span {
-                    background-color: rgba(255, 255, 255, 0.25);
-                }
+                #timeline div:last-child span { background-color: var(--light-25); }
 
-                /* Hover states - indicator and neighbors */
+                /* Hover states - indicator and neighbors (with ripple effect) */
                 #timeline div:hover span,
                 #timeline div.highlight span {
-                    transition:
-                        background-color 100ms linear,
-                        height 100ms var(--ease-out-quad, ease-out) !important;
+                    transition: background-color var(--transition-color), height var(--transition-indicator) !important;
                     height: 100% !important;
                 }
 
@@ -296,71 +311,55 @@ class HorizontalTimeline extends HTMLElement {
                 #timeline div:hover + div span,
                 #timeline div:has(+ div.highlight) span,
                 #timeline div.highlight + div span {
-                    transition:
-                        background-color 100ms linear,
-                        height 100ms var(--ease-out-quad, ease-out) !important;
-                    height: 77.78% !important;
+                    transition: background-color var(--transition-color), height var(--transition-indicator) !important;
+                    height: var(--indicator-height-xxl) !important;
                 }
 
                 #timeline div:has(+ div + div:hover) span,
                 #timeline div:hover + div + div span,
                 #timeline div:has(+ div + div.highlight) span,
                 #timeline div.highlight + div + div span {
-                    transition:
-                        background-color 100ms linear,
-                        height 100ms var(--ease-out-quad, ease-out) !important;
-                    height: 55.56% !important;
+                    transition: background-color var(--transition-color), height var(--transition-indicator) !important;
+                    height: var(--indicator-height-lg) !important;
                 }
 
-                /* Active state - indicator and ripple effect */
+                /* Active state - indicator and sequential ripple effect */
                 #timeline div.active span {
-                    transition:
-                        background-color 100ms linear,
-                        height 100ms var(--ease-out-quad, ease-out);
-                    background-color: rgba(255, 255, 255, 0.75);
+                    transition: background-color var(--transition-color), height var(--transition-indicator);
+                    background-color: var(--light-70);
                     height: 100%;
                 }
 
                 #timeline div.active + div span,
                 #timeline div:has(+ div.active) span {
-                    transition:
-                        background-color 100ms linear 100ms,
-                        height 100ms var(--ease-out-quad, ease-out);
-                    background-color: rgba(255, 255, 255, 0.7);
-                    height: 77.78%;
+                    transition: background-color var(--transition-color) 100ms, height var(--transition-indicator);
+                    background-color: var(--light-70);
+                    height: var(--indicator-height-xxl);
                 }
 
                 #timeline div.active + div + div span,
                 #timeline div:has(+ div + div.active) span {
-                    transition:
-                        background-color 100ms linear 200ms,
-                        height 100ms var(--ease-out-quad, ease-out);
-                    background-color: rgba(255, 255, 255, 0.65);
-                    height: 55.56%;
+                    transition: background-color var(--transition-color) 200ms, height var(--transition-indicator);
+                    background-color: var(--light-65);
+                    height: var(--indicator-height-lg);
                 }
 
                 #timeline div.active + div + div + div span,
                 #timeline div:has(+ div + div + div.active) span {
-                    transition:
-                        background-color 100ms linear 300ms,
-                        height 100ms var(--ease-out-quad, ease-out);
-                    background-color: rgba(255, 255, 255, 0.6);
+                    transition: background-color var(--transition-color) 300ms, height var(--transition-indicator);
+                    background-color: var(--light-60);
                 }
 
                 #timeline div.active + div + div + div + div span,
                 #timeline div:has(+ div + div + div + div.active) span {
-                    transition:
-                        background-color 100ms linear 400ms,
-                        height 100ms var(--ease-out-quad, ease-out);
-                    background-color: rgba(255, 255, 255, 0.55);
+                    transition: background-color var(--transition-color) 400ms, height var(--transition-indicator);
+                    background-color: var(--light-55);
                 }
 
                 #timeline div.active + div + div + div + div + div span,
                 #timeline div:has(+ div + div + div + div + div.active) span {
-                    transition:
-                        background-color 100ms linear 500ms,
-                        height 100ms var(--ease-out-quad, ease-out);
-                    background-color: rgba(255, 255, 255, 0.5);
+                    transition: background-color var(--transition-color) 500ms, height var(--transition-indicator);
+                    background-color: var(--light-50);
                 }
 
                 /* Labels */
@@ -372,7 +371,7 @@ class HorizontalTimeline extends HTMLElement {
                 }
 
                 #timeline_labels button {
-                    transition: padding var(--animate-out-segment, 150ms) var(--ease-in-quad, ease-in);
+                    transition: padding var(--transition--default);
                     position: relative;
                     display: inline-flex;
                     justify-content: center;
@@ -383,13 +382,13 @@ class HorizontalTimeline extends HTMLElement {
                 }
 
                 horizontal-timeline:hover #timeline_labels button {
-                    transition: padding var(--animate-in-segment, 150ms) var(--ease-out-quad, ease-out);
+                    transition: padding var(--transition--hover);
                     padding-top: 0.875rem;
                 }
 
                 #timeline_labels button > span {
                     position: relative;
-                    transition: color 100ms linear;
+                    transition: color var(--transition-color);
                     text-align: center;
                     color: var(--text-2, #999);
                     padding: 0.25rem 0.3125rem 0.25rem 0.4375rem;
@@ -401,6 +400,7 @@ class HorizontalTimeline extends HTMLElement {
                     text-transform: uppercase;
                 }
 
+                /* Text cropping for better vertical alignment */
                 #timeline_labels button > span::before {
                     content: "";
                     margin-bottom: -0.1864em;
@@ -413,6 +413,7 @@ class HorizontalTimeline extends HTMLElement {
                     display: table;
                 }
 
+                /* Special styling for last label ("elsewhen") */
                 #timeline_labels button:last-child > span {
                     font-size: 0.75892875rem;
                     line-height: 0.84375rem;
@@ -427,20 +428,19 @@ class HorizontalTimeline extends HTMLElement {
                 }
 
                 #timeline_labels button.active span {
-                    transition: color 100ms linear;
-                    color: var(--text-1, #fff);
+                    transition: color var(--transition-color);
+                    color: var(--text-1);
                 }
 
-                /* Label background pill */
+                /* Label background pill (animated on hover/active) */
                 #timeline_labels button > span > span {
-                    transition:
-                        opacity 100ms linear,
-                        inset 100ms var(--ease-in-quad, ease-in);
+                    z-index: -1;
+                    transition: opacity var(--transition-color), inset var(--transition-indicator);
                     content: "";
                     position: absolute;
                     inset: 0 0.1875rem 0.09375rem 0.1875rem;
                     opacity: 0;
-                    background-color: rgba(255, 255, 255, 0.15);
+                    background-color: var(--light-15);
                     border-radius: 999rem;
                 }
 
@@ -448,9 +448,7 @@ class HorizontalTimeline extends HTMLElement {
                 #timeline_labels button.highlight > span > span,
                 #timeline_labels button:hover > span > span,
                 #timeline_labels button:focus > span > span {
-                    transition:
-                        opacity 100ms linear,
-                        inset 100ms var(--ease-out-quad, ease-out);
+                    transition: opacity var(--transition-color), inset var(--transition-indicator);
                     opacity: 1;
                     inset: -0.09375rem 0 0 0;
                 }
@@ -465,6 +463,37 @@ class HorizontalTimeline extends HTMLElement {
                         margin: 0 2rem;
                     }
                 }
+
+                /* Light mode - consolidated color overrides */
+                #mode:checked~main #timeline-wrapper {
+                    background-color: rgba(165, 222, 234, 0.95); /* HSL 210, 50, 85 */
+                    border: solid max(1px, 0.0625rem) var(--dark-20);
+                    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-35);
+                }
+
+                #mode:checked~main #timeline_labels button > span > span {
+                    background-color: var(--light-50);
+                }
+
+                /* Light mode - indicator colors */
+                #mode:checked~main #timeline div span { background-color: var(--dark-45); }
+                #mode:checked~main #timeline div:nth-child(2) span,
+                #mode:checked~main #timeline div:nth-last-child(2) span { background-color: var(--dark-40); }
+                #mode:checked~main #timeline div:first-child span,
+                #mode:checked~main #timeline div:last-child span { background-color: var(--dark-30); }
+
+                /* Light mode - active state colors */
+                #mode:checked~main #timeline div.active span { background-color: var(--dark-70); }
+                #mode:checked~main #timeline div.active + div span,
+                #mode:checked~main #timeline div:has(+ div.active) span { background-color: var(--dark-70); }
+                #mode:checked~main #timeline div.active + div + div span,
+                #mode:checked~main #timeline div:has(+ div + div.active) span { background-color: var(--dark-65); }
+                #mode:checked~main #timeline div.active + div + div + div span,
+                #mode:checked~main #timeline div:has(+ div + div + div.active) span { background-color: var(--dark-60); }
+                #mode:checked~main #timeline div.active + div + div + div + div span,
+                #mode:checked~main #timeline div:has(+ div + div + div + div.active) span { background-color: var(--dark-55); }
+                #mode:checked~main #timeline div.active + div + div + div + div + div span,
+                #mode:checked~main #timeline div:has(+ div + div + div + div + div.active) span { background-color: var(--dark-50); }
             </style>
 
             <noscript>
@@ -855,9 +884,10 @@ class HorizontalTimeline extends HTMLElement {
         this.boundHandleMouseLeave = () => this.handleMouseLeave()
         this.addEventListener('mouseleave', this.boundHandleMouseLeave)
 
-        // Window resize - update scrollable state
-        this.boundHandleResize = () => this.handleResize()
-        window.addEventListener('resize', this.boundHandleResize)
+        // Window resize - register with centralized ResizeManager (if available)
+        if (typeof ResizeManager !== 'undefined') {
+            this.unregisterResize = ResizeManager.register(() => this.handleResize())
+        }
     }
 
     // ========================================================================
@@ -923,8 +953,7 @@ class HorizontalTimeline extends HTMLElement {
             { target: this, type: 'keydown', handler: 'boundHandleKeydown' },
             { target: this, type: 'mouseover', handler: 'boundHandleMouseOver' },
             { target: this, type: 'mouseout', handler: 'boundHandleMouseOut' },
-            { target: this, type: 'mouseleave', handler: 'boundHandleMouseLeave' },
-            { target: window, type: 'resize', handler: 'boundHandleResize' }
+            { target: this, type: 'mouseleave', handler: 'boundHandleMouseLeave' }
         ]
 
         listeners.forEach(({ target, type, handler }) => {
@@ -933,6 +962,12 @@ class HorizontalTimeline extends HTMLElement {
                 this[handler] = null
             }
         })
+
+        // Unregister from centralized resize manager
+        if (this.unregisterResize) {
+            this.unregisterResize()
+            this.unregisterResize = null
+        }
 
         // Clean up scroll end listener if exists
         if (this.boundHandleScrollEnd) {

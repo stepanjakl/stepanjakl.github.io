@@ -127,6 +127,17 @@
     height: 0.75rem;
     display: inline-flex;
     align-items: center;
+    text-decoration: underline;
+    text-decoration-thickness: 0.09375rem;
+    text-underline-offset: 0.1875rem;
+    text-decoration-color: transparent;
+    transition: text-decoration-color var(--animate-out-segment-2\/3) linear;
+    cursor: ne-resize;
+}
+
+.modal--profile .modal__body a:hover {
+    text-decoration-color: var(--text-2);
+    transition: text-decoration-color var(--animate-in-segment-2\/3) linear;
 }
 
 .modal--profile .modal__body a img {
@@ -224,7 +235,7 @@
     justify-content: center;
     column-gap: 0.25rem;
     border-radius: 999rem;
-    border: min(2px, 0.125rem) solid var(--modal-tag-bg);
+    border: solid min(2px, 0.125rem) var(--modal-tag-bg);
     /* background-color: var(--modal-tag-bg); */
     padding: 0.609375rem 0.75rem 0.5rem;
 }
@@ -316,12 +327,12 @@
     position: absolute;
     inset: 0;
     /* 110, 85, 65 */
-    background: radial-gradient(ellipse 75% 50% at 50% 100% in oklch, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0) 100%),
+    background: radial-gradient(ellipse 75% 50% at 50% 100% in oklch, var(--dark-75), var(--dark-50) 50%, rgba(0, 0, 0, 0) 100%),
         radial-gradient(ellipse 25% 25% at 50% 50% in oklch, rgba(125, 172, 59, 1), rgba(125, 172, 59, 1) 50%, rgba(125, 172, 59, 0) 100%),
         radial-gradient(ellipse 50% 100% at bottom center in oklch, rgba(125, 172, 59, 1), rgba(125, 172, 59, 1) 50%, rgba(125, 172, 59, 0) 100%),
         radial-gradient(ellipse 50% 75% at bottom left in oklch, rgba(125, 172, 59, 0.5), rgba(125, 172, 59, 0.5) 50%, rgba(125, 172, 59, 0) 100%),
         radial-gradient(ellipse 50% 75% at bottom right in oklch, rgba(125, 172, 59, 0.5), rgba(125, 172, 59, 0.5) 50%, rgba(125, 172, 59, 0) 100%),
-        linear-gradient(to top in oklch, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 75%);
+        linear-gradient(to top in oklch, var(--light-50), rgba(255, 255, 255, 0) 75%);
     filter: blur(4rem);
     transform: scaleY(0);
     transform-origin: bottom;

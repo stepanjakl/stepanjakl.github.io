@@ -191,7 +191,7 @@ footer>* {
     }
 
     10%, 14.999999999% {
-        background-color: var(--footer-square-1-hover);
+        background-color: var(--footer-square-1--hover);
     }
 
     15%, 59.999999999% {
@@ -199,7 +199,7 @@ footer>* {
     }
 
     60%, 64.999999999% {
-        background-color: var(--footer-square-1-hover);
+        background-color: var(--footer-square-1--hover);
     }
 
     65%, 100% {
@@ -488,87 +488,6 @@ footer>* {
     }
 }
 
-/* .bg-triangle--right,
-.bg-triangle--right-alt {
-    animation-duration: var(--duration-bg-triangle-right-fade-in);
-    animation-delay: var(--delay-bg-triangle-right-fade-in);
-}
-
-.bg-triangle--right::after {
-    animation-name: triangle-right-after-pulse, flicker;
-}
-
-.bg-triangle--right-alt::after {
-    animation-name: triangle-right-after-pulse, flicker-alt;
-}
-
-.bg-triangle--right::after,
-.bg-triangle--right-alt::after {
-    animation-fill-mode: both, forwards;
-    animation-duration: var(--duration-triangle-right-after-pulse), var(--duration-triangle-flicker);
-    animation-delay: var(--delay-triangle-right-after-pulse), var(--delay-triangle-flicker);
-    animation-timing-function: var(--ease-out-quad), linear;
-    animation-direction: alternate, normal;
-    animation-iteration-count: infinite, infinite;
-    will-change: top, height, width, opacity;
-}
-
-@keyframes triangle-right-after-pulse {
-    0% {
-        top: calc(2 * 14.6446609406725vh);
-        height: calc(2 * 70.710678118655vh);
-        width: calc(2 * 70.710678118655vh);
-    }
-
-    100% {
-        top: 14.6446609406725vh;
-        height: 70.710678118655vh;
-        width: 70.710678118655vh;
-    }
-}
-
-@keyframes flicker {
-    0%, 19.999%, 21%, 22.999%, 24%, 31.999%, 40%, 100% {
-        opacity: 1;
-    }
-
-    20%, 20.999%, 23%, 23.999%, 32%, 39.999% {
-        opacity: 0;
-    }
-}
-
-@keyframes flicker-alt {
-    0%, 19.999%, 21%, 22.999%, 24%, 31.999%, 40%, 100% {
-        opacity: 0;
-    }
-
-    20%, 20.999%, 23%, 23.999%, 32%, 39.999% {
-        opacity: 1;
-    }
-}
-
-.bg-triangle--right::before {
-    animation-name: triangle-before-pulse;
-    animation-fill-mode: both;
-    animation-duration: var(--duration-triangle-before-pulse);
-    animation-timing-function: var(--ease-out-quad);
-    animation-delay: var(--delay-triangle-before-pulse);
-}
-
-@keyframes triangle-before-pulse {
-    0% {
-        height: calc(2 * 70.710678118655vh);
-    }
-
-    100% {
-        height: 70.710678118655vh;
-    }
-}
-
-#profile:target~main .bg-triangle::before,
-#archive:target~main .bg-triangle::before,
-#profile:target~main .bg-triangle::after,
-#archive:target~main .bg-triangle::after, */
 #profile:target~main footer .intro__footer-rectangle,
 #archive:target~main footer .intro__footer-rectangle,
 #profile:target~main footer .intro__footer-square-1,
@@ -601,7 +520,7 @@ body.modal-archive-open .availability__dot {
 }
 
 .intro__name.highlight--active .intro__name-frame {
-    --corner-color-active: var(--green-lime-85);
+    --corner-color--active: var(--green-lime-85);
 }
 
 .intro__name .corners__item::before,
@@ -614,7 +533,7 @@ body.modal-archive-open .availability__dot {
     transition: background-color calc(2 * var(--animate-in-segment)) var(--ease-out-quad);
 }
 
-/* Corner Decoration */
+/* Corner decoration */
 .corners {
     position: absolute;
     inset: 0;
@@ -698,39 +617,19 @@ body.modal-archive-open .availability__dot {
     }
 
     75% {
-        background: var(--corner-color-active);
+        background: var(--corner-color--active);
     }
 
     100% {
-        background: var(--corner-color-active);
+        background: var(--corner-color--active);
     }
 }
-
-/* @keyframes corner-show {
-    0% {
-        transform: scale(0.75);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-@keyframes corner-hide {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-} */
 
 .corners__item::before,
 .corners__item::after {
     content: '';
     position: absolute;
-    background-color: var(--corner-color-active);
+    background-color: var(--corner-color--active);
 }
 
 .corners__item--tl {
@@ -810,13 +709,12 @@ body.modal-archive-open .availability__dot {
 }
 
 
-
 /* Face icon animation */
 
 body {
-    --face-icon-sequence-default: path("M14.917,24C14.277,24 13.743,23.785 13.312,23.354C12.882,22.924 12.667,22.389 12.667,21.75C12.667,21.111 12.889,20.577 13.333,20.146C13.778,19.716 14.319,19.5 14.958,19.5C15.598,19.5 16.125,19.715 16.542,20.146C16.959,20.576 17.167,21.111 17.167,21.75C17.167,22.389 16.952,22.923 16.521,23.354C16.091,23.784 15.556,24 14.917,24ZM25.083,24C24.444,24 23.91,23.785 23.479,23.354C23.049,22.924 22.833,22.389 22.833,21.75C22.833,21.111 23.048,20.577 23.479,20.146C23.909,19.716 24.444,19.5 25.083,19.5C25.723,19.5 26.264,19.715 26.708,20.146C27.153,20.576 27.375,21.111 27.375,21.75C27.375,22.389 27.153,22.923 26.708,23.354C26.276,23.779 25.689,24.013 25.083,24ZM20,33.667C23.805,33.667 27.035,32.341 29.688,29.688C32.341,27.035 33.667,23.805 33.667,20C33.667,19.305 33.618,18.632 33.521,17.979C33.433,17.363 33.286,16.756 33.083,16.167C32.508,16.309 31.923,16.407 31.333,16.458C30.723,16.514 30.083,16.542 29.417,16.542C26.806,16.542 24.347,16.007 22.042,14.938C19.744,13.874 17.72,12.299 16.125,10.333C15.227,12.473 13.893,14.403 12.208,16C10.519,17.608 8.539,18.881 6.375,19.75L6.375,20.042C6.375,23.847 7.695,27.069 10.333,29.708C12.973,32.348 16.195,33.667 20,33.667ZM20.042,37.333C17.625,37.333 15.368,36.875 13.271,35.958C11.174,35.041 9.341,33.805 7.771,32.25C6.201,30.695 4.959,28.861 4.042,26.75C3.125,24.639 2.667,22.389 2.667,20C2.667,17.611 3.125,15.361 4.042,13.25C4.959,11.139 6.202,9.305 7.771,7.75C9.341,6.195 11.174,4.959 13.271,4.042C15.368,3.125 17.625,2.667 20.042,2.667C22.431,2.667 24.674,3.125 26.771,4.042C28.868,4.959 30.701,6.195 32.271,7.75C33.841,9.305 35.076,11.139 35.979,13.25C36.882,15.361 37.333,17.611 37.333,20C37.333,22.389 36.882,24.639 35.979,26.75C35.076,28.861 33.84,30.702 32.271,32.271C30.701,33.841 28.861,35.076 26.75,35.979C24.639,36.882 22.403,37.333 20.042,37.333Z");
-    --face-icon-sequence-blink: path("M14.917,22.75C14.277,22.75 13.743,22.654 13.312,22.463C12.882,22.272 12.667,22.034 12.667,21.75C12.667,21.466 12.889,21.229 13.333,21.037C13.778,20.846 14.319,20.75 14.958,20.75C15.598,20.75 16.125,20.846 16.542,21.037C16.959,21.228 17.167,21.466 17.167,21.75C17.167,22.034 16.952,22.271 16.521,22.463C16.091,22.654 15.556,22.75 14.917,22.75ZM25.083,22.75C24.444,22.75 23.91,22.654 23.479,22.463C23.049,22.272 22.833,22.034 22.833,21.75C22.833,21.466 23.048,21.229 23.479,21.037C23.909,20.846 24.444,20.75 25.083,20.75C25.723,20.75 26.264,20.846 26.708,21.037C27.153,21.228 27.375,21.466 27.375,21.75C27.375,22.034 27.153,22.271 26.708,22.463C26.276,22.652 25.689,22.756 25.083,22.75ZM20,33.667C23.805,33.667 27.035,32.341 29.688,29.688C32.341,27.035 33.667,23.805 33.667,20C33.667,19.305 33.618,18.632 33.521,17.979C33.433,17.363 33.286,16.756 33.083,16.167C32.508,16.309 31.923,16.407 31.333,16.458C30.723,16.514 30.083,16.542 29.417,16.542C26.806,16.542 24.347,16.007 22.042,14.938C19.744,13.874 17.72,12.299 16.125,10.333C15.227,12.473 13.893,14.403 12.208,16C10.519,17.608 8.539,18.881 6.375,19.75L6.375,20.042C6.375,23.847 7.695,27.069 10.333,29.708C12.973,32.348 16.195,33.667 20,33.667ZM20.042,37.333C17.625,37.333 15.368,36.875 13.271,35.958C11.174,35.041 9.341,33.805 7.771,32.25C6.201,30.695 4.959,28.861 4.042,26.75C3.125,24.639 2.667,22.389 2.667,20C2.667,17.611 3.125,15.361 4.042,13.25C4.959,11.139 6.202,9.305 7.771,7.75C9.341,6.195 11.174,4.959 13.271,4.042C15.368,3.125 17.625,2.667 20.042,2.667C22.431,2.667 24.674,3.125 26.771,4.042C28.868,4.959 30.701,6.195 32.271,7.75C33.841,9.305 35.076,11.139 35.979,13.25C36.882,15.361 37.333,17.611 37.333,20C37.333,22.389 36.882,24.639 35.979,26.75C35.076,28.861 33.84,30.702 32.271,32.271C30.701,33.841 28.861,35.076 26.75,35.979C24.639,36.882 22.403,37.333 20.042,37.333Z");
-    --face-icon-sequence-wink: path("M14.917,24C14.277,24 13.743,23.785 13.312,23.354C12.882,22.924 12.667,22.389 12.667,21.75C12.667,21.111 12.889,20.577 13.333,20.146C13.778,19.716 14.319,19.5 14.958,19.5C15.598,19.5 16.125,19.715 16.542,20.146C16.959,20.576 17.167,21.111 17.167,21.75C17.167,22.389 16.952,22.923 16.521,23.354C16.091,23.784 15.556,24 14.917,24ZM25.083,22.75C24.444,22.75 23.91,22.654 23.479,22.463C23.049,22.272 22.833,22.034 22.833,21.75C22.833,21.466 23.048,21.229 23.479,21.037C23.909,20.846 24.444,20.75 25.083,20.75C25.723,20.75 26.264,20.846 26.708,21.037C27.153,21.228 27.375,21.466 27.375,21.75C27.375,22.034 27.153,22.271 26.708,22.463C26.276,22.652 25.689,22.756 25.083,22.75ZM20,33.667C23.805,33.667 27.035,32.341 29.688,29.688C32.341,27.035 33.667,23.805 33.667,20C33.667,19.305 33.618,18.632 33.521,17.979C33.433,17.363 33.286,16.756 33.083,16.167C32.508,16.309 31.923,16.407 31.333,16.458C30.723,16.514 30.083,16.542 29.417,16.542C26.806,16.542 24.347,16.007 22.042,14.938C19.744,13.874 17.72,12.299 16.125,10.333C15.227,12.473 13.893,14.403 12.208,16C10.519,17.608 8.539,18.881 6.375,19.75L6.375,20.042C6.375,23.847 7.695,27.069 10.333,29.708C12.973,32.348 16.195,33.667 20,33.667ZM20.042,37.333C17.625,37.333 15.368,36.875 13.271,35.958C11.174,35.041 9.341,33.805 7.771,32.25C6.201,30.695 4.959,28.861 4.042,26.75C3.125,24.639 2.667,22.389 2.667,20C2.667,17.611 3.125,15.361 4.042,13.25C4.959,11.139 6.202,9.305 7.771,7.75C9.341,6.195 11.174,4.959 13.271,4.042C15.368,3.125 17.625,2.667 20.042,2.667C22.431,2.667 24.674,3.125 26.771,4.042C28.868,4.959 30.701,6.195 32.271,7.75C33.841,9.305 35.076,11.139 35.979,13.25C36.882,15.361 37.333,17.611 37.333,20C37.333,22.389 36.882,24.639 35.979,26.75C35.076,28.861 33.84,30.702 32.271,32.271C30.701,33.841 28.861,35.076 26.75,35.979C24.639,36.882 22.403,37.333 20.042,37.333Z");
+    --face-icon-sequence--default: path("M14.917,24C14.277,24 13.743,23.785 13.312,23.354C12.882,22.924 12.667,22.389 12.667,21.75C12.667,21.111 12.889,20.577 13.333,20.146C13.778,19.716 14.319,19.5 14.958,19.5C15.598,19.5 16.125,19.715 16.542,20.146C16.959,20.576 17.167,21.111 17.167,21.75C17.167,22.389 16.952,22.923 16.521,23.354C16.091,23.784 15.556,24 14.917,24ZM25.083,24C24.444,24 23.91,23.785 23.479,23.354C23.049,22.924 22.833,22.389 22.833,21.75C22.833,21.111 23.048,20.577 23.479,20.146C23.909,19.716 24.444,19.5 25.083,19.5C25.723,19.5 26.264,19.715 26.708,20.146C27.153,20.576 27.375,21.111 27.375,21.75C27.375,22.389 27.153,22.923 26.708,23.354C26.276,23.779 25.689,24.013 25.083,24ZM20,33.667C23.805,33.667 27.035,32.341 29.688,29.688C32.341,27.035 33.667,23.805 33.667,20C33.667,19.305 33.618,18.632 33.521,17.979C33.433,17.363 33.286,16.756 33.083,16.167C32.508,16.309 31.923,16.407 31.333,16.458C30.723,16.514 30.083,16.542 29.417,16.542C26.806,16.542 24.347,16.007 22.042,14.938C19.744,13.874 17.72,12.299 16.125,10.333C15.227,12.473 13.893,14.403 12.208,16C10.519,17.608 8.539,18.881 6.375,19.75L6.375,20.042C6.375,23.847 7.695,27.069 10.333,29.708C12.973,32.348 16.195,33.667 20,33.667ZM20.042,37.333C17.625,37.333 15.368,36.875 13.271,35.958C11.174,35.041 9.341,33.805 7.771,32.25C6.201,30.695 4.959,28.861 4.042,26.75C3.125,24.639 2.667,22.389 2.667,20C2.667,17.611 3.125,15.361 4.042,13.25C4.959,11.139 6.202,9.305 7.771,7.75C9.341,6.195 11.174,4.959 13.271,4.042C15.368,3.125 17.625,2.667 20.042,2.667C22.431,2.667 24.674,3.125 26.771,4.042C28.868,4.959 30.701,6.195 32.271,7.75C33.841,9.305 35.076,11.139 35.979,13.25C36.882,15.361 37.333,17.611 37.333,20C37.333,22.389 36.882,24.639 35.979,26.75C35.076,28.861 33.84,30.702 32.271,32.271C30.701,33.841 28.861,35.076 26.75,35.979C24.639,36.882 22.403,37.333 20.042,37.333Z");
+    --face-icon-sequence--blink: path("M14.917,22.75C14.277,22.75 13.743,22.654 13.312,22.463C12.882,22.272 12.667,22.034 12.667,21.75C12.667,21.466 12.889,21.229 13.333,21.037C13.778,20.846 14.319,20.75 14.958,20.75C15.598,20.75 16.125,20.846 16.542,21.037C16.959,21.228 17.167,21.466 17.167,21.75C17.167,22.034 16.952,22.271 16.521,22.463C16.091,22.654 15.556,22.75 14.917,22.75ZM25.083,22.75C24.444,22.75 23.91,22.654 23.479,22.463C23.049,22.272 22.833,22.034 22.833,21.75C22.833,21.466 23.048,21.229 23.479,21.037C23.909,20.846 24.444,20.75 25.083,20.75C25.723,20.75 26.264,20.846 26.708,21.037C27.153,21.228 27.375,21.466 27.375,21.75C27.375,22.034 27.153,22.271 26.708,22.463C26.276,22.652 25.689,22.756 25.083,22.75ZM20,33.667C23.805,33.667 27.035,32.341 29.688,29.688C32.341,27.035 33.667,23.805 33.667,20C33.667,19.305 33.618,18.632 33.521,17.979C33.433,17.363 33.286,16.756 33.083,16.167C32.508,16.309 31.923,16.407 31.333,16.458C30.723,16.514 30.083,16.542 29.417,16.542C26.806,16.542 24.347,16.007 22.042,14.938C19.744,13.874 17.72,12.299 16.125,10.333C15.227,12.473 13.893,14.403 12.208,16C10.519,17.608 8.539,18.881 6.375,19.75L6.375,20.042C6.375,23.847 7.695,27.069 10.333,29.708C12.973,32.348 16.195,33.667 20,33.667ZM20.042,37.333C17.625,37.333 15.368,36.875 13.271,35.958C11.174,35.041 9.341,33.805 7.771,32.25C6.201,30.695 4.959,28.861 4.042,26.75C3.125,24.639 2.667,22.389 2.667,20C2.667,17.611 3.125,15.361 4.042,13.25C4.959,11.139 6.202,9.305 7.771,7.75C9.341,6.195 11.174,4.959 13.271,4.042C15.368,3.125 17.625,2.667 20.042,2.667C22.431,2.667 24.674,3.125 26.771,4.042C28.868,4.959 30.701,6.195 32.271,7.75C33.841,9.305 35.076,11.139 35.979,13.25C36.882,15.361 37.333,17.611 37.333,20C37.333,22.389 36.882,24.639 35.979,26.75C35.076,28.861 33.84,30.702 32.271,32.271C30.701,33.841 28.861,35.076 26.75,35.979C24.639,36.882 22.403,37.333 20.042,37.333Z");
+    --face-icon-sequence--wink: path("M14.917,24C14.277,24 13.743,23.785 13.312,23.354C12.882,22.924 12.667,22.389 12.667,21.75C12.667,21.111 12.889,20.577 13.333,20.146C13.778,19.716 14.319,19.5 14.958,19.5C15.598,19.5 16.125,19.715 16.542,20.146C16.959,20.576 17.167,21.111 17.167,21.75C17.167,22.389 16.952,22.923 16.521,23.354C16.091,23.784 15.556,24 14.917,24ZM25.083,22.75C24.444,22.75 23.91,22.654 23.479,22.463C23.049,22.272 22.833,22.034 22.833,21.75C22.833,21.466 23.048,21.229 23.479,21.037C23.909,20.846 24.444,20.75 25.083,20.75C25.723,20.75 26.264,20.846 26.708,21.037C27.153,21.228 27.375,21.466 27.375,21.75C27.375,22.034 27.153,22.271 26.708,22.463C26.276,22.652 25.689,22.756 25.083,22.75ZM20,33.667C23.805,33.667 27.035,32.341 29.688,29.688C32.341,27.035 33.667,23.805 33.667,20C33.667,19.305 33.618,18.632 33.521,17.979C33.433,17.363 33.286,16.756 33.083,16.167C32.508,16.309 31.923,16.407 31.333,16.458C30.723,16.514 30.083,16.542 29.417,16.542C26.806,16.542 24.347,16.007 22.042,14.938C19.744,13.874 17.72,12.299 16.125,10.333C15.227,12.473 13.893,14.403 12.208,16C10.519,17.608 8.539,18.881 6.375,19.75L6.375,20.042C6.375,23.847 7.695,27.069 10.333,29.708C12.973,32.348 16.195,33.667 20,33.667ZM20.042,37.333C17.625,37.333 15.368,36.875 13.271,35.958C11.174,35.041 9.341,33.805 7.771,32.25C6.201,30.695 4.959,28.861 4.042,26.75C3.125,24.639 2.667,22.389 2.667,20C2.667,17.611 3.125,15.361 4.042,13.25C4.959,11.139 6.202,9.305 7.771,7.75C9.341,6.195 11.174,4.959 13.271,4.042C15.368,3.125 17.625,2.667 20.042,2.667C22.431,2.667 24.674,3.125 26.771,4.042C28.868,4.959 30.701,6.195 32.271,7.75C33.841,9.305 35.076,11.139 35.979,13.25C36.882,15.361 37.333,17.611 37.333,20C37.333,22.389 36.882,24.639 35.979,26.75C35.076,28.861 33.84,30.702 32.271,32.271C30.701,33.841 28.861,35.076 26.75,35.979C24.639,36.882 22.403,37.333 20.042,37.333Z");
 }
 
 .menu__link-icon--animated svg path {
@@ -831,39 +729,39 @@ body {
 
 @keyframes face-icon-animation {
     0% {
-        d: var(--face-icon-sequence-default);
+        d: var(--face-icon-sequence--default);
     }
 
     25% {
-        d: var(--face-icon-sequence-default);
+        d: var(--face-icon-sequence--default);
     }
 
     27.5% {
-        d: var(--face-icon-sequence-blink);
+        d: var(--face-icon-sequence--blink);
     }
 
     30% {
-        d: var(--face-icon-sequence-default);
+        d: var(--face-icon-sequence--default);
     }
 
     32.5% {
-        d: var(--face-icon-sequence-blink);
+        d: var(--face-icon-sequence--blink);
     }
 
     35% {
-        d: var(--face-icon-sequence-default);
+        d: var(--face-icon-sequence--default);
     }
 
     95% {
-        d: var(--face-icon-sequence-default);
+        d: var(--face-icon-sequence--default);
     }
 
     97.5% {
-        d: var(--face-icon-sequence-wink);
+        d: var(--face-icon-sequence--wink);
     }
 
     100% {
-        d: var(--face-icon-sequence-default);
+        d: var(--face-icon-sequence--default);
     }
 }
 
@@ -970,7 +868,7 @@ body {
 .menu__link:focus,
 .menu__link.tooltip-key--active {
     background-color: var(--highlight-secondary);
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-3);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-25);
 }
 
 .menu__link--profile:hover,
@@ -990,7 +888,7 @@ body {
 .menu__email-button:hover svg,
 .menu__email-button:focus svg {
     transition: color var(--animate-in-segment-2\/3) linear;
-    color: var(--icon-hover);
+    color: var(--icon--hover);
 }
 
 .menu__link-label-text,
@@ -1057,12 +955,12 @@ body {
 }
 
 #menu-toggle:hover .menu__button {
-    border-color: var(--light-2);
+    border-color: var(--light-15);
 }
 
 #menu:target .menu__button,
 #menu-toggle.tooltip-key--active .menu__button {
-    border-color: var(--light-3);
+    border-color: var(--light-25);
 }
 
 #menu-toggle:hover .menu__button,
@@ -1070,7 +968,7 @@ body {
 #menu:target .menu__button,
 #menu-toggle.tooltip-key--active .menu__button {
     transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear, outline var(--animate-in-segment-2\/3) linear;
-    color: var(--icon-hover);
+    color: var(--icon--hover);
     background-color: var(--highlight-secondary);
 }
 
@@ -1325,7 +1223,7 @@ body {
 #menu-dropdown a:hover svg,
 #menu-dropdown label:hover svg {
     transition: color var(--animate-out-segment) linear, background-color var(--animate-out-segment) linear;
-    color: var(--icon-hover);
+    color: var(--icon--hover);
 }
 
 #menu-dropdown label#menu-dropdown-light-mode:hover span,
@@ -1444,7 +1342,7 @@ body.modal-profile-open footer>div {
 
 .modal-archive__timeline-grid [data-timeline-section-title]>div label:hover+div svg, .modal-archive__timeline-grid [data-timeline-section-title]>div label:focus+div svg {
     transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border var(--animate-in-segment-2\/3) linear;
-    color: var(--modal-icon-hover);
+    color: var(--modal-icon--hover);
     background-color: var(--highlight-secondary);
 }
 
@@ -1454,7 +1352,7 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a {
 
 section[data-timeline-section]>div>nav ul li:not(:first-child) a:hover,
 section[data-timeline-section]>div>nav ul li:not(:first-child) a:focus {
-    background-color: var(--modal-tag-bg-hover);
+    background-color: var(--modal-tag-bg--hover);
     transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear;
 }
 
@@ -1497,7 +1395,7 @@ body.modal-archive-open #modal-archive #horizontal-timeline> :first-child {
     transition: background-color var(--animate-out-segment) linear, width var(--animate-out-segment) var(--ease-in-quad), height var(--animate-out-segment) var(--ease-in-quad);
     width: 0.5rem;
     height: 0.5rem;
-    background-color: var(--light-4);
+    /* background-color: var(--light-25); */
 }
 
 [data-carousel-nav]:hover button, [data-carousel-nav]:focus-within button {
@@ -1508,13 +1406,13 @@ body.modal-archive-open #modal-archive #horizontal-timeline> :first-child {
 
 [data-carousel-nav] button:hover, [data-carousel-nav] button:focus {
     transition: background-color var(--animate-out-segment-2\/3) linear;
-    background-color: var(--light-6);
+    background-color: var(--light-50);
 }
 
 [data-carousel-nav] button[aria-current] {
     pointer-events: none;
-    background-color: var(--light-6);
     width: 1.75rem;
+    background-color: var(--light-50);
 }
 
 [data-carousel-nav]:hover button[aria-current], [data-carousel-nav]:focus-within button[aria-current] {
@@ -1523,22 +1421,22 @@ body.modal-archive-open #modal-archive #horizontal-timeline> :first-child {
 
 [data-carousel-arrows] li button {
     transition: background-color var(--animate-out-segment-2\/3) linear;
-    background-color: var(--light-2);
 }
 
-[data-carousel-arrows] li button:hover, [data-carousel-arrows] li button:focus {
+[data-carousel-arrows] li button:hover,
+[data-carousel-arrows] li button:focus {
     transition: background-color var(--animate-out-segment-2\/3) linear;
-    background-color: var(--light-4);
+    background-color: var(--light-25);
 }
 
 [data-carousel-arrows] li button::before {
     transition: background-color var(--animate-out-segment-2\/3) linear;
-    background-color: var(--light-5);
+    background-color: var(--light-35);
 }
 
 [data-carousel-arrows] li button:hover::before {
     transition: background-color var(--animate-in-segment-2\/3) linear;
-    background-color: var(--light-6);
+    background-color: var(--light-50);
 }
 
 
@@ -1546,19 +1444,19 @@ body.modal-archive-open #modal-archive #horizontal-timeline> :first-child {
 
 .modal__close-button, .modal__close-button svg,
 .modal__fullscreen-button, .modal__fullscreen-button svg {
-    transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, border var(--animate-out-segment-2\/3) linear;
+    transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, border var(--animate-out-segment-2\/3) linear, box-shadow var(--animate-out-segment-2\/3) linear, outline-color var(--animate-out-segment-2\/3) linear;
 }
 
 .modal__close-button:hover, .modal__close-button:focus,
 .modal__fullscreen-button:hover, .modal__fullscreen-button:focus {
-    transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border var(--animate-in-segment-2\/3) linear;
-    color: var(--modal-icon-hover);
-    background-color: var(--highlight-secondary);
+    transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear, outline-color var(--animate-in-segment-2\/3) linear;
+    color: var(--modal-icon--hover);
+    background-color: var(--modal-icon-bg--hover);
 }
 
 .modal__close-button:hover svg, .modal__close-button:focus svg,
 .modal__fullscreen-button:hover svg, .modal__fullscreen-button:focus svg {
-    color: var(--modal-icon-hover);
+    color: var(--modal-icon--hover);
 }
 
 
