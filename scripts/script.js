@@ -1,6 +1,6 @@
 /*!
  * Personal website of Štěpán Jákl
- * https://stepanjakl.github.io
+ * https://stepanjakl.com
  *
  * Copyright © 2025 Štěpán Jákl
  * Released under the MIT license
@@ -32,9 +32,151 @@ function debounce(func, wait) {
     }
 }
 
+/**
+ * Double requestAnimationFrame helper - ensures callback runs after browser paint
+ * Useful for DOM changes that need to sync with layout/paint cycle
+ * @param {Function} callback - Function to execute after paint
+ */
+function afterPaint(callback) {
+    requestAnimationFrame(() => {
+        requestAnimationFrame(callback)
+    })
+}
+
+/**
+ * Parse URL hash into base and parameters
+ * @param {string} hash - URL hash (e.g., '#archive?year=2024')
+ * @returns {{base: string, params: Object}} Parsed hash object
+ */
+function parseHash(hash = window.location.hash) {
+    const [base, queryString] = hash.split('?')
+    const params = {}
+
+    if (queryString) {
+        queryString.split('&').forEach(pair => {
+            const [key, value] = pair.split('=')
+            if (key) params[key] = value || ''
+        })
+    }
+
+    return { base, params }
+}
+
+// ============================================================================
+// Global Constants & Configuration
+// ============================================================================
+
+/** Shared navigation hash constants for consistent routing */
+const NAVIGATION_HASHES = Object.freeze({
+    PROFILE: '#profile',
+    ARCHIVE: '#archive',
+    MENU: '#menu'
+})
+
+/** Modal element selectors for DOM querying */
+const MODAL_SELECTORS = Object.freeze({
+    PROFILE: '#modal-profile',
+    ARCHIVE: '#modal-archive'
+})
+
+/** Dialog configuration for consistent ID references and focus management */
+const DIALOG_CONFIG = Object.freeze({
+    PROFILE: {
+        id: 'modal-profile',
+        trigger: 'menu-link-profile'  // Element to focus when dialog closes
+    },
+    ARCHIVE: {
+        id: 'modal-archive',
+        trigger: 'menu-link-archive'
+    },
+    MENU: {
+        id: 'menu-toggle',
+        trigger: 'menu-button-open',
+        close: 'menu-button-close'   // Element to focus when dialog opens
+    }
+})
+
+/** Popup link selector for media files */
+const POPUP_LINK_SELECTOR = 'a[target="_blank"][href$=".mp4"], a[target="_blank"][href$=".png"], a[target="_blank"][href$=".jpg"], a[target="_blank"][href$=".svg"]'
+
+/** Data attribute for tracking touch button primed state */
+const TOUCH_PRIMED_ATTRIBUTE = 'data-touch-primed'
+
+/** Shared modal element cache to avoid repeated DOM queries */
+const modalElementCache = {
+    profile: null,
+    archive: null
+}
+
+/**
+ * Get modal element with caching
+ * Shared utility used by WheelHandler and TouchHandler
+ * @param {string} hash - Navigation hash (e.g., '#profile')
+ * @returns {HTMLElement|null} Cached modal element or null if not found
+ */
+const getModalElement = (hash) => {
+    if (hash === NAVIGATION_HASHES.PROFILE) {
+        return modalElementCache.profile ??= document.querySelector(MODAL_SELECTORS.PROFILE)
+    } else if (hash === NAVIGATION_HASHES.ARCHIVE) {
+        return modalElementCache.archive ??= document.querySelector(MODAL_SELECTORS.ARCHIVE)
+    }
+    return null
+}
+
+// ============================================================================
+// Application Namespace
+// ============================================================================
+
+/**
+ * Application namespace for global state and utilities
+ * Initialized early to provide getEl helper for ThemeManager
+ * Full API populated later after all classes are defined
+ */
+window.App = window.App || {}
+App._elCache = App._elCache || {}
+
+/**
+ * Get element by id with caching. Accepts either an id string or an element.
+ * @param {string|HTMLElement} idOrEl
+ * @returns {HTMLElement|null}
+ */
+App.getEl = App.getEl || ((idOrEl) => {
+    if (!idOrEl) return null
+    if (typeof idOrEl !== 'string') return idOrEl
+    return App._elCache[idOrEl] ??= document.getElementById(idOrEl)
+})
+
+/**
+ * Helper to activate (click) an element by id and optionally focus another element.
+ * Intended for use from inline handlers to keep logic centralized and consistent.
+ * @param {string} clickId - id of element to .click()
+ * @param {string|null} focusId - id of element to .focus()
+ */
+App.keyActivate = (clickId, focusId = null) => {
+    const el = App.getEl(clickId)
+    if (el && typeof el.click === 'function') {
+        el.click()
+    }
+    if (focusId) {
+        const f = App.getEl(focusId)
+        if (f && typeof f.focus === 'function') f.focus()
+    }
+}
+
+// Public API methods (populated later, called from HTML)
+App.timeline = null
+App.textHighlighter = null
+App.popupInstance = null
+App.popupPreloadedLinks = null
+App.initializeTimeline = null
+App.positionTimeline = null
+App.handleTouchButtonClick = null
+App.toggleFullscreen = null
+
 // ============================================================================
 // Theme Persistence
 // ============================================================================
+
 
 /**
  * Manages light/dark mode persistence using localStorage
@@ -50,7 +192,7 @@ class ThemeManager {
 
     init() {
         // Get mode checkbox element
-        this.modeCheckbox = document.getElementById('mode')
+        this.modeCheckbox = App.getEl('mode')
         if (!this.modeCheckbox) {
             console.warn('Theme mode checkbox not found')
             return
@@ -98,16 +240,11 @@ class ThemeManager {
      */
     disableTransitionsDuringSwitch() {
         const html = document.documentElement
-
-        // Add class to disable all transitions
         html.classList.add(this.DISABLE_TRANSITIONS_CLASS)
 
-        // Use double rAF to ensure the theme change has been painted
-        // before re-enabling transitions
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                html.classList.remove(this.DISABLE_TRANSITIONS_CLASS)
-            })
+        // Use afterPaint helper to re-enable transitions after theme has painted
+        afterPaint(() => {
+            html.classList.remove(this.DISABLE_TRANSITIONS_CLASS)
         })
     }
 }
@@ -117,87 +254,24 @@ class ThemeManager {
 try {
     window.App = window.App || {}
     window.App.themeManager = new ThemeManager()
+
+    // Add page-loaded class to trigger fade-in after theme is applied
+    document.documentElement.classList.add('page-loaded')
 } catch (error) {
     console.error('Failed to initialize theme manager:', error)
     // Fallback: theme will use browser/system default without localStorage persistence
+    // Still add page-loaded class to prevent indefinite opacity 0
+    document.documentElement.classList.add('page-loaded')
 }
 
-/**
- * Check if CSS animation has finished on a specific element
- * @param {string} selector - CSS selector for element to check
- * @returns {boolean} True if animation is finished or element not found
- */
-const isAnimationFinished = (selector) => {
-    const animations = document.querySelector(selector)?.getAnimations()
-    return !animations || animations.length === 0 || animations[0].playState === 'finished'
-}
-
-/** Shared animation gate selector (used across handlers) */
-const ANIMATION_CHECK_SELECTOR = '.menu--animating .menu__background'
-
-/** Get current URL hash */
-const getCurrentHash = () => window.location.hash
-
-/** Get hash without query parameters (e.g., '#archive?year=2024' returns '#archive') */
-const getHashWithoutParams = () => getCurrentHash().split('?')[0]
-
-/**
- * Check if current hash exactly matches target
- * @param {string} hash - Hash to compare (e.g., '#profile')
- * @returns {boolean} True if exact match
- */
-const isHash = (hash) => getCurrentHash() === hash
-
-/**
- * Check if current hash includes target (for deep links with params)
- * @param {string} hash - Hash to search for (e.g., '#archive')
- * @returns {boolean} True if hash includes target
- */
-const hashIncludes = (hash) => getCurrentHash().includes(hash)
-
-/** WeakMap to track one-time blur handlers for touch buttons without mutating elements */
-const touchBlurHandlers = new WeakMap()
-
-/** WeakMap to track click counts for touch button interactions */
-const touchClickCounts = new WeakMap()
-
-/** Shared navigation hash constants for consistent routing */
-const NAVIGATION_HASHES = Object.freeze({
-    PROFILE: '#profile',
-    ARCHIVE: '#archive',
-    MENU: '#menu'
-})
-
-/** Modal element selectors for DOM querying */
-const MODAL_SELECTORS = Object.freeze({
-    PROFILE: '#modal-profile',
-    ARCHIVE: '#modal-archive'
-})
-
-/** Shared modal element cache to avoid repeated DOM queries */
-const modalElementCache = {
-    profile: null,
-    archive: null
-}
-
-/**
- * Get modal element with caching
- * Shared utility used by WheelHandler and TouchHandler
- * @param {string} hash - Navigation hash (e.g., '#profile')
- * @returns {HTMLElement|null} Cached modal element or null if not found
- */
-const getModalElement = (hash) => {
-    if (hash === NAVIGATION_HASHES.PROFILE) {
-        return modalElementCache.profile ??= document.querySelector(MODAL_SELECTORS.PROFILE)
-    } else if (hash === NAVIGATION_HASHES.ARCHIVE) {
-        return modalElementCache.archive ??= document.querySelector(MODAL_SELECTORS.ARCHIVE)
-    }
-    return null
-}
+// ============================================================================
+// Resize Manager
+// ============================================================================
 
 /**
  * Centralized Resize Handler
  * Reduces redundant resize calculations by consolidating all resize handlers
+ * Provides register/unregister pattern for cleanup
  */
 const ResizeManager = {
     handlers: [],
@@ -206,7 +280,7 @@ const ResizeManager = {
     /**
      * Register a resize handler function
      * @param {Function} handler - Function to call on resize
-     * @returns {Function} Unregister function
+     * @returns {Function} Unregister function for cleanup
      */
     register(handler) {
         if (!this.initialized) {
@@ -243,38 +317,6 @@ const ResizeManager = {
     }
 }
 
-/**
- * Application namespace for global state and utilities
- * Reduces global namespace pollution by grouping related functionality
- */
-window.App = {
-    timeline: null,
-    textHighlighter: null,
-
-    // Public API methods (called from HTML)
-    initializeTimeline: null,
-    positionTimeline: null,
-    handleTouchButtonClick: null,
-    toggleFullscreen: null
-}
-
-/** Dialog configuration for consistent ID references and focus management */
-const DIALOG_CONFIG = Object.freeze({
-    PROFILE: {
-        id: 'modal-profile',
-        trigger: 'menu-link-profile'  // Element to focus when dialog closes
-    },
-    ARCHIVE: {
-        id: 'modal-archive',
-        trigger: 'menu-link-archive'
-    },
-    MENU: {
-        id: 'menu-toggle',
-        trigger: 'menu-button-open',
-        close: 'menu-button-close'   // Element to focus when dialog opens
-    }
-})
-
 // ============================================================================
 // Dialog Lifecycle Configuration
 // ============================================================================
@@ -282,9 +324,14 @@ const DIALOG_CONFIG = Object.freeze({
 /**
  * Register lifecycle hooks for modal dialogs
  * This connects the generic dialog.js with project-specific initialization/cleanup
- * Note: Since scripts use defer, aria is always available when this runs
  */
 function registerDialogLifecycleHooks() {
+    // Ensure aria is available before registering hooks
+    if (typeof aria === 'undefined' || !aria.registerLifecycleHooks) {
+        console.warn('aria not yet loaded, deferring lifecycle hook registration')
+        return
+    }
+
     // Store original page title for restoration
     const originalTitle = document.title
 
@@ -306,7 +353,7 @@ function registerDialogLifecycleHooks() {
                 App.initializeTimeline(!yearParam)
 
                 // Position timeline after modal transition completes
-                const modalArchiveEl = document.getElementById('modal-archive')
+                const modalArchiveEl = App.getEl('modal-archive')
                 if (modalArchiveEl) {
                     let positioned = false
 
@@ -338,7 +385,7 @@ function registerDialogLifecycleHooks() {
             }
 
             // Track user scrolling on the modal to enable hash updates
-            const modalArchive = document.querySelector(MODAL_SELECTORS.ARCHIVE)
+            const modalArchive = getModalElement(NAVIGATION_HASHES.ARCHIVE)
             if (modalArchive && App.timeline) {
                 const handleUserScroll = () => {
                     if (App.timeline) {
@@ -350,7 +397,7 @@ function registerDialogLifecycleHooks() {
 
             // Handle deep-link scrolling if ?year= parameter is present
             if (yearParam) {
-                const modalArchiveEl = document.getElementById('modal-archive')
+                const modalArchiveEl = App.getEl('modal-archive')
 
                 // Wait for modal transition to complete before scrolling
                 const handleDeepLinkScroll = () => {
@@ -358,7 +405,7 @@ function registerDialogLifecycleHooks() {
                         requestAnimationFrame(() => {
                             // Scroll to the section title (header) rather than the content section
                             const targetSection = document.querySelector(`[data-timeline-section="${yearParam}"]`)
-                            const modalArchive = document.querySelector(MODAL_SELECTORS.ARCHIVE)
+                            const modalArchive = getModalElement(NAVIGATION_HASHES.ARCHIVE)
 
                             if (targetSection && modalArchive && App.timeline) {
                                 App.timeline.scrollParentToChildVertical(modalArchive, targetSection, 'instant')
@@ -459,8 +506,13 @@ function registerDialogLifecycleHooks() {
     })
 }
 
-// Register hooks immediately (will retry if aria not loaded yet)
-registerDialogLifecycleHooks()
+// Register hooks when aria is available
+// Since dialog.js loads before script.js (both use defer), call in DOMContentLoaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', registerDialogLifecycleHooks)
+} else {
+    registerDialogLifecycleHooks()
+}
 
 // ============================================================================
 // TextHighlighter Class
@@ -468,16 +520,22 @@ registerDialogLifecycleHooks()
 
 /**
  * Handles text highlighting and copying with temporary text replacement
+ * Used for visual feedback when copying text to clipboard
  */
 class TextHighlighter {
     constructor() {
+        // State
         this.originalText = ''
+
+        // Constants
         this.HIGHLIGHT_DURATION = 1000
         this.HIGHLIGHT_ACTIVE_CLASS = 'highlight--active'
     }
 
     /**
      * Highlight element and optionally change text temporarily
+     * Provides visual feedback for copy-to-clipboard actions
+     *
      * @param {Event} event - The triggering event
      * @param {HTMLElement} textElement - Element containing text to change
      * @param {HTMLElement} highlightElement - Element to highlight
@@ -510,14 +568,20 @@ class TextHighlighter {
 
 /**
  * Handles keyboard shortcuts and tooltip interactions
+ * Manages global keyboard navigation between dialogs (P, A, M keys)
+ * Controls tooltip visibility based on Ctrl/Cmd key state
  */
 class KeyHandler {
     constructor() {
+        // DOM Elements (lazy initialized)
         this.tooltipElements = null
         this.debugElement = null
+
+        // Configuration
         this.TOOLTIP_ITEMS_SELECTOR = '#menu-link-profile, #menu-link-archive, #menu-toggle'
         this.TOOLTIP_ACTIVE_CLASS = 'tooltip-key--active'
 
+        // Key constants
         this.KEYS = {
             ESCAPE: 'Escape',
             KEY_P: 'p',
@@ -526,19 +590,39 @@ class KeyHandler {
             KEY_D: 'd'
         }
 
+        // Bound handlers
         this.boundHandleKeydown = this.handleKeydown.bind(this)
         this.boundHandleKeyup = this.handleKeyup.bind(this)
         this.boundRemoveTooltips = () => this.toggleTooltipActiveClass(false)
 
+        // Initialize event listeners
         document.addEventListener('keydown', this.boundHandleKeydown)
         document.addEventListener('keyup', this.boundHandleKeyup)
         window.addEventListener('blur', this.boundRemoveTooltips)
         document.body.addEventListener('click', this.boundRemoveTooltips)
     }
 
+    // Animation Check
+
+    /**
+     * Check if menu intro animation has finished
+     * Prevents keyboard shortcuts during initial animation
+     * @returns {boolean} True if animation is finished
+     */
+    isMenuAnimationFinished() {
+        const el = document.querySelector('.menu--animating .menu__background')
+        if (!el) return true
+        const animations = el.getAnimations()
+        return !animations || animations.length === 0 || animations[0].playState === 'finished'
+    }
+
+    // DOM Helpers
+
     getTooltipElements() {
         return this.tooltipElements ??= Array.from(document.querySelectorAll(this.TOOLTIP_ITEMS_SELECTOR))
     }
+
+    // Event Handlers
 
     handleKeydown(event) {
         const rawKey = event.key
@@ -550,7 +634,7 @@ class KeyHandler {
                 closeDialog('#')
             }
         } else {
-            if (!isAnimationFinished(ANIMATION_CHECK_SELECTOR)) return
+            if (!this.isMenuAnimationFinished()) return
             switch (key) {
                 case this.KEYS.KEY_P:
                     this.toggleDialog(event, NAVIGATION_HASHES.PROFILE, DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger)
@@ -583,6 +667,8 @@ class KeyHandler {
         }
     }
 
+    // Dialog Control
+
     /**
      * Toggle dialog open/closed based on current hash
      * @param {Event} event - The triggering event
@@ -595,8 +681,9 @@ class KeyHandler {
     toggleDialog(event, hash, dialogId, triggerId, focusFirst = null, useIncludes = false) {
         event.preventDefault()
 
+        const currentHash = window.location.hash
         // useIncludes: true = partial match (#archive?year=2024), false = exact match (#profile)
-        const shouldClose = useIncludes ? hashIncludes(hash) : isHash(hash)
+        const shouldClose = useIncludes ? currentHash.includes(hash) : currentHash === hash
 
         if (shouldClose) {
             closeDialog('#')
@@ -607,22 +694,112 @@ class KeyHandler {
 
     toggleDebug(event) {
         event.preventDefault()
-        this.debugElement ??= document.getElementById('debug')
+        this.debugElement ??= App.getEl('debug')
         if (this.debugElement) {
             this.debugElement.checked = !this.debugElement.checked
         }
     }
 
-    handleTooltipActiveClass(event) {
-        const hash = getCurrentHash()
-        const hashValue = hash.split('#')[1]
+    // Tooltip Management
 
-        if (hashValue) {
+    handleTooltipActiveClass(event) {
+        const { base: hash } = parseHash()
+
+        if (hash) {
             this.toggleTooltipActiveClass(false)
         } else if (event.ctrlKey || event.metaKey) {
-            if (!hash) {
-                this.toggleTooltipActiveClass(true)
+            this.toggleTooltipActiveClass(true)
+        }
+    }
+}
+
+
+// ============================================================================
+// NavigationHandler Base Class
+// ============================================================================
+
+/**
+ * Base class for handling vertical and horizontal navigation gestures
+ * Shared logic between WheelHandler and TouchHandler
+ * Manages modal opening/closing via scroll/swipe gestures
+ */
+class NavigationHandler {
+    constructor() {
+        // Configuration
+        this.SCROLL_MIN_THRESHOLD = 5
+    }
+
+    // Animation Check
+
+    /**
+     * Check if menu intro animation has finished
+     * Prevents navigation gestures during initial animation
+     * @returns {boolean} True if animation is finished
+     */
+    isMenuAnimationFinished() {
+        const el = document.querySelector('.menu--animating .menu__background')
+        if (!el) return true
+        const animations = el.getAnimations()
+        return !animations || animations.length === 0 || animations[0].playState === 'finished'
+    }
+
+    // Navigation Handlers
+
+    /**
+     * Handle vertical scroll navigation (shared logic)
+     * Opens profile modal at bottom of page, closes modal when scrolling up at top
+     * @param {string} direction - 'up' or 'down'
+     */
+    handleVerticalNavigation(direction) {
+        const { base: currentHash } = parseHash()
+
+        if (currentHash === NAVIGATION_HASHES.PROFILE || currentHash === NAVIGATION_HASHES.ARCHIVE) {
+            this.handleModalVerticalScroll(direction, currentHash)
+        } else {
+            this.handleVerticalPageScroll(direction)
+        }
+    }
+
+    /**
+     * Handle modal vertical scrolling (close on scroll up at top)
+     * @param {string} direction - 'up' or 'down'
+     * @param {string} currentHash - Current navigation hash
+     */
+    handleModalVerticalScroll(direction, currentHash) {
+        if (direction !== 'up') return
+
+        const modalElement = getModalElement(currentHash)
+        if (modalElement?.scrollTop === 0) {
+            closeDialog('#')
+        }
+    }
+
+    /**
+     * Handle page vertical scrolling (open modal at bottom)
+     * @param {string} direction - 'up' or 'down'
+     */
+    handleVerticalPageScroll(direction) {
+        if (direction !== 'down' || window.location.hash) return
+
+        if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
+            openDialog(DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger, null, 'profile')
+        }
+    }
+
+    /**
+     * Handle horizontal scroll navigation (shared logic)
+     * @param {string} direction - 'left' or 'right'
+     */
+    handleHorizontalNavigation(direction) {
+        const currentHash = window.location.hash
+        const scrollX = window.scrollX
+
+        if (direction === 'right' && !currentHash) {
+            if (scrollX + window.innerWidth >= document.body.scrollWidth) {
+                openDialog(DIALOG_CONFIG.MENU.id, DIALOG_CONFIG.MENU.trigger, DIALOG_CONFIG.MENU.close, 'menu')
             }
+        } else if (direction === 'left' && currentHash === NAVIGATION_HASHES.MENU && scrollX === 0) {
+            closeDialog('#')
         }
     }
 }
@@ -634,67 +811,34 @@ class KeyHandler {
 
 /**
  * Handles mouse wheel scrolling for navigation between dialogs and pages
+ * Detects vertical and horizontal wheel movements to trigger navigation
+ * Extends NavigationHandler for shared gesture logic
  */
-class WheelHandler {
+class WheelHandler extends NavigationHandler {
     constructor() {
-        this.SCROLL_MIN_THRESHOLD = 5
+        super()
 
+        // Bound handlers
         this.boundHandleWheelEvent = this.handleWheelEvent.bind(this)
+
+        // Initialize event listeners
         window.addEventListener('wheel', this.boundHandleWheelEvent, { passive: true })
     }
 
+    // Event Handlers
+
     handleWheelEvent(event) {
-        if (!isAnimationFinished(ANIMATION_CHECK_SELECTOR)) return
+        if (!this.isMenuAnimationFinished()) return
 
         const deltaX = Math.abs(event.deltaX)
         const deltaY = Math.abs(event.deltaY)
 
         if (deltaY > deltaX && deltaY > this.SCROLL_MIN_THRESHOLD) {
-            this.handleVerticalScroll(event.deltaY)
+            const direction = event.deltaY > 0 ? 'down' : 'up'
+            this.handleVerticalNavigation(direction)
         } else if (deltaX > deltaY && deltaX > this.SCROLL_MIN_THRESHOLD) {
-            this.handleHorizontalScroll(event.deltaX)
-        }
-    }
-
-    handleVerticalScroll(deltaY) {
-        const direction = deltaY > 0 ? 'down' : 'up'
-        const currentHash = getHashWithoutParams()
-
-        if (currentHash === NAVIGATION_HASHES.PROFILE || currentHash === NAVIGATION_HASHES.ARCHIVE) {
-            this.handleModalVerticalScroll(direction, currentHash)
-        } else {
-            this.handleVerticalPageScroll(direction)
-        }
-    }
-
-    handleModalVerticalScroll(direction, currentHash) {
-        if (direction !== 'up') return
-
-        const modalElement = getModalElement(currentHash)
-        if (modalElement?.scrollTop === 0) {
-            closeDialog('#')
-        }
-    }
-
-    handleVerticalPageScroll(direction) {
-        if (direction !== 'down' || getCurrentHash()) return
-
-        if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
-            openDialog(DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger, null, 'profile')
-        }
-    }
-
-    handleHorizontalScroll(deltaX) {
-        const direction = deltaX > 0 ? 'right' : 'left'
-        const hash = getCurrentHash()
-        const scrollX = window.scrollX
-
-        if (direction === 'right' && !hash) {
-            if (scrollX + window.innerWidth >= document.body.scrollWidth) {
-                openDialog(DIALOG_CONFIG.MENU.id, DIALOG_CONFIG.MENU.trigger, DIALOG_CONFIG.MENU.close, 'menu')
-            }
-        } else if (direction === 'left' && hash === NAVIGATION_HASHES.MENU && scrollX === 0) {
-            closeDialog('#')
+            const direction = event.deltaX > 0 ? 'right' : 'left'
+            this.handleHorizontalNavigation(direction)
         }
     }
 }
@@ -706,18 +850,27 @@ class WheelHandler {
 
 /**
  * Handles touch gestures for navigation on mobile devices
+ * Detects swipe directions to trigger modal navigation
+ * Extends NavigationHandler for shared gesture logic
  */
-class TouchHandler {
+class TouchHandler extends NavigationHandler {
     constructor() {
+        super()
+
+        // State
         this.touchStartX = 0
         this.touchStartY = 0
-        this.SCROLL_MIN_THRESHOLD = 5
 
+        // Bound handlers
         this.boundHandleTouchStart = this.handleTouchStart.bind(this)
         this.boundHandleTouchMove = this.handleTouchMove.bind(this)
+
+        // Initialize event listeners
         window.addEventListener('touchstart', this.boundHandleTouchStart, { passive: true })
         window.addEventListener('touchmove', this.boundHandleTouchMove, { passive: true })
     }
+
+    // Event Handlers
 
     handleTouchStart(event) {
         const touch = event.touches[0]
@@ -726,56 +879,18 @@ class TouchHandler {
     }
 
     handleTouchMove(event) {
-        if (!isAnimationFinished(ANIMATION_CHECK_SELECTOR)) return
+        if (!this.isMenuAnimationFinished()) return
 
         const touch = event.touches[0]
         const deltaX = Math.abs(touch.clientX - this.touchStartX)
         const deltaY = Math.abs(touch.clientY - this.touchStartY)
 
         if (deltaY > deltaX && deltaY > this.SCROLL_MIN_THRESHOLD) {
-            this.handleVerticalScroll(touch.clientY)
+            const direction = touch.clientY < this.touchStartY ? 'down' : 'up'
+            this.handleVerticalNavigation(direction)
         } else if (deltaX > deltaY && deltaX > this.SCROLL_MIN_THRESHOLD) {
-            this.handleHorizontalScroll(touch.clientX)
-        }
-    }
-
-    handleVerticalScroll(touchEndY) {
-        const direction = touchEndY < this.touchStartY ? 'down' : 'up'
-        const currentHash = getHashWithoutParams()
-
-        if (currentHash === NAVIGATION_HASHES.PROFILE || currentHash === NAVIGATION_HASHES.ARCHIVE) {
-            this.handleModalScroll(direction, currentHash)
-        } else {
-            this.handleVerticalPageScroll(direction)
-        }
-    }
-
-    handleModalScroll(direction, currentHash) {
-        if (direction !== 'up') return
-
-        const modalElement = getModalElement(currentHash)
-        if (modalElement?.scrollTop === 0) {
-            closeDialog('#')
-        }
-    }
-
-    handleVerticalPageScroll(direction) {
-        if (direction !== 'down' || getCurrentHash()) return
-
-        if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
-            openDialog(DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger, null, 'profile')
-        }
-    }
-
-    handleHorizontalScroll(touchEndX) {
-        const direction = touchEndX > this.touchStartX ? 'right' : 'left'
-        const hash = getCurrentHash()
-        const scrollX = window.scrollX
-
-        if (direction === 'right' && hash === NAVIGATION_HASHES.MENU && scrollX + window.innerWidth >= document.body.scrollWidth) {
-            closeDialog('#')
-        } else if (direction === 'left' && !hash && scrollX === 0) {
-            openDialog(DIALOG_CONFIG.MENU.id, DIALOG_CONFIG.MENU.trigger, DIALOG_CONFIG.MENU.close, 'menu')
+            const direction = touch.clientX > this.touchStartX ? 'right' : 'left'
+            this.handleHorizontalNavigation(direction)
         }
     }
 }
@@ -787,27 +902,36 @@ class TouchHandler {
 
 /**
  * Enables drag-to-scroll functionality on horizontal scrollable elements
+ * Provides mouse-based click-and-drag scrolling similar to mobile touch scrolling
  */
 class HorizontalDragScroller {
     constructor(options = {}) {
+        // Configuration
         this.element = options.element
+
+        // State
         this.isMouseDown = false
         this.startX = 0
         this.scrollLeft = 0
 
+        // Constants
         this.MOUSE_DOWN_CLASS = 'x-drag-scroll--mouse-down'
         this.DRAGGING_CLASS = 'x-drag-scroll--dragging'
         this.DRAG_RELEASE_TIMEOUT = 300
 
+        // Bound handlers
         this.onMouseDownBound = this.onMouseDown.bind(this)
         this.onMouseMoveBound = this.onMouseMove.bind(this)
         this.completeDragBound = this.completeDrag.bind(this)
 
+        // Initialize event listeners
         this.element.addEventListener('mousedown', this.onMouseDownBound)
         this.element.addEventListener('mousemove', this.onMouseMoveBound)
         this.element.addEventListener('mouseup', this.completeDragBound)
         this.element.addEventListener('mouseleave', this.completeDragBound)
     }
+
+    // Cleanup
 
     destroy() {
         this.element.removeEventListener('mousedown', this.onMouseDownBound)
@@ -815,6 +939,8 @@ class HorizontalDragScroller {
         this.element.removeEventListener('mouseup', this.completeDragBound)
         this.element.removeEventListener('mouseleave', this.completeDragBound)
     }
+
+    // Event Handlers
 
     onMouseDown(event) {
         this.isMouseDown = true
@@ -852,9 +978,17 @@ class HorizontalDragScroller {
  */
 class HorizontalEdgeScroller {
     constructor(options = {}) {
+        // Configuration
         this.options = options
         this.element = options.element
         this.maxSpeed = options.maxSpeed ?? 0.75
+
+        // Constants
+        this.DRAGGING_CLASS = 'x-drag-scroll--dragging'
+        this.EDGE_SCROLLING_CLASS = 'edge-x-scroll--scrolling'
+        this.SCROLL_STOP_TIMEOUT = 300
+
+        // State
         this.scrollSpeed = 0
         this.isScrolling = false
         this.lastTimestamp = null
@@ -864,10 +998,7 @@ class HorizontalEdgeScroller {
         this.styleElement = null
         this.unregisterResize = null
 
-        this.DRAGGING_CLASS = 'x-drag-scroll--dragging'
-        this.EDGE_SCROLLING_CLASS = 'edge-x-scroll--scrolling'
-        this.SCROLL_STOP_TIMEOUT = 300
-
+        // Bound handlers
         this.scrollStep = this.scrollStep.bind(this)
         this.handleMouseOut = this.handleMouseOut.bind(this)
 
@@ -881,6 +1012,8 @@ class HorizontalEdgeScroller {
         }
     }
 
+    // Resize Handler
+
     onResize() {
         this.edgeWidth = (this.options.edgeWidthRatio ?? 3) * parseFloat(getComputedStyle(document.body).fontSize)
         this.updatePseudoElementStyles()
@@ -893,7 +1026,7 @@ class HorizontalEdgeScroller {
         const styleId = `horizontal-edge-scroll-style-${id}`
 
         if (!this.styleElement) {
-            this.styleElement = document.getElementById(styleId)
+            this.styleElement = App.getEl(styleId)
             if (!this.styleElement) {
                 this.styleElement = document.createElement('style')
                 this.styleElement.id = styleId
@@ -923,23 +1056,7 @@ class HorizontalEdgeScroller {
         `
     }
 
-    handleMouseOut() {
-        this.isSnapped = true
-
-        const activeSlide = this.options.activeSlide?.get()
-        if (activeSlide) {
-            requestAnimationFrame(() => {
-                this.element.scrollTo({
-                    left: activeSlide.offsetLeft,
-                    behavior: 'smooth'
-                })
-            })
-        }
-
-        setTimeout(() => {
-            this.element.classList.remove(this.EDGE_SCROLLING_CLASS)
-        }, this.SCROLL_STOP_TIMEOUT)
-    }
+    // Event Handlers
 
     handleMouseMove(event) {
         if (!this.mediaQuery.matches || this.element.classList.contains(this.DRAGGING_CLASS)) return
@@ -972,6 +1089,26 @@ class HorizontalEdgeScroller {
         }
     }
 
+    handleMouseOut() {
+        this.isSnapped = true
+
+        const activeSlide = this.options.activeSlide?.get()
+        if (activeSlide) {
+            requestAnimationFrame(() => {
+                this.element.scrollTo({
+                    left: activeSlide.offsetLeft,
+                    behavior: 'smooth'
+                })
+            })
+        }
+
+        setTimeout(() => {
+            this.element.classList.remove(this.EDGE_SCROLLING_CLASS)
+        }, this.SCROLL_STOP_TIMEOUT)
+    }
+
+    // Scroll Control
+
     startScroll() {
         if (this.isScrolling) return
 
@@ -979,6 +1116,10 @@ class HorizontalEdgeScroller {
         this.isSnapped = false
         this.element.classList.add(this.EDGE_SCROLLING_CLASS)
         requestAnimationFrame(this.scrollStep)
+    }
+
+    stopScroll() {
+        this.scrollSpeed = 0
     }
 
     scrollStep(timestamp) {
@@ -998,14 +1139,14 @@ class HorizontalEdgeScroller {
         }
     }
 
-    stopScroll() {
-        this.scrollSpeed = 0
-    }
+    // Helpers
 
     calculateSpeed(distance, direction) {
         const speed = (this.maxSpeed * (this.edgeWidth - distance)) / this.edgeWidth
         return direction === 'left' ? -speed : speed
     }
+
+    // Cleanup
 
     destroy() {
         if (!isTouchDevice && this.handleMouseMoveBound) {
@@ -1032,20 +1173,27 @@ class HorizontalEdgeScroller {
 
 /**
  * Detects cursor idle state and manages fade-out/fade-in of target element
+ * Used to auto-hide UI controls (like video close button) when cursor is inactive
+ * Only active on non-touch devices
  */
 class CursorIdleDetector {
     constructor(options = {}) {
+        // Configuration
         this.targetElement = options.targetElement || null
         this.container = options.container || document
         this.idleTimeout = options.idleTimeout || 2000 // 2 seconds default
         this.fadedClass = options.fadedClass || 'cursor-idle-fade'
 
+        // State
         this.idleTimer = null
         this.isIdle = false
 
+        // Bound handlers
         this.boundHandleMouseMove = this.handleMouseMove.bind(this)
         this.boundHandleMouseLeave = this.handleMouseLeave.bind(this)
     }
+
+    // Lifecycle
 
     start() {
         if (!this.targetElement) return
@@ -1067,6 +1215,8 @@ class CursorIdleDetector {
         this.showTarget()
     }
 
+    // Event Handlers
+
     handleMouseMove() {
         this.showTarget()
         this.clearIdleTimer()
@@ -1077,6 +1227,8 @@ class CursorIdleDetector {
         this.clearIdleTimer()
         this.showTarget()
     }
+
+    // Timer Management
 
     startIdleTimer() {
         this.idleTimer = setTimeout(() => {
@@ -1090,6 +1242,8 @@ class CursorIdleDetector {
             this.idleTimer = null
         }
     }
+
+    // Visibility Control
 
     hideTarget() {
         if (!this.targetElement || this.isIdle) return
@@ -1120,6 +1274,8 @@ class CursorIdleDetector {
 
 /**
  * Handles image and video popups with fallback views for blocked popups
+ * Opens media in new windows/tabs when possible, falls back to inline overlay
+ * Supports placeholder images for progressive loading
  */
 class Popup {
     constructor() {
@@ -1148,6 +1304,8 @@ class Popup {
             Popup.isPopupBlocked = false
         }
     }
+
+    // HTML Generation
 
     generatePopupHTML(href, isVideo, placeholderUrl, includeOverlay = false) {
         const mediaElementHtml = isVideo
@@ -1186,6 +1344,8 @@ class Popup {
         </html>`
     }
 
+    // Popup Opening
+
     async open(element, event) {
         event.preventDefault()
         const { href } = element
@@ -1213,12 +1373,10 @@ class Popup {
         }
 
         const { width, height, left, top } = this.calculateWindowSize(dimensions)
-
         const imageAspect = dimensions.width / dimensions.height
         const isTallImage = !isVideo && imageAspect < this.ASPECT_RATIO_TALL_THRESHOLD
 
         // Generate popup/tab HTML with shared functionality
-        // Add overlay for all images (not videos)
         const html = this.generatePopupHTML(href, isVideo, placeholderUrl, !isVideo)
         const blob = new Blob([html], { type: 'text/html' })
         const blobUrl = URL.createObjectURL(blob)
@@ -1238,20 +1396,21 @@ class Popup {
 
             return false
         }
-        else {
-            // Otherwise attempt to open a centered popup window
-            const popup = window.open(blobUrl, `popup_${Date.now()}`, `toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=${width},height=${height},top=${top},left=${left},popup=yes`)
 
-            if (!popup || popup.closed || typeof popup.closed === 'undefined') {
-                Popup.isPopupBlocked = true
-                console.info('Popup was blocked. Using inline fallback for the session.')
-                this.showFallbackView(href, isVideo, dimensions, placeholderUrl)
-                return true
-            }
+        // Otherwise attempt to open a centered popup window
+        const popup = window.open(blobUrl, `popup_${Date.now()}`, `toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=${width},height=${height},top=${top},left=${left},popup=yes`)
+
+        if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+            Popup.isPopupBlocked = true
+            console.info('Popup was blocked. Using inline fallback for the session.')
+            this.showFallbackView(href, isVideo, dimensions, placeholderUrl)
+            return true
         }
 
         return false
     }
+
+    // Fallback View
 
     showFallbackView(url, isVideo, dimensions, placeholderUrl) {
         // Initialize fallback container only once
@@ -1390,13 +1549,15 @@ class Popup {
         }
     }
 
+    // Fallback Initialization
+
     initializeFallbackContainer() {
         this.fallbackContainer = document.createElement('div')
         this.fallbackContainer.className = 'media_fallback_overlay'
         this.fallbackContainer.innerHTML = `<div class="media_fallback-wrapper"><div class="media_fallback-content"></div></div>`
 
         // Inject styles only once
-        if (!this.stylesInjected && !document.getElementById('media_fallback-styles')) {
+        if (!this.stylesInjected && !App.getEl('media_fallback-styles')) {
             this.injectStyles()
             this.stylesInjected = true
         }
@@ -1428,8 +1589,6 @@ class Popup {
         // stopImmediatePropagation prevents ALL other handlers from running
         if (!this.handleEscapeKey) {
             this.handleEscapeKey = (e) => {
-                console.log('escape key pressed in fallback view')
-
                 if (e.key === 'Escape' && this.fallbackContainer?.parentElement) {
                     e.stopImmediatePropagation()
                     this.closeFallbackView()
@@ -1438,6 +1597,8 @@ class Popup {
             document.addEventListener('keydown', this.handleEscapeKey, { capture: true })
         }
     }
+
+    // UI Element Creation
 
     createCloseButton() {
         const button = document.createElement('button')
@@ -1455,6 +1616,8 @@ class Popup {
         overlay.tabIndex = 0
         return overlay
     }
+
+    // Style Injection
 
     injectStyles() {
         const styles = document.createElement('style')
@@ -1591,6 +1754,8 @@ class Popup {
         document.head.appendChild(styles)
     }
 
+    // Cleanup
+
     closeFallbackView() {
         if (this.fallbackContainer && this.fallbackContainer.parentElement) {
             // Stop cursor idle detector
@@ -1628,6 +1793,8 @@ class Popup {
         }
     }
 
+    // Media Type Detection
+
     isVideo(url) {
         return /\.(mp4|webm|ogg)$/i.test(url)
     }
@@ -1635,6 +1802,8 @@ class Popup {
     getPlaceholderUrl(url) {
         return url.replace('.full.', '.min.')
     }
+
+    // Dimension Calculation
 
     getImageDimensions(url) {
         return new Promise((resolve) => {
@@ -1726,8 +1895,11 @@ class Popup {
  */
 class Carousel {
     constructor(options = {}) {
+        // Configuration
         const { id = '', element = null } = options
         this.id = id
+
+        // DOM Elements
         this.carouselEl = element
         this.slidesWrapperEl = this.carouselEl.querySelector('[data-carousel-slides-wrapper]')
         this.slidesEls = Array.from(this.carouselEl.querySelectorAll('[data-carousel-slides] figure'))
@@ -1738,13 +1910,19 @@ class Carousel {
         this.dotEls = []
         this.leftEdgeEl = null
         this.rightEdgeEl = null
+        this.announcementEl = null
+
+        // State
         this.observer = null
         this.activeSlide = null
 
+        // Constants
         this.ACTIVE_CLASS = 'active'
 
         this.init()
     }
+
+    // Initialization
 
     init() {
         this.createEdgeNavigation()
@@ -1753,6 +1931,8 @@ class Carousel {
         this.setupControlNavigationEventListeners()
         this.setupIntersectionObserver()
     }
+
+    // Edge Navigation
 
     createEdgeNavigation() {
         this.leftEdgeEl = document.createElement('div')
@@ -1782,6 +1962,8 @@ class Carousel {
         })
     }
 
+    // Control Navigation
+
     createControlNavigation() {
         this.controlsEl = document.createElement('div')
         this.controlsEl.setAttribute('data-carousel-controls', '')
@@ -1799,7 +1981,6 @@ class Carousel {
             `
         this.carouselEl.appendChild(this.controlsEl)
 
-        this.navWrapperEl = this.controlsEl.querySelector('[data-carousel-nav-wrapper]')
         this.navEl = this.controlsEl.querySelector('[data-carousel-nav]')
         this.prevButtonEl = this.controlsEl.querySelector('[data-carousel-arrows] li:first-child button')
         this.nextButtonEl = this.controlsEl.querySelector('[data-carousel-arrows] li:last-child button')
@@ -1820,50 +2001,6 @@ class Carousel {
     }
 
     setupControlNavigationEventListeners() {
-        // Touch device: first touch focuses active button, then normal behavior
-        /* if (isTouchDevice) {
-            let isFirstTouch = true
-
-            // Disable non-active buttons initially
-            this.dotEls.forEach(button => {
-                if (button.getAttribute('aria-current') !== 'true') {
-                    button.style.pointerEvents = 'none'
-                }
-            })
-
-            this.navWrapperEl.addEventListener('touchstart', (event) => {
-                if (isFirstTouch) {
-                    event.preventDefault()
-                    const activeButton = this.navEl.querySelector('button[aria-current="true"]')
-                    if (activeButton) {
-                        activeButton.focus()
-                        isFirstTouch = false
-
-                        // Enable all buttons
-                        this.dotEls.forEach(button => {
-                            button.style.pointerEvents = ''
-                        })
-
-                        // Reset on focus-out
-                        this.navEl.addEventListener('focusout', (e) => {
-                            console.log('focusout');
-
-                            if (!this.navEl.contains(e.relatedTarget)) {
-                                isFirstTouch = true
-
-                                // Disable non-active buttons again
-                                this.dotEls.forEach(button => {
-                                    if (button.getAttribute('aria-current') !== 'true') {
-                                        button.style.pointerEvents = 'none'
-                                    }
-                                })
-                            }
-                        }, { once: true })
-                    }
-                }
-            })
-        } */
-
         // Use event delegation for dot buttons
         this.navEl.addEventListener('click', (event) => {
             const button = event.target.closest('button[data-label-for]')
@@ -1942,6 +2079,8 @@ class Carousel {
         })
     }
 
+    // Intersection Observer
+
     setupIntersectionObserver() {
         const observerCallback = (entries) => {
             for (let i = 0; i < entries.length; i++) {
@@ -1977,6 +2116,8 @@ class Carousel {
         this.slidesEls.forEach(slideEl => this.observer.observe(slideEl))
     }
 
+    // Navigation Methods
+
     navigateToSlide(direction) {
         if (!this.activeSlide) return
 
@@ -1997,35 +2138,38 @@ class Carousel {
 }
 
 // ============================================================================
-// ImageGridNavigator Class
+// KeyboardNavigator Class
 // ============================================================================
 
 /**
- * Enables keyboard navigation for image grids
- * Supports arrow keys, Enter to activate, and proper focus management
+ * Enables keyboard navigation for containers with focusable items
+ * Supports both linear lists and 2D grids with arrow keys, Home/End
+ * Used by ImageGridNavigator and MenuDropdownNavigator
  */
-class ImageGridNavigator {
+class KeyboardNavigator {
     constructor(options = {}) {
-        this.containerSelector = options.containerSelector || '.hover-cards, .image-grid'
-        this.itemSelector = options.itemSelector || 'figure a'
-        this.fallbackSelector = 'figure'
+        // Configuration
+        this.containerSelector = options.containerSelector
+        this.itemSelector = options.itemSelector
+        this.fallbackSelector = options.fallbackSelector
+        this.is2DGrid = options.is2DGrid ?? true // Default to grid layout detection
+
+        // State
         this.containers = null
 
+        // Bound handlers
         this.boundHandleKeydown = this.handleKeydown.bind(this)
+
         this.init()
     }
+
+    // Initialization
 
     init() {
         this.containers = Array.from(document.querySelectorAll(this.containerSelector))
 
-        // Make all images keyboard-focusable
         this.containers.forEach(container => {
-            let items = Array.from(container.querySelectorAll(this.itemSelector))
-
-            // Fallback: if no links found, make figures themselves focusable
-            if (items.length === 0) {
-                items = Array.from(container.querySelectorAll(this.fallbackSelector))
-            }
+            let items = this.getItems(container)
 
             items.forEach((item, index) => {
                 // First item is focusable, rest are not (use arrow keys to navigate)
@@ -2035,26 +2179,38 @@ class ImageGridNavigator {
         })
     }
 
+    // DOM Helpers
+
+    getItems(container) {
+        let items = Array.from(container.querySelectorAll(this.itemSelector))
+
+        // Fallback selector if primary selector finds nothing
+        if (items.length === 0 && this.fallbackSelector) {
+            items = Array.from(container.querySelectorAll(this.fallbackSelector))
+        }
+
+        return items
+    }
+
+    // Event Handlers
+
     handleKeydown(event) {
         const currentItem = event.target
         const container = currentItem.closest(this.containerSelector)
         if (!container) return
 
-        let items = Array.from(container.querySelectorAll(this.itemSelector))
-
-        // Fallback: if no links found, use figures
-        if (items.length === 0) {
-            items = Array.from(container.querySelectorAll(this.fallbackSelector))
-        }
-
+        const items = this.getItems(container)
         const currentIndex = items.indexOf(currentItem)
         let targetIndex = -1
         let handled = false
 
-        // Detect grid layout (check if items wrap)
-        const containerWidth = container.offsetWidth
-        const itemWidth = items[0]?.offsetWidth || 0
-        const itemsPerRow = itemWidth > 0 ? Math.floor(containerWidth / itemWidth) : 1
+        // Detect grid layout (check if items wrap) only if 2D grid mode is enabled
+        let itemsPerRow = 1
+        if (this.is2DGrid) {
+            const containerWidth = container.offsetWidth
+            const itemWidth = items[0]?.offsetWidth || 0
+            itemsPerRow = itemWidth > 0 ? Math.floor(containerWidth / itemWidth) : 1
+        }
 
         switch (event.key) {
             case 'ArrowRight':
@@ -2068,13 +2224,23 @@ class ImageGridNavigator {
                 handled = true
                 break
             case 'ArrowDown':
-                // Move to item in next row
-                targetIndex = Math.min(currentIndex + itemsPerRow, items.length - 1)
+                if (this.is2DGrid) {
+                    // Move to item in next row (grid)
+                    targetIndex = Math.min(currentIndex + itemsPerRow, items.length - 1)
+                } else {
+                    // Move to next item (list)
+                    targetIndex = Math.min(currentIndex + 1, items.length - 1)
+                }
                 handled = true
                 break
             case 'ArrowUp':
-                // Move to item in previous row
-                targetIndex = Math.max(currentIndex - itemsPerRow, 0)
+                if (this.is2DGrid) {
+                    // Move to item in previous row (grid)
+                    targetIndex = Math.max(currentIndex - itemsPerRow, 0)
+                } else {
+                    // Move to previous item (list)
+                    targetIndex = Math.max(currentIndex - 1, 0)
+                }
                 handled = true
                 break
             case 'Home':
@@ -2089,7 +2255,7 @@ class ImageGridNavigator {
                 break
             case 'Enter':
             case ' ':
-                // Activate the link/open popup
+                // Activate the item
                 event.preventDefault()
                 currentItem.click()
                 return
@@ -2108,16 +2274,12 @@ class ImageGridNavigator {
         }
     }
 
+    // Cleanup
+
     destroy() {
         if (this.containers) {
             this.containers.forEach(container => {
-                let items = Array.from(container.querySelectorAll(this.itemSelector))
-
-                // Fallback: if no links found, use figures
-                if (items.length === 0) {
-                    items = Array.from(container.querySelectorAll(this.fallbackSelector))
-                }
-
+                const items = this.getItems(container)
                 items.forEach(item => {
                     item.removeEventListener('keydown', this.boundHandleKeydown)
                     item.removeAttribute('tabindex')
@@ -2129,7 +2291,135 @@ class ImageGridNavigator {
 
 
 // ============================================================================
-// Global Functions
+// ImageGridNavigator Class
+// ============================================================================
+
+/**
+ * Enables keyboard navigation for image grids
+ * Wrapper around KeyboardNavigator with image grid specific configuration
+ */
+class ImageGridNavigator extends KeyboardNavigator {
+    constructor(options = {}) {
+        super({
+            containerSelector: options.containerSelector || '.hover-cards, .image-grid',
+            itemSelector: options.itemSelector || 'figure a',
+            fallbackSelector: 'figure',
+            is2DGrid: true
+        })
+    }
+}
+
+
+// ============================================================================
+// MenuDropdownNavigator Class
+// ============================================================================
+
+/**
+ * Enables keyboard navigation for menu dropdown
+ * Arrow keys move through focusable items like Tab/Shift+Tab
+ */
+class MenuDropdownNavigator {
+    constructor(options = {}) {
+        // Configuration
+        this.dropdownSelector = options.dropdownSelector || '#menu-dropdown'
+        this.itemSelector = options.itemSelector || 'a, label, button'
+
+        // Bound handlers
+        this.boundHandleKeydown = this.handleKeydown.bind(this)
+
+        this.init()
+    }
+
+    // Initialization
+
+    init() {
+        // Listen on document to catch events from both dropdown and close button
+        document.addEventListener('keydown', this.boundHandleKeydown)
+    }
+
+    // Event Handlers
+
+    handleKeydown(event) {
+        // Only handle arrow keys
+        if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp' && event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return
+
+        // Only enable navigation when menu is actually open
+        if (window.location.hash !== '#menu') return
+
+        const dropdown = document.querySelector(this.dropdownSelector)
+        if (!dropdown) return
+
+        const closeButton = App.getEl('menu-button-close')
+
+        // Right arrow: go to close button (only if currently in dropdown)
+        if (event.key === 'ArrowRight') {
+            const currentElement = document.activeElement
+            const items = Array.from(dropdown.querySelectorAll(this.itemSelector))
+
+            // Only respond if currently focused on a dropdown item
+            if (items.includes(currentElement)) {
+                event.preventDefault()
+                if (closeButton) {
+                    closeButton.focus()
+                }
+            }
+            return
+        }
+
+        // Left arrow: go to first dropdown item (works from anywhere in menu)
+        if (event.key === 'ArrowLeft') {
+            event.preventDefault()
+            const firstItem = dropdown.querySelector(this.itemSelector)
+            if (firstItem) {
+                firstItem.focus()
+            }
+            return
+        }
+
+        // Get all focusable items
+        const items = Array.from(dropdown.querySelectorAll(this.itemSelector))
+            .filter(item => {
+                // Filter out items that aren't visible or focusable
+                return item.offsetParent !== null &&
+                    !item.hasAttribute('inert') &&
+                    !item.disabled
+            })
+
+        const currentIndex = items.indexOf(document.activeElement)
+
+        // If no item is focused, don't do anything
+        if (currentIndex === -1) return
+
+        event.preventDefault()
+
+        let targetIndex
+        if (event.key === 'ArrowDown') {
+            // Move to next item (like Tab)
+            targetIndex = currentIndex + 1
+            if (targetIndex >= items.length) {
+                targetIndex = 0 // Wrap to first item
+            }
+        } else {
+            // Move to previous item (like Shift+Tab)
+            targetIndex = currentIndex - 1
+            if (targetIndex < 0) {
+                targetIndex = items.length - 1 // Wrap to last item
+            }
+        }
+
+        items[targetIndex].focus()
+    }
+
+    // Cleanup
+
+    destroy() {
+        document.removeEventListener('keydown', this.boundHandleKeydown)
+    }
+}
+
+
+// ============================================================================
+// Global Utility Functions
 // ============================================================================
 
 /**
@@ -2168,6 +2458,10 @@ async function copyToClipboard(text) {
     }
 }
 
+// ============================================================================
+// Touch Interaction Functions
+// ============================================================================
+
 /**
  * Handles touch button/link click interactions with focus management
  * On touch devices: first tap focuses, second tap executes callback or allows default behavior
@@ -2190,30 +2484,17 @@ App.handleTouchButtonClick = (element, event, callback = null, focusAfterClick =
         return false
     }
 
-    // Track click count on the element using WeakMap
-    const currentCount = touchClickCounts.get(element) || 0
-    const clickCount = currentCount + 1
-    touchClickCounts.set(element, clickCount)
+    // Check if this is the second tap by looking for our marker attribute
+    const isSecondTap = element.getAttribute(TOUCH_PRIMED_ATTRIBUTE) === 'true'
 
-    // First click: set up blur handler and focus
-    if (clickCount === 1) {
-        const handleBlur = () => {
-            touchClickCounts.delete(element)
-            element.removeAttribute('data-focus-after-click')
-            touchBlurHandlers.delete(element)
-        }
-
-        touchBlurHandlers.set(element, handleBlur)
-        element.addEventListener('blur', handleBlur, { once: true })
-        element.focus()
+    // If this is the second tap, execute callback
+    if (isSecondTap) {
         event.preventDefault()
-        return true
-    }
 
-    // Second click: execute callback or allow default behavior
-    if (clickCount === 2 || element.getAttribute('data-focus-after-click') === 'true') {
+        // Clean up the marker
+        element.removeAttribute(TOUCH_PRIMED_ATTRIBUTE)
+
         if (callback) {
-            event.preventDefault()
             callback()
 
             // If focusAfterClick is true, maintain focus on element after callback
@@ -2226,19 +2507,43 @@ App.handleTouchButtonClick = (element, event, callback = null, focusAfterClick =
             }
             return true
         } else {
-            // No callback: allow default behavior (for links)
+            // No callback: navigate to href manually
+            if (element.href) {
+                window.location.href = element.href
+            }
             return false
         }
     }
 
-    // Fallback: prevent default
+    // First tap: mark element as primed for second tap
     event.preventDefault()
+    element.setAttribute(TOUCH_PRIMED_ATTRIBUTE, 'true')
+
+    // Focus the element for visual feedback
+    element.focus()
+
     return true
 }
 
 /**
- * Initializes the timeline component with scrollers.
- * Timeline persists for the entire session once initialized.
+ * Initialize touch button handler with global cleanup
+ * Sets up document-level click listener to clear primed state when user taps elsewhere
+ * Only called once on page load for touch devices
+ *
+ * Related to: App.handleTouchButtonClick
+ */
+function initializeTouchButtonHandler() {
+    // Handler will be registered in the centralized global event manager
+    // See: initializeGlobalEventHandlers()
+}
+
+// ============================================================================
+// Timeline Functions
+// ============================================================================
+
+/**
+ * Initialize the timeline component with scrollers
+ * Timeline persists for the entire session once initialized
  *
  * Integration points:
  * - Creates <horizontal-timeline> custom element
@@ -2324,14 +2629,18 @@ App.initializeTimeline = (startObserver = true) => {
     }
 }
 
+// ============================================================================
+// Dialog Initialization Functions
+// ============================================================================
+
 /**
- * Initializes dialog elements with ARIA attributes and backdrops
+ * Initialize dialog elements with ARIA attributes and backdrops
  */
 function initializeDialogs() {
     const dialogConfigs = [DIALOG_CONFIG.PROFILE, DIALOG_CONFIG.ARCHIVE, DIALOG_CONFIG.MENU]
 
     for (const config of dialogConfigs) {
-        const dialogEl = document.getElementById(config.id)
+        const dialogEl = App.getEl(config.id)
         if (dialogEl) {
             if (!dialogEl.getAttribute('role')) {
                 dialogEl.setAttribute('role', 'dialog')
@@ -2342,7 +2651,30 @@ function initializeDialogs() {
 }
 
 /**
- * Adds class to prevent initial page-load animations
+ * Open the appropriate dialog based on URL hash on page load
+ */
+const openDialogOnLoad = () => {
+    const { base: baseHash } = parseHash()
+
+    switch (baseHash) {
+        case NAVIGATION_HASHES.PROFILE:
+            openDialog(DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger, null, 'profile')
+            break
+        case NAVIGATION_HASHES.ARCHIVE:
+            openDialog(DIALOG_CONFIG.ARCHIVE.id, DIALOG_CONFIG.ARCHIVE.trigger)
+            break
+        case NAVIGATION_HASHES.MENU:
+            openDialog(DIALOG_CONFIG.MENU.id, DIALOG_CONFIG.MENU.trigger, DIALOG_CONFIG.MENU.close, 'menu')
+            break
+    }
+}
+
+// ============================================================================
+// Animation Control Functions
+// ============================================================================
+
+/**
+ * Add class to prevent initial page-load animations
  */
 const applyNoAnimation = () => {
     const SKIP_ANIMATION_CLASS = 'skip-animation'
@@ -2368,36 +2700,18 @@ const applyNoAnimation = () => {
     }
 }
 
-/**
- * Opens the appropriate dialog based on URL hash on page load
- */
-const openDialogOnLoad = () => {
-    const fullHash = window.location.hash
-    const baseHash = fullHash.split('?')[0]
-
-    switch (baseHash) {
-        case '#profile':
-            openDialog(DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger, null, 'profile')
-            break
-        case '#archive':
-            const yearParam = fullHash.split('?year=')[1]
-            openDialog(DIALOG_CONFIG.ARCHIVE.id, DIALOG_CONFIG.ARCHIVE.trigger)
-            break
-        case '#menu':
-            openDialog(DIALOG_CONFIG.MENU.id, DIALOG_CONFIG.MENU.trigger, DIALOG_CONFIG.MENU.close, 'menu')
-            break
-    }
-}
-
+// ============================================================================
+// Modal-Specific Initialization Functions
+// ============================================================================
 
 /**
- * Initializes 3D transform effect for modal profile footer art based on scroll
- * Event listeners persist for page lifetime - no cleanup needed per YAGNI principle
+ * Initialize 3D transform effect for modal profile footer art based on scroll
+ * Event listeners persist for page lifetime per YAGNI principle
  */
 const initializeModalFooterArt = () => {
     const footerArtWrapper = document.querySelector('.modal-profile__footer-art')
     const footerArt = document.querySelector('.modal-profile__footer-art-gradient')
-    const modalProfile = document.getElementById(DIALOG_CONFIG.PROFILE.id)
+    const modalProfile = App.getEl(DIALOG_CONFIG.PROFILE.id)
 
     if (!footerArtWrapper || !footerArt || !modalProfile) return
 
@@ -2414,6 +2728,10 @@ const initializeModalFooterArt = () => {
     handleScroll()
 }
 
+// ============================================================================
+// Fullscreen Functions
+// ============================================================================
+
 
 /**
  * Check if browser supports fullscreen API
@@ -2429,7 +2747,7 @@ const isFullscreenSupported = () => {
 }
 
 /**
- * Toggles fullscreen mode for the document
+ * Toggle fullscreen mode for the document
  * Only called if fullscreen is supported
  */
 App.toggleFullscreen = () => {
@@ -2459,8 +2777,34 @@ App.toggleFullscreen = () => {
     }
 }
 
+/**
+ * Synchronize the hidden #fullscreen input with actual fullscreen state
+ * Handles native exits (Escape key) and vendor-prefixed events
+ */
+function setupFullscreenSync() {
+    const syncHandler = () => {
+        const fullscreenInput = App.getEl('fullscreen')
+        const isFullscreen = !!(
+            document.fullscreenElement ||
+            document.webkitFullscreenElement ||
+            document.mozFullScreenElement ||
+            document.msFullscreenElement
+        )
+        if (fullscreenInput) fullscreenInput.checked = isFullscreen
+    }
+
+    // Listen for standard and vendor-prefixed fullscreen events
+    document.addEventListener('fullscreenchange', syncHandler)
+    document.addEventListener('webkitfullscreenchange', syncHandler)
+    document.addEventListener('mozfullscreenchange', syncHandler)
+    document.addEventListener('MSFullscreenChange', syncHandler)
+
+    // Set initial state
+    syncHandler()
+}
+
 // ============================================================================
-// Accessibility Enhancements
+// Link Enhancement Functions
 // ============================================================================
 
 /**
@@ -2508,44 +2852,87 @@ function enhanceExternalLinks() {
 }
 
 // ============================================================================
-// DOM Content Loaded Event Handler
+// Component Initialization Functions
 // ============================================================================
 
-document.addEventListener('DOMContentLoaded', () => {
-    const ANIMATION_CHECK_SELECTOR = '.menu--animating .menu__background'
-    const TOUCH_DEVICE_CLASS = 'touch-device'
-    const NO_FULLSCREEN_CLASS = 'no-fullscreen'
-    const OVERFLOW_HIDDEN_CLASS = 'overflow-hidden'
+/**
+ * Initialize click handlers with cached querySelector results
+ */
+function initializeClickHandlers() {
+    // Cache DOM queries at page load
+    const nameTooltip = document.querySelector('.intro__name .tooltip__text--bottom span')
+    const emailTooltip = document.querySelector('.menu__email .tooltip__text span')
+    const emailHighlight = document.querySelector('.menu__email .highlight')
 
-    // Apply no animation on first click
-    document.body.addEventListener('click', () => {
-        if (!isAnimationFinished(ANIMATION_CHECK_SELECTOR)) {
-            applyNoAnimation()
+    // Setup name element click handler
+    const nameElement = document.querySelector('.intro__name')
+    if (nameElement && nameTooltip) {
+        nameElement.onclick = function (event) {
+            App.handleTouchButtonClick(this, event, () => {
+                copyToClipboard('Štěpán Jákl')
+                App.textHighlighter.highlightAndCopyText(event, nameTooltip, this, 'Copied to the clipboard')
+            }, true)
         }
-    }, { once: true })
-
-    initializeDialogs()
-
-    // Enhance all external links for accessibility and security
-    enhanceExternalLinks()
-
-    // Detect touch device
-    if (isTouchDevice) {
-        document.body.classList.add(TOUCH_DEVICE_CLASS)
     }
 
-    // Detect fullscreen support and add class if not supported
-    if (!isFullscreenSupported()) {
-        document.body.classList.add(NO_FULLSCREEN_CLASS)
+    // Setup email button click handler
+    const emailButton = document.querySelector('.menu__email-button')
+    if (emailButton && emailTooltip && emailHighlight) {
+        emailButton.onclick = function (event) {
+            App.handleTouchButtonClick(this, event, () => {
+                copyToClipboard('stepan.jakl@icloud.com')
+                App.textHighlighter.highlightAndCopyText(event, emailTooltip, emailHighlight, 'Copied to the clipboard')
+            })
+        }
+    }
+}
+
+/**
+ * Initialize live timezone display that updates every 15 seconds
+ */
+function initializeTimezoneDisplay() {
+    const timezoneEl = document.querySelector('.modal-profile__timezone-live')
+    if (!timezoneEl) return
+
+    const liveTimezoneTime = () => {
+        timezoneEl.innerHTML = `(${new Intl.DateTimeFormat('de-DE', {
+            timeZone: 'Europe/London',
+            timeZoneName: 'short',
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }).format(new Date())})`
     }
 
-    // Initialize the UI elements based on the current hash
-    if (window.location.hash) {
-        applyNoAnimation()
-        openDialogOnLoad()
-    }
+    liveTimezoneTime()
+    setInterval(liveTimezoneTime, 15000)
+}
 
-    // Prevent the default behavior of scrolling to the hash
+/**
+ * Initialize popup system with event delegation for media links
+ */
+function initializePopups() {
+    // Handlers will be registered in the centralized global event manager
+    // See: initializeGlobalEventHandlers()
+
+    // Initialize popup instance for use by global handlers
+    if (!window.App.popupInstance) {
+        window.App.popupInstance = new Popup()
+        window.App.popupPreloadedLinks = new WeakSet()
+    }
+}
+
+// ============================================================================
+// Hash Navigation Functions
+// ============================================================================
+
+/**
+ * Setup hash change handler for archive year navigation
+ */
+function setupHashChangeHandler() {
+    const OVERFLOW_HIDDEN_CLASS = 'overflow-hidden'
     let scrollTop = document.body.scrollTop
 
     window.addEventListener('scroll', () => {
@@ -2553,38 +2940,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true })
 
     window.addEventListener('hashchange', () => {
-        const fullHash = window.location.hash
-        const baseHash = fullHash.split('?')[0]
-        const yearParam = fullHash.split('?year=')[1]
+        const { base: baseHash, params } = parseHash()
+        const yearParam = params.year
 
         // Handle archive year parameter changes during session
-        if (baseHash === '#archive' && yearParam) {
+        if (baseHash === NAVIGATION_HASHES.ARCHIVE && yearParam) {
             // Check if modal is currently open (to distinguish from initial page load)
-            const modalArchive = document.querySelector(MODAL_SELECTORS.ARCHIVE)
+            const modalArchive = getModalElement(NAVIGATION_HASHES.ARCHIVE)
             const isModalOpen = document.body.classList.contains('modal-open')
 
             if (isModalOpen) {
                 // Modal is already open (via body.modal-open class), just scroll to new section
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        const targetSection = document.querySelector(`[data-timeline-section="${yearParam}"]`)
+                afterPaint(() => {
+                    const targetSection = document.querySelector(`[data-timeline-section="${yearParam}"]`)
 
-                        if (targetSection && modalArchive && App.timeline) {
-                            App.timeline.scrollParentToChildVertical(modalArchive, targetSection, 'smooth')
+                    if (targetSection && modalArchive && App.timeline) {
+                        App.timeline.scrollParentToChildVertical(modalArchive, targetSection, 'smooth')
 
-                            // Update timeline state
-                            App.timeline.setActiveLabel(yearParam)
-                            App.timeline.setActiveIndicator(yearParam)
+                        // Update timeline state
+                        App.timeline.setActiveLabel(yearParam)
+                        App.timeline.setActiveIndicator(yearParam)
 
-                            const activeLabel = App.timeline.querySelector(`[data-label-for="${yearParam}"]`)
-                            if (activeLabel) {
-                                App.timeline.scrollParentToChildCenterHorizontal(
-                                    App.timeline.getTimelineContentEl(),
-                                    activeLabel
-                                )
-                            }
+                        const activeLabel = App.timeline.querySelector(`[data-label-for="${yearParam}"]`)
+                        if (activeLabel) {
+                            App.timeline.scrollParentToChildCenterHorizontal(
+                                App.timeline.getTimelineContentEl(),
+                                activeLabel
+                            )
                         }
-                    })
+                    }
                 })
             }
         }
@@ -2597,88 +2981,173 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.remove(OVERFLOW_HIDDEN_CLASS)
         })
     })
+}
 
-    // Initialize global handlers (persistent throughout page lifetime)
-    try {
-        new WheelHandler()
-        new TouchHandler()
-        new KeyHandler()
-    } catch (error) {
-        console.error('Failed to initialize global handlers:', error)
-        // Navigation will still work via links and buttons
-    }
+// ============================================================================
+// Global Event Handlers
+// ============================================================================
 
-    // Initialize text highlighter
-    try {
-        App.textHighlighter = new TextHighlighter()
-    } catch (error) {
-        console.error('Failed to initialize text highlighter:', error)
-        // Copy functionality will still work, just without visual feedback
-    }
-
-    // Initialize carousels (persistent throughout page lifetime)
-    try {
-        const carouselElements = document.querySelectorAll('[data-carousel]')
-        for (let i = 0; i < carouselElements.length; i++) {
-            new Carousel({ id: `carousel-${i + 1}`, element: carouselElements[i] })
+/**
+ * Centralized global event handler for document-level events
+ * Reduces number of event listeners by consolidating similar handlers
+ * Uses event delegation pattern for optimal performance
+ */
+function initializeGlobalEventHandlers() {
+    // Single document click handler for multiple concerns
+    document.addEventListener('click', (event) => {
+        // 1. Clear touch button primed states when user taps elsewhere
+        if (isTouchDevice) {
+            const primedElements = document.querySelectorAll(`[${TOUCH_PRIMED_ATTRIBUTE}="true"]`)
+            primedElements.forEach(el => {
+                if (!el.contains(event.target)) {
+                    el.removeAttribute(TOUCH_PRIMED_ATTRIBUTE)
+                }
+            })
         }
-    } catch (error) {
-        console.error('Failed to initialize carousels:', error)
-        // Images will still be visible, just without carousel navigation
+
+        // 2. Handle popup link clicks
+        const popupLink = event.target.closest(POPUP_LINK_SELECTOR)
+        if (popupLink && App.popupInstance) {
+            App.popupInstance.open(popupLink, event)
+        }
+    }, { capture: true })
+
+    // Single document mouseover handler for link preloading
+    document.addEventListener('mouseover', (event) => {
+        const link = event.target.closest(POPUP_LINK_SELECTOR)
+        if (!link || !App.popupInstance || !App.popupPreloadedLinks) return
+        if (App.popupPreloadedLinks.has(link)) return
+
+        // Preload placeholder images for faster popup display
+        if (!App.popupInstance.isVideo(link.href)) {
+            const placeholderUrl = App.popupInstance.getPlaceholderUrl(link.href)
+            const preloadImg = new Image()
+            preloadImg.src = placeholderUrl
+        }
+        App.popupPreloadedLinks.add(link)
+    }, { passive: true })
+}
+
+// ============================================================================
+// DOM Content Loaded Event Handler
+// ============================================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Constants
+    const TOUCH_DEVICE_CLASS = 'touch-device'
+    const NO_FULLSCREEN_CLASS = 'no-fullscreen'
+
+    // Helper Functions
+
+    /**
+     * Check if menu intro animation has finished
+     * Helper for one-time animation check on first interaction
+     */
+    const isMenuAnimationFinished = () => {
+        const el = document.querySelector('.menu--animating .menu__background')
+        if (!el) return true
+        const animations = el.getAnimations()
+        return !animations || animations.length === 0 || animations[0].playState === 'finished'
     }
+
+    // Animation Skip Setup
+
+    // Apply no animation on first click
+    document.body.addEventListener('click', () => {
+        if (!isMenuAnimationFinished()) {
+            applyNoAnimation()
+        }
+    }, { once: true })
+
+    // Core Initialization
+
+    initializeDialogs()
+    enhanceExternalLinks()
+    initializePopups()
+    initializeGlobalEventHandlers()
+
+    // Device Detection
+
+    // Detect touch device and setup touch-specific handlers
+    if (isTouchDevice) {
+        document.body.classList.add(TOUCH_DEVICE_CLASS)
+        initializeTouchButtonHandler()
+    }
+
+    // Detect fullscreen support
+    if (!isFullscreenSupported()) {
+        document.body.classList.add(NO_FULLSCREEN_CLASS)
+    }
+
+    setupFullscreenSync()
+
+    // Hash-Based Navigation Setup
+
+    // Initialize UI based on current hash (deep linking)
+    if (window.location.hash) {
+        applyNoAnimation()
+        openDialogOnLoad()
+    }
+
+    setupHashChangeHandler()
+
+    // Global Handlers Initialization
+
+    // Initialize persistent handlers (active throughout page lifetime)
+    new WheelHandler()
+    new TouchHandler()
+    new KeyHandler()
+    App.textHighlighter = new TextHighlighter()
+
+    // Interactive Components Initialization
+
+    initializeClickHandlers()
+    initializeTimezoneDisplay()
+
+    // Initialize carousels
+    const carouselElements = document.querySelectorAll('[data-carousel]')
+    for (let i = 0; i < carouselElements.length; i++) {
+        new Carousel({ id: `carousel-${i + 1}`, element: carouselElements[i] })
+    }
+
+    // Keyboard Navigation Setup
 
     // Initialize keyboard navigation for image grids
-    try {
-        new ImageGridNavigator({
-            containerSelector: '.hover-cards, .image-grid',
-            itemSelector: 'figure a'
-        })
-    } catch (error) {
-        console.error('Failed to initialize image grid navigator:', error)
-        // Image grids will still be visible, mouse interaction will work
-    }
+    new ImageGridNavigator({
+        containerSelector: '.hover-cards, .image-grid',
+        itemSelector: 'figure a'
+    })
 
-    // Initialize popups with delegated listeners to reduce per-link handlers
-    try {
-        const popupInstance = new Popup()
-        const preloadedLinks = new WeakSet()
+    // Initialize keyboard navigation for menu dropdown
+    new MenuDropdownNavigator({
+        dropdownSelector: '#menu-dropdown',
+        itemSelector: 'a, label, button'
+    })
 
-        document.addEventListener('mouseover', (e) => {
-            const link = e.target.closest('a[target="_blank"][href$=".mp4"], a[target="_blank"][href$=".png"], a[target="_blank"][href$=".jpg"], a[target="_blank"][href$=".svg"]')
-            if (!link) return
-            if (preloadedLinks.has(link)) return
-            if (!popupInstance.isVideo(link.href)) {
-                const placeholderUrl = popupInstance.getPlaceholderUrl(link.href)
-                const preloadImg = new Image()
-                preloadImg.src = placeholderUrl
-            }
-            preloadedLinks.add(link)
-        })
+    // Timeline Positioning Setup
 
-        document.addEventListener('click', (e) => {
-            const link = e.target.closest('a[target="_blank"][href$=".mp4"], a[target="_blank"][href$=".png"], a[target="_blank"][href$=".jpg"], a[target="_blank"][href$=".svg"]')
-            if (!link) return
-            popupInstance.open(link, e)
-        })
-    } catch (error) {
-        console.error('Failed to initialize popups:', error)
-        // Links will still open in new tabs/windows
-    }
+    // Setup global timeline positioning function with cached queries
+    App.positionTimeline = (() => {
+        // Cache positioning elements (queried once, reused on every resize)
+        let archiveWrapperEl, timelineContentSectionEl, timelineWrapperEl
 
-    // Setup global timeline positioning function
-    App.positionTimeline = () => {
-        const archiveWrapperEl = document.querySelector('.modal-archive__timeline')
-        const timelineContentSectionEl = document.querySelector('.modal-archive__timeline-grid [data-timeline-section]')
-        const timelineWrapperEl = document.querySelector('#horizontal-timeline')
+        return () => {
+            // Lazy initialization with caching
+            archiveWrapperEl ??= document.querySelector('.modal-archive__timeline')
+            timelineContentSectionEl ??= document.querySelector('.modal-archive__timeline-grid [data-timeline-section]')
+            timelineWrapperEl ??= document.querySelector('#horizontal-timeline')
 
-        if (!archiveWrapperEl || !timelineContentSectionEl || !timelineWrapperEl) return
+            if (!archiveWrapperEl || !timelineContentSectionEl || !timelineWrapperEl) return
 
-        const archiveWrapperRect = archiveWrapperEl.getBoundingClientRect()
-        const timelineContentSectionRect = timelineContentSectionEl.getBoundingClientRect()
+            const archiveWrapperRect = archiveWrapperEl.getBoundingClientRect()
+            const timelineContentSectionRect = timelineContentSectionEl.getBoundingClientRect()
 
-        timelineWrapperEl.style.setProperty('left', `${timelineContentSectionRect.left - archiveWrapperRect.left}px`)
-        timelineWrapperEl.style.setProperty('right', `${archiveWrapperRect.right - timelineContentSectionRect.right}px`)
-    }
+            timelineWrapperEl.style.setProperty('left', `${timelineContentSectionRect.left - archiveWrapperRect.left}px`)
+            timelineWrapperEl.style.setProperty('right', `${archiveWrapperRect.right - timelineContentSectionRect.right}px`)
+        }
+    })()
+
+    // Resize Handler Registration
 
     // Register timeline positioning with centralized resize manager
     ResizeManager.register(() => {
@@ -2698,40 +3167,41 @@ document.addEventListener('DOMContentLoaded', () => {
  * Browsers without spacing support get separate log statements
  */
 (function () {
-    const color = '#7cce00' // 115, 100, 75
-    const bgColor = 'rgba(124, 206, 0, 0.075)'
+    // Theme Colors
+    const COLOR = '#7cce00' // Green-lime (HSL: 115, 100, 75)
+    const BG_COLOR = 'rgba(124, 206, 0, 0.075)'
 
-    // Message text
-    const header = 'Štěpán Jákl | Full-stack developer & interface designer'
-    const line1 = 'This website is built with HTML, CSS, and vanilla JavaScript.'
-    const line2 = 'The goal: a fast, pixel-perfect, and fully responsive experience.'
-    const line3 = 'No frameworks, no build tools, no generators. Just pure craftsmanship.'
-    const line4 = 'Interested in working together? Reach out via email at'
-    const email = 'stepan.jakl@icloud.com'
+    // Message Content
+    const HEADER = 'Štěpán Jákl | Full-stack developer & interface designer'
+    const LINE_1 = 'This website is built with HTML, CSS, and vanilla JavaScript.'
+    const LINE_2 = 'The goal: a fast, pixel-perfect, and fully responsive experience.'
+    const LINE_3 = 'No frameworks, no build tools, no generators. Just pure craftsmanship.'
+    const LINE_4 = 'Interested in working together? Reach out via email at'
+    const EMAIL = 'stepan.jakl@icloud.com'
 
-    // Detect if browser supports margin/padding in console (Chrome, Firefox, Edge do; Safari doesn't)
+    // Browser Feature Detection
     const supportsSpacing = !navigator.userAgent.includes('Safari') || navigator.userAgent.includes('Chrome')
 
     if (supportsSpacing) {
-        // Bordered box style with padding and margin for the header
-        const boxStyle = `border: max(1px, 0.0625rem) solid ${color}; border-radius: 0.125rem; color: ${color}; background: ${bgColor}; font-size: 0.8125rem; padding: 1.40625rem 2.1875rem 1.25rem 2.1875rem; margin: 1.25rem 1.25rem;`
-        const textStyle = `color: ${color}; font-size: 0.75rem; margin: 0.9375rem 0 0.9375rem 1.25rem;`
-        const linkStyle = `color: ${color}; font-size: 0.75rem; text-decoration: underline;;`
+        // Bordered box style with padding and margin (Chrome, Firefox, Edge)
+        const boxStyle = `border: max(1px, 0.0625rem) solid ${COLOR}; border-radius: 0.125rem; color: ${COLOR}; background: ${BG_COLOR}; font-size: 0.8125rem; padding: 1.40625rem 2.1875rem 1.25rem 2.1875rem; margin: 1.25rem 1.25rem;`
+        const textStyle = `color: ${COLOR}; font-size: 0.75rem; margin: 0.9375rem 0 0.9375rem 1.25rem;`
+        const linkStyle = `color: ${COLOR}; font-size: 0.75rem; text-decoration: underline;`
 
-        console.log(`%c${header}`, boxStyle)
-        console.log(`%c${line1}`, textStyle)
-        console.log(`%c${line2}`, textStyle)
-        console.log(`%c${line3}`, textStyle)
-        console.log(`%c${line4} %c${email}`, textStyle, linkStyle)
+        console.log(`%c${HEADER}`, boxStyle)
+        console.log(`%c${LINE_1}`, textStyle)
+        console.log(`%c${LINE_2}`, textStyle)
+        console.log(`%c${LINE_3}`, textStyle)
+        console.log(`%c${LINE_4} %c${EMAIL}`, textStyle, linkStyle)
     } else {
-        // Separate log statements for browsers without spacing support
-        const headerStyle = `color: ${color}; font-size: 0.78125rem; font-weight: bold;`
-        const textStyle = `color: ${color};`
+        // Separate log statements for browsers without spacing support (Safari)
+        const headerStyle = `color: ${COLOR}; font-size: 0.78125rem; font-weight: bold;`
+        const textStyle = `color: ${COLOR};`
 
-        console.log(`%c${header}`, headerStyle)
-        console.log(`%c${line1}`, textStyle)
-        console.log(`%c${line2}`, textStyle)
-        console.log(`%c${line3}`, textStyle)
-        console.log(`%c${line4} ${email}`, textStyle)
+        console.log(`%c${HEADER}`, headerStyle)
+        console.log(`%c${LINE_1}`, textStyle)
+        console.log(`%c${LINE_2}`, textStyle)
+        console.log(`%c${LINE_3}`, textStyle)
+        console.log(`%c${LINE_4} ${EMAIL}`, textStyle)
     }
 })()

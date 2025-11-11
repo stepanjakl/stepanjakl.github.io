@@ -65,14 +65,9 @@ body {
     }
 }
 
-/* @media (min-width: 45rem) {
-    body {
-        --text-lg-font-weight: 200;
-        --text-xl-font-weight: 200;
-    }
-} */
 
 /* Shared text utility base */
+
 [class^="text-"]::before {
     content: "";
     display: table;
@@ -201,11 +196,10 @@ body {
 .disable-transitions *::before,
 .disable-transitions *::after {
     transition: none !important;
-    /* animation: none !important; */
 }
 
 
-/* Mid */
+/* Mid ("midscript" text) */
 .mid {
     font-size: 0.666em;
     letter-spacing: 0.075em;

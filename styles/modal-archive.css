@@ -3,7 +3,7 @@
  */
 
 
-/* Modal - Archive Timeline */
+/* Timeline */
 
 .modal-archive__timeline>input[type="checkbox"] {
     display: none;
@@ -31,7 +31,7 @@
 }
 
 
-/* Archive Timeline - Section Title */
+/* Timeline - Section title */
 
 .modal-archive__timeline-section-title {
     position: relative;
@@ -116,7 +116,7 @@
 }
 
 
-/* Archive Timeline - Section Controls */
+/* Timeline - Section controls */
 
 .modal-archive__timeline-section-controls {
     display: flex;
@@ -126,7 +126,7 @@
 }
 
 
-/* Archive Timeline - Section Content */
+/* Timeline - Section content */
 
 .modal-archive__timeline-section {
     display: flex;
@@ -254,7 +254,7 @@
 }
 
 
-/* Archive Timeline - Section Typography */
+/* Timeline - Section typography */
 
 .modal-archive__timeline-section h1:not(:first-child) {
     margin-top: 4rem;
@@ -323,7 +323,7 @@
 }
 
 
-/* Archive Timeline - Section Navigation */
+/* Timeline - Section navigation */
 
 .modal-archive__timeline-section nav {
     display: flex;
@@ -475,7 +475,7 @@
 }
 
 
-/* Modal - Archive - Hover Cards */
+/* Hover cards */
 
 .hover-cards-wrapper {
     --hover-cards-border-radius: 0.5rem;
@@ -485,10 +485,12 @@
     padding: var(--hover-cards-padding);
     border-radius: var(--hover-cards-border-radius);
     background-color: var(--context-bg-modal);
+    align-self: flex-start;
 }
 
 @media (min-width: 45rem) {
     .hover-cards-wrapper {
+        align-self: normal;
         --hover-cards-border-radius: 1rem;
     }
 }
@@ -540,6 +542,11 @@
     flex-grow: calc(((var(--items) - 1) * var(--aspect-w) * var(--container-aspect-h)) / (var(--aspect-h) * var(--effective-width) - var(--aspect-w) * var(--container-aspect-h)));
 }
 
+/* Reset focused-within to default when sibling is hovered */
+.hover-cards:has(figure:hover) > figure:focus-within:not(:hover) {
+    flex-grow: 1;
+}
+
 .hover-cards>figure>div {
     border-radius: calc(var(--hover-cards-border-radius) - var(--hover-cards-padding));
     overflow: hidden;
@@ -570,7 +577,7 @@
 }
 
 
-/* Modal - Archive - Hover Cards - Variants */
+/* Hover cards - variants */
 
 [class*="hover-cards--variant-"]>figure {
     --aspect-w: 16;
@@ -621,7 +628,7 @@
 }
 
 
-/* Modal - Archive - Carousel */
+/* Carousel */
 
 [data-carousel] {
     position: relative;
@@ -815,13 +822,14 @@
 }
 
 
-/* Modal - Archive - Logo Grid */
+/* Logo grid */
 
 .image-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.75rem;
     margin-top: 2rem;
+    align-self: flex-start;
 }
 
 .image-grid figure {
@@ -843,6 +851,7 @@
     .image-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
+        align-self: normal;
     }
 
     .image-grid img {
@@ -864,7 +873,7 @@
 }
 
 
-/* Modal - Archive - Footer Art */
+/* Footer art */
 
 .modal-archive__footer-art-left {
     position: absolute;
@@ -933,11 +942,11 @@
 }
 
 
-/* Modal Archive - Content Background */
+/* Content background */
 
 #modal-archive .modal__content::before {
     background-image: url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='13.25' y='13.25' width='1.5' height='1.5' fill='%23FFFF' fill-opacity='0.0625'/%3E%3C/svg%3E%0A");
-    background-color: rgba(0, 54, 61, 0.975);
+    background-color: var(--modal-bg-archive);
     /* 210, 100, 20 */
     backdrop-filter: none;
     -webkit-backdrop-filter: none;

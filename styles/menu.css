@@ -2,7 +2,7 @@
  * Menu
  */
 
-/* Menu Container */
+/* Menu container */
 
 .menu {
     --menu-space-gap: 0.4375rem;
@@ -30,7 +30,7 @@
     animation: fade-in-cta-2 both;
 }
 
-/* Menu Background */
+/* Menu background */
 
 .menu__background {
     position: absolute;
@@ -58,7 +58,8 @@
     }
 }
 
-/* Menu Items (Shared) */
+
+/* Menu items (shared) */
 
 .menu__email,
 .menu__link {
@@ -72,13 +73,15 @@
 }
 
 @media (min-width: 45rem) {
+
     .menu__email,
     .menu__link:last-child {
         border-radius: var(--menu-item-border-radius);
     }
 }
 
-/* Menu Email */
+
+/* Menu email */
 
 .menu__email {
     place-self: self-start;
@@ -87,6 +90,7 @@
 }
 
 @media (min-width: 45rem) {
+
     .menu__email,
     .menu__link:last-child {
         border-radius: var(--menu-item-border-radius);
@@ -106,7 +110,7 @@
 .menu__email-icon {
     display: inline-flex;
     padding: 0.6875rem;
-    border-radius: 9999px;
+    border-radius: 999rem;
     background-color: var(--dark-25);
 }
 
@@ -135,7 +139,8 @@
     user-select: none;
 }
 
-/* Menu Links */
+
+/* Menu links */
 
 .menu__links {
     display: flex;
@@ -161,7 +166,7 @@
 
 .menu__link-icon {
     display: inline-flex;
-    border-radius: 9999px;
+    border-radius: 999rem;
     background-color: var(--dark-25);
 }
 
@@ -180,8 +185,8 @@
     }
 
     .menu__link-icon--animated svg {
-    width: 1.1875rem;
-    height: 1.1875rem;
+        width: 1.1875rem;
+        height: 1.1875rem;
     }
 }
 
@@ -232,7 +237,8 @@
     border-bottom: solid 0.125rem var(--highlight-primary);
 }
 
-/* Menu Toggle & Button */
+
+/* Menu toggle & button */
 
 #menu-toggle {
     position: relative;
@@ -270,7 +276,8 @@
     }
 }
 
-/* Menu Button Icon Variables */
+
+/* Menu button icon variables */
 
 body {
     --menu-icon-bit-size: 3px;
@@ -303,7 +310,8 @@ body {
     }
 }
 
-/* Menu Button Icon */
+
+/* Menu button icon */
 
 .menu__button-icon {
     display: grid;
@@ -330,14 +338,15 @@ body {
     transform: rotate(180deg);
 }
 
-/* Menu Tooltip Positioning */
+
+/* Menu tooltip positioning */
 
 .menu__email .tooltip__text--top {
     margin-bottom: 0.875rem;
 }
 
 .menu__links .tooltip__text--bottom {
-    margin-top: var(--menu-space-gap);
+    margin-top: calc(var(--menu-space-gap) - max(1px, 0.0625rem));
 }
 
 @media (min-width: 45rem) {
@@ -370,6 +379,7 @@ body {
 }
 
 @media (min-width: 45rem) {
+
     #menu-link-profile .tooltip__text--active,
     #menu-link-archive .tooltip__text--active {
         left: 50%;
@@ -385,6 +395,7 @@ body {
         margin-right: -0.5rem;
     }
 }
+
 
 /* Menu dropdown */
 
@@ -486,7 +497,6 @@ body {
     flex-direction: row;
     align-items: center;
     width: auto;
-    /* margin: 0 max(1px, 0.0625rem); */
     padding: 0.875rem 2rem 0.75rem 1.125rem;
     box-shadow: inset 0 max(1px, 0.0625rem) 0 0 var(--dark-20);
     border-top: solid max(1px, 0.0625rem) var(--light-15);
@@ -495,6 +505,7 @@ body {
 }
 
 @media (min-width: 45rem) {
+
     #menu-dropdown a,
     #menu-dropdown label {
         padding: 0.75rem 1.125rem 0.625rem 1rem;
@@ -541,7 +552,8 @@ body {
     background-clip: padding-box;
 }
 
-/* Menu dropdown - Fullscreen Icons */
+
+/* Menu dropdown - Fullscreen icons */
 
 #menu-dropdown-fullscreen svg {
     width: 1.375rem;
@@ -550,13 +562,15 @@ body {
     box-sizing: content-box;
 }
 
-/* Menu dropdown - Dark Mode Icon */
+
+/* Menu dropdown - Dark mode icon */
 
 #menu-dropdown-dark-mode svg {
     color: var(--navy-25);
 }
 
-/* Menu dropdown - Light Mode Icon */
+
+/* Menu dropdown - Light mode icon */
 
 #menu-dropdown #menu-dropdown-light-mode svg {
     color: var(--yellow-85);

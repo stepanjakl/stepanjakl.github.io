@@ -3,7 +3,14 @@
  */
 
 
-/* Modal Profile - Layout */
+/* Layout */
+
+@media (min-width: 45rem) {
+    .modal--profile .modal__body {
+        margin-bottom: 0;
+    }
+}
+
 .modal--profile .modal__body dl {
     padding: var(--segment-quarter) 0 var(--segment-quarter) var(--segment-quarter);
     display: grid;
@@ -65,16 +72,6 @@
     }
 }
 
-/* .modal--profile .modal__body dl div.profile p {
-    text-align: left;
-}
-
-@media (min-width: 105rem) {
-    .modal--profile .modal__body dl div.profile p {
-        text-align: initial;
-    }
-} */
-
 .modal--profile .modal__body dt:first-of-type,
 .modal--profile .modal__body dd:first-of-type {
     margin-top: var(--segment-half);
@@ -122,7 +119,9 @@
     display: table;
 }
 
-/* Modal Profile - Links and Images */
+
+/* Links and images */
+
 .modal--profile .modal__body a {
     height: 0.75rem;
     display: inline-flex;
@@ -146,7 +145,9 @@
     box-sizing: content-box;
 }
 
-/* Modal Profile - Timezone Display */
+
+/* Timezone display */
+
 .modal-profile__timezone {
     display: inline-flex;
     align-items: center;
@@ -174,7 +175,8 @@
     display: table;
 }
 
-/* Modal Profile - Table Content Text */
+
+/* Table content text */
 
 .modal-profile__table dd>span,
 .modal-profile__table dd>p {
@@ -206,7 +208,9 @@
     display: table;
 }
 
-/* Modal Profile - Summary Content */
+
+/* Summary content */
+
 .modal-profile__summary {
     display: inline-flex;
     flex-direction: column;
@@ -217,7 +221,9 @@
     padding-bottom: var(--segment-third);
 }
 
-/* Modal Profile - Tags List */
+
+/* Tags list */
+
 .modal-profile__tags ul {
     display: flex;
     flex-direction: row;
@@ -236,7 +242,6 @@
     column-gap: 0.25rem;
     border-radius: 999rem;
     border: solid min(2px, 0.125rem) var(--modal-tag-bg);
-    /* background-color: var(--modal-tag-bg); */
     padding: 0.609375rem 0.75rem 0.5rem;
 }
 
@@ -276,23 +281,35 @@
     display: table;
 }
 
-/* Modal Profile - Photo */
+
+/* Photo */
+
 .modal-profile__photo {
-    width: calc(4 * var(--segment));
+    width: calc(4.25 * var(--segment));
     height: auto;
     aspect-ratio: 1/1;
     margin: 0;
     border: none;
-    border-radius: 9999px;
+    border-radius: 999rem;
+    border: solid 0.25rem var(--context-bg-modal);
 }
 
-/* Modal Profile - Flag Images */
+
+/* Flag images */
+
 .modal--profile .modal__body img[alt$="flag"] {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.625rem;
+    height: 1.625rem;
+    flex-shrink: 0;
+    background-color: var(--context-bg-modal);
+    border: solid 0.125rem transparent;
+    border-radius: 999rem;
+    corner-shape: unset;
 }
 
-/* Modal Profile - Deliverables & Tools Section Titles */
+
+/* Tags */
+
 .modal--profile .modal__body dt:nth-last-of-type(2) {
     padding-top: 0.375rem !important;
 }
@@ -301,13 +318,17 @@
     padding-top: 0.625rem !important;
 }
 
-/* Modal Profile - Close Button */
+
+/* Close button */
+
 .modal--profile .modal__close-button {
     backdrop-filter: blur(0.046875rem);
     -webkit-backdrop-filter: blur(0.046875rem);
 }
 
-/* Modal Profile - Footer Art */
+
+/* Footer art */
+
 .modal-profile__footer-art {
     position: relative;
     width: 100%;

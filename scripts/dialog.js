@@ -24,10 +24,31 @@
  * Inspired by: https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/dialog/
  */
 
+// ============================================================================
+// ARIA Namespace & Utilities
+// ============================================================================
+
+var aria = aria || {}
+
+// Lightweight local DOM getter with caching
+// Keeps dialog.js standalone while avoiding repeated document.getElementById calls
+aria._elCache = aria._elCache || {}
+
+/**
+ * Get element by ID with caching. Accepts either an id string or an element.
+ * @param {string|HTMLElement} idOrEl - Element ID or element itself
+ * @returns {HTMLElement|null} Element or null if not found
+ */
+aria.getEl = (idOrEl) => {
+    if (!idOrEl) return null
+    if (typeof idOrEl !== 'string') return idOrEl
+    return aria._elCache[idOrEl] ??= document.getElementById(idOrEl)
+}
+
 // Inject backdrop styles (self-contained, no external dependencies)
 (function injectDialogStyles() {
     const styleId = 'aria-dialog-styles'
-    if (document.getElementById(styleId)) return
+    if (aria.getEl(styleId)) return
 
     const style = document.createElement('style')
     style.id = styleId
@@ -47,7 +68,9 @@
     document.head.appendChild(style)
 })()
 
-var aria = aria || {}
+// ============================================================================
+// Inert Polyfill
+// ============================================================================
 
 /**
  * Inert Polyfill - Fallback for browsers without native inert support
@@ -120,10 +143,18 @@ aria.removeInert = (element) => {
     }
 }
 
+// ============================================================================
+// Dialog Configuration
+// ============================================================================
+
 /**
  * Valid ARIA roles for dialogs
  */
 aria.VALID_DIALOG_ROLES = Object.freeze(['dialog', 'alertdialog'])
+
+// ============================================================================
+// Lifecycle Hooks
+// ============================================================================
 
 /**
  * Lifecycle hooks registry
@@ -146,6 +177,23 @@ aria.lifecycleHooks = aria.lifecycleHooks || {}
 aria.registerLifecycleHooks = (dialogId, hooks) => {
     aria.lifecycleHooks[dialogId] = hooks
 }
+
+/**
+ * Call registered lifecycle hooks for a dialog
+ * @private
+ * @param {string} dialogId - The ID of the dialog
+ * @param {string} hookType - Either 'initialize' or 'cleanup'
+ */
+aria.callLifecycleHook = (dialogId, hookType) => {
+    const hooks = aria.lifecycleHooks[dialogId]
+    if (hooks && typeof hooks[hookType] === 'function') {
+        hooks[hookType]()
+    }
+}
+
+// ============================================================================
+// Utility Functions
+// ============================================================================
 
 /**
  * Utility functions for dialog accessibility and DOM manipulation
@@ -212,18 +260,9 @@ aria.Utils = aria.Utils || {
     },
 }
 
-/**
- * Call registered lifecycle hooks for a dialog
- * @private
- * @param {string} dialogId - The ID of the dialog
- * @param {string} hookType - Either 'initialize' or 'cleanup'
- */
-aria.callLifecycleHook = (dialogId, hookType) => {
-    const hooks = aria.lifecycleHooks[dialogId]
-    if (hooks && typeof hooks[hookType] === 'function') {
-        hooks[hookType]()
-    }
-}
+// ============================================================================
+// Dialog Stack Management
+// ============================================================================
 
 /**
  * Stack of currently open dialogs
@@ -256,7 +295,7 @@ aria.closeCurrentDialog = (hash) => {
  * @returns {HTMLElement} The backdrop element
  */
 aria.addBackdrop = (dialogId) => {
-    const dialogNode = document.getElementById(dialogId)
+    const dialogNode = aria.getEl(dialogId)
     if (!dialogNode) return null
 
     const backdropClass = aria.Utils.backdropClass
@@ -276,6 +315,10 @@ aria.addBackdrop = (dialogId) => {
     return backdropNode
 }
 
+// ============================================================================
+// Dialog Constructor
+// ============================================================================
+
 /**
  * ARIA Dialog Constructor
  * Creates an accessible modal dialog with proper focus management
@@ -292,7 +335,7 @@ aria.Dialog = function (dialogId, focusAfterClosed, focusFirst, hash) {
 
     // Core elements
     this.dialogId = dialogId
-    this.dialogNode = document.getElementById(dialogId)
+    this.dialogNode = aria.getEl(dialogId)
     if (!this.dialogNode) {
         throw new Error(`No element found with id="${dialogId}".`)
     }
@@ -317,7 +360,7 @@ aria.Dialog = function (dialogId, focusAfterClosed, focusFirst, hash) {
     //          </div>
     const inertTargetId = this.dialogNode.getAttribute('data-inert-target')
     this.inertNode = inertTargetId
-        ? document.getElementById(inertTargetId)
+        ? aria.getEl(inertTargetId)
         : this.dialogNode
 
     if (!this.inertNode) {
@@ -353,6 +396,10 @@ aria.Dialog = function (dialogId, focusAfterClosed, focusFirst, hash) {
     this.handleInitialFocus(hash)
 }
 
+// ============================================================================
+// Dialog Prototype Methods
+// ============================================================================
+
 /**
  * Validate that the dialog has a proper ARIA role
  * @private
@@ -376,7 +423,7 @@ aria.Dialog.prototype.validateDialogRole = function () {
 aria.Dialog.prototype.setupFocusElements = function (focusAfterClosed, focusFirst) {
     // Convert string IDs to elements
     this.focusAfterClosed = typeof focusAfterClosed === 'string'
-        ? document.getElementById(focusAfterClosed)
+        ? aria.getEl(focusAfterClosed)
         : focusAfterClosed
 
     if (!this.focusAfterClosed) {
@@ -384,7 +431,7 @@ aria.Dialog.prototype.setupFocusElements = function (focusAfterClosed, focusFirs
     }
 
     this.focusFirst = typeof focusFirst === 'string'
-        ? document.getElementById(focusFirst)
+        ? aria.getEl(focusFirst)
         : focusFirst || null
 
     // Validate focusFirst has a focus method if it's not null
@@ -552,6 +599,10 @@ aria.Dialog.prototype.trapFocus = function (event) {
     }
 }
 
+// ============================================================================
+// Global Functions
+// ============================================================================
+
 /**
  * Open a dialog or replace the current one
  * Global function for opening dialogs with proper lifecycle management
@@ -590,6 +641,10 @@ window.closeDialog = (hash) => {
 
     topDialog.close(hash)
 }
+
+// ============================================================================
+// Initialization
+// ============================================================================
 
 /**
  * Initialize inert state for all dialogs on page load

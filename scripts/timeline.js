@@ -1,6 +1,6 @@
 /*!
  * Personal website of Štěpán Jákl
- * https://stepanjakl.github.io
+ * https://stepanjakl.com
  *
  * Copyright © 2025 Štěpán Jákl
  * Released under the MIT license
@@ -133,6 +133,14 @@ class HorizontalTimeline extends HTMLElement {
     connectedCallback() {
         this.render()
         this.setupEventHandlers()
+
+        // Add loaded class after a brief delay to trigger fade-in animation
+        // This ensures the initial opacity: 0 state is applied first
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                this.classList.add('timeline-loaded')
+            })
+        })
     }
 
     disconnectedCallback() {

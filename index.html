@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <!-- Initial styles -->
         <style>main { opacity: 0; }</style>
-        <!-- GlitchTip -->
+
+        <!-- Error monitoring (GlitchTip) -->
         <link rel="preconnect" href="https://browser.sentry-cdn.com">
         <link rel="dns-prefetch" href="https://browser.sentry-cdn.com">
         <link rel="preconnect" href="https://app.glitchtip.com">
@@ -23,70 +25,74 @@
                 Sentry.captureException(event.reason)
             }
         </script>
+
+        <!-- Page metadata -->
         <title>Štěpán Jákl | Full-stack web developer & interface designer</title>
         <meta charset="UTF-8">
         <meta name="description"
-              content="Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals. Proficient in both back-end and front-end development, with a focus on prioritising user experience. Equally dedicated to code and design.">
+              content="Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="color-scheme" content="dark light">
         <meta name="keywords" content="developer, designer">
-        <!-- Open Graph -->
+
+        <!-- Social media & SEO (Open Graph) -->
         <meta property="og:type" content="website">
-        <meta property="og:url" content="https://stepanjakl.github.io">
+        <meta property="og:url" content="https://stepanjakl.com/">
+        <meta property="og:site_name" content="Štěpán Jákl Portfolio">
         <meta property="og:title" content="Štěpán Jákl | Full-stack web developer & interface designer">
         <meta property="og:description" content="Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.">
-        <meta property="og:image" content="https://stepanjakl.github.io/images/selfie.jpg">
-        <meta property="og:image:width" content="960">
-        <meta property="og:image:height" content="960">
-        <meta property="og:image:alt" content="Profile photo of Štěpán Jákl">
+        <meta property="og:image" content="https://stepanjakl.com/images/og-banner.jpg">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+        <meta property="og:image:alt" content="Personal site banner">
         <meta property="og:locale" content="en_GB">
-        <!-- Twitter Card -->
-        <meta name="twitter:card" content="summary">
-        <meta name="twitter:url" content="https://stepanjakl.github.io">
-        <meta name="twitter:title" content="Štěpán Jákl | Full-stack web developer & interface designer">
-        <meta name="twitter:description" content="Experienced and detail-oriented user interface engineer specializing in crafting intuitive digital solutions.">
-        <meta name="twitter:image" content="https://stepanjakl.github.io/images/selfie.jpg">
-        <meta name="twitter:image:alt" content="Profile photo of Štěpán Jákl">
-        <!-- Viewport -->
-        <meta name="viewport"
-       content="width=device-width, initial-scale=1, viewport-fit=contain">
-        <!-- Cache -->
+
+        <!-- Viewport & device settings -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=contain">
+
+        <!-- Browser cache control -->
         <meta http-equiv="cache-control" content="no-cache">
         <meta http-equiv="expires" content="0">
         <meta http-equiv="pragma" content="no-cache">
-        <!-- iPhone Safari Notch Background Color -->
+
+        <!-- Mobile Safari & PWA settings -->
         <meta name="theme-color" content="#001417">
         <meta name="apple-mobile-web-app-status-bar-style"
               content="black-translucent">
-        <!-- Favicon -->
+
+        <!-- Icons & favicons -->
         <meta name="theme-color" content="#ffffff">
         <link rel="icon" href="images/favicon.svg">
         <link rel="mask-icon" href="images/mask-icon.svg" color="#4e7bff">
         <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
         <link rel="manifest" href="manifest.json">
-        <!-- Fonts -->
+
+        <!-- Typography (fonts) -->
         <link rel="stylesheet" href="styles/font-bai-jamjuree.css">
         <link rel="stylesheet" href="styles/font-chakra-petch.css">
         <link rel="stylesheet" href="styles/font-newsreader.css">
-        <!-- Styles -->
+
+        <!-- Stylesheets -->
         <link rel="stylesheet" href="styles/reset.css">
         <link rel="stylesheet" href="styles/utility.css">
+        <link rel="stylesheet" href="styles/colors.css">
         <link rel="stylesheet" href="styles/style.css">
         <link rel="stylesheet" href="styles/menu.css">
         <link rel="stylesheet" href="styles/modal-profile.css">
         <link rel="stylesheet" href="styles/modal-archive.css">
         <link rel="stylesheet" href="styles/state.css">
         <link rel="stylesheet" href="styles/animation.css">
-        <!-- Structured Data -->
+
+        <!-- Structured data (JSON-LD schema) -->
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "Person",
             "name": "Štěpán Jákl",
-            "url": "https://stepanjakl.github.io",
-            "image": "https://stepanjakl.github.io/images/selfie.jpg",
-            "jobTitle": "Full-stack Web Developer & Interface Designer",
-            "description": "Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions",
+            "url": "https://stepanjakl.com",
+            "image": "https://stepanjakl.com/images/selfie.jpg",
+            "jobTitle": "Full-stack web developer & interface designer",
+            "description": "Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.",
             "nationality": {
                 "@type": "Country",
                 "name": "Czech Republic"
@@ -96,37 +102,40 @@
                 "addressLocality": "Manchester",
                 "addressCountry": "GB"
             },
-            "alumniOf": {
-                "@type": "EducationalOrganization",
+            "alumniOf": [
+                {
+                "@type": "CollegeOrUniversity",
+                "name": "Brunel University London"
+                },
+                {
+                "@type": "CollegeOrUniversity",
+                "name": "University of Worcester"
+                },
+                {
+                "@type": "CollegeOrUniversity",
                 "name": "Brock University"
-            },
-            "knowsAbout": [
-                "HTML",
-                "CSS",
-                "JavaScript",
-                "React",
-                "Vue.js",
-                "Alpine.js",
-                "TailwindCSS",
-                "ApostropheCMS",
-                "MongoDB",
-                "UI/UX Design",
-                "Figma",
-                "Framer"
+                },
+                {
+                "@type": "EducationalOrganization",
+                "name": "Technical / IT secondary school"
+                }
             ],
             "sameAs": [
-                "https://www.linkedin.com/in/stepanjakl",
+                "https://linkedin.com/in/stepanjakl",
                 "https://github.com/stepanjakl",
-                "https://codepen.io/stepj/pens/public"
+                "https://codepen.io/stepj"
             ]
         }
         </script>
+
+        <!-- Scripts -->
         <script defer src="scripts/dialog.js"></script>
         <script defer src="scripts/timeline.js"></script>
         <script defer src="scripts/script.js"></script>
     </head>
 
     <body>
+        <!-- Global state controls -->
         <input id="mode"
                type="checkbox"
                hidden
@@ -152,17 +161,22 @@
                hidden
                aria-hidden="true"
                aria-label="Archive dialog">
+
+        <!-- Main layout -->
         <main>
+            <!-- Background pattern -->
             <div id="background-pattern" class="bg-pattern">
             </div>
+
             <figure>
+                <!-- Header / Introduction section -->
                 <header class="intro">
+                    <!-- Left column: Name & logo -->
                     <div class="intro__left">
                         <h2 class="intro__name intro__name--animating tooltip highlight has-corners"
                             tabindex="0"
-                            onkeypress="this.click()"
+                            onkeydown="if(event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') { event.preventDefault(); this.click(); }"
                             oncontextmenu="if ('speechSynthesis' in window) { let msg = new SpeechSynthesisUtterance(); msg.volume= 0.25; msg.lang = 'cs-CZ'; msg.voice = speechSynthesis.getVoices().filter(voice => voice.name === 'Zuzana')[0]; msg.text = 'Štěpán Jákl'; speechSynthesis.speak(msg) }"
-                            onclick="App.handleTouchButtonClick(this, event, () => { copyToClipboard('Štěpán Jákl'); App.textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip__text--bottom span'), this, 'Copied to the clipboard') }, true)"
                             role="button"
                             aria-label="Left click to copy name to clipboard; Right click to hear pronunciation">
                             <div class="intro__name-frame" aria-hidden="true">
@@ -210,7 +224,10 @@
                             </span>
                         </div>
                     </div>
+
+                    <!-- Right column: Titles, availability & menu -->
                     <div class="intro__right">
+                        <!-- Job titles -->
                         <h3 class="intro__title intro__primary-title intro__title--animating">
                             <p style="--i:2">
                                 <span>F</span><span>u</span><span>l</span><span>l</span><span>-</span><span>s</span><span>t</span><span>a</span><span>c</span><span>k</span>
@@ -227,10 +244,11 @@
                                 <span>&nbsp;</span><span style="--i:1">d</span><span style="--i:2">e</span><span style="--i:3">s</span><span style="--i:4">i</span><span style="--i:5">g</span><span style="--i:6">n</span><span style="--i:7">e</span><span style="--i:8">r</span>
                             </p>
                         </h3>
+
+                        <!-- Availability badge -->
                         <div class="availability availability--animating">
                             <div class="tooltip">
                                 <a href="https://cal.com/stepanjakl"
-                                   tabindex="0"
                                    onclick="App.handleTouchButtonClick(this, event, () => { window.open(this.getAttribute('href'), '_blank') }, true)"
                                    target="_blank"
                                    aria-label="Open to new opportunities, book a virtual meeting"
@@ -247,14 +265,17 @@
                                 </abbr>
                             </div>
                         </div>
+
+                        <!-- Navigation menu -->
                         <nav id="menu"
                              class="menu menu--animating">
+                            <!-- Menu background decoration -->
                             <div class="menu__background">
                             </div>
+
+                            <!-- Email contact button -->
                             <div class="menu__email tooltip" style="--i:0">
                                 <button type="button"
-                                        tabindex="0"
-                                        onclick="App.handleTouchButtonClick(this, event, () => { copyToClipboard('stepan.jakl@icloud.com'); App.textHighlighter.highlightAndCopyText(event, this.querySelector('.tooltip__text span'), this.querySelector('.highlight'), 'Copied to the clipboard') })"
                                         class="menu__email-button"
                                         aria-label="Contact me via email">
                                     <span class="menu__email-icon">
@@ -268,10 +289,11 @@
                                     </abbr>
                                 </button>
                             </div>
+
+                            <!-- Menu navigation links -->
                             <div class="menu__links">
                                 <a href="#profile"
                                    id="menu-link-profile"
-                                   tabindex="0"
                                    onclick="App.handleTouchButtonClick(this, event, () => { openDialog('modal-profile', this, null, 'profile') })"
                                    aria-label="Learn more about me"
                                    class="menu__link menu__link--profile tooltip"
@@ -297,7 +319,6 @@
                                 </a>
                                 <a href="#archive"
                                    id="menu-link-archive"
-                                   tabindex="0"
                                    onclick="App.handleTouchButtonClick(this, event, () => { openDialog('modal-archive', this, null, 'archive') })"
                                    aria-label="Explore snippets of my past work"
                                    class="menu__link tooltip"
@@ -319,19 +340,18 @@
                                     </abbr>
                                 </a>
                             </div>
-                            <div role="dialog"
-                                 id="menu-toggle"
+
+                            <!-- Menu toggle & dropdown -->
+                            <div id="menu-toggle"
                                  data-inert-target="menu-dropdown"
                                  class="tooltip"
                                  style="--i:3">
                                 <a href="#menu"
-                                   tabindex="0"
                                    onclick="event.preventDefault(); openDialog('menu-toggle', this, 'menu-button-close', 'menu');"
                                    id="menu-button-open"
                                    class="menu__button-open"
                                    aria-label="Open dropdown menu"></a>
                                 <a href="#"
-                                   tabindex="0"
                                    onclick="event.preventDefault(); closeDialog('#')"
                                    id="menu-button-close"
                                    class="menu__button-close"
@@ -358,11 +378,12 @@
                                    id="underlay-menu"
                                    class="underlay underlay--menu"
                                    aria-label="Close menu"></a>
-                                <dialog role="dialog" id="menu-dropdown" inert>
+
+                                <!-- Dropdown menu content -->
+                                <dialog id="menu-dropdown" inert>
                                     <div>
                                         <a href="https://cal.com/stepanjakl"
                                            target="_blank"
-                                           tabindex="0"
                                            aria-label="Schedule a call">
                                             <svg>
                                                 <use xlink:href="images/icons.svg#menu-call"></use>
@@ -372,9 +393,8 @@
                                                 <use xlink:href="images/icons.svg#new-tab"></use>
                                             </svg>
                                         </a>
-                                        <a href="https://www.linkedin.com/in/stepanjakl"
+                                        <a href="https://linkedin.com/in/stepanjakl"
                                            target="_blank"
-                                           tabindex="0"
                                            aria-label="Find out more about me on LinkedIn">
                                             <svg>
                                                 <use xlink:href="images/icons.svg#menu-linkedin"></use>
@@ -386,7 +406,6 @@
                                         </a>
                                         <a href="https://github.com/stepanjakl"
                                            target="_blank"
-                                           tabindex="0"
                                            aria-label="Visit my profile on GitHub">
                                             <svg>
                                                 <use xlink:href="images/icons.svg#menu-github"></use>
@@ -398,7 +417,6 @@
                                         </a>
                                         <a href="https://codepen.io/stepj/pens/public"
                                            target="_blank"
-                                           tabindex="0"
                                            aria-label="Visit my profile on CodePen">
                                             <svg>
                                                 <use xlink:href="images/icons.svg#menu-codepen"></use>
@@ -409,29 +427,29 @@
                                             </svg>
                                         </a>
                                         <hr>
-                                        <label id="menu-dropdown-light-mode"
-                                               for="mode"
-                                               tabindex="0"
-                                               onkeypress="if(event.key === 'Enter') { document.getElementById('mode').click(); document.getElementById('menu-dropdown-dark-mode').focus(); }">
+                         <label id="menu-dropdown-light-mode"
+                             for="mode"
+                             tabindex="0"
+                             onkeydown="if(event.key === 'Enter') { App.keyActivate('mode','menu-dropdown-dark-mode') }">
                                             <svg>
                                                 <use xlink:href="images/icons.svg#menu-light-mode"></use>
                                             </svg>
                                             <span class="text-sm">Light mode</span>
                                         </label>
-                                        <label id="menu-dropdown-dark-mode"
-                                               for="mode"
-                                               tabindex="0"
-                                               onkeypress="if(event.key === 'Enter') { document.getElementById('mode').click(); document.getElementById('menu-dropdown-light-mode').focus(); }">
+                         <label id="menu-dropdown-dark-mode"
+                             for="mode"
+                             tabindex="0"
+                             onkeydown="if(event.key === 'Enter') { App.keyActivate('mode','menu-dropdown-light-mode') }">
                                             <svg>
                                                 <use xlink:href="images/icons.svg#menu-dark-mode"></use>
                                             </svg>
                                             <span class="text-sm">Dark mode</span>
                                         </label>
-                                        <label id="menu-dropdown-fullscreen"
-                                               for="fullscreen"
-                                               tabindex="0"
-                                               onclick="App.toggleFullscreen()"
-                                               onkeypress="if(event.key === 'Enter') { document.getElementById('fullscreen').click(); }">
+                         <label id="menu-dropdown-fullscreen"
+                             for="fullscreen"
+                             tabindex="0"
+                             onclick="App.toggleFullscreen()"
+                             onkeydown="if(event.key === 'Enter') { App.toggleFullscreen() }">
                                             <svg class="fullscreen-checked:hidden flex">
                                                 <use xlink:href="images/icons.svg#menu-fullscreen"></use>
                                             </svg>
@@ -440,10 +458,10 @@
                                             </svg>
                                             <span class="text-sm">Fullscreen</span>
                                         </label>
-                                        <label id="menu-dropdown-debug"
-                                               for="debug"
-                                               tabindex="0"
-                                               onkeypress="if(event.key === 'Enter') { document.getElementById('debug').click(); }">
+                         <label id="menu-dropdown-debug"
+                             for="debug"
+                             tabindex="0"
+                             onkeydown="if(event.key === 'Enter') { App.keyActivate('debug') }">
                                             <svg class="debug-checked:hidden flex">
                                                 <use xlink:href="images/icons.svg#menu-debug"></use>
                                             </svg>
@@ -457,7 +475,9 @@
                             </div>
                         </nav>
                     </div>
-                    <dialog id="modal-profile" class="modal modal--profile" role="dialog" aria-modal="true" inert>
+
+                    <!-- Modal: Profile -->
+                    <dialog id="modal-profile" class="modal modal--profile" aria-modal="true" inert>
                         <div class="modal__content">
                             <div class="modal__controls">
                                 <a href="#"
@@ -503,15 +523,6 @@
                                         <p>
                                             Dedicated to shaping engaging interfaces through purposeful design and seamless interactions. I value precision in every aspect of the creative process, ensuring layouts feel balanced, transitions enhance flow, and visual elements contribute meaningfully to the overall experience. Each project is an opportunity to refine the connection between form and function.
                                         </p>
-                                        <!-- <p>
-                                            In recent years, my efforts have been devoted to building and overseeing a
-                                            significant number of websites using the&nbsp;<a href="https://apostrophecms.com" target="_blank"><u>ApostropheCMS</u>
-                                            <svg class="fill-current" style="margin-left: 0.1em; margin-top: -0.65em; width: 0.85rem; height: 0.85rem">
-                                                <use xlink:href="images/icons.svg#new-tab"></use>
-                                            </svg>
-
-                                        </a>&nbsp;framework.
-                                    </p> -->
                                         <p>
                                             I have been equally dedicated to code and design as a profesional since 2014.
                                         </p>
@@ -565,21 +576,6 @@
                                     <dd class="modal-profile__timezone">
                                         <span lang="en-GB">Europe/London</span>
                                         <span class="modal-profile__timezone-live" aria-live="polite" aria-atomic="true"></span>
-                                        <script>
-                                            const liveTimezoneTime = () => {
-                                                document.querySelector('.modal-profile__timezone-live').innerHTML = `(${new Intl.DateTimeFormat('de-DE', {
-                                                timeZone: 'Europe/London',
-                                                timeZoneName: 'short',
-                                                day: '2-digit',
-                                                month: '2-digit',
-                                                year: 'numeric',
-                                                hour: '2-digit',
-                                                minute: '2-digit'
-                                            }).format(new Date())})`
-                                            }
-                                            liveTimezoneTime()
-                                            setInterval(liveTimezoneTime, 15000)
-                                        </script>
                                     </dd>
                                     <dt>
                                         <span>Deliverables:</span>
@@ -692,8 +688,11 @@
                             </div>
                         </div>
                     </dialog>
-                    <dialog id="modal-archive" class="modal modal--archive" role="dialog" aria-modal="true" inert>
+
+                    <!-- Modal: Archive -->
+                    <dialog id="modal-archive" class="modal modal--archive" aria-modal="true" inert>
                         <figure class="modal__content">
+                            <!-- Modal controls -->
                             <div class="modal__controls">
                                 <a href="#"
                                    onclick="event.preventDefault(); closeDialog('#')"
@@ -703,11 +702,11 @@
                                         <use xlink:href="images/icons.svg#close"></use>
                                     </svg>
                                 </a>
-                                <label for="fullscreen"
-                                       tabindex="0"
-                                       onclick="App.toggleFullscreen()"
-                                       onkeypress="if(event.key === 'Enter') { document.getElementById('fullscreen').click(); }"
-                                       class="modal__fullscreen-button">
+                    <label for="fullscreen"
+                        tabindex="0"
+                        onclick="App.toggleFullscreen()"
+                        onkeydown="if(event.key === 'Enter') { App.toggleFullscreen() }"
+                        class="modal__fullscreen-button">
                                     <svg class="fullscreen-checked:hidden flex">
                                         <use xlink:href="images/icons.svg#fullscreen"></use>
                                     </svg>
@@ -716,13 +715,20 @@
                                     </svg>
                                 </label>
                             </div>
+
+                            <!-- Modal body / Timeline content -->
                             <div class="modal__body">
+                                <!-- Archive timeline -->
                                 <div class="modal-archive__timeline">
+                                    <!-- Timeline section toggle controls -->
                                     <input type="checkbox" id="timeline-section-year-2024-21" checked>
                                     <input type="checkbox" id="timeline-section-year-2021-19">
                                     <input type="checkbox" id="timeline-section-year-2019-18">
                                     <input type="checkbox" id="timeline-section-year-elsewhen">
+
+                                    <!-- Timeline grid layout -->
                                     <div class="modal-archive__timeline-grid">
+                                        <!-- Timeline section: 2024-21 -->
                                         <!-- 2024-21 -->
                                         <section data-timeline-section-title="2024-21" class="modal-archive__timeline-section-title">
                                             <div>
@@ -1057,6 +1063,8 @@
                                                 </p>
                                             </div>
                                         </section>
+
+                                        <!-- Timeline section: 2021-19 -->
                                         <!-- 2021-19 -->
                                         <section data-timeline-section-title="2021-19" class="modal-archive__timeline-section-title">
                                             <div>
@@ -1256,6 +1264,8 @@
                                                 </p>
                                             </div>
                                         </section>
+
+                                        <!-- Timeline section: 2019-18 -->
                                         <!-- 2019/18 -->
                                         <section data-timeline-section-title="2019-18" class="modal-archive__timeline-section-title">
                                             <div>
@@ -1413,6 +1423,8 @@
                                                 </p>
                                             </div>
                                         </section>
+
+                                        <!-- Timeline section: Elsewhen -->
                                         <!-- Elsewhen -->
                                         <section data-timeline-section-title="elsewhen" class="modal-archive__timeline-section-title">
                                             <div>
@@ -1601,25 +1613,35 @@
                                         </section>
                                     </div>
                                 </div>
+
+                                <!-- Horizontal timeline navigation -->
                                 <div id="horizontal-timeline-wrapper" tabindex="-1">
                                     <div id="horizontal-timeline">
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Modal footer decoration -->
                             <figure id="modal-archive-footer-art-left" class="modal-archive__footer-art-left">
                             </figure>
                         </figure>
                     </dialog>
+
+                    <!-- Modal underlays / Backdrops -->
                     <div id="underlay-modal-profile" class="underlay underlay--modal-profile">
                     </div>
                     <div id="underlay-modal-archive" class="underlay underlay--modal-archive">
                     </div>
                 </header>
+
+                <!-- Background decorative elements -->
                 <figure class="bg-triangle--left bg-triangle">
                 </figure>
                 <figure class="bg-triangle--right bg-triangle">
                 </figure>
             </figure>
+
+            <!-- Footer -->
             <footer>
                 <div>
                     <div>
@@ -1634,13 +1656,15 @@
                     </div>
                 </div>
             </footer>
+
+            <!-- Debug grid overlay -->
             <svg id="debug-grid" width="100%" height="100%">
                 <defs>
                 <pattern id="debug-grid-fill" width="8" height="8" patternUnits="userSpaceOnUse">
                 <path d="M 8 0 L 0 0 0 8" fill="none" stroke="currentColor" stroke-width="0.5" />
                 </pattern>
                 <pattern id="debug-grid-outline" width="80" height="80" patternUnits="userSpaceOnUse">
-                <rect width="80" height="80" fill="url(#debug-grid-fill)" />
+                <rect width="80" height="80" stroke="currentColor" stroke-width="0.5" fill="url(#debug-grid-fill)" />
                 </pattern>
                 </defs>
                 <rect width="100%" height="100%" fill="url(#debug-grid-outline)" />

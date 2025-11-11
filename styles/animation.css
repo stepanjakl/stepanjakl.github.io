@@ -96,6 +96,14 @@ body {
 }
 
 
+/* Page-loaded fade-In */
+
+html.page-loaded main {
+    opacity: 1;
+    transition: opacity var(--anim-segment) linear var(--anim-segment);
+}
+
+
 /* Intro - Footer - Rectangle */
 
 footer>* {
@@ -307,7 +315,7 @@ footer>* {
 }
 
 
-/* Intro - Text De-Highlight */
+/* Intro - Text de-highlight */
 
 .intro__title--animating .intro__animated-text span:hover {
     color: var(--highlight-primary) !important;
@@ -359,7 +367,7 @@ footer>* {
 }
 
 
-/* Intro - CTA Blocks */
+/* Intro - CTA blocks */
 
 .availability--animating .availability__background {
     animation-name: cta-1-animate-init;
@@ -430,7 +438,7 @@ footer>* {
 }
 
 
-/* Intro - Background Triangle */
+/* Intro - Background triangle */
 
 .bg-triangle {
     animation-name: fade-in-opacity;
@@ -533,7 +541,9 @@ body.modal-archive-open .availability__dot {
     transition: background-color calc(2 * var(--animate-in-segment)) var(--ease-out-quad);
 }
 
+
 /* Corner decoration */
+
 .corners {
     position: absolute;
     inset: 0;
@@ -766,7 +776,7 @@ body {
 }
 
 
-/* Availability Button */
+/* Availability button */
 
 @keyframes availability-dot-fade-animation {
     0% {
@@ -844,7 +854,7 @@ body {
 }
 
 
-/* Intro Links */
+/* Intro links */
 
 .menu__link,
 .menu__email-icon,
@@ -916,7 +926,7 @@ body {
 }
 
 
-/* Menu Button */
+/* Menu button */
 
 .menu__button-open,
 .menu__button-close {
@@ -1357,24 +1367,23 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:focus {
 }
 
 
-/* Modals - Horizontal Timeline */
+/* Modals - Archive - Horizontal timeline */
 
-#horizontal-timeline>:first-child {
+horizontal-timeline {
     transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad);
     transform: scale(0.95);
     transform-origin: bottom;
     opacity: 0;
 }
 
-#archive:target~main #modal-archive #horizontal-timeline> :first-child,
-body.modal-archive-open #modal-archive #horizontal-timeline> :first-child {
+#archive:target~main horizontal-timeline.timeline-loaded {
     transition: opacity var(--animate-in-segment) linear var(--anim-segment), transform var(--animate-in-segment) var(--ease-out-quad) var(--anim-segment);
     transform: scale(1);
     opacity: 1;
 }
 
 
-/* Modals - Carousel */
+/* Modals - Archive - Carousel */
 
 [data-carousel-nav] {
     transition: border-radius var(--animate-out-segment) var(--ease-in-quad), column-gap var(--animate-out-segment) var(--ease-in-quad), padding var(--animate-out-segment) var(--ease-in-quad), margin var(--animate-out-segment) var(--ease-in-quad);
@@ -1395,7 +1404,6 @@ body.modal-archive-open #modal-archive #horizontal-timeline> :first-child {
     transition: background-color var(--animate-out-segment) linear, width var(--animate-out-segment) var(--ease-in-quad), height var(--animate-out-segment) var(--ease-in-quad);
     width: 0.5rem;
     height: 0.5rem;
-    /* background-color: var(--light-25); */
 }
 
 [data-carousel-nav]:hover button, [data-carousel-nav]:focus-within button {
@@ -1440,7 +1448,7 @@ body.modal-archive-open #modal-archive #horizontal-timeline> :first-child {
 }
 
 
-/* Modals - Close Button */
+/* Modals - Close button */
 
 .modal__close-button, .modal__close-button svg,
 .modal__fullscreen-button, .modal__fullscreen-button svg {
@@ -1460,7 +1468,7 @@ body.modal-archive-open #modal-archive #horizontal-timeline> :first-child {
 }
 
 
-/* Modal Profile - Triangle */
+/* Modal - Profile - Triangle */
 
 #profile:target~main .bg-triangle::before {
     --tri-s-0: rgba(0, 45, 15, 0);
@@ -1506,7 +1514,7 @@ body.modal-archive-open #modal-archive #horizontal-timeline> :first-child {
     --tri-m-12: rgba(0, 138, 60, 0.690);
     --tri-m-13: rgba(0, 138, 60, 0.789);
     --tri-m-14: rgba(0, 138, 60, 0.893);
-    --tri-m-15: #008a3c;
+    --tri-m-15: var(--green-50);
     transition: --tri-m-0 var(--transition-triangle-profile), --tri-m-1 var(--transition-triangle-profile),
         --tri-m-2 var(--transition-triangle-profile), --tri-m-3 var(--transition-triangle-profile),
         --tri-m-4 var(--transition-triangle-profile), --tri-m-5 var(--transition-triangle-profile),
@@ -1545,7 +1553,7 @@ body.modal-archive-open #modal-archive #horizontal-timeline> :first-child {
 }
 
 
-/* Modal Profile - Footer Art */
+/* Modal - Profile - Footer art */
 
 .modal-profile__footer-art-gradient {
     opacity: 0;
@@ -1593,12 +1601,4 @@ body.modal-archive-open #modal-archive #horizontal-timeline> :first-child {
 .tooltip.tooltip-key--active .tooltip__text--active, .tooltip:focus-within.tooltip-key--active .tooltip__text--active {
     transition: opacity var(--animate-in-segment-2\/3) linear var(--animate-in-segment);
     opacity: 1;
-}
-
-
-/* Anti-FOUC (“Flash of Unstyled Content”) Hack for Safari on iOS */
-
-main {
-    opacity: 1;
-    transition: opacity var(--anim-segment) linear var(--anim-segment), background-color var(--animate-in-segment) linear;
 }

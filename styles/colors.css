@@ -1,0 +1,310 @@
+/*
+ * Colors
+ */
+
+/* ===================================================================
+   COLOR PALETTES - Base color tokens
+   ================================================================ */
+
+:root {
+    /* Colours - Cyan palette (210 hue) */
+    /* 210, 100, 5-95 */
+    --cyan-full-5: #001417;
+    --cyan-full-10: #001F24;
+    --cyan-full-15: #002a30;
+    --cyan-full-20: #00363d;
+    --cyan-full-25: #00424b;
+    --cyan-full-35: #005b66;
+    --cyan-full-45: #007684;
+    --cyan-full-55: #0091a2;
+    --cyan-full-65: #00aec2;
+    --cyan-full-70: #00bcd2;
+    --cyan-full-75: #00CBE2;
+    --cyan-full-85: #4ce7ff;
+    --cyan-full-90: #a0efff;
+    --cyan-full-95: #D4F7FF;
+    /* 210, 75, 25-95 */
+    --cyan-three-quarters-25: #1c4047;
+    --cyan-three-quarters-40: #30666f;
+    --cyan-three-quarters-45: #37737e;
+    --cyan-three-quarters-50: #3e808c;
+    --cyan-three-quarters-55: #468e9b;
+    --cyan-three-quarters-65: #55aab9;
+    --cyan-three-quarters-70: #5cb8c8;
+    --cyan-three-quarters-75: #64c6d8;
+    --cyan-three-quarters-80: #6cd5e8;
+    --cyan-three-quarters-85: #83e2f5;
+    --cyan-three-quarters-90: #b4ecf8;
+    --cyan-three-quarters-95: #dcf5fb;
+    /* 210, 50, 10-95 */
+    --cyan-half-10: #121d20;
+    --cyan-half-15: #19282b;
+    --cyan-half-25: #2A3F43;
+    --cyan-half-30: #324b50;
+    --cyan-half-35: #3b575d;
+    --cyan-half-40: #44636a;
+    --cyan-half-45: #4e7077;
+    --cyan-half-55: #618a93;
+    --cyan-half-65: #75a6b0;
+    --cyan-half-70: #7fb4bf;
+    --cyan-half-75: #89c2ce;
+    --cyan-half-80: #93d0dd;
+    --cyan-half-85: #a5deea;
+    --cyan-half-90: #c6e9f1;
+    --cyan-half-95: #e3f4f8;
+    /* 210, 25, 5-95 */
+    --cyan-quarter-5: #0e1213;
+    --cyan-quarter-10: #171c1e;
+    --cyan-quarter-15: #202729;
+    --cyan-quarter-20: #2a3234;
+    --cyan-quarter-25: #333d3f;
+    --cyan-quarter-30: #3e494b;
+    --cyan-quarter-35: #485558;
+    --cyan-quarter-40: #536164;
+    --cyan-quarter-45: #5e6d71;
+    --cyan-quarter-50: #697a7e;
+    --cyan-quarter-55: #74878c;
+    --cyan-quarter-60: #809499;
+    --cyan-quarter-65: #8BA2A7;
+    --cyan-quarter-70: #97afb5;
+    --cyan-quarter-75: #a3bdc3;
+    --cyan-quarter-80: #b0cbd2;
+    --cyan-quarter-85: #BFD9DF;
+    --cyan-quarter-90: #d5e5ea;
+    --cyan-quarter-95: #eaf2f4;
+
+    /* Colours - Blue palette (260 hue) */
+    /* 260, 100, 5-95 */
+    --blue-full-5: #000e33;
+    --blue-full-10: #00184a;
+    --blue-full-15: #00215f;
+    --blue-full-25: #00348d;
+    --blue-full-35: #0049be;
+    --blue-full-45: #005FF1;
+    --blue-full-55: #4e7bff;
+    --blue-full-65: #7e98ff;
+    --blue-full-75: #a6b5ff;
+    --blue-full-80: #b8c3ff;
+    --blue-full-85: #cad2ff;
+    --blue-full-90: #dce1ff;
+    --blue-full-95: #EEF0FF;
+
+    /* Colours - Accent colors */
+    /* 75, 100, 85 */
+    --yellow-75: #d0ba00;
+    --yellow-85: #EED500;
+    /* 110, 85, 65 */
+    --green-forest-65: #7dac3b;
+    /* 125, 100, 75-85 */
+    --green-lime-75: #3fd400;
+    --green-lime-80: #44e400;
+    --green-lime-85: #49f400;
+    --green-lime-85-opacity: rgba(73, 244, 0, 0.25);
+    /* 135, 100, 50 */
+    --green-50: #008a3c;
+    /* 135, 100, 35 */
+    --green-35: #006028;
+    /* 135, 100, 15 */
+    --green-15: #002d0f;
+    /* 300, 100, 25 */
+    --navy-25: #6b0076;
+
+    /* Opacity tokens */
+    --light-10: rgba(255, 255, 255, 0.1);
+    --light-15: rgba(255, 255, 255, 0.15);
+    --light-20: rgba(255, 255, 255, 0.2);
+    --light-25: rgba(255, 255, 255, 0.25);
+    --light-35: rgba(255, 255, 255, 0.35);
+    --light-45: rgba(255, 255, 255, 0.45);
+    --light-50: rgba(255, 255, 255, 0.5);
+    --light-55: rgba(255, 255, 255, 0.55);
+    --light-60: rgba(255, 255, 255, 0.6);
+    --light-65: rgba(255, 255, 255, 0.65);
+    --light-70: rgba(255, 255, 255, 0.7);
+    --light-75: rgba(255, 255, 255, 0.75);
+    --light-95: rgba(255, 255, 255, 0.95);
+    --dark-10: rgba(0, 0, 0, 0.1);
+    --dark-15: rgba(0, 0, 0, 0.15);
+    --dark-20: rgba(0, 0, 0, 0.2);
+    --dark-25: rgba(0, 0, 0, 0.25);
+    --dark-35: rgba(0, 0, 0, 0.35);
+    --dark-40: rgba(0, 0, 0, 0.4);
+    --dark-45: rgba(0, 0, 0, 0.45);
+    --dark-50: rgba(0, 0, 0, 0.5);
+    --dark-55: rgba(0, 0, 0, 0.55);
+    --dark-60: rgba(0, 0, 0, 0.6);
+    --dark-65: rgba(0, 0, 0, 0.65);
+    --dark-70: rgba(0, 0, 0, 0.7);
+    --dark-75: rgba(0, 0, 0, 0.75);
+}
+
+
+/* ===================================================================
+   SEMANTIC COLOR TOKENS - Dark Mode (Default)
+   ================================================================ */
+
+main {
+    /* Background & Pattern colors */
+    --background: var(--cyan-full-5);
+    --background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
+    --pattern-overlay: rgba(255, 255, 255, 0.01);
+
+    /* Gradient definitions (16-stop easing curve) */
+    /* 260, 100, 25; ease-in-out-quad */
+    --triangle: rgba(0, 52, 141, 0) 0%, rgba(0, 52, 141, 0.011) 8.6%, rgba(0, 52, 141, 0.032) 16.29%, rgba(0, 52, 141, 0.063) 23.22%, rgba(0, 52, 141, 0.103) 29.53%, rgba(0, 52, 141, 0.151) 35.37%, rgba(0, 52, 141, 0.208) 40.89%, rgba(0, 52, 141, 0.272) 46.23%, rgba(0, 52, 141, 0.343) 51.53%, rgba(0, 52, 141, 0.421) 56.95%, rgba(0, 52, 141, 0.505) 62.63%, rgba(0, 52, 141, 0.595) 68.71%, rgba(0, 52, 141, 0.690) 75.34%, rgba(0, 52, 141, 0.789) 82.67%, rgba(0, 52, 141, 0.893) 90.84%, #00348D 100%;
+    /* 210, 100, 10; ease-in-out-quad */
+    --triangle-stripe: rgba(0, 31, 36, 0) 0%, rgba(0, 31, 36, 0.011) 8.6%, rgba(0, 31, 36, 0.032) 16.29%, rgba(0, 31, 36, 0.063) 23.22%, rgba(0, 31, 36, 0.103) 29.53%, rgba(0, 31, 36, 0.151) 35.37%, rgba(0, 31, 36, 0.208) 40.89%, rgba(0, 31, 36, 0.272) 46.23%, rgba(0, 31, 36, 0.343) 51.53%, rgba(0, 31, 36, 0.421) 56.95%, rgba(0, 31, 36, 0.505) 62.63%, rgba(0, 31, 36, 0.595) 68.71%, rgba(0, 31, 36, 0.690) 75.34%, rgba(0, 31, 36, 0.789) 82.67%, rgba(0, 31, 36, 0.893) 90.84%, #001F24 100%;
+    /* 75, 100, 50; ease-in-out-quad */
+    --triangle-alt: rgba(134, 120, 0, 0) 0%, rgba(134, 120, 0, 0.011) 8.6%, rgba(134, 120, 0, 0.032) 16.29%, rgba(134, 120, 0, 0.063) 23.22%, rgba(134, 120, 0, 0.103) 29.53%, rgba(134, 120, 0, 0.151) 35.37%, rgba(134, 120, 0, 0.208) 40.89%, rgba(134, 120, 0, 0.272) 46.23%, rgba(134, 120, 0, 0.343) 51.53%, rgba(134, 120, 0, 0.421) 56.95%, rgba(134, 120, 0, 0.505) 62.63%, rgba(134, 120, 0, 0.595) 68.71%, rgba(134, 120, 0, 0.690) 75.34%, rgba(134, 120, 0, 0.789) 82.67%, rgba(134, 120, 0, 0.893) 90.84%, #867800 100%;
+
+    /* Text & highlight colors */
+    --text-1: var(--cyan-full-95);
+    --text-2: var(--cyan-quarter-85);
+    --text-3: var(--cyan-quarter-65);
+    --highlight-primary: var(--blue-full-45);
+    --highlight-secondary: var(--cyan-full-45);
+
+    /* Icon colors */
+    --icon: var(--cyan-quarter-80);
+    --icon--hover: var(--cyan-quarter-85);
+    --icon-bg: var(--cyan-quarter-45);
+
+    /* Context menu colors */
+    /* 210, 25, 25 */
+    --context-bg: rgba(51, 61, 63, 0.5);
+    /* 210, 25, 35 */
+    --context-bg-2: rgba(62, 73, 75, 0.75);
+    --context-bg-modal: var(--light-15);
+
+    /* 210, 25, 25 */
+    --menu-bg: #333d3f55;
+    --tooltip-bg: #333d3f65;
+
+    /* Modal colors */
+    --modal-border-outer: var(--dark-10);
+    --modal-border-inner: var(--light-15);
+    /* 210, 100, 25 */
+    --modal-bg-blur: rgba(0, 66, 75, 0.35), rgba(0, 66, 75, 0.65);
+    --modal-bg-archive: rgba(0, 54, 61, 0.975);
+    /* 210, 100, 20 */
+    /* 210, 100, 5 */
+    --modal-underlay-bg-profile: rgb(0, 20, 23, 0.25);
+    --modal-underlay-bg-archive: rgb(0, 20, 23, 0.5);
+    --modal-icon: var(--cyan-half-85);
+    --modal-icon--hover: var(--cyan-half-95);
+    --modal-icon-bg: var(--light-15);
+    --modal-icon-bg--hover: var(--highlight-secondary);
+    --modal-line: var(--cyan-half-75);
+    --modal-line-2: var(--cyan-half-65);
+    --modal-line-3: var(--cyan-half-55);
+    --modal-tag-bg: var(--cyan-three-quarters-45);
+    --modal-tag-bg--hover: var(--cyan-three-quarters-55);
+
+    /* Carousel control colors */
+    --carousel-nav-bg: var(--light-25);
+    --carousel-nav-bg-hover: var(--dark-40);
+    --carousel-nav-bg-active: var(--dark-50);
+    --carousel-arrow-bg: var(--context-bg-modal);
+    --carousel-arrow-bg-hover: var(--context-bg-modal--hover);
+    --carousel-arrow-icon-bg: var(--dark-35);
+    --carousel-arrow-icon-bg-hover: var(--dark-50);
+
+    /* Footer colors */
+    --footer-square-1: var(--highlight-primary);
+    --footer-square-1--hover: var(--yellow-85);
+    --footer-square-2: var(--cyan-full-85);
+    --footer-square-3: var(--cyan-full-65);
+    --footer-square-4: var(--cyan-full-45);
+    --footer-rectangle: var(--cyan-full-65);
+}
+
+body, html {
+    --background: var(--cyan-full-5);
+    background-color: var(--background);
+}
+
+
+/* ===================================================================
+   SEMANTIC COLOR TOKENS - Light Mode
+   ================================================================ */
+
+#mode:checked~main {
+    /* Background & Pattern colors */
+    --background: var(--cyan-quarter-95);
+    /* 210, 50, 75 */
+    --background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
+    --pattern-overlay: rgba(0, 0, 0, 0.01);
+    --triangle: #93d0dd00, var(--cyan-half-80);
+    --triangle-stripe: transparent;
+
+    /* Text & highlight colors */
+    --text-1: var(--cyan-half-25);
+    --text-2: var(--cyan-half-35);
+    --text-3: var(--cyan-quarter-65);
+    --highlight-primary: var(--blue-full-80);
+    --highlight-secondary: var(--cyan-half-80);
+
+    /* Icon colors */
+    --icon: var(--cyan-half-45);
+    --icon--hover: var(--cyan-half-35);
+    --icon-bg: var(--cyan-quarter-75);
+
+    /* Context menu colors */
+    /* 210, 25, 70 */
+    --context-bg: rgba(176, 203, 210, 0.5);
+    /* 210, 25, 80 */
+    --context-bg-2: rgba(176, 203, 210, 0.75);
+    --context-bg-modal: var(--cyan-quarter-80);
+    --context-bg-modal--hover: var(--cyan-quarter-85);
+
+    /* 210, 25, 75 */
+    --menu-bg: #a3bdc355;
+    --tooltip-bg: #a3bdc365;
+
+    /* Modal colors */
+    --modal-border-outer: var(--dark-15);
+    --modal-border-inner: var(--light-50);
+    --modal-bg-blur: var(--light-15), var(--light-35);
+    --modal-bg-archive: rgba(234, 242, 244, 0.975);
+    /* 210, 25, 95 */
+    --modal-underlay-bg-profile: rgba(255, 255, 255, 0);
+    --modal-underlay-bg-archive: rgba(255, 255, 255, 0);
+    --modal-icon: var(--cyan-half-45);
+    --modal-icon--hover: var(--cyan-full-35);
+    --modal-icon-bg: var(--light-25);
+    --modal-icon--hover: var(--text-1);
+    --modal-line: var(--cyan-quarter-60);
+    --modal-line-2: var(--cyan-quarter-70);
+    --modal-line-3: var(--cyan-quarter-80);
+    --modal-tag-bg: var(--cyan-three-quarters-80);
+    --modal-tag-bg--hover: var(--cyan-three-quarters-85);
+
+    /* Carousel control colors */
+    --carousel-nav-bg: var(--dark-25);
+    --carousel-nav-bg-hover: var(--dark-40);
+    --carousel-nav-bg-active: var(--dark-50);
+    --carousel-arrow-bg: var(--context-bg-modal);
+    --carousel-arrow-bg-hover: var(--context-bg-modal--hover);
+    --carousel-arrow-icon-bg: var(--dark-35);
+    --carousel-arrow-icon-bg-hover: var(--dark-50);
+
+    /* Footer colors */
+    --footer-square-1: var(--blue-full-75);
+    --footer-square-1--hover: var(--yellow-75);
+    --footer-square-2: var(--cyan-half-55);
+    --footer-square-3: var(--cyan-half-65);
+    --footer-square-4: var(--cyan-half-75);
+    --footer-rectangle: var(--cyan-half-55);
+}
+
+@media (min-width: 45rem) {
+    #mode:checked~main {
+        --background-pattern: url("data:image/svg+xml,%3Csvg width='56' height='56' viewBox='0 0 56 56' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='27' y='27' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
+    }
+}
+
+@media (min-width: 75rem) {
+    #mode:checked~main {
+        --background-pattern: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='31' y='31' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
+    }
+}
