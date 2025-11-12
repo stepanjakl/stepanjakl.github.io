@@ -8,6 +8,20 @@
  */
 
 // ============================================================================
+// Utility Functions
+// ============================================================================
+
+/**
+ * Get appropriate scroll behavior based on user's motion preferences
+ * Respects prefers-reduced-motion setting for accessibility
+ * @returns {string} 'auto' if reduced motion is preferred, 'smooth' otherwise
+ */
+function getScrollBehavior() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    return prefersReducedMotion ? 'auto' : 'smooth'
+}
+
+// ============================================================================
 // HorizontalTimeline Custom Element
 // ============================================================================
 
@@ -134,13 +148,15 @@ class HorizontalTimeline extends HTMLElement {
         this.render()
         this.setupEventHandlers()
 
-        // Add loaded class after a brief delay to trigger fade-in animation
-        // This ensures the initial opacity: 0 state is applied first
-        requestAnimationFrame(() => {
+        // Notify that timeline is ready for external initialization
+        if (this.onReady && typeof this.onReady === 'function') {
+            // Use double rAF to ensure layout is complete before callback
             requestAnimationFrame(() => {
-                this.classList.add('timeline-loaded')
+                requestAnimationFrame(() => {
+                    this.onReady()
+                })
             })
-        })
+        }
     }
 
     disconnectedCallback() {
@@ -158,363 +174,6 @@ class HorizontalTimeline extends HTMLElement {
         }
 
         this.innerHTML = `
-            <style>
-                /*
-                * Modal - Archive - Horizontal Timeline Component
-                */
-
-                /* CSS Variables for component configuration */
-                horizontal-timeline {
-                    /* Spacing */
-                    --timeline-margin: 3rem;
-                    --timeline-margin--hover: 1rem;
-                    --timeline-padding: 0.5rem 1.5rem 0.25rem 1.5rem;
-                    --timeline-padding--hover: 0.875rem 5.5rem 0.625rem 5.5rem;
-
-                    /* Heights */
-                    --timeline-height: 1.125rem;
-                    --timeline-height--hover: 1.75rem;
-
-                    /* Border radius */
-                    --timeline-radius: 0.75rem;
-                    --timeline-radius--hover: 1.125rem;
-
-                    /* Indicator bar widths/heights (percentages) */
-                    --indicator-height-sm: 33.33%;
-                    --indicator-height-md: 44.44%;
-                    --indicator-height-lg: 55.56%;
-                    --indicator-height-xl: 66.67%;
-                    --indicator-height-xxl: 77.78%;
-
-                    /* Common transitions */
-                    --transition--hover: var(--animate-in-segment, 150ms) var(--ease-out-quad, ease-out);
-                    --transition--default: var(--animate-out-segment, 150ms) var(--ease-in-quad, ease-in);
-                    --transition-indicator: 100ms var(--ease-out-quad, ease-out);
-                    --transition-color: 100ms linear;
-                }
-
-                /* Host element */
-                horizontal-timeline {
-                    display: flex;
-                    justify-content: center;
-                    transition: margin var(--transition--default);
-                    margin: 0 var(--timeline-margin);
-                }
-
-                horizontal-timeline:hover {
-                    transition: margin var(--transition--hover);
-                    margin: 0 var(--timeline-margin--hover);
-                }
-
-                horizontal-timeline::before {
-                    content: '';
-                    position: absolute;
-                    inset: -0.5rem;
-                }
-
-                /* Wrapper */
-                #timeline-wrapper {
-                    transition: border-radius var(--transition--default), transform var(--transition--default);
-                    position: relative;
-                    width: auto;
-                    max-width: 100%;
-                    border-radius: var(--timeline-radius);
-                    background-color: rgba(0, 91, 102, 0.95); /* HSL 210, 100, 35 */
-                    overflow: hidden;
-                }
-
-                horizontal-timeline:hover #timeline-wrapper {
-                    transition: border-radius var(--transition--hover), transform var(--transition--hover);
-                    border-radius: var(--timeline-radius--hover);
-                    transform: translateY(0.5625rem);
-                }
-
-                /* Scrollable content area */
-                #timeline-content {
-                    transition: padding var(--transition--default);
-                    overflow-x: scroll;
-                    overflow-y: hidden;
-                    scroll-behavior: auto;
-                    white-space: nowrap;
-                    scrollbar-width: none;
-                    -ms-overflow-style: none;
-                    padding: var(--timeline-padding);
-                    mask-image: linear-gradient(
-                        90deg,
-                        rgba(0, 0, 0, 0) 0%,
-                        rgba(0, 0, 0, 1) var(--segment, 1.5rem),
-                        rgba(0, 0, 0, 1) calc(100% - var(--segment, 1.5rem)),
-                        rgba(0, 0, 0, 0) 100%
-                    );
-                }
-
-                #timeline-content::-webkit-scrollbar {
-                    display: none;
-                }
-
-                horizontal-timeline.timeline-scrollable #timeline-content {
-                    cursor: grab;
-                }
-
-                horizontal-timeline:hover #timeline-content {
-                    transition: padding var(--transition--hover);
-                    padding: var(--timeline-padding--hover);
-                }
-
-                #timeline-content > div {
-                    display: inline-flex;
-                    flex-direction: column;
-                }
-
-                /* Timeline bar */
-                #timeline {
-                    display: flex;
-                    transition: height var(--transition--default);
-                    height: var(--timeline-height);
-                }
-
-                horizontal-timeline:hover #timeline {
-                    transition: height var(--transition--hover);
-                    height: var(--timeline-height--hover);
-                }
-
-                /* Timeline indicators (vertical bars) */
-                #timeline div {
-                    display: flex;
-                    align-items: end;
-                    padding: 0 0.5rem;
-                }
-
-                #timeline div[data-value] {
-                    cursor: pointer;
-                }
-
-                #timeline div span {
-                    transition: background-color var(--transition-color), height var(--transition-indicator);
-                    background-color: var(--light-45);
-                    width: max(1.5px, 0.09375rem);
-                    height: var(--indicator-height-sm);
-                    border-radius: max(0.5px, 0.09375rem);
-                }
-
-                /* Pattern-based indicator heights - organized by size */
-                #timeline div:nth-child(6n + 4) span { height: var(--indicator-height-xl); }
-                #timeline div:nth-child(6n + 3) span,
-                #timeline div:nth-child(6n + 5) span { height: var(--indicator-height-md); }
-
-                /* Edge indicators with reduced opacity */
-                #timeline div:nth-child(2) span,
-                #timeline div:nth-last-child(2) span { background-color: var(--light-35); }
-                #timeline div:first-child span,
-                #timeline div:last-child span { background-color: var(--light-25); }
-
-                /* Hover states - indicator and neighbors (with ripple effect) */
-                #timeline div:hover span,
-                #timeline div.highlight span {
-                    transition: background-color var(--transition-color), height var(--transition-indicator) !important;
-                    height: 100% !important;
-                }
-
-                #timeline div:has(+ div:hover) span,
-                #timeline div:hover + div span,
-                #timeline div:has(+ div.highlight) span,
-                #timeline div.highlight + div span {
-                    transition: background-color var(--transition-color), height var(--transition-indicator) !important;
-                    height: var(--indicator-height-xxl) !important;
-                }
-
-                #timeline div:has(+ div + div:hover) span,
-                #timeline div:hover + div + div span,
-                #timeline div:has(+ div + div.highlight) span,
-                #timeline div.highlight + div + div span {
-                    transition: background-color var(--transition-color), height var(--transition-indicator) !important;
-                    height: var(--indicator-height-lg) !important;
-                }
-
-                /* Active state - indicator and sequential ripple effect */
-                #timeline div.active span {
-                    transition: background-color var(--transition-color), height var(--transition-indicator);
-                    background-color: var(--light-70);
-                    height: 100%;
-                }
-
-                #timeline div.active + div span,
-                #timeline div:has(+ div.active) span {
-                    transition: background-color var(--transition-color) 100ms, height var(--transition-indicator);
-                    background-color: var(--light-70);
-                    height: var(--indicator-height-xxl);
-                }
-
-                #timeline div.active + div + div span,
-                #timeline div:has(+ div + div.active) span {
-                    transition: background-color var(--transition-color) 200ms, height var(--transition-indicator);
-                    background-color: var(--light-65);
-                    height: var(--indicator-height-lg);
-                }
-
-                #timeline div.active + div + div + div span,
-                #timeline div:has(+ div + div + div.active) span {
-                    transition: background-color var(--transition-color) 300ms, height var(--transition-indicator);
-                    background-color: var(--light-60);
-                }
-
-                #timeline div.active + div + div + div + div span,
-                #timeline div:has(+ div + div + div + div.active) span {
-                    transition: background-color var(--transition-color) 400ms, height var(--transition-indicator);
-                    background-color: var(--light-55);
-                }
-
-                #timeline div.active + div + div + div + div + div span,
-                #timeline div:has(+ div + div + div + div + div.active) span {
-                    transition: background-color var(--transition-color) 500ms, height var(--transition-indicator);
-                    background-color: var(--light-50);
-                }
-
-                /* Labels */
-                #timeline_labels {
-                    display: grid;
-                    grid-auto-flow: column;
-                    grid-auto-columns: 1fr;
-                    padding: 0 0.5rem;
-                }
-
-                #timeline_labels button {
-                    transition: padding var(--transition--default);
-                    position: relative;
-                    display: inline-flex;
-                    justify-content: center;
-                    cursor: pointer;
-                    padding-top: 0.5rem;
-                    border: none;
-                    background: none;
-                }
-
-                horizontal-timeline:hover #timeline_labels button {
-                    transition: padding var(--transition--hover);
-                    padding-top: 0.875rem;
-                }
-
-                #timeline_labels button > span {
-                    position: relative;
-                    transition: color var(--transition-color);
-                    text-align: center;
-                    color: var(--text-2, #999);
-                    padding: 0.25rem 0.3125rem 0.25rem 0.4375rem;
-                    font-family: 'Chakra Petch', monospace;
-                    font-weight: 600;
-                    font-size: 0.80356875rem;
-                    line-height: 0.875rem;
-                    letter-spacing: 0.125rem;
-                    text-transform: uppercase;
-                }
-
-                /* Text cropping for better vertical alignment */
-                #timeline_labels button > span::before {
-                    content: "";
-                    margin-bottom: -0.1864em;
-                    display: table;
-                }
-
-                #timeline_labels button > span::after {
-                    content: "";
-                    margin-top: -0.2024em;
-                    display: table;
-                }
-
-                /* Special styling for last label ("elsewhen") */
-                #timeline_labels button:last-child > span {
-                    font-size: 0.75892875rem;
-                    line-height: 0.84375rem;
-                }
-
-                #timeline_labels button:last-child > span::before {
-                    margin-bottom: -0.1986em;
-                }
-
-                #timeline_labels button:last-child > span::after {
-                    margin-top: -0.21455em;
-                }
-
-                #timeline_labels button.active span {
-                    transition: color var(--transition-color);
-                    color: var(--text-1);
-                }
-
-                /* Label background pill (animated on hover/active) */
-                #timeline_labels button > span > span {
-                    z-index: -1;
-                    transition: opacity var(--transition-color), inset var(--transition-indicator);
-                    content: "";
-                    position: absolute;
-                    inset: 0 0.1875rem 0.09375rem 0.1875rem;
-                    opacity: 0;
-                    background-color: var(--light-15);
-                    border-radius: 999rem;
-                }
-
-                #timeline_labels button.active > span > span,
-                #timeline_labels button.highlight > span > span,
-                #timeline_labels button:hover > span > span,
-                #timeline_labels button:focus > span > span {
-                    transition: opacity var(--transition-color), inset var(--transition-indicator);
-                    opacity: 1;
-                    inset: -0.09375rem 0 0 0;
-                }
-
-                /* Responsive adjustments */
-                @media (min-width: 60rem) {
-                    horizontal-timeline {
-                        margin: 0 6rem;
-                    }
-
-                    horizontal-timeline:hover {
-                        margin: 0 2rem;
-                    }
-                }
-
-                /* Light mode - consolidated color overrides */
-                #mode:checked~main #timeline-wrapper {
-                    background-color: rgba(165, 222, 234, 0.95); /* HSL 210, 50, 85 */
-                    border: solid max(1px, 0.0625rem) var(--dark-20);
-                    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-35);
-                }
-
-                #mode:checked~main #timeline_labels button > span > span {
-                    background-color: var(--light-50);
-                }
-
-                /* Light mode - indicator colors */
-                #mode:checked~main #timeline div span { background-color: var(--dark-45); }
-                #mode:checked~main #timeline div:nth-child(2) span,
-                #mode:checked~main #timeline div:nth-last-child(2) span { background-color: var(--dark-40); }
-                #mode:checked~main #timeline div:first-child span,
-                #mode:checked~main #timeline div:last-child span { background-color: var(--dark-30); }
-
-                /* Light mode - active state colors */
-                #mode:checked~main #timeline div.active span { background-color: var(--dark-70); }
-                #mode:checked~main #timeline div.active + div span,
-                #mode:checked~main #timeline div:has(+ div.active) span { background-color: var(--dark-70); }
-                #mode:checked~main #timeline div.active + div + div span,
-                #mode:checked~main #timeline div:has(+ div + div.active) span { background-color: var(--dark-65); }
-                #mode:checked~main #timeline div.active + div + div + div span,
-                #mode:checked~main #timeline div:has(+ div + div + div.active) span { background-color: var(--dark-60); }
-                #mode:checked~main #timeline div.active + div + div + div + div span,
-                #mode:checked~main #timeline div:has(+ div + div + div + div.active) span { background-color: var(--dark-55); }
-                #mode:checked~main #timeline div.active + div + div + div + div + div span,
-                #mode:checked~main #timeline div:has(+ div + div + div + div + div.active) span { background-color: var(--dark-50); }
-            </style>
-
-            <noscript>
-                <style>
-                    /* No-JS: Expand hit area for anchor-based navigation */
-                    #timeline_labels button::after {
-                        content: "";
-                        position: absolute;
-                        inset: -1.875rem -0.3125rem -0.3125rem -0.3125rem;
-                    }
-                </style>
-            </noscript>
-
             <div id="timeline-wrapper">
                 <div id="timeline-content">
                     <div>
@@ -536,8 +195,6 @@ class HorizontalTimeline extends HTMLElement {
                 </div>
             </div>
         `
-
-        this.updateScrollableClass()
     }
 
     // ========================================================================
@@ -625,7 +282,7 @@ class HorizontalTimeline extends HTMLElement {
 
             parent.scroll({
                 left: initialScrollLeft + scrollAmount,
-                behavior: 'smooth'
+                behavior: getScrollBehavior()
             })
         })
     }
@@ -635,16 +292,19 @@ class HorizontalTimeline extends HTMLElement {
      *
      * @param {HTMLElement} parent - Scrollable container
      * @param {HTMLElement} child - Element to scroll into view
-     * @param {string} scrollBehavior - 'instant' or 'smooth' (default)
+     * @param {string} scrollBehavior - 'instant', 'smooth', or null (auto-detect based on preferences)
      */
-    scrollParentToChildVertical(parent, child, scrollBehavior = 'smooth') {
+    scrollParentToChildVertical(parent, child, scrollBehavior = null) {
         if (!parent || !child) return
 
         const parentRect = parent.getBoundingClientRect()
         const childRect = child.getBoundingClientRect()
         const scrollAmount = childRect.top - parentRect.top - this.scrollOffset
 
-        if (scrollBehavior === 'instant') {
+        // Use getScrollBehavior() if no explicit behavior provided
+        const behavior = scrollBehavior || getScrollBehavior()
+
+        if (behavior === 'instant' || behavior === 'auto') {
             // Temporarily disable smooth scrolling
             parent.classList.add('scroll-behavior-auto')
             parent.scrollTop += scrollAmount
@@ -654,7 +314,7 @@ class HorizontalTimeline extends HTMLElement {
         } else {
             parent.scrollBy({
                 top: scrollAmount,
-                behavior: 'smooth'
+                behavior: behavior
             })
         }
     }
@@ -727,6 +387,7 @@ class HorizontalTimeline extends HTMLElement {
     }
 
     handleResize() {
+        // Update scrollable class when dimensions change
         this.updateScrollableClass()
     }
 

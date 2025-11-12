@@ -512,36 +512,6 @@ body.modal-archive-open .availability__dot {
 }
 
 
-/* Text highlight */
-
-.highlight, .highlight:focus {
-    transition: color calc(2 * var(--animate-out-segment)) var(--ease-in-quad);
-}
-
-.highlight:hover {
-    transition: color calc(2 * var(--animate-out-segment)) var(--ease-in-quad) !important;
-}
-
-.highlight--active {
-    transition: color calc(2 * var(--animate-in-segment)) var(--ease-out-quad) !important;
-    color: var(--green-lime-85) !important;
-}
-
-.intro__name.highlight--active .intro__name-frame {
-    --corner-color--active: var(--green-lime-85);
-}
-
-.intro__name .corners__item::before,
-.intro__name .corners__item::after {
-    transition: background-color calc(2 * var(--animate-out-segment)) var(--ease-in-quad);
-}
-
-.intro__name.highlight--active .corners__item::before,
-.intro__name.highlight--active .corners__item::after {
-    transition: background-color calc(2 * var(--animate-in-segment)) var(--ease-out-quad);
-}
-
-
 /* Corner decoration */
 
 .corners {
@@ -1376,7 +1346,7 @@ horizontal-timeline {
     opacity: 0;
 }
 
-#archive:target~main horizontal-timeline.timeline-loaded {
+horizontal-timeline.timeline-in-place {
     transition: opacity var(--animate-in-segment) linear var(--anim-segment), transform var(--animate-in-segment) var(--ease-out-quad) var(--anim-segment);
     transform: scale(1);
     opacity: 1;
@@ -1601,4 +1571,32 @@ horizontal-timeline {
 .tooltip.tooltip-key--active .tooltip__text--active, .tooltip:focus-within.tooltip-key--active .tooltip__text--active {
     transition: opacity var(--animate-in-segment-2\/3) linear var(--animate-in-segment);
     opacity: 1;
+}
+
+
+/* Text highlight */
+
+.highlight {
+    transition: color calc(2 * var(--animate-out-segment)) var(--ease-in-quad);
+}
+
+.highlight.highlight--active,
+.menu__email-button:hover .highlight.highlight--active,
+.menu__email-button:focus .highlight.highlight--active {
+    transition: color calc(2 * var(--animate-in-segment)) var(--ease-out-quad);
+    color: var(--green-lime-85);
+}
+
+.intro__name.highlight--active .intro__name-frame {
+    --corner-color--active: var(--green-lime-85);
+}
+
+.intro__name .corners__item::before,
+.intro__name .corners__item::after {
+    transition: background-color calc(2 * var(--animate-out-segment)) var(--ease-in-quad);
+}
+
+.intro__name.highlight--active .corners__item::before,
+.intro__name.highlight--active .corners__item::after {
+    transition: background-color calc(2 * var(--animate-in-segment)) var(--ease-out-quad);
 }

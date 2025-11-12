@@ -62,6 +62,29 @@ function parseHash(hash = window.location.hash) {
     return { base, params }
 }
 
+/**
+ * Check if menu intro animation has finished
+ * Prevents keyboard shortcuts and navigation gestures during initial animation
+ * Shared utility used by KeyHandler, NavigationHandler, and DOMContentLoaded
+ * @returns {boolean} True if animation is finished
+ */
+function isMenuAnimationFinished() {
+    const el = document.querySelector('.menu--animating .menu__background')
+    if (!el) return true
+    const animations = el.getAnimations()
+    return !animations || animations.length === 0 || animations[0].playState === 'finished'
+}
+
+/**
+ * Get appropriate scroll behavior based on user's motion preferences
+ * Respects prefers-reduced-motion setting for accessibility
+ * @returns {string} 'auto' if reduced motion is preferred, 'smooth' otherwise
+ */
+function getScrollBehavior() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    return prefersReducedMotion ? 'auto' : 'smooth'
+}
+
 // ============================================================================
 // Global Constants & Configuration
 // ============================================================================
@@ -73,20 +96,16 @@ const NAVIGATION_HASHES = Object.freeze({
     MENU: '#menu'
 })
 
-/** Modal element selectors for DOM querying */
-const MODAL_SELECTORS = Object.freeze({
-    PROFILE: '#modal-profile',
-    ARCHIVE: '#modal-archive'
-})
-
 /** Dialog configuration for consistent ID references and focus management */
 const DIALOG_CONFIG = Object.freeze({
     PROFILE: {
         id: 'modal-profile',
+        selector: '#modal-profile',
         trigger: 'menu-link-profile'  // Element to focus when dialog closes
     },
     ARCHIVE: {
         id: 'modal-archive',
+        selector: '#modal-archive',
         trigger: 'menu-link-archive'
     },
     MENU: {
@@ -102,6 +121,19 @@ const POPUP_LINK_SELECTOR = 'a[target="_blank"][href$=".mp4"], a[target="_blank"
 /** Data attribute for tracking touch button primed state */
 const TOUCH_PRIMED_ATTRIBUTE = 'data-touch-primed'
 
+/** CSS class names for device and feature detection */
+const DEVICE_CLASSES = Object.freeze({
+    TOUCH_DEVICE: 'touch-device',
+    NO_FULLSCREEN: 'no-fullscreen'
+})
+
+/** Shared CSS class names for horizontal scrolling components */
+const SCROLL_CLASSES = Object.freeze({
+    DRAGGING: 'x-drag-scroll--dragging',
+    MOUSE_DOWN: 'x-drag-scroll--mouse-down',
+    EDGE_SCROLLING: 'edge-x-scroll--scrolling'
+})
+
 /** Shared modal element cache to avoid repeated DOM queries */
 const modalElementCache = {
     profile: null,
@@ -116,9 +148,9 @@ const modalElementCache = {
  */
 const getModalElement = (hash) => {
     if (hash === NAVIGATION_HASHES.PROFILE) {
-        return modalElementCache.profile ??= document.querySelector(MODAL_SELECTORS.PROFILE)
+        return modalElementCache.profile ??= document.querySelector(DIALOG_CONFIG.PROFILE.selector)
     } else if (hash === NAVIGATION_HASHES.ARCHIVE) {
-        return modalElementCache.archive ??= document.querySelector(MODAL_SELECTORS.ARCHIVE)
+        return modalElementCache.archive ??= document.querySelector(DIALOG_CONFIG.ARCHIVE.selector)
     }
     return null
 }
@@ -183,17 +215,31 @@ App.toggleFullscreen = null
  */
 class ThemeManager {
     constructor() {
+        // Constants
         this.STORAGE_KEY = 'theme-mode'
         this.DISABLE_TRANSITIONS_CLASS = 'disable-transitions'
-        this.modeCheckbox = null
+
+        // DOM Cache (lazy initialized)
+        this.modeCheckboxElement = null
 
         this.init()
     }
 
+    // DOM Helpers
+
+    /**
+     * Get mode checkbox element with lazy caching
+     * @returns {HTMLElement|null} Cached mode checkbox element
+     */
+    getModeCheckbox() {
+        return this.modeCheckboxElement ??= App.getEl('mode')
+    }
+
+    // Initialization
+
     init() {
-        // Get mode checkbox element
-        this.modeCheckbox = App.getEl('mode')
-        if (!this.modeCheckbox) {
+        const modeCheckbox = this.getModeCheckbox()
+        if (!modeCheckbox) {
             console.warn('Theme mode checkbox not found')
             return
         }
@@ -202,22 +248,27 @@ class ThemeManager {
         this.applySavedTheme()
 
         // Listen for theme changes and persist them
-        this.modeCheckbox.addEventListener('change', () => {
+        modeCheckbox.addEventListener('change', () => {
             this.saveTheme()
             this.disableTransitionsDuringSwitch()
         })
     }
 
+    // Theme Management
+
     applySavedTheme() {
+        const modeCheckbox = this.getModeCheckbox()
+        if (!modeCheckbox) return
+
         try {
             const savedTheme = localStorage.getItem(this.STORAGE_KEY)
 
             if (savedTheme === 'light') {
                 // Light mode: checkbox should be checked
-                this.modeCheckbox.checked = true
+                modeCheckbox.checked = true
             } else if (savedTheme === 'dark') {
                 // Dark mode: checkbox should be unchecked
-                this.modeCheckbox.checked = false
+                modeCheckbox.checked = false
             }
             // If no saved preference, leave checkbox in its default state
         } catch (error) {
@@ -226,8 +277,11 @@ class ThemeManager {
     }
 
     saveTheme() {
+        const modeCheckbox = this.getModeCheckbox()
+        if (!modeCheckbox) return
+
         try {
-            const theme = this.modeCheckbox.checked ? 'light' : 'dark'
+            const theme = modeCheckbox.checked ? 'light' : 'dark'
             localStorage.setItem(this.STORAGE_KEY, theme)
         } catch (error) {
             console.warn('Failed to save theme preference:', error)
@@ -318,6 +372,34 @@ const ResizeManager = {
 }
 
 // ============================================================================
+// Modal-Specific Initialization Functions
+// ============================================================================
+
+/**
+ * Initialize 3D transform effect for modal profile footer art based on scroll
+ * Event listeners persist for page lifetime per YAGNI principle
+ */
+function initializeModalFooterArt() {
+    const footerArtWrapper = document.querySelector('.modal-profile__footer-art')
+    const footerArt = document.querySelector('.modal-profile__footer-art-gradient')
+    const modalProfile = App.getEl(DIALOG_CONFIG.PROFILE.id)
+
+    if (!footerArtWrapper || !footerArt || !modalProfile) return
+
+    const handleScroll = () => {
+        const rect = footerArtWrapper.getBoundingClientRect()
+        const modalRect = modalProfile.getBoundingClientRect()
+        const inViewDistance = Math.min(Math.max((modalRect.height + rect.height) - rect.bottom, 0), rect.height)
+        const progress = Math.min(Math.max(inViewDistance / rect.height, 0), 1)
+        footerArt.style.transform = `rotateX(${progress * 30}deg)`
+    }
+
+    modalProfile.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll)
+    handleScroll()
+}
+
+// ============================================================================
 // Dialog Lifecycle Configuration
 // ============================================================================
 
@@ -354,6 +436,7 @@ function registerDialogLifecycleHooks() {
 
                 // Position timeline after modal transition completes
                 const modalArchiveEl = App.getEl('modal-archive')
+
                 if (modalArchiveEl) {
                     let positioned = false
 
@@ -401,36 +484,34 @@ function registerDialogLifecycleHooks() {
 
                 // Wait for modal transition to complete before scrolling
                 const handleDeepLinkScroll = () => {
-                    requestAnimationFrame(() => {
-                        requestAnimationFrame(() => {
-                            // Scroll to the section title (header) rather than the content section
-                            const targetSection = document.querySelector(`[data-timeline-section="${yearParam}"]`)
-                            const modalArchive = getModalElement(NAVIGATION_HASHES.ARCHIVE)
+                    afterPaint(() => {
+                        // Scroll to the section title (header) rather than the content section
+                        const targetSection = document.querySelector(`[data-timeline-section="${yearParam}"]`)
+                        const modalArchive = getModalElement(NAVIGATION_HASHES.ARCHIVE)
 
-                            if (targetSection && modalArchive && App.timeline) {
-                                App.timeline.scrollParentToChildVertical(modalArchive, targetSection, 'instant')
+                        if (targetSection && modalArchive && App.timeline) {
+                            App.timeline.scrollParentToChildVertical(modalArchive, targetSection, 'instant')
+                        }
+
+                        // Update timeline to show correct active section
+                        if (App.timeline) {
+                            App.timeline.setActiveLabel(yearParam)
+                            App.timeline.setActiveIndicator(yearParam)
+
+                            // Center the active label in timeline
+                            const activeLabel = App.timeline.querySelector(`[data-label-for="${yearParam}"]`)
+                            if (activeLabel) {
+                                App.timeline.scrollParentToChildCenterHorizontal(
+                                    App.timeline.getTimelineContentEl(),
+                                    activeLabel
+                                )
                             }
+                        }
 
-                            // Update timeline to show correct active section
-                            if (App.timeline) {
-                                App.timeline.setActiveLabel(yearParam)
-                                App.timeline.setActiveIndicator(yearParam)
-
-                                // Center the active label in timeline
-                                const activeLabel = App.timeline.querySelector(`[data-label-for="${yearParam}"]`)
-                                if (activeLabel) {
-                                    App.timeline.scrollParentToChildCenterHorizontal(
-                                        App.timeline.getTimelineContentEl(),
-                                        activeLabel
-                                    )
-                                }
-                            }
-
-                            // Start observer after scrolling and timeline updates
-                            if (App.timeline && App.timeline.startIntersectionObserver) {
-                                App.timeline.startIntersectionObserver()
-                            }
-                        })
+                        // Start observer after scrolling and timeline updates
+                        if (App.timeline && App.timeline.startIntersectionObserver) {
+                            App.timeline.startIntersectionObserver()
+                        }
                     })
                 }
 
@@ -573,11 +654,11 @@ class TextHighlighter {
  */
 class KeyHandler {
     constructor() {
-        // DOM Elements (lazy initialized)
-        this.tooltipElements = null
-        this.debugElement = null
+        // DOM Cache (lazy initialized)
+        this.tooltipElementsCache = null
+        this.debugElementCache = null
 
-        // Configuration
+        // Constants
         this.TOOLTIP_ITEMS_SELECTOR = '#menu-link-profile, #menu-link-archive, #menu-toggle'
         this.TOOLTIP_ACTIVE_CLASS = 'tooltip-key--active'
 
@@ -602,24 +683,22 @@ class KeyHandler {
         document.body.addEventListener('click', this.boundRemoveTooltips)
     }
 
-    // Animation Check
-
-    /**
-     * Check if menu intro animation has finished
-     * Prevents keyboard shortcuts during initial animation
-     * @returns {boolean} True if animation is finished
-     */
-    isMenuAnimationFinished() {
-        const el = document.querySelector('.menu--animating .menu__background')
-        if (!el) return true
-        const animations = el.getAnimations()
-        return !animations || animations.length === 0 || animations[0].playState === 'finished'
-    }
-
     // DOM Helpers
 
+    /**
+     * Get tooltip elements with lazy caching
+     * @returns {Array<HTMLElement>} Cached array of tooltip elements
+     */
     getTooltipElements() {
-        return this.tooltipElements ??= Array.from(document.querySelectorAll(this.TOOLTIP_ITEMS_SELECTOR))
+        return this.tooltipElementsCache ??= Array.from(document.querySelectorAll(this.TOOLTIP_ITEMS_SELECTOR))
+    }
+
+    /**
+     * Get debug checkbox element with lazy caching
+     * @returns {HTMLElement|null} Cached debug checkbox element
+     */
+    getDebugElement() {
+        return this.debugElementCache ??= App.getEl('debug')
     }
 
     // Event Handlers
@@ -634,7 +713,7 @@ class KeyHandler {
                 closeDialog('#')
             }
         } else {
-            if (!this.isMenuAnimationFinished()) return
+            if (!isMenuAnimationFinished()) return
             switch (key) {
                 case this.KEYS.KEY_P:
                     this.toggleDialog(event, NAVIGATION_HASHES.PROFILE, DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger)
@@ -694,9 +773,9 @@ class KeyHandler {
 
     toggleDebug(event) {
         event.preventDefault()
-        this.debugElement ??= App.getEl('debug')
-        if (this.debugElement) {
-            this.debugElement.checked = !this.debugElement.checked
+        const debugElement = this.getDebugElement()
+        if (debugElement) {
+            debugElement.checked = !debugElement.checked
         }
     }
 
@@ -727,20 +806,6 @@ class NavigationHandler {
     constructor() {
         // Configuration
         this.SCROLL_MIN_THRESHOLD = 5
-    }
-
-    // Animation Check
-
-    /**
-     * Check if menu intro animation has finished
-     * Prevents navigation gestures during initial animation
-     * @returns {boolean} True if animation is finished
-     */
-    isMenuAnimationFinished() {
-        const el = document.querySelector('.menu--animating .menu__background')
-        if (!el) return true
-        const animations = el.getAnimations()
-        return !animations || animations.length === 0 || animations[0].playState === 'finished'
     }
 
     // Navigation Handlers
@@ -828,7 +893,7 @@ class WheelHandler extends NavigationHandler {
     // Event Handlers
 
     handleWheelEvent(event) {
-        if (!this.isMenuAnimationFinished()) return
+        if (!isMenuAnimationFinished()) return
 
         const deltaX = Math.abs(event.deltaX)
         const deltaY = Math.abs(event.deltaY)
@@ -879,7 +944,7 @@ class TouchHandler extends NavigationHandler {
     }
 
     handleTouchMove(event) {
-        if (!this.isMenuAnimationFinished()) return
+        if (!isMenuAnimationFinished()) return
 
         const touch = event.touches[0]
         const deltaX = Math.abs(touch.clientX - this.touchStartX)
@@ -915,8 +980,6 @@ class HorizontalDragScroller {
         this.scrollLeft = 0
 
         // Constants
-        this.MOUSE_DOWN_CLASS = 'x-drag-scroll--mouse-down'
-        this.DRAGGING_CLASS = 'x-drag-scroll--dragging'
         this.DRAG_RELEASE_TIMEOUT = 300
 
         // Bound handlers
@@ -946,13 +1009,13 @@ class HorizontalDragScroller {
         this.isMouseDown = true
         this.startX = event.clientX
         this.scrollLeft = this.element.scrollLeft
-        this.element.classList.add(this.MOUSE_DOWN_CLASS)
+        this.element.classList.add(SCROLL_CLASSES.MOUSE_DOWN)
     }
 
     onMouseMove(event) {
         if (!this.isMouseDown) return
 
-        this.element.classList.add(this.DRAGGING_CLASS)
+        this.element.classList.add(SCROLL_CLASSES.DRAGGING)
         this.element.scrollLeft = this.scrollLeft - (event.clientX - this.startX)
     }
 
@@ -960,10 +1023,10 @@ class HorizontalDragScroller {
         if (!this.isMouseDown) return
 
         this.isMouseDown = false
-        this.element.classList.remove(this.MOUSE_DOWN_CLASS)
+        this.element.classList.remove(SCROLL_CLASSES.MOUSE_DOWN)
 
         setTimeout(() => {
-            this.element.classList.remove(this.DRAGGING_CLASS)
+            this.element.classList.remove(SCROLL_CLASSES.DRAGGING)
         }, this.DRAG_RELEASE_TIMEOUT)
     }
 }
@@ -984,8 +1047,6 @@ class HorizontalEdgeScroller {
         this.maxSpeed = options.maxSpeed ?? 0.75
 
         // Constants
-        this.DRAGGING_CLASS = 'x-drag-scroll--dragging'
-        this.EDGE_SCROLLING_CLASS = 'edge-x-scroll--scrolling'
         this.SCROLL_STOP_TIMEOUT = 300
 
         // State
@@ -995,6 +1056,8 @@ class HorizontalEdgeScroller {
         this.isSnapped = true
         this.edgeWidth = 0
         this.mediaQuery = window.matchMedia('(min-width: 45rem)')
+
+        // Lifecycle (managed through destroy)
         this.styleElement = null
         this.unregisterResize = null
 
@@ -1059,7 +1122,7 @@ class HorizontalEdgeScroller {
     // Event Handlers
 
     handleMouseMove(event) {
-        if (!this.mediaQuery.matches || this.element.classList.contains(this.DRAGGING_CLASS)) return
+        if (!this.mediaQuery.matches || this.element.classList.contains(SCROLL_CLASSES.DRAGGING)) return
 
         const rect = this.element.getBoundingClientRect()
         const { clientX, clientY } = event
@@ -1097,13 +1160,13 @@ class HorizontalEdgeScroller {
             requestAnimationFrame(() => {
                 this.element.scrollTo({
                     left: activeSlide.offsetLeft,
-                    behavior: 'smooth'
+                    behavior: getScrollBehavior()
                 })
             })
         }
 
         setTimeout(() => {
-            this.element.classList.remove(this.EDGE_SCROLLING_CLASS)
+            this.element.classList.remove(SCROLL_CLASSES.EDGE_SCROLLING)
         }, this.SCROLL_STOP_TIMEOUT)
     }
 
@@ -1114,7 +1177,7 @@ class HorizontalEdgeScroller {
 
         this.isScrolling = true
         this.isSnapped = false
-        this.element.classList.add(this.EDGE_SCROLLING_CLASS)
+        this.element.classList.add(SCROLL_CLASSES.EDGE_SCROLLING)
         requestAnimationFrame(this.scrollStep)
     }
 
@@ -1279,25 +1342,25 @@ class CursorIdleDetector {
  */
 class Popup {
     constructor() {
-        // Popup size configuration
+        // Constants
         this.POPUP_SCREEN_WIDTH_RATIO = 0.9
         this.POPUP_SCREEN_HEIGHT_RATIO = 0.9
-
-        // Aspect ratio thresholds
         this.ASPECT_RATIO_TALL_THRESHOLD = 0.85
         this.TALL_RATIO_CLASS = 'tall-ratio'
         this.SQUARE_RATIO_MIN = 0.95
         this.SQUARE_RATIO_MAX = 1.05
         this.SQUARE_RATIO_CLASS = 'square-ratio'
 
-        // State management
+        // State
+        this.stylesInjected = false
+        this.triggeringElement = null
+
+        // Lifecycle (managed through initialization and cleanup)
         this.fallbackContainer = null
         this.wrapperElement = null
-        this.stylesInjected = false
         this.handleEscapeKey = null
         this.handleFallbackClick = null
-        this.triggeringElement = null // Track element that opened the viewer for focus restoration
-        this.cursorIdleDetector = null // Cursor idle detector for close button
+        this.cursorIdleDetector = null
 
         // Static property to track popup blocking across all instances
         if (typeof Popup.isPopupBlocked === 'undefined') {
@@ -1502,11 +1565,9 @@ class Popup {
             }
 
             const onFullImageLoad = () => {
-                // Use requestAnimationFrame to ensure image is painted before fading
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        if (placeholder) placeholder.style.opacity = '0'
-                    })
+                // Use afterPaint to ensure image is painted before fading
+                afterPaint(() => {
+                    if (placeholder) placeholder.style.opacity = '0'
                 })
             }
 
@@ -1899,7 +1960,10 @@ class Carousel {
         const { id = '', element = null } = options
         this.id = id
 
-        // DOM Elements
+        // Constants
+        this.ACTIVE_CLASS = 'active'
+
+        // DOM Elements (initialized during component setup)
         this.carouselEl = element
         this.slidesWrapperEl = this.carouselEl.querySelector('[data-carousel-slides-wrapper]')
         this.slidesEls = Array.from(this.carouselEl.querySelectorAll('[data-carousel-slides] figure'))
@@ -1915,9 +1979,6 @@ class Carousel {
         // State
         this.observer = null
         this.activeSlide = null
-
-        // Constants
-        this.ACTIVE_CLASS = 'active'
 
         this.init()
     }
@@ -2132,7 +2193,7 @@ class Carousel {
 
     scrollToSlide(slideEl) {
         if (slideEl) {
-            slideEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+            slideEl.scrollIntoView({ behavior: getScrollBehavior(), block: 'nearest', inline: 'start' })
         }
     }
 }
@@ -2154,7 +2215,7 @@ class KeyboardNavigator {
         this.fallbackSelector = options.fallbackSelector
         this.is2DGrid = options.is2DGrid ?? true // Default to grid layout detection
 
-        // State
+        // DOM Elements (initialized in init, not lazy caching)
         this.containers = null
 
         // Bound handlers
@@ -2525,21 +2586,55 @@ App.handleTouchButtonClick = (element, event, callback = null, focusAfterClick =
     return true
 }
 
-/**
- * Initialize touch button handler with global cleanup
- * Sets up document-level click listener to clear primed state when user taps elsewhere
- * Only called once on page load for touch devices
- *
- * Related to: App.handleTouchButtonClick
- */
-function initializeTouchButtonHandler() {
-    // Handler will be registered in the centralized global event manager
-    // See: initializeGlobalEventHandlers()
-}
-
 // ============================================================================
 // Timeline Functions
 // ============================================================================
+
+/**
+ * Cache for timeline positioning elements
+ * Queried once on first use, reused on every resize
+ */
+const timelineElementCache = {
+    archiveWrapper: null,
+    timelineContentSection: null,
+    timelineWrapper: null,
+    timeline: null
+}
+
+/**
+ * Position timeline horizontally to align with content sections
+ * Uses cached DOM queries for performance on resize events
+ * Related to: App.initializeTimeline
+ */
+App.positionTimeline = () => {
+    // Lazy initialization with caching
+    timelineElementCache.archiveWrapper ??= document.querySelector('.modal-archive__timeline')
+    timelineElementCache.timelineContentSection ??= document.querySelector('.modal-archive__timeline-grid [data-timeline-section]')
+    timelineElementCache.timelineWrapper ??= document.querySelector('#horizontal-timeline')
+    timelineElementCache.timeline ??= document.querySelector('horizontal-timeline')
+
+    if (!timelineElementCache.archiveWrapper || !timelineElementCache.timelineContentSection || !timelineElementCache.timelineWrapper) return
+
+    const archiveWrapperRect = timelineElementCache.archiveWrapper.getBoundingClientRect()
+    const timelineContentSectionRect = timelineElementCache.timelineContentSection.getBoundingClientRect()
+
+    timelineElementCache.timelineWrapper.style.setProperty('left', `${timelineContentSectionRect.left - archiveWrapperRect.left}px`)
+    timelineElementCache.timelineWrapper.style.setProperty('right', `${archiveWrapperRect.right - timelineContentSectionRect.right}px`)
+
+    afterPaint(() => {
+        timelineElementCache.timeline.classList.add('timeline-in-place')
+
+        // Update scrollable class now that timeline is in final position
+        if (App.timeline && typeof App.timeline.updateScrollableClass === 'function') {
+            App.timeline.updateScrollableClass()
+        }
+
+        // Initialize scrollers after timeline is positioned and painted
+        if (App.timeline && typeof App.timeline.initializeScrollers === 'function') {
+            App.timeline.initializeScrollers()
+        }
+    })
+}
 
 /**
  * Initialize the timeline component with scrollers
@@ -2585,47 +2680,73 @@ App.initializeTimeline = (startObserver = true) => {
         return
     }
 
+    // Setup horizontal scrolling enhancements after timeline renders
+    let edgeScroller = null
+    let dragScroll = null
+
+    /**
+     * Initialize horizontal scrollers for timeline navigation
+     * Called after timeline is positioned in its final location
+     */
+    const initializeTimelineScrollers = () => {
+        const timelineContent = document.querySelector('#timeline-content')
+        if (!timelineContent) {
+            console.warn('Timeline: Content element not found')
+            return
+        }
+
+        const isScrollable = () => timelineContent.scrollWidth > timelineContent.clientWidth
+
+        const createScrollers = () => {
+            // Only create if currently scrollable AND not already created
+            if (!isScrollable()) return
+
+            if (!edgeScroller) {
+                edgeScroller = new HorizontalEdgeScroller({ id: 'timeline', element: timelineContent })
+            }
+            if (!dragScroll) {
+                dragScroll = new HorizontalDragScroller({ element: timelineContent })
+            }
+        }
+
+        const destroyScrollers = () => {
+            // Clean up both scrollers
+            if (edgeScroller) {
+                edgeScroller.destroy()
+                edgeScroller = null
+            }
+            if (dragScroll) {
+                dragScroll.destroy()
+                dragScroll = null
+            }
+        }
+
+        const handleResize = () => {
+            // Check scrollability and create/destroy scrollers accordingly
+            if (isScrollable()) {
+                // Create scrollers if they don't exist yet
+                createScrollers()
+            } else {
+                // Destroy scrollers if element is no longer scrollable
+                destroyScrollers()
+            }
+        }
+
+        // Initial setup
+        handleResize()
+
+        // Register with centralized ResizeManager for cleanup and consistency
+        ResizeManager.register(handleResize)
+    }
+
+    // Store initializer on timeline instance for external access
+    App.timeline.initializeScrollers = initializeTimelineScrollers
+
     container.appendChild(App.timeline)
 
     // Only start observer if requested (skip for deep-link scenarios)
     if (startObserver) {
         App.timeline.startIntersectionObserver()
-    }
-
-    // Setup horizontal scrolling enhancements
-    const timelineContent = document.querySelector('#timeline-content')
-    let edgeScroller, dragScroll
-
-    const isScrollable = () => timelineContent && timelineContent.scrollWidth > timelineContent.clientWidth
-
-    const createScrollers = () => {
-        if (!isScrollable()) return
-        if (!edgeScroller) edgeScroller = new HorizontalEdgeScroller({ id: 'timeline', element: timelineContent })
-        if (!dragScroll) dragScroll = new HorizontalDragScroller({ element: timelineContent })
-    }
-
-    const destroyScrollers = () => {
-        if (edgeScroller) {
-            edgeScroller.destroy()
-            edgeScroller = null
-        }
-        if (dragScroll) {
-            dragScroll.destroy()
-            dragScroll = null
-        }
-    }
-
-    const handleResize = () => {
-        if (isScrollable()) {
-            createScrollers()
-        } else {
-            destroyScrollers()
-        }
-    }
-
-    if (timelineContent) {
-        handleResize()
-        window.addEventListener('resize', handleResize)
     }
 }
 
@@ -2698,34 +2819,6 @@ const applyNoAnimation = () => {
     for (let i = 0; i < elements.length; i++) {
         elements[i].classList.add(SKIP_ANIMATION_CLASS)
     }
-}
-
-// ============================================================================
-// Modal-Specific Initialization Functions
-// ============================================================================
-
-/**
- * Initialize 3D transform effect for modal profile footer art based on scroll
- * Event listeners persist for page lifetime per YAGNI principle
- */
-const initializeModalFooterArt = () => {
-    const footerArtWrapper = document.querySelector('.modal-profile__footer-art')
-    const footerArt = document.querySelector('.modal-profile__footer-art-gradient')
-    const modalProfile = App.getEl(DIALOG_CONFIG.PROFILE.id)
-
-    if (!footerArtWrapper || !footerArt || !modalProfile) return
-
-    const handleScroll = () => {
-        const rect = footerArtWrapper.getBoundingClientRect()
-        const modalRect = modalProfile.getBoundingClientRect()
-        const inViewDistance = Math.min(Math.max((modalRect.height + rect.height) - rect.bottom, 0), rect.height)
-        const progress = Math.min(Math.max(inViewDistance / rect.height, 0), 1)
-        footerArt.style.transform = `rotateX(${progress * 30}deg)`
-    }
-
-    modalProfile.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('resize', handleScroll)
-    handleScroll()
 }
 
 // ============================================================================
@@ -3033,23 +3126,6 @@ function initializeGlobalEventHandlers() {
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Constants
-    const TOUCH_DEVICE_CLASS = 'touch-device'
-    const NO_FULLSCREEN_CLASS = 'no-fullscreen'
-
-    // Helper Functions
-
-    /**
-     * Check if menu intro animation has finished
-     * Helper for one-time animation check on first interaction
-     */
-    const isMenuAnimationFinished = () => {
-        const el = document.querySelector('.menu--animating .menu__background')
-        if (!el) return true
-        const animations = el.getAnimations()
-        return !animations || animations.length === 0 || animations[0].playState === 'finished'
-    }
-
     // Animation Skip Setup
 
     // Apply no animation on first click
@@ -3070,13 +3146,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Detect touch device and setup touch-specific handlers
     if (isTouchDevice) {
-        document.body.classList.add(TOUCH_DEVICE_CLASS)
-        initializeTouchButtonHandler()
+        document.body.classList.add(DEVICE_CLASSES.TOUCH_DEVICE)
+        // Touch button cleanup is handled in initializeGlobalEventHandlers()
     }
 
     // Detect fullscreen support
     if (!isFullscreenSupported()) {
-        document.body.classList.add(NO_FULLSCREEN_CLASS)
+        document.body.classList.add(DEVICE_CLASSES.NO_FULLSCREEN)
     }
 
     setupFullscreenSync()
@@ -3123,29 +3199,6 @@ document.addEventListener('DOMContentLoaded', () => {
         dropdownSelector: '#menu-dropdown',
         itemSelector: 'a, label, button'
     })
-
-    // Timeline Positioning Setup
-
-    // Setup global timeline positioning function with cached queries
-    App.positionTimeline = (() => {
-        // Cache positioning elements (queried once, reused on every resize)
-        let archiveWrapperEl, timelineContentSectionEl, timelineWrapperEl
-
-        return () => {
-            // Lazy initialization with caching
-            archiveWrapperEl ??= document.querySelector('.modal-archive__timeline')
-            timelineContentSectionEl ??= document.querySelector('.modal-archive__timeline-grid [data-timeline-section]')
-            timelineWrapperEl ??= document.querySelector('#horizontal-timeline')
-
-            if (!archiveWrapperEl || !timelineContentSectionEl || !timelineWrapperEl) return
-
-            const archiveWrapperRect = archiveWrapperEl.getBoundingClientRect()
-            const timelineContentSectionRect = timelineContentSectionEl.getBoundingClientRect()
-
-            timelineWrapperEl.style.setProperty('left', `${timelineContentSectionRect.left - archiveWrapperRect.left}px`)
-            timelineWrapperEl.style.setProperty('right', `${archiveWrapperRect.right - timelineContentSectionRect.right}px`)
-        }
-    })()
 
     // Resize Handler Registration
 

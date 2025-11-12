@@ -30,6 +30,17 @@
 
 var aria = aria || {}
 
+/**
+ * Double requestAnimationFrame helper - ensures callback runs after browser paint
+ * Useful for DOM changes that need to sync with layout/paint cycle
+ * @param {Function} callback - Function to execute after paint
+ */
+function afterPaint(callback) {
+    requestAnimationFrame(() => {
+        requestAnimationFrame(callback)
+    })
+}
+
 // Lightweight local DOM getter with caching
 // Keeps dialog.js standalone while avoiding repeated document.getElementById calls
 aria._elCache = aria._elCache || {}
@@ -465,17 +476,15 @@ aria.Dialog.prototype.createFocusTrapNodes = function () {
  * @param {string} hash - URL hash to set
  */
 aria.Dialog.prototype.handleInitialFocus = function (hash) {
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            if (hash) window.location.hash = hash
+    afterPaint(() => {
+        if (hash) window.location.hash = hash
 
-            if (this.focusFirst && typeof this.focusFirst.focus === 'function') {
-                this.focusFirst.focus()
-            } else {
-                aria.Utils.focusFirstDescendant(this.dialogNode)
-            }
-            this.lastFocus = document.activeElement
-        })
+        if (this.focusFirst && typeof this.focusFirst.focus === 'function') {
+            this.focusFirst.focus()
+        } else {
+            aria.Utils.focusFirstDescendant(this.dialogNode)
+        }
+        this.lastFocus = document.activeElement
     })
 }
 
