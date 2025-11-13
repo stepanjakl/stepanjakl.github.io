@@ -89,7 +89,6 @@ body.no-fullscreen .modal__fullscreen-button {
 /* Light mode - Menu dropdown */
 
 #mode:checked~main #menu-dropdown>div {
-    background-color: var(--light-50);
     outline-color: transparent;
     border-color: var(--dark-20);
 }
@@ -533,4 +532,56 @@ body.modal-archive-open #modal-archive .modal__content {
 #mode:checked~main .hover-cards img,
 #mode:checked~main .modal-profile__photo {
     filter: none;
+}
+
+
+/* Reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        filter: none !important;
+        scroll-behavior: auto !important;
+    }
+
+    main {
+        --context-bg: var(--cyan-quarter-25);
+        --context-bg-2: var(--cyan-quarter-35);
+        --modal-bg-blur: var(--cyan-three-quarters-25), var(--cyan-three-quarters-25);
+        --modal-bg-archive: var(--cyan-three-quarters-25);
+        --modal-bg-pattern: none;
+        --menu-bg: transparent;
+
+        --tooltip-bg: transparent;
+    }
+
+    #mode:checked~main {
+        --context-bg: var(--cyan-quarter-80);
+        --context-bg-2: var(--cyan-quarter-90);
+        --modal-bg-blur: var(--cyan-quarter-95), var(--cyan-quarter-95);
+        --modal-bg-archive: var(--cyan-quarter-95);
+        --modal-bg-pattern: none;
+        --menu-bg: transparent;
+
+        --tooltip-bg: transparent;
+    }
+
+    #timeline-wrapper {
+        background-color: var(--cyan-full-40);
+    }
+
+    #mode:checked~main #timeline-wrapper {
+        background-color: var(--cyan-half-85);
+    }
+
+    .modal-profile__footer-art {
+        display: none;
+    }
+
+    [data-carousel-slides] figure a img {
+        transform: none;
+    }
 }

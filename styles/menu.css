@@ -84,7 +84,6 @@
 /* Menu email */
 
 .menu__email {
-    place-self: self-start;
     margin: var(--menu-space-gap) var(--menu-space-gap) 0 var(--menu-space-gap);
     border-radius: 1.5rem 1.5rem 0.5rem 1.5rem;
 }
@@ -92,23 +91,24 @@
 @media (min-width: 45rem) {
 
     .menu__email,
-    .menu__link:last-child {
+    .menu__link {
         border-radius: var(--menu-item-border-radius);
     }
 
     .menu__email {
         margin: 0.5rem 0 0 0.5rem;
-        border-radius: var(--menu-item-border-radius);
     }
 }
 
 .menu__email-button {
-    display: inline-flex;
+    display: flex;
+    flex-grow: 1;
     align-items: center;
 }
 
 .menu__email-icon {
     display: inline-flex;
+    flex-shrink: 0;
     padding: 0.6875rem;
     border-radius: 999rem;
     background-color: var(--dark-25);
@@ -133,6 +133,7 @@
 }
 
 .menu__email-text {
+    flex-grow: 1;
     padding: 0 1.5rem 0 1rem;
     letter-spacing: 0.078125rem;
     cursor: text;
@@ -166,6 +167,7 @@
 
 .menu__link-icon {
     display: inline-flex;
+    flex-shrink: 0;
     border-radius: 999rem;
     background-color: var(--dark-25);
 }
@@ -215,7 +217,8 @@
 }
 
 .menu__link-label {
-    text-align: center;
+    flex-grow: 1;
+    text-align: left;
     padding: 0 0.75rem 0 1rem;
     margin-top: -0.078125rem;
     letter-spacing: 0.125rem;
@@ -223,12 +226,12 @@
 
 @media (min-width: 45rem) {
     .menu__link-label {
+        text-align: center;
         padding: 0 0.75rem 0 0.625rem;
     }
 }
 
 .menu__link-label-text {
-    text-align: center;
     text-transform: uppercase;
     user-select: none;
 }
@@ -406,7 +409,7 @@ body {
     padding-top: 50%;
     bottom: 100%;
     margin-bottom: 0.375rem;
-    margin-right: 0.5rem;
+    margin-right: calc(0.5rem - max(1px, 0.0625rem));
 }
 
 @media (min-width: 45rem) {

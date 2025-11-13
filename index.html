@@ -2,28 +2,31 @@
 <html lang="en">
     <head>
         <!-- Initial styles -->
-        <style>main { opacity: 0; }</style>
+        <style>
+            main {
+                opacity: 0;
+            }
+        </style>
 
-        <!-- Error monitoring (GlitchTip) -->
-        <link rel="preconnect" href="https://browser.sentry-cdn.com">
-        <link rel="dns-prefetch" href="https://browser.sentry-cdn.com">
-        <link rel="preconnect" href="https://app.glitchtip.com">
-        <link rel="dns-prefetch" href="https://app.glitchtip.com">
-        <script src="https://browser.sentry-cdn.com/8.25.0/bundle.min.js"
-                crossorigin="anonymous"></script>
+        <!-- Umami - Analytics -->
+        <script defer src="https://cloud.umami.is/script.js" data-website-id="6f9d8fb6-c4c3-410e-bba3-7b8cafd6ed04"></script>
+
+        <!-- GlitchTip - Error tracking -->
+        <script src="https://browser.sentry-cdn.com/10.25.0/bundle.min.js" crossorigin="anonymous"></script>
+
         <script>
-            Sentry.init({
-                dsn: "https://f290201df2b04ab98a6863d0f5f322ca@app.glitchtip.com/7660",
-                tracesSampleRate: 0.01,
-            })
+                Sentry.init({
+                    dsn: "https://7388455908f8442ba73a83bca2c9403c@app.glitchtip.com/13576",
+                    tracesSampleRate: 0.01,
+                });
 
-            window.onerror = function(message, source, lineno, colno, error) {
-                Sentry.captureException(error)
-            }
+                window.onerror = function(message, source, lineno, colno, error) {
+                    Sentry.captureException(error)
+                }
 
-            window.onunhandledrejection = function(event) {
-                Sentry.captureException(event.reason)
-            }
+                window.onunhandledrejection = function(event) {
+                    Sentry.captureException(event.reason)
+                }
         </script>
 
         <!-- Page metadata -->
@@ -39,16 +42,20 @@
         <meta property="og:type" content="website">
         <meta property="og:url" content="https://stepanjakl.com/">
         <meta property="og:site_name" content="Štěpán Jákl Portfolio">
-        <meta property="og:title" content="Štěpán Jákl | Full-stack web developer & interface designer">
-        <meta property="og:description" content="Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.">
-        <meta property="og:image" content="https://stepanjakl.com/images/og-banner.jpg">
+        <meta property="og:title"
+              content="Štěpán Jákl | Full-stack web developer & interface designer">
+        <meta property="og:description"
+              content="Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.">
+        <meta property="og:image"
+              content="https://stepanjakl.com/images/og-banner.jpg">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta property="og:image:alt" content="Personal site banner">
         <meta property="og:locale" content="en_GB">
 
         <!-- Viewport & device settings -->
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=contain">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1, viewport-fit=contain">
 
         <!-- Browser cache control -->
         <meta http-equiv="cache-control" content="no-cache">
@@ -86,47 +93,42 @@
 
         <!-- Structured data (JSON-LD schema) -->
         <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "Person",
-            "name": "Štěpán Jákl",
-            "url": "https://stepanjakl.com",
-            "image": "https://stepanjakl.com/images/selfie.jpg",
-            "jobTitle": "Full-stack web developer & interface designer",
-            "description": "Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.",
-            "nationality": {
-                "@type": "Country",
-                "name": "Czech Republic"
-            },
-            "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "Manchester",
-                "addressCountry": "GB"
-            },
-            "alumniOf": [
-                {
-                "@type": "CollegeOrUniversity",
-                "name": "Brunel University London"
+            {
+                "@context": "https://schema.org",
+                "@type": "Person",
+                "name": "Štěpán Jákl",
+                "url": "https://stepanjakl.com",
+                "image": "https://stepanjakl.com/images/selfie.jpg",
+                "jobTitle": "Full-stack web developer & interface designer",
+                "description": "Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.",
+                "nationality": {
+                    "@type": "Country",
+                    "name": "Czech Republic"
                 },
-                {
-                "@type": "CollegeOrUniversity",
-                "name": "University of Worcester"
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Manchester",
+                    "addressCountry": "GB"
                 },
-                {
-                "@type": "CollegeOrUniversity",
-                "name": "Brock University"
-                },
-                {
-                "@type": "EducationalOrganization",
-                "name": "Technical / IT secondary school"
-                }
-            ],
-            "sameAs": [
-                "https://linkedin.com/in/stepanjakl",
-                "https://github.com/stepanjakl",
-                "https://codepen.io/stepj"
-            ]
-        }
+                "alumniOf": [{
+                    "@type": "CollegeOrUniversity",
+                    "name": "Brunel University London"
+                }, {
+                    "@type": "CollegeOrUniversity",
+                    "name": "University of Worcester"
+                }, {
+                    "@type": "CollegeOrUniversity",
+                    "name": "Brock University"
+                }, {
+                    "@type": "EducationalOrganization",
+                    "name": "Technical / IT secondary school"
+                }],
+                "sameAs": [
+                    "https://linkedin.com/in/stepanjakl",
+                    "https://github.com/stepanjakl",
+                    "https://codepen.io/stepj"
+                ]
+            }
         </script>
 
         <!-- Scripts -->
@@ -268,8 +270,7 @@
                         </div>
 
                         <!-- Navigation menu -->
-                        <nav id="menu"
-                             class="menu menu--animating">
+                        <nav id="menu" class="menu menu--animating">
                             <!-- Menu background decoration -->
                             <div class="menu__background">
                             </div>
@@ -300,10 +301,7 @@
                                    class="menu__link menu__link--profile tooltip"
                                    style="--i:1">
                                     <span class="menu__link-icon menu__link-icon--animated">
-                                        <svg height="100%"
-                                             width="100%"
-                                             viewBox="0 0 40 40"
-                                             fill="currentColor">
+                                        <svg height="100%" width="100%" viewBox="0 0 40 40" fill="currentColor">
                                             <path d="M14.917 24c-.64 0-1.174-.215-1.605-.646-.43-.43-.645-.965-.645-1.604 0-.639.222-1.173.666-1.604.445-.43.986-.646 1.625-.646.64 0 1.167.215 1.584.646.417.43.625.965.625 1.604 0 .639-.215 1.173-.646 1.604-.43.43-.965.646-1.604.646Zm10.166 0c-.639 0-1.173-.215-1.604-.646-.43-.43-.646-.965-.646-1.604 0-.639.215-1.173.646-1.604.43-.43.965-.646 1.604-.646.64 0 1.181.215 1.625.646.445.43.667.965.667 1.604 0 .639-.222 1.173-.667 1.604a2.25 2.25 0 0 1-1.625.646ZM20 33.667c3.805 0 7.035-1.326 9.688-3.979 2.653-2.653 3.979-5.883 3.979-9.688 0-.695-.049-1.368-.146-2.021a9.868 9.868 0 0 0-.438-1.812 11.41 11.41 0 0 1-1.75.291c-.61.056-1.25.084-1.916.084-2.611 0-5.07-.535-7.375-1.604a16.598 16.598 0 0 1-5.917-4.605A16.73 16.73 0 0 1 12.208 16a18.409 18.409 0 0 1-5.833 3.75v.292c0 3.805 1.32 7.027 3.958 9.666 2.64 2.64 5.862 3.959 9.667 3.959Zm.042 3.666c-2.417 0-4.674-.458-6.771-1.375-2.097-.917-3.93-2.153-5.5-3.708-1.57-1.555-2.812-3.389-3.729-5.5-.917-2.111-1.375-4.361-1.375-6.75 0-2.389.458-4.639 1.375-6.75.917-2.111 2.16-3.945 3.729-5.5 1.57-1.555 3.403-2.791 5.5-3.708 2.097-.917 4.354-1.375 6.771-1.375 2.389 0 4.632.458 6.729 1.375 2.097.917 3.93 2.153 5.5 3.708 1.57 1.555 2.805 3.389 3.708 5.5s1.354 4.361 1.354 6.75c0 2.389-.451 4.639-1.354 6.75-.903 2.111-2.139 3.952-3.708 5.521-1.57 1.57-3.41 2.805-5.521 3.708-2.111.903-4.347 1.354-6.708 1.354Z" />
                                         </svg>
                                     </span>
@@ -428,29 +426,29 @@
                                             </svg>
                                         </a>
                                         <hr>
-                         <label id="menu-dropdown-light-mode"
-                             for="mode"
-                             tabindex="0"
-                             onkeydown="if(event.key === 'Enter') { App.keyActivate('mode','menu-dropdown-dark-mode') }">
+                                        <label id="menu-dropdown-light-mode"
+                                               for="mode"
+                                               tabindex="0"
+                                               onkeydown="if(event.key === 'Enter') { App.keyActivate('mode','menu-dropdown-dark-mode') }">
                                             <svg>
                                                 <use xlink:href="images/icons.svg#menu-light-mode"></use>
                                             </svg>
                                             <span class="text-sm">Light mode</span>
                                         </label>
-                         <label id="menu-dropdown-dark-mode"
-                             for="mode"
-                             tabindex="0"
-                             onkeydown="if(event.key === 'Enter') { App.keyActivate('mode','menu-dropdown-light-mode') }">
+                                        <label id="menu-dropdown-dark-mode"
+                                               for="mode"
+                                               tabindex="0"
+                                               onkeydown="if(event.key === 'Enter') { App.keyActivate('mode','menu-dropdown-light-mode') }">
                                             <svg>
                                                 <use xlink:href="images/icons.svg#menu-dark-mode"></use>
                                             </svg>
                                             <span class="text-sm">Dark mode</span>
                                         </label>
-                         <label id="menu-dropdown-fullscreen"
-                             for="fullscreen"
-                             tabindex="0"
-                             onclick="App.toggleFullscreen()"
-                             onkeydown="if(event.key === 'Enter') { App.toggleFullscreen() }">
+                                        <label id="menu-dropdown-fullscreen"
+                                               for="fullscreen"
+                                               tabindex="0"
+                                               onclick="App.toggleFullscreen()"
+                                               onkeydown="if(event.key === 'Enter') { App.toggleFullscreen() }">
                                             <svg class="fullscreen-checked:hidden flex">
                                                 <use xlink:href="images/icons.svg#menu-fullscreen"></use>
                                             </svg>
@@ -459,10 +457,10 @@
                                             </svg>
                                             <span class="text-sm">Fullscreen</span>
                                         </label>
-                         <label id="menu-dropdown-debug"
-                             for="debug"
-                             tabindex="0"
-                             onkeydown="if(event.key === 'Enter') { App.keyActivate('debug') }">
+                                        <label id="menu-dropdown-debug"
+                                               for="debug"
+                                               tabindex="0"
+                                               onkeydown="if(event.key === 'Enter') { App.keyActivate('debug') }">
                                             <svg class="debug-checked:hidden flex">
                                                 <use xlink:href="images/icons.svg#menu-debug"></use>
                                             </svg>
@@ -478,7 +476,10 @@
                     </div>
 
                     <!-- Modal: Profile -->
-                    <dialog id="modal-profile" class="modal modal--profile" aria-modal="true" inert>
+                    <dialog id="modal-profile"
+                            class="modal modal--profile"
+                            aria-modal="true"
+                            inert>
                         <div class="modal__content">
                             <div class="modal__controls">
                                 <a href="#"
@@ -576,7 +577,9 @@
                                     </dt>
                                     <dd class="modal-profile__timezone">
                                         <span lang="en-GB">Europe/London</span>
-                                        <span class="modal-profile__timezone-live" aria-live="polite" aria-atomic="true"></span>
+                                        <span class="modal-profile__timezone-live"
+                                              aria-live="polite"
+                                              aria-atomic="true"></span>
                                     </dd>
                                     <dt>
                                         <span>Deliverables:</span>
@@ -685,13 +688,17 @@
                                 </dl>
                             </div>
                             <div class="modal-profile__footer-art">
-                                <figure class="modal-profile__footer-art-gradient"></figure>
+                                <figure class="modal-profile__footer-art-gradient">
+                                </figure>
                             </div>
                         </div>
                     </dialog>
 
                     <!-- Modal: Archive -->
-                    <dialog id="modal-archive" class="modal modal--archive" aria-modal="true" inert>
+                    <dialog id="modal-archive"
+                            class="modal modal--archive"
+                            aria-modal="true"
+                            inert>
                         <figure class="modal__content">
                             <!-- Modal controls -->
                             <div class="modal__controls">
@@ -703,11 +710,11 @@
                                         <use xlink:href="images/icons.svg#close"></use>
                                     </svg>
                                 </a>
-                    <label for="fullscreen"
-                        tabindex="0"
-                        onclick="App.toggleFullscreen()"
-                        onkeydown="if(event.key === 'Enter') { App.toggleFullscreen() }"
-                        class="modal__fullscreen-button">
+                                <label for="fullscreen"
+                                       tabindex="0"
+                                       onclick="App.toggleFullscreen()"
+                                       onkeydown="if(event.key === 'Enter') { App.toggleFullscreen() }"
+                                       class="modal__fullscreen-button">
                                     <svg class="fullscreen-checked:hidden flex">
                                         <use xlink:href="images/icons.svg#fullscreen"></use>
                                     </svg>
@@ -731,7 +738,8 @@
                                     <div class="modal-archive__timeline-grid">
                                         <!-- Timeline section: 2024-21 -->
                                         <!-- 2024-21 -->
-                                        <section data-timeline-section-title="2024-21" class="modal-archive__timeline-section-title">
+                                        <section data-timeline-section-title="2024-21"
+                                                 class="modal-archive__timeline-section-title">
                                             <div>
                                                 <label for="timeline-section-year-2024-21" tabindex="0">
                                                     2024
@@ -747,7 +755,8 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="2024-21" class="modal-archive__timeline-section">
+                                        <section data-timeline-section="2024-21"
+                                                 class="modal-archive__timeline-section">
                                             <figure>
                                                 <hr>
                                                 <hr>
@@ -761,7 +770,8 @@
                                                     <div class="hover-cards hover-cards--variant-cloudraker-tfp">
                                                         <figure>
                                                             <div>
-                                                                <a href="projects/2024-21/cloudraker-tfp/landing-hero-ovo.full.png" target="_blank">
+                                                                <a href="projects/2024-21/cloudraker-tfp/landing-hero-ovo.full.png"
+                                                                   target="_blank">
                                                                     <img loading="lazy"
                                                                          src="projects/2024-21/cloudraker-tfp/landing-hero-ovo.min.png"
                                                                          alt="OVO Fertility landing page hero section"
@@ -772,7 +782,8 @@
                                                         </figure>
                                                         <figure>
                                                             <div>
-                                                                <a href="projects/2024-21/cloudraker-tfp/landing-hero-olive.full.png" target="_blank">
+                                                                <a href="projects/2024-21/cloudraker-tfp/landing-hero-olive.full.png"
+                                                                   target="_blank">
                                                                     <img loading="lazy"
                                                                          src="projects/2024-21/cloudraker-tfp/landing-hero-olive.min.png"
                                                                          alt="Olive Fertility landing page hero section"
@@ -783,7 +794,8 @@
                                                         </figure>
                                                         <figure>
                                                             <div>
-                                                                <a href="projects/2024-21/cloudraker-tfp/landing-hero-heartland.full.png" target="_blank">
+                                                                <a href="projects/2024-21/cloudraker-tfp/landing-hero-heartland.full.png"
+                                                                   target="_blank">
                                                                     <img loading="lazy"
                                                                          src="projects/2024-21/cloudraker-tfp/landing-hero-heartland.min.png"
                                                                          alt="Heartland Fertility landing page hero section"
@@ -794,7 +806,8 @@
                                                         </figure>
                                                         <figure>
                                                             <div>
-                                                                <a href="projects/2024-21/cloudraker-tfp/landing-hero-conceptia.full.png" target="_blank">
+                                                                <a href="projects/2024-21/cloudraker-tfp/landing-hero-conceptia.full.png"
+                                                                   target="_blank">
                                                                     <img loading="lazy"
                                                                          src="projects/2024-21/cloudraker-tfp/landing-hero-conceptia.min.png"
                                                                          alt="Conceptia Fertility landing page hero section"
@@ -805,7 +818,8 @@
                                                         </figure>
                                                         <figure>
                                                             <div>
-                                                                <a href="projects/2024-21/cloudraker-tfp/landing-hero-grace.full.png" target="_blank">
+                                                                <a href="projects/2024-21/cloudraker-tfp/landing-hero-grace.full.png"
+                                                                   target="_blank">
                                                                     <img loading="lazy"
                                                                          src="projects/2024-21/cloudraker-tfp/landing-hero-grace.min.png"
                                                                          alt="Grace Fertility landing page hero section"
@@ -831,8 +845,10 @@
                                                             <span>Video:</span>
                                                         </li>
                                                         <li>
-                                                            <a href="projects/2024-21/cloudraker-tfp/showreel-front.mp4" target="_blank">Showreel - Front <span class="mid">(2:10)</span></a>
-                                                            <a href="projects/2024-21/cloudraker-tfp/showreel-back.mp4" target="_blank">Showreel - Back <span class="mid">(1:02)</span></a>
+                                                            <a href="projects/2024-21/cloudraker-tfp/showreel-front.mp4"
+                                                               target="_blank">Showreel - Front <span class="mid">(2:10)</span></a>
+                                                            <a href="projects/2024-21/cloudraker-tfp/showreel-back.mp4"
+                                                               target="_blank">Showreel - Back <span class="mid">(1:02)</span></a>
                                                         </li>
                                                     </ul>
                                                     <ul>
@@ -920,7 +936,8 @@
                                                             <span>Video:</span>
                                                         </li>
                                                         <li>
-                                                            <a href="projects/2024-21/apostrophe-template/template-demo-landing-page-scrollthrough.mp4" target="_blank">Template Demo Page Scrollthrough <span class="mid">(0:50)</span></a>
+                                                            <a href="projects/2024-21/apostrophe-template/template-demo-landing-page-scrollthrough.mp4"
+                                                               target="_blank">Template Demo Page Scrollthrough <span class="mid">(0:50)</span></a>
                                                         </li>
                                                     </ul>
                                                 </nav>
@@ -1052,10 +1069,10 @@
                                                         <li>
                                                             <a href="projects/2024-21/apostrophe-stripe-extension/admin-ux-walkthrough-demo.mp4"
                                                                target="_blank">CMS Demo <span class="mid">(0:51)</span></a>
-                                                               <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-js-example-userflow.mp4"
-                                                                  target="_blank">User Demo w/ Alpine.js <span class="mid">(0:35)</span></a>
-                                                                  <a href="projects/2024-21/apostrophe-stripe-extension/store-htmx-example-userflow.mp4"
-                                                                     target="_blank">User Demo w/ HTMX <span class="mid">(0:31)</span></a>
+                                                            <a href="projects/2024-21/apostrophe-stripe-extension/store-alpine-js-example-userflow.mp4"
+                                                               target="_blank">User Demo w/ Alpine.js <span class="mid">(0:35)</span></a>
+                                                            <a href="projects/2024-21/apostrophe-stripe-extension/store-htmx-example-userflow.mp4"
+                                                               target="_blank">User Demo w/ HTMX <span class="mid">(0:31)</span></a>
                                                         </li>
                                                     </ul>
                                                 </nav>
@@ -1067,7 +1084,8 @@
 
                                         <!-- Timeline section: 2021-19 -->
                                         <!-- 2021-19 -->
-                                        <section data-timeline-section-title="2021-19" class="modal-archive__timeline-section-title">
+                                        <section data-timeline-section-title="2021-19"
+                                                 class="modal-archive__timeline-section-title">
                                             <div>
                                                 <label for="timeline-section-year-2021-19" tabindex="0">
                                                     2021-19
@@ -1083,7 +1101,8 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="2021-19" class="modal-archive__timeline-section">
+                                        <section data-timeline-section="2021-19"
+                                                 class="modal-archive__timeline-section">
                                             <figure>
                                                 <hr>
                                                 <hr>
@@ -1146,7 +1165,7 @@
                                                             <a href="projects/2021-19/bohemica-store/landing-page-dark.full.jpg"
                                                                target="_blank">Dark Page</a>
                                                             <a href="projects/2021-19/bohemica-store/landing-page-light.full.jpg"
-                                                                  target="_blank">Light Page</a>
+                                                               target="_blank">Light Page</a>
                                                         </li>
                                                     </ul>
                                                 </nav>
@@ -1218,8 +1237,8 @@
                                                         <li>
                                                             <a href="projects/2021-19/bohemica-signage/playlist-detail-fullscreen.full.png"
                                                                target="_blank">Playlist</a>
-                                                               <a href="projects/2021-19/bohemica-signage/display-detail-fullscreen.full.png"
-                                                                  target="_blank">Display</a>
+                                                            <a href="projects/2021-19/bohemica-signage/display-detail-fullscreen.full.png"
+                                                               target="_blank">Display</a>
                                                         </li>
                                                     </ul>
                                                 </nav>
@@ -1268,7 +1287,8 @@
 
                                         <!-- Timeline section: 2019-18 -->
                                         <!-- 2019/18 -->
-                                        <section data-timeline-section-title="2019-18" class="modal-archive__timeline-section-title">
+                                        <section data-timeline-section-title="2019-18"
+                                                 class="modal-archive__timeline-section-title">
                                             <div>
                                                 <label for="timeline-section-year-2019-18" tabindex="0">
                                                     2019-18
@@ -1284,7 +1304,8 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="2019-18" class="modal-archive__timeline-section">
+                                        <section data-timeline-section="2019-18"
+                                                 class="modal-archive__timeline-section">
                                             <figure>
                                                 <hr>
                                                 <hr>
@@ -1376,9 +1397,9 @@
                                                         <li>
                                                             <a href="projects/2019-18/aeropot/concept-presentation-poster.pdf"
                                                                target="_blank">Concept Presentation Poster</a>
-                                                               <a href="projects/2019-18/aeropot/dissertation.pdf" target="_blank">Dissertation</a>
-                                                               <a href="projects/2019-18/aeropot/development-report.pdf"
-                                                                  target="_blank">Development Report</a>
+                                                            <a href="projects/2019-18/aeropot/dissertation.pdf" target="_blank">Dissertation</a>
+                                                            <a href="projects/2019-18/aeropot/development-report.pdf"
+                                                               target="_blank">Development Report</a>
                                                         </li>
                                                     </ul>
                                                     <ul>
@@ -1388,8 +1409,8 @@
                                                         <li>
                                                             <a href="projects/2019-18/aeropot/plant-growth-timelapse.mp4"
                                                                target="_blank">Plant Growth Timelapse <span class="mid">(0:27)</span></a>
-                                                               <a href="projects/2019-18/aeropot/top-cover-light-effect.mp4"
-                                                                  target="_blank">Top Cover Light Effect <span class="mid">(0:16)</span></a>
+                                                            <a href="projects/2019-18/aeropot/top-cover-light-effect.mp4"
+                                                               target="_blank">Top Cover Light Effect <span class="mid">(0:16)</span></a>
                                                         </li>
                                                     </ul>
                                                     <ul>
@@ -1427,7 +1448,8 @@
 
                                         <!-- Timeline section: Elsewhen -->
                                         <!-- Elsewhen -->
-                                        <section data-timeline-section-title="elsewhen" class="modal-archive__timeline-section-title">
+                                        <section data-timeline-section-title="elsewhen"
+                                                 class="modal-archive__timeline-section-title">
                                             <div>
                                                 <label for="timeline-section-year-elsewhen" tabindex="0">
                                                     Elsewhen
@@ -1443,7 +1465,8 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="elsewhen" class="modal-archive__timeline-section">
+                                        <section data-timeline-section="elsewhen"
+                                                 class="modal-archive__timeline-section">
                                             <figure>
                                                 <hr>
                                                 <hr>
@@ -1529,10 +1552,10 @@
                                                         <li>
                                                             <a href="projects/elsewhen/mockup-wireframe/document-data-extraction-ui-ux-task.full.png"
                                                                target="_blank">Document Data Extraction UI/UX Task</a>
-                                                               <a href="projects/elsewhen/mockup-wireframe/full-mockup-with-measurements.full.jpg"
-                                                                  target="_blank">Full Mockup with Measurements</a>
-                                                                  <a href="projects/elsewhen/mockup-wireframe/website-service-wireframe.full.png"
-                                                                     target="_blank">Website Service Wireframe</a>
+                                                            <a href="projects/elsewhen/mockup-wireframe/full-mockup-with-measurements.full.jpg"
+                                                               target="_blank">Full Mockup with Measurements</a>
+                                                            <a href="projects/elsewhen/mockup-wireframe/website-service-wireframe.full.png"
+                                                               target="_blank">Website Service Wireframe</a>
                                                         </li>
                                                     </ul>
                                                 </nav>
@@ -1605,7 +1628,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <figure id="modal-archive-footer-art-middle" class="modal-archive__footer-art-middle">
+                                                <figure id="modal-archive-footer-art-middle"
+                                                        class="modal-archive__footer-art-middle">
                                                     <hr>
                                                     <hr>
                                                     <hr>
@@ -1623,7 +1647,8 @@
                             </div>
 
                             <!-- Modal footer decoration -->
-                            <figure id="modal-archive-footer-art-left" class="modal-archive__footer-art-left">
+                            <figure id="modal-archive-footer-art-left"
+                                    class="modal-archive__footer-art-left">
                             </figure>
                         </figure>
                     </dialog>

@@ -411,7 +411,8 @@
 .modal-archive__timeline-section nav li:nth-child(2) p {
     font-family: 'Chakra Petch', monospace;
     font-size: 1.07143125rem;
-    line-height: 1.25rem;
+    line-height: 1.5rem;
+    font-weight: 500;
     margin: 0.3125rem 0 0.25rem 0.6875rem;
 }
 
@@ -430,6 +431,7 @@
 @media (min-width: 45rem) {
     .modal-archive__timeline-section nav li:nth-child(2),
     .modal-archive__timeline-section nav li:nth-child(2) p {
+        font-weight: 400;
         margin-left: 0;
     }
 }

@@ -255,7 +255,7 @@ body, html {
     /* 210, 25, 70 */
     --context-bg: rgba(176, 203, 210, 0.5);
     /* 210, 25, 80 */
-    --context-bg-2: rgba(176, 203, 210, 0.75);
+    --context-bg-2: var(--light-50);
     --context-bg-modal: var(--cyan-quarter-80);
     --context-bg-modal--hover: var(--cyan-quarter-85);
 
@@ -267,8 +267,8 @@ body, html {
     --modal-border-outer: var(--dark-15);
     --modal-border-inner: var(--light-50);
     --modal-bg-blur: var(--light-15), var(--light-35);
-    --modal-bg-archive: rgba(234, 242, 244, 0.975);
     /* 210, 25, 95 */
+    --modal-bg-archive: rgba(234, 242, 244, 0.975);
     --modal-underlay-bg-profile: rgba(255, 255, 255, 0);
     --modal-underlay-bg-archive: rgba(255, 255, 255, 0);
     --modal-icon: var(--cyan-half-45);

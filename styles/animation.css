@@ -46,10 +46,10 @@ body {
     --duration-bg-triangle-right-fade-in: calc(var(--anim-segment) * 15);
     --delay-bg-triangle-right-fade-in: calc(var(--anim-segment) * 7.75);
 
-    --duration-triangle-right-after-pulse: calc(var(--anim-segment) * 20);
-    --delay-triangle-right-after-pulse: calc(var(--anim-segment) * 7.75);
-    --duration-triangle-before-pulse: calc(var(--anim-segment) * 20);
-    --delay-triangle-before-pulse: calc(var(--anim-segment) * 7.75);
+    --duration-triangle-right-pull-after: calc(var(--anim-segment) * 20);
+    --delay-triangle-right-pull-after: calc(var(--delay-menu-links-fade-in) + var(--duration-menu-links-fade-in) + ((var(--anim-segment) * 0.75) * 3));
+    --duration-triangle-pull-before: calc(var(--anim-segment) * 20);
+    --delay-triangle-pull-before: calc(var(--delay-menu-links-fade-in) + var(--duration-menu-links-fade-in) + ((var(--anim-segment) * 0.75) * 3));
 
     --duration-availability-background-animate: calc(var(--anim-segment) * 1.5);
     --delay-availability-background-animate: calc(var(--anim-segment) * 9.75);
@@ -60,9 +60,6 @@ body {
     --delay-menu-background-animate: calc(var(--anim-segment) * 11.25);
     --duration-menu-links-fade-in: calc(var(--anim-segment) * 1.25);
     --delay-menu-links-fade-in: calc(var(--anim-segment) * 12.25);
-
-    --duration-triangle-flicker: calc(var(--anim-segment) * 20);
-    --delay-triangle-flicker: calc(var(--anim-segment) * 14.75);
 
     --duration-footer-fade-in: calc(var(--anim-segment) * 10);
     --delay-footer-fade-in: calc(var(--anim-segment) * 12.75);
@@ -457,14 +454,14 @@ footer>* {
 }
 
 .bg-triangle--right::before {
-    animation-name: triangle-before-pulse;
+    animation-name: triangle-pull-before;
     animation-fill-mode: both;
-    animation-duration: var(--duration-triangle-before-pulse);
+    animation-duration: var(--duration-triangle-pull-before);
     animation-timing-function: var(--ease-out-quad);
-    animation-delay: var(--delay-triangle-before-pulse);
+    animation-delay: var(--delay-triangle-pull-before);
 }
 
-@keyframes triangle-before-pulse {
+@keyframes triangle-pull-before {
     0% {
         height: calc(2 * 70.710678118655vh);
     }
@@ -476,13 +473,13 @@ footer>* {
 
 .bg-triangle--right::after {
     animation-fill-mode: both;
-    animation-name: triangle-right-after-pulse;
-    animation-duration: var(--duration-triangle-right-after-pulse);
+    animation-name: triangle-right-pull-after;
+    animation-duration: var(--duration-triangle-right-pull-after);
     animation-timing-function: var(--ease-out-quad);
-    animation-delay: var(--delay-triangle-right-after-pulse);
+    animation-delay: var(--delay-triangle-right-pull-after);
 }
 
-@keyframes triangle-right-after-pulse {
+@keyframes triangle-right-pull-after {
     0% {
         top: calc(2 * 14.6446609406725vh);
         height: calc(2 * 70.710678118655vh);

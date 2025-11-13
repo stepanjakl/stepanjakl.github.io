@@ -1084,39 +1084,60 @@ class HorizontalEdgeScroller {
 
     updatePseudoElementStyles() {
         const { id } = this.options
-        this.element.setAttribute('data-edge-scroll-id', id)
 
-        const styleId = `horizontal-edge-scroll-style-${id}`
+        // Remove existing elements if they exist
+        const existingLeft = this.element.querySelector(`[data-edge-scroll-left="${id}"]`)
+        const existingRight = this.element.querySelector(`[data-edge-scroll-right="${id}"]`)
+        if (existingLeft) existingLeft.remove()
+        if (existingRight) existingRight.remove()
 
-        if (!this.styleElement) {
-            this.styleElement = App.getEl(styleId)
-            if (!this.styleElement) {
-                this.styleElement = document.createElement('style')
-                this.styleElement.id = styleId
-                document.head.appendChild(this.styleElement)
-            }
-        }
-
-        const { edgeWidth } = this
-        this.styleElement.textContent = `
-          [data-edge-scroll-id="${id}"]::before,
-          [data-edge-scroll-id="${id}"]::after {
-            content: '';
+        // Create actual DOM elements for edge scrolling
+        const leftEdge = document.createElement('div')
+        leftEdge.setAttribute('data-edge-scroll-left', id)
+        leftEdge.setAttribute('aria-hidden', 'true')
+        leftEdge.style.cssText = `
             position: absolute;
             z-index: 5;
             display: block;
-            width: ${edgeWidth}px;
+            width: ${this.edgeWidth}px;
             user-select: none;
-          }
-          [data-edge-scroll-id="${id}"]::before {
+            -webkit-user-select: none;
             inset: 0 auto 0 0;
             cursor: w-resize;
-          }
-          [data-edge-scroll-id="${id}"]::after {
+        `
+
+        const rightEdge = document.createElement('div')
+        rightEdge.setAttribute('data-edge-scroll-right', id)
+        rightEdge.setAttribute('aria-hidden', 'true')
+        rightEdge.style.cssText = `
+            position: absolute;
+            z-index: 5;
+            display: block;
+            width: ${this.edgeWidth}px;
+            user-select: none;
+            -webkit-user-select: none;
             inset: 0 0 0 auto;
             cursor: e-resize;
-          }
         `
+
+        // Add click handlers for navigation
+        leftEdge.addEventListener('click', () => {
+            this.element.scrollBy({
+                left: -this.element.clientWidth * 0.75,
+                behavior: 'smooth'
+            })
+        })
+
+        rightEdge.addEventListener('click', () => {
+            this.element.scrollBy({
+                left: this.element.clientWidth * 0.75,
+                behavior: 'smooth'
+            })
+        })
+
+        // Append to element
+        this.element.appendChild(leftEdge)
+        this.element.appendChild(rightEdge)
     }
 
     // Event Handlers
@@ -1220,12 +1241,15 @@ class HorizontalEdgeScroller {
                 this.unregisterResize = null
             }
         }
-        if (this.styleElement && this.styleElement.parentElement) {
-            this.styleElement.remove()
-        }
-        if (this.element) {
-            this.element.removeAttribute('data-edge-scroll-id')
-        }
+
+        // Remove edge scroll elements
+        const leftEdge = this.element.querySelector(`[data-edge-scroll-left="${this.options.id}"]`)
+        const rightEdge = this.element.querySelector(`[data-edge-scroll-right="${this.options.id}"]`)
+        if (leftEdge) leftEdge.remove()
+        if (rightEdge) rightEdge.remove()
+
+        // Remove the data attribute
+        this.element.removeAttribute('data-edge-scroll-id')
     }
 }
 
@@ -1688,6 +1712,9 @@ class Popup {
                 position: fixed;
                 z-index: 300;
                 inset: 0;
+            }
+            .media_fallback_overlay:has(.media_fallback-content video) {
+                background: rgba(0, 0, 0, 0.75);
             }
             .media_fallback-wrapper {
                 position: relative;
