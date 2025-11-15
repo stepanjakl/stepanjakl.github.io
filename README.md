@@ -20,9 +20,17 @@
 
 > ##### Built with: HTML, CSS, and vanilla JavaScript
 >
-> ##### Philosophy: Fast, pixel-perfect, and fully responsive
+> ##### Philosophy: Fast, simple, and precise
 >
 > ##### Approach: No frameworks, no build tools, no generators—just pure craftsmanship
+
+---
+
+### 🧪 Testing & Deployment
+
+- **Local Testing**: Run `./minify-test.sh` to minify assets, preview the site locally on `http://localhost:222`, and clean up automatically.
+
+- **Release Process**: Push to the `release` branch to trigger automated minification and deployment to `gh-pages`.
 
 ---
 

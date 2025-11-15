@@ -103,7 +103,8 @@
     cursor: ne-resize;
 }
 
-.modal--profile .modal__body a:hover {
+.modal--profile .modal__body a:hover,
+.modal--profile .modal__body a:focus {
     text-decoration-color: var(--text-2);
     transition: text-decoration-color var(--animate-in-segment-2\/3) linear;
 }

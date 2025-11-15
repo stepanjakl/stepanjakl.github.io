@@ -1,7 +1,5 @@
-# This workflow is triggered by a push to the `main` branch
-# which it checks out, minimises the appropriate html/css/js
-# in-place, and pushes the changes to the `gh-pages` branch
-
+# This workflow is triggered by a push to the `release` branch
+# It checks out, minimises the appropriate html/css/js in-place, and pushes the changes to the `gh-pages` branch
 # Inspired by: https://stackoverflow.com/a/73882805/11035513
 
 name: minify-assets
@@ -28,20 +26,28 @@ jobs:
       - run: npm install -g html-minifier
       - run: npm install -g svgo
 
-      # Perform minification, overwriting original files
-      - run: terser ./scripts/timeline.js --compress --mangle --output ./scripts/timeline.js
+      # Perform minification, overwriting original files (originals preserved on release branch)
       - run: |
+          set -e
+          # Minify JS files
+          for js_file in scripts/*.js; do
+            echo "Minifying $js_file"
+            terser "$js_file" --compress --mangle --output "$js_file"
+          done
+          # Minify CSS files
           css_font_files=$(ls ./styles/*.css)
           echo "$css_font_files" | while IFS= read -r file; do
-          echo "Minifying $file"
-          csso --force-media-merge $file --output $file
+            echo "Minifying $file"
+            csso --force-media-merge "$file" --output "$file"
           done
-      - run: html-minifier --case-sensitive --collapse-inline-tag-whitespace --collapse-whitespace --minify-css --minify-js --minify-urls --quote-character='"' --remove-comments index.html --output index.html
-      - run: svgo -f ./images -o ./images
+          # Minify HTML
+          html-minifier --case-sensitive --collapse-inline-tag-whitespace --collapse-whitespace --minify-css --minify-js --minify-urls --quote-character='"' --remove-comments index.html --output index.html
+          # Optimize images (SVGs only)
+          svgo --disable removeUselessDefs -f ./images --exclude icons.svg --exclude logos.svg
 
       # (Force) push changes to `gh-pages` branch
       - run: |
           git config user.name stepanjakl
           git config user.email stepan.jakl@outlook.com
-          git commit -am "Automated minify of ${{ github.sha }}"
+          git commit -am "Automated minify of ${{ github.sha }} (all JS files now included)"
           git push --force -u origin release:gh-pages
