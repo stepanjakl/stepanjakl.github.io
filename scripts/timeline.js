@@ -189,7 +189,7 @@ class HorizontalTimeline extends HTMLElement {
                             `).join('')}
                         </div>
                         <div id="timeline_labels" role="tablist" aria-label="Timeline navigation">
-                            ${this.labels.map((label, index) => `<button type="button" role="tab" data-label-for="${label}" aria-label="View ${label} projects" tabindex="${index === 0 ? '0' : '-1'}"><span>${label}<span></span></span></button>`).join('')}
+                            ${this.labels.map((label, index) => `<button type="button" role="tab" data-label-for="${label}" aria-label="View ${label} projects" aria-selected="${index === 0 ? 'true' : 'false'}" aria-controls="timeline-content-${label}" tabindex="${index === 0 ? '0' : '-1'}"><span>${label}<span></span></span></button>`).join('')}
                         </div>
                     </div>
                 </div>
@@ -397,14 +397,30 @@ class HorizontalTimeline extends HTMLElement {
 
     /**
      * Set the active label, removing active class from all others.
+     * Also announces the change to screen readers via live region.
      */
     setActiveLabel(section) {
         const labelEls = this.getLabelEls()
-        labelEls.forEach(el => el.classList.remove('active'))
+        labelEls.forEach(el => {
+            const isActive = el.getAttribute('data-label-for') === section
+
+            // Visual state
+            el.classList.toggle('active', isActive)
+
+            // Screen reader state
+            el.setAttribute('aria-selected', isActive ? 'true' : 'false')
+            el.setAttribute('tabindex', isActive ? '0' : '-1')
+        })
 
         const activeLabel = this.querySelector(`[data-label-for="${section}"]`)
         if (activeLabel) {
             activeLabel.classList.add('active')
+
+            // Announce current section to screen readers
+            const announcement = document.getElementById('timeline-announcement')
+            if (announcement) {
+                announcement.textContent = `Viewing ${section} projects`
+            }
         }
     }
 

@@ -176,12 +176,13 @@
                 <header class="intro">
                     <!-- Left column: Name & logo -->
                     <div class="intro__left">
-                        <h2 class="intro__name intro__name--animating tooltip highlight has-corners"
+                        <h1 class="intro__name intro__name--animating tooltip highlight has-corners"
                             tabindex="0"
                             onkeydown="if(event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') { event.preventDefault(); this.click(); }"
                             oncontextmenu="if ('speechSynthesis' in window) { let msg = new SpeechSynthesisUtterance(); msg.volume= 0.25; msg.lang = 'cs-CZ'; msg.voice = speechSynthesis.getVoices().filter(voice => voice.name === 'Zuzana')[0]; msg.text = 'Štěpán Jákl'; speechSynthesis.speak(msg) }"
                             role="button"
-                            aria-label="Left click to copy name to clipboard; Right click to hear pronunciation">
+                            aria-label="Štěpán Jákl. Activate to copy name to clipboard">
+                            <span class="sr-only" lang="cs">Štěpán Jákl</span>
                             <div class="intro__name-frame" aria-hidden="true">
                                 <div class="corners">
                                     <span class="corners__item corners__item--tl"></span>
@@ -215,8 +216,8 @@
                             <abbr class="tooltip__text--bottom tooltip__text">
                                 <span aria-hidden="true">L-click to copy / R-click to pronounce</span>
                             </abbr>
-                        </h2>
-                        <div class="intro__logo intro__logo--animating has-corners">
+                        </h1>
+                        <div class="intro__logo intro__logo--animating has-corners" role="img" aria-label="Štěpán Jákl personal brand logo">
                             <span class="intro__logo-frame">
                                 <div class="corners">
                                     <figure class="corners__item corners__item--tr">
@@ -231,22 +232,24 @@
                     <!-- Right column: Titles, availability & menu -->
                     <div class="intro__right">
                         <!-- Job titles -->
-                        <h3 class="intro__title intro__primary-title intro__title--animating">
-                            <p style="--i:2">
+                        <h2 class="intro__title intro__primary-title intro__title--animating" role="heading" aria-level="2">
+                            <span class="sr-only">Full-stack developer</span>
+                            <p style="--i:2" aria-hidden="true">
                                 <span>F</span><span>u</span><span>l</span><span>l</span><span>-</span><span>s</span><span>t</span><span>a</span><span>c</span><span>k</span>
                             </p>
-                            <p class="intro__animated-text" style="--i:3">
+                            <p class="intro__animated-text" style="--i:3" aria-hidden="true">
                                 <span>&nbsp;</span><span style="--i:1">d</span><span style="--i:2">e</span><span style="--i:3">v</span><span style="--i:4">e</span><span style="--i:5">l</span><span style="--i:6">o</span><span style="--i:7">p</span><span style="--i:8">e</span><span style="--i:9">r</span>
                             </p>
-                        </h3>
-                        <h3 class="intro__title intro__secondary-title intro__title--animating">
-                            <p style="--i:4">
+                        </h2>
+                        <div class="intro__title intro__secondary-title intro__title--animating" role="heading" aria-level="2">
+                            <span class="sr-only">& interface designer</span>
+                            <p style="--i:4" aria-hidden="true">
                                 <span>&</span><span>&nbsp;</span><span>i</span><span>n</span><span>t</span><span>e</span><span>r</span><span>f</span><span>a</span><span>c</span><span>e</span>
                             </p>
-                            <p class="intro__animated-text--alt" style="--i:5">
+                            <p class="intro__animated-text--alt" style="--i:5" aria-hidden="true">
                                 <span>&nbsp;</span><span style="--i:1">d</span><span style="--i:2">e</span><span style="--i:3">s</span><span style="--i:4">i</span><span style="--i:5">g</span><span style="--i:6">n</span><span style="--i:7">e</span><span style="--i:8">r</span>
                             </p>
-                        </h3>
+                        </div>
 
                         <!-- Availability badge -->
                         <div class="availability availability--animating">
@@ -254,7 +257,7 @@
                                 <a href="https://cal.com/stepanjakl"
                                    onclick="App.handleTouchButtonClick(this, event, () => { window.open(this.getAttribute('href'), '_blank') }, true)"
                                    target="_blank"
-                                   aria-label="Open to new opportunities, book a virtual meeting"
+                                   aria-label="Open to new opportunities. Book a virtual meeting"
                                    class="availability__button">
                                     <div class="availability__background">
                                     </div>
@@ -279,7 +282,8 @@
                             <div class="menu__item menu__email tooltip" style="--i:0">
                                 <button type="button"
                                         class="menu__email-button"
-                                        aria-label="Contact me via email">
+                                        aria-label="Contact me via email. Click to copy email address"
+                                        aria-describedby="email-copy-status">
                                     <span class="menu__email-icon">
                                         <svg>
                                             <use xlink:href="images/icons.svg#email"></use>
@@ -290,6 +294,7 @@
                                         <span>Click to copy</span>
                                     </abbr>
                                 </button>
+                                <span id="email-copy-status" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></span>
                             </div>
 
                             <!-- Menu navigation links -->
@@ -297,7 +302,7 @@
                                 <a href="#profile"
                                    id="menu-link-profile"
                                    onclick="App.handleTouchButtonClick(this, event, () => { openDialog('modal-profile', this, null, 'profile') })"
-                                   aria-label="Learn more about me"
+                                   aria-label="Profile. Learn more about me. Keyboard shortcut: Command P"
                                    class="menu__item menu__link menu__link--profile tooltip"
                                    style="--i:1">
                                     <span class="menu__link-icon menu__link-icon--animated">
@@ -319,7 +324,7 @@
                                 <a href="#archive"
                                    id="menu-link-archive"
                                    onclick="App.handleTouchButtonClick(this, event, () => { openDialog('modal-archive', this, null, 'archive') })"
-                                   aria-label="Explore snippets of my past work"
+                                   aria-label="Archive. Explore snippets of my past work. Keyboard shortcut: Command A"
                                    class="menu__item menu__link tooltip"
                                    style="--i:2">
                                     <span class="menu__link-icon">
@@ -359,7 +364,7 @@
                                         type="button"
                                         class="menu__button"
                                         tabindex="-1"
-                                        aria-label="Menu toggle">
+                                        aria-label="Menu toggle. Keyboard shortcut: Command M">
                                     <div class="menu__button-icon">
                                         <span>&nbsp;</span>
                                         <span>&nbsp;</span>
@@ -383,47 +388,51 @@
                                     <div>
                                         <a href="https://cal.com/stepanjakl"
                                            target="_blank"
-                                           aria-label="Schedule a call">
-                                            <svg>
+                                           aria-label="Schedule a call (opens in new tab)">
+                                            <svg aria-hidden="true">
                                                 <use xlink:href="images/icons.svg#menu-call"></use>
                                             </svg>
                                             <span class="text-sm">Virtual meeting</span>
-                                            <svg>
+                                            <svg aria-hidden="true">
                                                 <use xlink:href="images/icons.svg#new-tab"></use>
                                             </svg>
+                                            <span class="sr-only">(opens in new tab)</span>
                                         </a>
                                         <a href="https://linkedin.com/in/stepanjakl"
                                            target="_blank"
-                                           aria-label="Find out more about me on LinkedIn">
-                                            <svg>
+                                           aria-label="Find out more about me on LinkedIn (opens in new tab)">
+                                            <svg aria-hidden="true">
                                                 <use xlink:href="images/icons.svg#menu-linkedin"></use>
                                             </svg>
                                             <span class="text-sm">LinkedIn profile</span>
-                                            <svg>
+                                            <svg aria-hidden="true">
                                                 <use xlink:href="images/icons.svg#new-tab"></use>
                                             </svg>
+                                            <span class="sr-only">(opens in new tab)</span>
                                         </a>
                                         <a href="https://github.com/stepanjakl"
                                            target="_blank"
-                                           aria-label="Visit my profile on GitHub">
-                                            <svg>
+                                           aria-label="Visit my profile on GitHub (opens in new tab)">
+                                            <svg aria-hidden="true">
                                                 <use xlink:href="images/icons.svg#menu-github"></use>
                                             </svg>
                                             <span class="text-sm">GitHub profile</span>
-                                            <svg>
+                                            <svg aria-hidden="true">
                                                 <use xlink:href="images/icons.svg#new-tab"></use>
                                             </svg>
+                                            <span class="sr-only">(opens in new tab)</span>
                                         </a>
                                         <a href="https://codepen.io/stepj/pens/public"
                                            target="_blank"
-                                           aria-label="Visit my profile on CodePen">
-                                            <svg>
+                                           aria-label="Visit my profile on CodePen (opens in new tab)">
+                                            <svg aria-hidden="true">
                                                 <use xlink:href="images/icons.svg#menu-codepen"></use>
                                             </svg>
                                             <span class="text-sm">CodePen profile</span>
-                                            <svg>
+                                            <svg aria-hidden="true">
                                                 <use xlink:href="images/icons.svg#new-tab"></use>
                                             </svg>
+                                            <span class="sr-only">(opens in new tab)</span>
                                         </a>
                                         <hr>
                                         <label id="menu-dropdown-light-mode"
@@ -479,7 +488,9 @@
                     <dialog id="modal-profile"
                             class="modal modal--profile"
                             aria-modal="true"
+                            aria-labelledby="modal-profile-title"
                             inert>
+                        <h1 id="modal-profile-title" class="sr-only">Profile Information</h1>
                         <div class="modal__content">
                             <div class="modal__controls">
                                 <a href="#"
@@ -699,7 +710,9 @@
                     <dialog id="modal-archive"
                             class="modal modal--archive"
                             aria-modal="true"
+                            aria-labelledby="modal-archive-title"
                             inert>
+                        <h1 id="modal-archive-title" class="sr-only">Project Archive</h1>
                         <figure class="modal__content">
                             <!-- Modal controls -->
                             <div class="modal__controls">
@@ -723,6 +736,7 @@
                                         <use xlink:href="images/icons.svg#fullscreen-off"></use>
                                     </svg>
                                 </label>
+                                <a href="#horizontal-timeline-wrapper" class="sr-only-focusable modal-archive__skip-link">Skip to timeline navigation</a>
                             </div>
 
                             <!-- Modal body / Timeline content -->
@@ -730,20 +744,20 @@
                                 <!-- Archive timeline -->
                                 <div class="modal-archive__timeline">
                                     <!-- Timeline section toggle controls -->
-                                    <input type="checkbox" id="timeline-section-year-2024-21" checked>
-                                    <input type="checkbox" id="timeline-section-year-2021-19">
-                                    <input type="checkbox" id="timeline-section-year-2019-18">
-                                    <input type="checkbox" id="timeline-section-year-elsewhen">
+                                    <input type="checkbox" id="timeline-section-year-2024-21" checked class="sr-only" aria-labelledby="timeline-label-2024-21">
+                                    <input type="checkbox" id="timeline-section-year-2021-19" class="sr-only" aria-labelledby="timeline-label-2021-19">
+                                    <input type="checkbox" id="timeline-section-year-2019-18" class="sr-only" aria-labelledby="timeline-label-2019-18">
+                                    <input type="checkbox" id="timeline-section-year-elsewhen" class="sr-only" aria-labelledby="timeline-label-elsewhen">
 
                                     <!-- Timeline grid layout -->
-                                    <div class="modal-archive__timeline-grid">
+                                    <div id="timeline-navigation" class="modal-archive__timeline-grid">
                                         <!-- Timeline section: 2024-21 -->
-                                        <!-- 2024-21 -->
                                         <section data-timeline-section-title="2024-21"
                                                  class="modal-archive__timeline-section-title">
+                                            <h2 id="timeline-label-2024-21" class="sr-only">2024-21 Projects</h2>
                                             <div>
-                                                <label for="timeline-section-year-2024-21" tabindex="0">
-                                                    2024
+                                                <label for="timeline-section-year-2024-21" tabindex="0" role="button" aria-expanded="true" aria-controls="timeline-content-2024-21">
+                                                    <span class="sr-only">Show or hide 2024-21 projects. </span><span aria-hidden="true">2024</span>
                                                 </label>
                                                 <div class="modal-archive__timeline-section-controls">
                                                     <svg>
@@ -756,17 +770,17 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="2024-21"
+                                        <section id="timeline-content-2024-21" data-timeline-section="2024-21"
                                                  class="modal-archive__timeline-section">
-                                            <figure>
+                                            <figure aria-hidden="true">
                                                 <hr>
                                                 <hr>
                                                 <hr>
                                             </figure>
                                             <div>
-                                                <h1>
+                                                <h3>
                                                     <span>ApostropheCMS Fleet of Sites</span>
-                                                </h1>
+                                                </h3>
                                                 <div class="hover-cards-wrapper">
                                                     <div class="hover-cards hover-cards--variant-cloudraker-tfp">
                                                         <figure>
@@ -876,21 +890,21 @@
                                                     The project&rsquo;s scale and impact were substantial. Each site comprised hundreds of pages of content in multiple languages, serving a combined audience of thousands of visitors per month. We created a centralised template system so that enhancements (new widgets, scripts or layouts) could be shared across all sites. Performance and SEO were optimised to handle high traffic, and analytics dashboards were set up to measure user engagement and guide ongoing refinements. In sum, this effort not only modernised TFP&rsquo;s digital presence but also delivered a repeatable, efficient platform for future growth.
                                                 </p>
                                             </div>
-                                            <figure>
+                                            <figure aria-hidden="true">
                                                 <hr>
                                                 <hr>
                                                 <hr>
                                             </figure>
                                             <div>
-                                                <h1>
+                                                <h3>
                                                     <span>ApostropheCMS Extensions</span>
-                                                </h1>
+                                                </h3>
                                                 <p>
                                                     Alongside the main TFP project, I developed several ApostropheCMS extensions to streamline development and add functionality. These tools supported TFP&rsquo;s ecosystem and became reusable assets for future Apostrophe projects.
                                                 </p>
-                                                <h2>
+                                                <h4>
                                                     ApostropheCMS Template & Module Library
-                                                </h2>
+                                                </h4>
                                                 <div class="hover-cards-wrapper">
                                                     <div class="hover-cards hover-cards--variant-apostrophe-template">
                                                         <figure>
@@ -948,9 +962,9 @@
                                                     <br>
                                                     As development continued, new modules and enhancements were merged back into the library so that every site benefitted from the latest improvements. The setup also supported advanced integrations such as form validation, scroll animations and WebGL content, all configurable directly through the CMS. This approach made development faster, more consistent and highly adaptable.
                                                 </p>
-                                                <h2>
+                                                <h4>
                                                     ApostropheCMS Sync Extension
-                                                </h2>
+                                                </h4>
                                                 <nav>
                                                     <ul>
                                                         <li>
@@ -979,9 +993,9 @@
                                                 <p>
                                                     Together with the team at Bohemica Studio, we developed a terminal-based Node.js utility for synchronising MongoDB collections and uploaded assets across local, staging and production environments. The tool allowed developers to pull or push complete site data with a single command, replacing manual export and import processes. The extension improved reliability, saved time, and ensured consistent, up-to-date content across all environments, greatly simplifying both testing and deployment.
                                                 </p>
-                                                <h2>
+                                                <h4>
                                                     ApostropheCMS Stripe Extension
-                                                </h2>
+                                                </h4>
                                                 <div data-carousel>
                                                     <div data-carousel-slides-wrapper>
                                                         <div data-carousel-slides>
@@ -1084,12 +1098,12 @@
                                         </section>
 
                                         <!-- Timeline section: 2021-19 -->
-                                        <!-- 2021-19 -->
                                         <section data-timeline-section-title="2021-19"
                                                  class="modal-archive__timeline-section-title">
+                                            <h2 id="timeline-label-2021-19" class="sr-only">2021-19 Projects</h2>
                                             <div>
-                                                <label for="timeline-section-year-2021-19" tabindex="0">
-                                                    2021-19
+                                                <label for="timeline-section-year-2021-19" tabindex="0" role="button" aria-expanded="false" aria-controls="timeline-content-2021-19">
+                                                    <span class="sr-only">Show or hide 2021-19 projects. </span><span aria-hidden="true">2021-19</span>
                                                 </label>
                                                 <div class="modal-archive__timeline-section-controls">
                                                     <svg>
@@ -1102,17 +1116,17 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="2021-19"
+                                        <section id="timeline-content-2021-19" data-timeline-section="2021-19"
                                                  class="modal-archive__timeline-section">
-                                            <figure>
+                                            <figure aria-hidden="true">
                                                 <hr>
                                                 <hr>
                                                 <hr>
                                             </figure>
                                             <div>
-                                                <h1>
+                                                <h3>
                                                     <span>Bohemica Studio Team</span>
-                                                </h1>
+                                                </h3>
                                                 <picture>
                                                     <img loading="lazy"
                                                          src="projects/2021-19/bohemica-studio/bohemica-studio-hero.min.png"
@@ -1154,9 +1168,9 @@
                                                     <br>
                                                     A key part of my role was ensuring we stayed at the cutting edge of our industry. I championed the continuous adoption of modern tools and best practices, keeping our technical stack current and our workflows efficient. This commitment to innovation ensured that we consistently delivered solutions that were not only beautifully designed but also technically excellent and built to last.
                                                 </p>
-                                                <h2>
+                                                <h4>
                                                     Bohemica Store
-                                                </h2>
+                                                </h4>
                                                 <nav>
                                                     <ul>
                                                         <li>
@@ -1173,9 +1187,9 @@
                                                 <p>
                                                     I developed reusable component templates for the e-commerce platform and advised on UI/UX improvements. The templates streamlined feature development and ensured a consistent user experience across the store.
                                                 </p>
-                                                <h2>
+                                                <h4>
                                                     Bohemica Signage
-                                                </h2>
+                                                </h4>
                                                 <div class="hover-cards-wrapper">
                                                     <div class="hover-cards hover-cards--variant-bohemica-signage">
                                                         <figure>
@@ -1250,15 +1264,15 @@
                                                     My role extended beyond design; I coordinated cross-functional teams, guided technical decisions, and ensured the interface remained intuitive as we expanded features like calendar scheduling and multi-location display grouping. I worked closely with developers and stakeholders to balance powerful functionality with ease of use, creating a product that feels effortless to use yet robust enough to manage thousands of screens reliably.
                                                 </p>
                                             </div>
-                                            <figure>
+                                            <figure aria-hidden="true">
                                                 <hr>
                                                 <hr>
                                                 <hr>
                                             </figure>
                                             <div>
-                                                <h1>
+                                                <h3>
                                                     <span>MMT Company Web Identity</span>
-                                                </h1>
+                                                </h3>
                                                 <picture>
                                                     <img loading="lazy"
                                                          src="projects/2021-19/mmt/mmt-logo-hero.svg"
@@ -1287,12 +1301,12 @@
                                         </section>
 
                                         <!-- Timeline section: 2019-18 -->
-                                        <!-- 2019/18 -->
                                         <section data-timeline-section-title="2019-18"
                                                  class="modal-archive__timeline-section-title">
+                                            <h2 id="timeline-label-2019-18" class="sr-only">2019-18 Projects</h2>
                                             <div>
-                                                <label for="timeline-section-year-2019-18" tabindex="0">
-                                                    2019-18
+                                                <label for="timeline-section-year-2019-18" tabindex="0" role="button" aria-expanded="false" aria-controls="timeline-content-2019-18">
+                                                    <span class="sr-only">Show or hide 2019-18 projects. </span><span aria-hidden="true">2019-18</span>
                                                 </label>
                                                 <div class="modal-archive__timeline-section-controls">
                                                     <svg>
@@ -1305,17 +1319,17 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section data-timeline-section="2019-18"
+                                        <section id="timeline-content-2019-18" data-timeline-section="2019-18"
                                                  class="modal-archive__timeline-section">
-                                            <figure>
+                                            <figure aria-hidden="true">
                                                 <hr>
                                                 <hr>
                                                 <hr>
                                             </figure>
                                             <div>
-                                                <h1>
+                                                <h3>
                                                     <span>Aéropot Smart Ultraponic System</span>
-                                                </h1>
+                                                </h3>
                                                 <div data-carousel>
                                                     <div data-carousel-slides-wrapper>
                                                         <div data-carousel-slides>
@@ -1448,12 +1462,12 @@
                                         </section>
 
                                         <!-- Timeline section: Elsewhen -->
-                                        <!-- Elsewhen -->
                                         <section data-timeline-section-title="elsewhen"
                                                  class="modal-archive__timeline-section-title">
+                                            <h2 id="timeline-label-elsewhen" class="sr-only">Elsewhen Projects</h2>
                                             <div>
-                                                <label for="timeline-section-year-elsewhen" tabindex="0">
-                                                    Elsewhen
+                                                <label for="timeline-section-year-elsewhen" tabindex="0" role="button" aria-expanded="false" aria-controls="timeline-content-elsewhen">
+                                                    <span class="sr-only">Show or hide Elsewhen projects. </span><span aria-hidden="true">Elsewhen</span>
                                                 </label>
                                                 <div class="modal-archive__timeline-section-controls">
                                                     <svg>
@@ -1484,9 +1498,9 @@
                                                 <p>
                                                     Work and artifacts from different projects and moments that stand apart from full case studies but still belong here.
                                                 </p>
-                                                <h1>
+                                                <h3>
                                                     <span class="spark">Logos</span>
-                                                </h1>
+                                                </h3>
                                                 <div class="image-grid">
                                                     <figure>
                                                         <a href="projects/elsewhen/logo/eightshop.full.png" target="_blank">
@@ -1543,9 +1557,9 @@
                                                         </a>
                                                     </figure>
                                                 </div>
-                                                <h1>
+                                                <h3>
                                                     <span class="spark">Wireframes & Mock-ups</span>
-                                                </h1>
+                                                </h3>
                                                 <nav>
                                                     <ul>
                                                         <li class="hidden">
@@ -1560,9 +1574,9 @@
                                                         </li>
                                                     </ul>
                                                 </nav>
-                                                <h1>
+                                                <h3>
                                                     <span class="spark">Graphic Artifacts</span>
-                                                </h1>
+                                                </h3>
                                                 <div data-carousel>
                                                     <div data-carousel-slides-wrapper>
                                                         <div data-carousel-slides>
@@ -1642,8 +1656,11 @@
 
                                 <!-- Horizontal timeline navigation -->
                                 <div id="horizontal-timeline-wrapper" tabindex="-1">
+                                    <button type="button" id="horizontal-timeline-return" class="sr-only-focusable" aria-label="Return to main content">Return to main content</button>
                                     <div id="horizontal-timeline">
                                     </div>
+                                    <!-- Live region for announcing current timeline section to screen readers -->
+                                    <div id="timeline-announcement" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
                                 </div>
                             </div>
 
@@ -1662,14 +1679,14 @@
                 </header>
 
                 <!-- Background decorative elements -->
-                <figure class="bg-triangle--left bg-triangle">
+                <figure class="bg-triangle--left bg-triangle" aria-hidden="true">
                 </figure>
-                <figure class="bg-triangle--right bg-triangle">
+                <figure class="bg-triangle--right bg-triangle" aria-hidden="true">
                 </figure>
             </figure>
 
             <!-- Footer -->
-            <footer>
+            <footer aria-hidden="true">
                 <div>
                     <div>
                         <span class="intro__footer-square-1"></span>

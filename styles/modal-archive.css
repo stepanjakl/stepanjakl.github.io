@@ -207,7 +207,7 @@
     height: auto;
 }
 
-.modal-archive__timeline-section h1 {
+.modal-archive__timeline-section h3 {
     font-weight: 400;
     font-size: 2.14285625rem;
     line-height: 2.5rem;
@@ -215,8 +215,12 @@
     word-break: keep-all;
 }
 
+.modal-archive__timeline-section h3:not(:first-child) {
+    margin-top: 4rem;
+}
+
 @media (min-width: 45rem) {
-    .modal-archive__timeline-section h1 {
+    .modal-archive__timeline-section h3 {
         font-weight: var(--text-lg-font-weight);
         font-size: var(--text-lg-font-size);
         line-height: var(--text-lg-line-height);
@@ -224,19 +228,19 @@
     }
 }
 
-.modal-archive__timeline-section h1::before {
+.modal-archive__timeline-section h3::before {
     content: "";
     margin-bottom: var(--text-lg_before-margin-bottom);
     display: table;
 }
 
-.modal-archive__timeline-section h1::after {
+.modal-archive__timeline-section h3::after {
     content: "";
     margin-top: var(--text-lg_after-margin-top);
     display: table;
 }
 
-.modal-archive__timeline-section h1 span::before {
+.modal-archive__timeline-section h3 span::before {
     content: "∴";
     /* Echo */
     vertical-align: 0.25rem;
@@ -244,7 +248,7 @@
     line-height: 1;
 }
 
-.modal-archive__timeline-section h1 span.spark::before {
+.modal-archive__timeline-section h3 span.spark::before {
     content: "✦";
     /* Spark */
     font-size: 1.5rem;
@@ -256,11 +260,7 @@
 
 /* Timeline - Section typography */
 
-.modal-archive__timeline-section h1:not(:first-child) {
-    margin-top: 4rem;
-}
-
-.modal-archive__timeline-section h2 {
+.modal-archive__timeline-section h4 {
     margin-top: 3rem;
     padding-top: 1.5rem;
     border-top: max(1px, 0.0625rem) solid var(--modal-line-3);
@@ -271,13 +271,13 @@
     word-break: keep-all;
 }
 
-.modal-archive__timeline-section h2::before {
+.modal-archive__timeline-section h4::before {
     content: "";
     margin-bottom: var(--text-md_before-margin-bottom);
     display: table;
 }
 
-.modal-archive__timeline-section h2::after {
+.modal-archive__timeline-section h4::after {
     content: "";
     margin-top: var(--text-md_after-margin-top);
     display: table;

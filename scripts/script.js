@@ -86,6 +86,200 @@ function getScrollBehavior() {
 }
 
 // ============================================================================
+// Focus Trap Utility
+// ============================================================================
+
+/**
+ * Reusable focus trap utility for accessibility
+ * Keeps keyboard focus within a specified container, preventing tab navigation outside
+ * Implements the same pattern used by dialog.js for consistency
+ *
+ * Usage:
+ *   const trap = new FocusTrap(container, { returnFocusTo: previousElement })
+ *   trap.activate()
+ *   // ... later
+ *   trap.deactivate()
+ *
+ * @class FocusTrap
+ */
+class FocusTrap {
+    /**
+     * Standard focusable element selector matching dialog.js pattern
+     * @static
+     */
+    static FOCUSABLE_SELECTOR = 'button:not([disabled]), video, a[href], input:not([type="hidden"]):not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
+    /**
+     * Create a focus trap instance
+     * @param {HTMLElement} container - The element to trap focus within
+     * @param {Object} options - Configuration options
+     * @param {HTMLElement} options.returnFocusTo - Element to focus when trap is deactivated
+     * @param {boolean} options.initialFocus - Whether to focus first element on activation (default: true)
+     */
+    constructor(container, options = {}) {
+        if (!container || !(container instanceof HTMLElement)) {
+            throw new Error('FocusTrap: Container must be a valid HTMLElement')
+        }
+
+        this.container = container
+        this.returnFocusTo = options.returnFocusTo || null
+        this.initialFocus = options.initialFocus !== false
+        this.isActive = false
+        this.lastFocus = null
+
+        // Bound handler for cleanup
+        this.boundHandleFocusTrap = this.handleFocusTrap.bind(this)
+    }
+
+    /**
+     * Activate the focus trap
+     * Sets up event listener and optionally focuses first element
+     */
+    activate() {
+        if (this.isActive) {
+            console.warn('FocusTrap: Already active')
+            return
+        }
+
+        this.isActive = true
+
+        // Signal to dialog.js that external focus trap is active
+        if (typeof aria !== 'undefined') {
+            aria.externalFocusTrapActive = true
+        }
+
+        // Add focus event listener in capture phase (same as dialog.js)
+        document.addEventListener('focus', this.boundHandleFocusTrap, true)
+
+        // Focus first element if requested
+        if (this.initialFocus) {
+            requestAnimationFrame(() => {
+                this.focusFirstDescendant()
+            })
+        }
+    }
+
+    /**
+     * Deactivate the focus trap
+     * Removes event listener and optionally restores focus
+     */
+    deactivate() {
+        if (!this.isActive) {
+            console.warn('FocusTrap: Already inactive')
+            return
+        }
+
+        this.isActive = false
+
+        // Clear external focus trap flag for dialog.js
+        if (typeof aria !== 'undefined') {
+            aria.externalFocusTrapActive = false
+        }
+
+        // Remove focus event listener
+        document.removeEventListener('focus', this.boundHandleFocusTrap, true)
+
+        // Restore focus if specified
+        if (this.returnFocusTo && typeof this.returnFocusTo.focus === 'function') {
+            requestAnimationFrame(() => {
+                this.returnFocusTo.focus()
+            })
+        }
+
+        // Clear state
+        this.lastFocus = null
+    }
+
+    /**
+     * Handle focus events - trap focus within container
+     * @param {FocusEvent} event - The focus event
+     * @private
+     */
+    handleFocusTrap(event) {
+        if (!this.isActive || !this.container) return
+
+        // If focus is within container, track it
+        if (this.container.contains(event.target)) {
+            this.lastFocus = event.target
+        } else {
+            // Focus escaped - use smart wrapping pattern from dialog.js
+            // Try to focus first element
+            this.focusFirstDescendant()
+
+            // If focus didn't change (we were already on first), wrap to last
+            if (this.lastFocus === document.activeElement) {
+                this.focusLastDescendant()
+            }
+
+            this.lastFocus = document.activeElement
+        }
+    }
+
+    /**
+     * Focus the first focusable descendant
+     * @returns {boolean} True if an element was focused
+     * @private
+     */
+    focusFirstDescendant() {
+        if (!this.container) return false
+
+        const focusableElements = this.container.querySelectorAll(FocusTrap.FOCUSABLE_SELECTOR)
+
+        if (focusableElements.length > 0) {
+            return this.attemptFocus(focusableElements[0])
+        }
+        return false
+    }
+
+    /**
+     * Focus the last focusable descendant
+     * @returns {boolean} True if an element was focused
+     * @private
+     */
+    focusLastDescendant() {
+        if (!this.container) return false
+
+        const focusableElements = this.container.querySelectorAll(FocusTrap.FOCUSABLE_SELECTOR)
+
+        if (focusableElements.length > 0) {
+            return this.attemptFocus(focusableElements[focusableElements.length - 1])
+        }
+        return false
+    }
+
+    /**
+     * Attempt to focus an element
+     * @param {HTMLElement} element - The element to focus
+     * @returns {boolean} True if element was successfully focused
+     * @private
+     */
+    attemptFocus(element) {
+        if (!element || !this.isFocusable(element)) return false
+
+        try {
+            element.focus()
+            return document.activeElement === element
+        } catch (e) {
+            return false
+        }
+    }
+
+    /**
+     * Check if element is focusable
+     * @param {HTMLElement} element - The element to check
+     * @returns {boolean} True if element is focusable
+     * @private
+     */
+    isFocusable(element) {
+        if (!element || element.nodeType !== 1) return false
+
+        // Check visibility (disabled/hidden already filtered by FOCUSABLE_SELECTOR)
+        const style = window.getComputedStyle(element)
+        return style.display !== 'none' && style.visibility !== 'hidden'
+    }
+}
+
+// ============================================================================
 // Global Constants & Configuration
 // ============================================================================
 
@@ -204,6 +398,12 @@ App.initializeTimeline = null
 App.positionTimeline = null
 App.handleTouchButtonClick = null
 App.toggleFullscreen = null
+
+// Timeline focus trap (populated by setupTimelineFocusTrap)
+App.timelineFocusTrap = null
+App.isTimelineSkipLinkActivated = null
+App.exitTimelineFocusTrap = null
+App.updateTimelineExitFocusTarget = null
 
 // ============================================================================
 // Theme Persistence
@@ -709,6 +909,13 @@ class KeyHandler {
 
         // Always allow Escape to close dialogs, regardless of animation state
         if (rawKey === this.KEYS.ESCAPE) {
+            // Check if popup fallback viewer is open (takes priority)
+            if (App.popupInstance?.isOpen()) {
+                App.popupInstance.handleEscape()
+                return
+            }
+
+            // Otherwise handle dialog escape
             if (aria.getCurrentDialog()) {
                 closeDialog('#')
             }
@@ -1382,8 +1589,8 @@ class Popup {
         // Lifecycle (managed through initialization and cleanup)
         this.fallbackContainer = null
         this.wrapperElement = null
-        this.handleEscapeKey = null
         this.handleFallbackClick = null
+        this.focusTrap = null // FocusTrap instance for accessibility
         this.cursorIdleDetector = null
 
         // Static property to track popup blocking across all instances
@@ -1547,11 +1754,21 @@ class Popup {
             video.src = url
             video.controls = true
             video.autoplay = true
+            video.tabIndex = 0
 
             // Add error handler for video loading
             video.addEventListener('error', () => {
                 console.error(`Video file not found or failed to load: ${url}`)
             }, { once: true })
+
+            // When video or its controls are clicked, move focus to video element
+            // This ensures keyboard shortcuts work after clicking
+            video.addEventListener('click', (e) => {
+                // Small delay to ensure click completes before focusing
+                requestAnimationFrame(() => {
+                    video.focus()
+                })
+            })
 
             fragment.appendChild(video)
         } else {
@@ -1615,6 +1832,15 @@ class Popup {
             document.body.appendChild(this.fallbackContainer)
         }
 
+        // Setup focus trap for keyboard accessibility
+        if (!this.focusTrap) {
+            this.focusTrap = new FocusTrap(this.fallbackContainer, {
+                returnFocusTo: this.triggeringElement,
+                initialFocus: false // We'll focus video manually below
+            })
+        }
+        this.focusTrap.activate()
+
         // Initialize cursor idle detector for video close button
         if (isVideo && closeButton) {
             // Stop any existing detector
@@ -1631,6 +1857,28 @@ class Popup {
             })
 
             this.cursorIdleDetector.start()
+
+            // When close button receives focus, ensure it's visible
+            closeButton.addEventListener('focus', () => {
+                if (this.cursorIdleDetector) {
+                    this.cursorIdleDetector.showTarget()
+                }
+            })
+
+            // Add direct click handler for close button
+            closeButton.addEventListener('click', () => {
+                this.closeFallbackView()
+            })
+        }
+
+        // Focus video initially for keyboard accessibility (videos autoplay)
+        if (isVideo) {
+            const video = wrapper.querySelector('video')
+            requestAnimationFrame(() => {
+                if (video && typeof video.focus === 'function') {
+                    video.focus()
+                }
+            })
         }
     }
 
@@ -1668,19 +1916,6 @@ class Popup {
             }
             this.fallbackContainer.addEventListener('click', this.handleFallbackClick)
         }
-
-        // Set up escape key handler for this fallback instance
-        // Use capture phase to run before other keydown handlers (KeyHandler, aria.handleEscape)
-        // stopImmediatePropagation prevents ALL other handlers from running
-        if (!this.handleEscapeKey) {
-            this.handleEscapeKey = (e) => {
-                if (e.key === 'Escape' && this.fallbackContainer?.parentElement) {
-                    e.stopImmediatePropagation()
-                    this.closeFallbackView()
-                }
-            }
-            document.addEventListener('keydown', this.handleEscapeKey, { capture: true })
-        }
     }
 
     // UI Element Creation
@@ -1690,6 +1925,7 @@ class Popup {
         button.className = 'media_fallback-close-button'
         button.setAttribute('aria-label', 'Close')
         button.type = 'button'
+        button.tabIndex = 0
         button.innerHTML = '<svg style="fill: currentColor; width: 1.125rem; height: 1.125rem"><use xlink:href="images/icons.svg#close"></use></svg>'
         return button
     }
@@ -1737,27 +1973,46 @@ class Popup {
                 height: auto;
                 max-width: 100svh;
                 max-height: 100svw;
-                top: 50%;
-                left: 50%;
+                inset: 50% 0 0 50%;
                 transform: translate(-50%, -50%) rotate(-90deg);
                 transform-origin: center center;
                 opacity: 1;
+            }
+            .media_fallback-content img:nth-of-type(2) {
+                position: absolute;
+                inset: 50% 0 0 50%;
             }
             @media (min-width: 45rem) {
                 .media_fallback-content img {
                     position: relative;
                     width: 100%;
-                    height: auto;
+                    height: 100%;
                     max-width: 100%;
                     margin: auto;
                     top: 0;
                     left: 0;
                     transform: none;
                 }
-                .media_fallback-content img:nth-child(2) {
-                    position: absolute;
+                .media_fallback-content img:nth-of-type(2) {
                     inset: 0;
+                    height: auto;
                 }
+            }
+            .media_fallback-content.tall-ratio img {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                max-width: 100%;
+                max-height: none;
+                inset: 0 auto auto 0;
+                transform: none;
+                margin: auto;
+            }
+            .media_fallback-content.tall-ratio img:nth-of-type(2) {
+                position: absolute;
+                inset: 0;
+                height: auto;
+                margin: auto;
             }
             .media_fallback-content.square-ratio {
                 height: auto;
@@ -1768,19 +2023,9 @@ class Popup {
                 height: auto;
                 max-height: 100vh;
                 max-width: 100vw;
-                top: 50%;
-                left: 50%;
+                inset: 50% 0 0 50%;
                 transform: translate(-50%, -50%);
-            }
-            .media_fallback-content.tall-ratio img {
-                position: relative;
-                width: 100%;
-                height: auto;
-                max-width: 100%;
-                max-height: none;
-                top: 0;
-                left: 0;
-                transform: none;
+                margin: 0;
             }
             .media_fallback-content video {
                 position: relative;
@@ -1836,10 +2081,41 @@ class Popup {
             }
             .media_fallback-close-button.cursor-idle-fade {
                 opacity: 0;
-                pointer-events: none;
             }
         `
         document.head.appendChild(styles)
+    }
+
+    // Public API for global keyboard handler
+
+    /**
+     * Check if fallback viewer is open
+     * @returns {boolean}
+     */
+    isOpen() {
+        return this.fallbackContainer?.parentElement != null
+    }
+
+    /**
+     * Handle escape key from global keyboard handler
+     * Returns true if handled, false otherwise
+     * @returns {boolean}
+     */
+    handleEscape() {
+        if (!this.isOpen()) return false
+
+        // If video is focused, move focus to close button instead of closing
+        const video = this.fallbackContainer.querySelector('video')
+        const closeButton = this.fallbackContainer.querySelector('.media_fallback-close-button')
+
+        if (video && document.activeElement === video && closeButton) {
+            closeButton.focus()
+            return true
+        }
+
+        // Otherwise close the viewer
+        this.closeFallbackView()
+        return true
     }
 
     // Cleanup
@@ -1852,10 +2128,9 @@ class Popup {
                 this.cursorIdleDetector = null
             }
 
-            // Remove escape key handler
-            if (this.handleEscapeKey) {
-                document.removeEventListener('keydown', this.handleEscapeKey, { capture: true })
-                this.handleEscapeKey = null
+            // Deactivate focus trap (handles cleanup and focus restoration)
+            if (this.focusTrap) {
+                this.focusTrap.deactivate()
             }
 
             // Remove click handler
@@ -1870,14 +2145,6 @@ class Popup {
             // Don't nullify container - we'll reuse it and need to re-add handlers
             // Reset cached wrapper reference to force fresh content queries
             this.wrapperElement = null
-
-            // Restore focus to the element that triggered the viewer
-            // The hash should remain unchanged (modal stays open with its hash)
-            if (this.triggeringElement && typeof this.triggeringElement.focus === 'function') {
-                requestAnimationFrame(() => {
-                    this.triggeringElement.focus()
-                })
-            }
         }
     }
 
@@ -1971,6 +2238,48 @@ class Popup {
             top: Math.round(top)
         }
     }
+
+    // Focus Management Helpers
+
+    isFocusable(element) {
+        if (!element || element.nodeType !== 1) return false
+        if (element.disabled) return false
+
+        // Check explicit tabindex
+        const tabindex = element.getAttribute('tabindex')
+        if (tabindex !== null) {
+            const tabindexValue = parseInt(tabindex, 10)
+            return tabindexValue >= 0
+        }
+
+        // Check naturally focusable elements
+        switch (element.nodeName) {
+            case 'A':
+                return !!element.href
+            case 'INPUT':
+                return element.type !== 'hidden'
+            case 'BUTTON':
+            case 'SELECT':
+            case 'TEXTAREA':
+            case 'VIDEO':
+                return true
+            default:
+                return false
+        }
+    }
+
+    // Focusability Check
+
+    isFocusable(element) {
+        if (!element || element.nodeType !== 1) return false
+        if (element.disabled || element.hidden) return false
+        if (element.tabIndex < 0) return false
+
+        const style = window.getComputedStyle(element)
+        if (style.display === 'none' || style.visibility === 'hidden') return false
+
+        return true
+    }
 }
 
 
@@ -2007,6 +2316,9 @@ class Carousel {
         this.observer = null
         this.activeSlide = null
 
+        // Bound handlers
+        this.boundHandleSlidesKeydown = this.handleSlidesKeydown.bind(this)
+
         this.init()
     }
 
@@ -2017,6 +2329,7 @@ class Carousel {
         this.setupEdgeNavigationEventListeners()
         this.createControlNavigation()
         this.setupControlNavigationEventListeners()
+        this.setupSlidesKeyboardNavigation()
         this.setupIntersectionObserver()
     }
 
@@ -2101,7 +2414,7 @@ class Carousel {
             }
         })
 
-        // Keyboard navigation for carousel controls
+        // Keyboard navigation for carousel controls (horizontal only)
         this.navEl.addEventListener('keydown', (event) => {
             const currentButton = event.target.closest('button[data-label-for]')
             if (!currentButton) return
@@ -2111,7 +2424,6 @@ class Carousel {
 
             switch (event.key) {
                 case 'ArrowLeft':
-                case 'ArrowUp':
                     // Navigate to previous slide
                     if (currentIndex > 0) {
                         this.dotEls[currentIndex - 1].focus()
@@ -2120,7 +2432,6 @@ class Carousel {
                     handled = true
                     break
                 case 'ArrowRight':
-                case 'ArrowDown':
                     // Navigate to next slide
                     if (currentIndex < this.dotEls.length - 1) {
                         this.dotEls[currentIndex + 1].focus()
@@ -2128,6 +2439,11 @@ class Carousel {
                     }
                     handled = true
                     break
+                case 'ArrowUp':
+                case 'ArrowDown':
+                    // Prevent viewport scroll but don't navigate (horizontal control)
+                    event.preventDefault()
+                    return
                 case 'Home':
                     // Go to first slide
                     this.dotEls[0].focus()
@@ -2167,6 +2483,88 @@ class Carousel {
         })
     }
 
+    // Slides Keyboard Navigation
+
+    /**
+     * Setup keyboard navigation for slides (arrow keys to navigate)
+     * Pattern: Tab to focus first link, arrows to navigate slides, Tab to exit
+     * Similar to hover-cards pattern but for horizontal carousel
+     */
+    setupSlidesKeyboardNavigation() {
+        // Get all focusable links within slides
+        const slideLinks = this.slidesEls.map(slide => slide.querySelector('a')).filter(link => link !== null)
+
+        if (slideLinks.length === 0) return
+
+        // Set initial tabindex: first link focusable, rest not
+        slideLinks.forEach((link, index) => {
+            link.setAttribute('tabindex', index === 0 ? '0' : '-1')
+            link.addEventListener('keydown', this.boundHandleSlidesKeydown)
+        })
+    }
+
+    /**
+     * Handle keyboard navigation within carousel slides
+     * @param {KeyboardEvent} event - The keyboard event
+     */
+    handleSlidesKeydown(event) {
+        const currentLink = event.target
+        const currentSlide = currentLink.closest('figure')
+        if (!currentSlide) return
+
+        const currentIndex = this.slidesEls.indexOf(currentSlide)
+        let targetIndex = -1
+        let handled = false
+
+        switch (event.key) {
+            case 'ArrowLeft':
+                // Navigate to previous slide
+                targetIndex = Math.max(currentIndex - 1, 0)
+                handled = true
+                break
+            case 'ArrowRight':
+                // Navigate to next slide
+                targetIndex = Math.min(currentIndex + 1, this.slidesEls.length - 1)
+                handled = true
+                break
+            case 'ArrowUp':
+            case 'ArrowDown':
+                // Prevent default scroll behavior but don't navigate (horizontal carousel)
+                event.preventDefault()
+                return
+            case 'Home':
+                // Go to first slide
+                targetIndex = 0
+                handled = true
+                break
+            case 'End':
+                // Go to last slide
+                targetIndex = this.slidesEls.length - 1
+                handled = true
+                break
+        }
+
+        // Always prevent default for handled keys to avoid glitches
+        if (handled) {
+            event.preventDefault()
+        }
+
+        if (handled && targetIndex !== -1 && targetIndex !== currentIndex) {
+            // Scroll to target slide
+            const targetSlide = this.slidesEls[targetIndex]
+            if (targetSlide) {
+                this.scrollToSlide(targetSlide)
+
+                // Focus the target slide's link immediately
+                // The intersection observer will update tabindex when the slide becomes active
+                const targetLink = targetSlide.querySelector('a')
+                if (targetLink) {
+                    targetLink.focus()
+                }
+            }
+        }
+    }
+
     // Intersection Observer
 
     setupIntersectionObserver() {
@@ -2178,12 +2576,20 @@ class Carousel {
                     entry.target.classList.add(this.ACTIVE_CLASS)
 
                     const slideIndex = this.slidesEls.indexOf(entry.target)
+
+                    // Update dot navigation state
                     for (let j = 0; j < this.dotEls.length; j++) {
                         const isActive = j === slideIndex
                         this.dotEls[j].toggleAttribute('aria-current', isActive)
                         this.dotEls[j].setAttribute('aria-selected', isActive ? 'true' : 'false')
                         this.dotEls[j].setAttribute('tabindex', isActive ? '0' : '-1')
                     }
+
+                    // Update slide links tabindex to match active slide
+                    const slideLinks = this.slidesEls.map(slide => slide.querySelector('a')).filter(link => link !== null)
+                    slideLinks.forEach((link, index) => {
+                        link.setAttribute('tabindex', index === slideIndex ? '0' : '-1')
+                    })
 
                     // Announce slide change to screen readers
                     if (this.announcementEl) {
@@ -2222,6 +2628,26 @@ class Carousel {
         if (slideEl) {
             slideEl.scrollIntoView({ behavior: getScrollBehavior(), block: 'nearest', inline: 'start' })
         }
+    }
+
+    // Cleanup
+
+    destroy() {
+        // Disconnect intersection observer
+        if (this.observer) {
+            this.observer.disconnect()
+            this.observer = null
+        }
+
+        // Remove keyboard event listeners from slide links
+        const slideLinks = this.slidesEls.map(slide => slide.querySelector('a')).filter(link => link !== null)
+        slideLinks.forEach(link => {
+            link.removeEventListener('keydown', this.boundHandleSlidesKeydown)
+            link.removeAttribute('tabindex')
+        })
+
+        // Clear bound handler reference
+        this.boundHandleSlidesKeydown = null
     }
 }
 
@@ -2315,21 +2741,23 @@ class KeyboardNavigator {
                 if (this.is2DGrid) {
                     // Move to item in next row (grid)
                     targetIndex = Math.min(currentIndex + itemsPerRow, items.length - 1)
+                    handled = true
                 } else {
-                    // Move to next item (list)
-                    targetIndex = Math.min(currentIndex + 1, items.length - 1)
+                    // Prevent viewport scroll but don't navigate (horizontal-only)
+                    event.preventDefault()
+                    return
                 }
-                handled = true
                 break
             case 'ArrowUp':
                 if (this.is2DGrid) {
                     // Move to item in previous row (grid)
                     targetIndex = Math.max(currentIndex - itemsPerRow, 0)
+                    handled = true
                 } else {
-                    // Move to previous item (list)
-                    targetIndex = Math.max(currentIndex - 1, 0)
+                    // Prevent viewport scroll but don't navigate (horizontal-only)
+                    event.preventDefault()
+                    return
                 }
-                handled = true
                 break
             case 'Home':
                 // Move to first item
@@ -2349,9 +2777,12 @@ class KeyboardNavigator {
                 return
         }
 
-        if (handled && targetIndex !== -1 && targetIndex !== currentIndex) {
+        // Always prevent default for handled keys to avoid glitches
+        if (handled) {
             event.preventDefault()
+        }
 
+        if (handled && targetIndex !== -1 && targetIndex !== currentIndex) {
             // Update tabindex
             items.forEach((item, index) => {
                 item.setAttribute('tabindex', index === targetIndex ? '0' : '-1')
@@ -2385,6 +2816,8 @@ class KeyboardNavigator {
 /**
  * Enables keyboard navigation for image grids
  * Wrapper around KeyboardNavigator with image grid specific configuration
+ * - hover-cards: horizontal only (Left/Right)
+ * - image-grid: 2D grid (all directions)
  */
 class ImageGridNavigator extends KeyboardNavigator {
     constructor(options = {}) {
@@ -2392,7 +2825,7 @@ class ImageGridNavigator extends KeyboardNavigator {
             containerSelector: options.containerSelector || '.hover-cards, .image-grid',
             itemSelector: options.itemSelector || 'figure a',
             fallbackSelector: 'figure',
-            is2DGrid: true
+            is2DGrid: options.is2DGrid ?? false // Default to horizontal-only
         })
     }
 }
@@ -2771,10 +3204,98 @@ App.initializeTimeline = (startObserver = true) => {
 
     container.appendChild(App.timeline)
 
+    // Setup focus trap and return button for timeline accessibility
+    setupTimelineFocusTrap()
+
     // Only start observer if requested (skip for deep-link scenarios)
     if (startObserver) {
         App.timeline.startIntersectionObserver()
     }
+}
+
+/**
+ * Setup focus trap for horizontal timeline accessibility
+ * Creates FocusTrap instance and helper functions for keyboard navigation
+ *
+ * Event handlers centralized in initializeGlobalEventHandlers()
+ * Only one direct listener needed here (focus events don't bubble)
+ * @private
+ */
+function setupTimelineFocusTrap() {
+    const timelineWrapper = document.querySelector('#horizontal-timeline-wrapper')
+    const returnButton = document.querySelector('#horizontal-timeline-return')
+    const skipLink = document.querySelector('.modal-archive__skip-link')
+
+    if (!timelineWrapper || !returnButton) {
+        console.warn('Timeline: Required elements not found')
+        return
+    }
+
+    // Initialize focus trap (returnFocusTo updated dynamically as user navigates)
+    App.timelineFocusTrap = new FocusTrap(timelineWrapper, {
+        returnFocusTo: skipLink,
+        initialFocus: false
+    })
+
+    // Track skip link activation (set by global event handlers)
+    App.isTimelineSkipLinkActivated = false
+
+    /**
+     * Update where focus returns when exiting timeline
+     * Targets the section corresponding to the currently selected timeline label
+     * @param {HTMLElement} [labelElement] - Timeline label (if not provided, finds active one)
+     * @private
+     */
+    function updateExitFocusTarget(labelElement = null) {
+        if (!App.timelineFocusTrap?.isActive) return
+
+        const activeLabel = labelElement ||
+            timelineWrapper.querySelector('#timeline_labels [data-label-for]:focus') ||
+            timelineWrapper.querySelector('#timeline_labels [data-label-for][tabindex="0"]')
+
+        if (!activeLabel) return
+
+        const sectionId = activeLabel.getAttribute('data-label-for')
+        const targetSection = document.querySelector(`[data-timeline-section="${sectionId}"]`)
+
+        if (!targetSection) return
+
+        const firstFocusable = targetSection.querySelector(FocusTrap.FOCUSABLE_SELECTOR)
+
+        if (firstFocusable) {
+            App.timelineFocusTrap.returnFocusTo = firstFocusable
+        } else {
+            // Make section itself focusable as fallback
+            targetSection.setAttribute('tabindex', '-1')
+            App.timelineFocusTrap.returnFocusTo = targetSection
+        }
+    }
+
+    /**
+     * Exit timeline focus trap and return focus to main content
+     * @private
+     */
+    function exitTimelineFocusTrap() {
+        App.timelineFocusTrap?.deactivate()
+    }
+
+    // Focus event listener (must be direct - focus events don't bubble)
+    timelineWrapper.addEventListener('focus', () => {
+        if (App.isTimelineSkipLinkActivated && !App.timelineFocusTrap?.isActive) {
+            App.isTimelineSkipLinkActivated = false
+            App.timelineFocusTrap.activate()
+
+            // Focus first label (user wants to navigate, not immediately return)
+            requestAnimationFrame(() => {
+                const firstLabel = timelineWrapper.querySelector('#timeline_labels [data-label-for][tabindex="0"]')
+                ;(firstLabel || returnButton).focus()
+            })
+        }
+    })
+
+    // Expose functions for global event handlers
+    App.exitTimelineFocusTrap = exitTimelineFocusTrap
+    App.updateTimelineExitFocusTarget = updateExitFocusTarget
 }
 
 // ============================================================================
@@ -2997,14 +3518,59 @@ function initializeClickHandlers() {
 
     // Setup email button click handler
     const emailButton = document.querySelector('.menu__email-button')
+    const emailStatus = document.getElementById('email-copy-status')
     if (emailButton && emailTooltip && emailHighlight) {
         emailButton.onclick = function (event) {
             App.handleTouchButtonClick(this, event, () => {
                 copyToClipboard('stepan.jakl@icloud.com')
                 App.textHighlighter.highlightAndCopyText(event, emailTooltip, emailHighlight, 'Copied to the clipboard')
+
+                // Announce to screen readers
+                if (emailStatus) {
+                    emailStatus.textContent = 'Email address copied to clipboard'
+                    setTimeout(() => {
+                        emailStatus.textContent = ''
+                    }, 3000)
+                }
             })
         }
     }
+}
+
+/**
+ * Initialize timeline section toggles with aria-expanded synchronization
+ * Keeps checkbox state in sync with aria-expanded attribute for screen readers
+ */
+function initializeTimelineSectionToggles() {
+    const toggles = [
+        { checkbox: 'timeline-section-year-2024-21', label: '[for="timeline-section-year-2024-21"]' },
+        { checkbox: 'timeline-section-year-2021-19', label: '[for="timeline-section-year-2021-19"]' },
+        { checkbox: 'timeline-section-year-2019-18', label: '[for="timeline-section-year-2019-18"]' },
+        { checkbox: 'timeline-section-year-elsewhen', label: '[for="timeline-section-year-elsewhen"]' }
+    ]
+
+    toggles.forEach(({ checkbox, label }) => {
+        const checkboxEl = document.getElementById(checkbox)
+        const labelEl = document.querySelector(label)
+
+        if (checkboxEl && labelEl) {
+            // Set initial aria-expanded state based on checkbox
+            labelEl.setAttribute('aria-expanded', checkboxEl.checked ? 'true' : 'false')
+
+            // Update aria-expanded when checkbox changes
+            checkboxEl.addEventListener('change', () => {
+                labelEl.setAttribute('aria-expanded', checkboxEl.checked ? 'true' : 'false')
+            })
+
+            // Also update when label is clicked (for keyboard users)
+            labelEl.addEventListener('click', () => {
+                // State will update after the click, so we use setTimeout
+                setTimeout(() => {
+                    labelEl.setAttribute('aria-expanded', checkboxEl.checked ? 'true' : 'false')
+                }, 0)
+            })
+        }
+    })
 }
 
 /**
@@ -3113,6 +3679,12 @@ function setupHashChangeHandler() {
  * Uses event delegation pattern for optimal performance
  */
 function initializeGlobalEventHandlers() {
+    // Cache timeline wrapper for repeated access in event handlers
+    let timelineWrapperCache = null
+    const getTimelineWrapper = () => {
+        return timelineWrapperCache ??= document.querySelector('#horizontal-timeline-wrapper')
+    }
+
     // Single document click handler for multiple concerns
     document.addEventListener('click', (event) => {
         // 1. Clear touch button primed states when user taps elsewhere
@@ -3130,6 +3702,29 @@ function initializeGlobalEventHandlers() {
         if (popupLink && App.popupInstance) {
             App.popupInstance.open(popupLink, event)
         }
+
+        // 3. Track timeline skip link activation
+        if (event.target.closest('.modal-archive__skip-link')) {
+            App.isTimelineSkipLinkActivated = true
+            return
+        }
+
+        // 4. Handle timeline return button
+        if (event.target.closest('#horizontal-timeline-return')) {
+            event.preventDefault()
+            App.exitTimelineFocusTrap?.()
+            return
+        }
+
+        // 5. Update exit target when timeline label clicked
+        const labelButton = event.target.closest('#timeline_labels [data-label-for]')
+        if (labelButton) {
+            const timelineWrapper = getTimelineWrapper()
+            if (timelineWrapper?.contains(labelButton)) {
+                // Defer to allow timeline.js navigation to complete
+                setTimeout(() => App.updateTimelineExitFocusTarget?.(labelButton), 0)
+            }
+        }
     }, { capture: true })
 
     // Single document mouseover handler for link preloading
@@ -3146,6 +3741,42 @@ function initializeGlobalEventHandlers() {
         }
         App.popupPreloadedLinks.add(link)
     }, { passive: true })
+
+    // Single document keydown handler for keyboard interactions
+    document.addEventListener('keydown', (event) => {
+        const { key } = event
+
+        // 1. Track timeline skip link keyboard activation
+        if (event.target.closest('.modal-archive__skip-link') && (key === 'Enter' || key === ' ')) {
+            App.isTimelineSkipLinkActivated = true
+            return
+        }
+
+        // 2. Handle timeline return button
+        if (event.target.closest('#horizontal-timeline-return') && (key === 'Enter' || key === ' ')) {
+            event.preventDefault()
+            App.exitTimelineFocusTrap?.()
+            return
+        }
+
+        // 3. Update exit target during timeline arrow navigation
+        if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(key)) {
+            const labelButton = event.target.closest('#timeline_labels [data-label-for]')
+            if (labelButton) {
+                const timelineWrapper = getTimelineWrapper()
+                if (timelineWrapper?.contains(labelButton)) {
+                    // Defer to allow timeline.js to update tabindex/focus
+                    setTimeout(() => {
+                        const newFocusedLabel = timelineWrapper.querySelector('#timeline_labels [data-label-for]:focus') ||
+                            timelineWrapper.querySelector('#timeline_labels [data-label-for][tabindex="0"]')
+                        if (newFocusedLabel) {
+                            App.updateTimelineExitFocusTarget?.(newFocusedLabel)
+                        }
+                    }, 0)
+                }
+            }
+        }
+    })
 }
 
 // ============================================================================
@@ -3206,6 +3837,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initializeClickHandlers()
     initializeTimezoneDisplay()
+    initializeTimelineSectionToggles()
 
     // Initialize carousels
     const carouselElements = document.querySelectorAll('[data-carousel]')
@@ -3215,10 +3847,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Keyboard Navigation Setup
 
-    // Initialize keyboard navigation for image grids
+    // Initialize keyboard navigation for hover-cards (horizontal only)
     new ImageGridNavigator({
-        containerSelector: '.hover-cards, .image-grid',
-        itemSelector: 'figure a'
+        containerSelector: '.hover-cards',
+        itemSelector: 'figure a',
+        is2DGrid: false // Horizontal navigation only
+    })
+
+    // Initialize keyboard navigation for image-grid (true 2D grid)
+    new ImageGridNavigator({
+        containerSelector: '.image-grid',
+        itemSelector: 'figure a',
+        is2DGrid: true // Full 2D grid navigation
     })
 
     // Initialize keyboard navigation for menu dropdown

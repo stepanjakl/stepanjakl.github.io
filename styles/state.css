@@ -402,7 +402,7 @@ body.modal-profile-open #modal-profile .modal__content {
     display: none;
 }
 
-.modal-profile-side-ruler-art {
+#mode:checked~main .modal-profile-side-ruler-art {
     background-image: url("data:image/svg+xml,%3Csvg width='28' height='101' viewBox='0 0 28 101' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0.75H14' stroke='%2300000025' stroke-width='1.5'/%3E%3Cpath d='M0 10.75H14' stroke='%2300000025' stroke-width='1.5'/%3E%3Cpath d='M0 20.75H14' stroke='%2300000025' stroke-width='1.5'/%3E%3Cpath d='M0 30.75H14' stroke='%2300000025' stroke-width='1.5'/%3E%3Cpath d='M0 80.75H14' stroke='%2300000025' stroke-width='1.5'/%3E%3Cpath d='M0 90.75H28' stroke='%2300000040' stroke-width='1.5'/%3E%3Cpath d='M0 40.75H14' stroke='%2300000025' stroke-width='1.5'/%3E%3Cpath d='M0 50.75H14' stroke='%2300000025' stroke-width='1.5'/%3E%3Cpath d='M0 60.75H14' stroke='%2300000025' stroke-width='1.5'/%3E%3Cpath d='M0 70.75H14' stroke='%2300000025' stroke-width='1.5'/%3E%3C/svg%3E%0A");
 }
 
@@ -540,9 +540,9 @@ body.modal-archive-open #modal-archive .modal__content {
 }
 
 
-/* Reduced motion */
+/* Prefers media features */
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce), (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active) {
     *, *::before, *::after {
         animation: none !important;
         transition: none !important;
@@ -580,6 +580,10 @@ body.modal-archive-open #modal-archive .modal__content {
 
     #mode:checked~main #timeline-wrapper {
         background-color: var(--cyan-half-85);
+    }
+
+    .modal-profile-side-ruler-art {
+        display: none;
     }
 
     .modal-profile__footer-art {

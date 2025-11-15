@@ -1185,7 +1185,7 @@ body {
 #menu-dropdown a span,
 #menu-dropdown label span {
     transition: color var(--animate-out-segment) linear;
-    z-index: 1;
+    z-index: 2;
 }
 
 #menu-dropdown a:hover span,
@@ -1197,7 +1197,7 @@ body {
 #menu-dropdown label svg {
     transition: color var(--animate-out-segment) linear;
     color: var(--icon);
-    z-index: 1;
+    z-index: 2;
 }
 
 #menu-dropdown a:hover svg,

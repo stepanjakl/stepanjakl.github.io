@@ -31,6 +31,14 @@
 var aria = aria || {}
 
 /**
+ * External focus trap flag
+ * Set this to true from external code to temporarily disable dialog focus trapping
+ * Useful for higher-priority overlays (popups, tooltips, etc.) that appear above dialogs
+ * @type {boolean}
+ */
+aria.externalFocusTrapActive = false
+
+/**
  * Double requestAnimationFrame helper - ensures callback runs after browser paint
  * Useful for DOM changes that need to sync with layout/paint cycle
  * @param {Function} callback - Function to execute after paint
@@ -597,6 +605,9 @@ aria.Dialog.prototype.trapFocus = function (event) {
     const currentDialog = aria.getCurrentDialog()
     if (!currentDialog) return
 
+    // Don't trap focus if external focus trap is active (e.g., popup, tooltip)
+    if (aria.externalFocusTrapActive) return
+
     if (currentDialog.dialogNode.contains(event.target)) {
         currentDialog.lastFocus = event.target
     } else {
@@ -651,31 +662,31 @@ window.closeDialog = (hash) => {
     topDialog.close(hash)
 }
 
-// ============================================================================
-// Initialization
-// ============================================================================
+    // ============================================================================
+    // Initialization
+    // ============================================================================
 
-/**
- * Initialize inert state for all dialogs on page load
- * For browsers without native inert support, apply polyfill to all modals
- */
-;(function initializeDialogInertState() {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', applyInertToDialogs)
-    } else {
-        applyInertToDialogs()
-    }
-
-    function applyInertToDialogs() {
-        // Only apply polyfill if browser doesn't support native inert
-        if (!aria.supportsInert) {
-            // Find all dialog elements with inert attribute
-            const dialogs = document.querySelectorAll('dialog[inert], [role="dialog"][inert], [role="alertdialog"][inert]')
-
-            dialogs.forEach(dialog => {
-                // Apply polyfill instead of native inert
-                aria.setInert(dialog)
-            })
+    /**
+     * Initialize inert state for all dialogs on page load
+     * For browsers without native inert support, apply polyfill to all modals
+     */
+    ; (function initializeDialogInertState() {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', applyInertToDialogs)
+        } else {
+            applyInertToDialogs()
         }
-    }
-})()
+
+        function applyInertToDialogs() {
+            // Only apply polyfill if browser doesn't support native inert
+            if (!aria.supportsInert) {
+                // Find all dialog elements with inert attribute
+                const dialogs = document.querySelectorAll('dialog[inert], [role="dialog"][inert], [role="alertdialog"][inert]')
+
+                dialogs.forEach(dialog => {
+                    // Apply polyfill instead of native inert
+                    aria.setInert(dialog)
+                })
+            }
+        }
+    })()
