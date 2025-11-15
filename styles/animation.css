@@ -838,6 +838,9 @@ body {
 .menu__link:hover .menu__link-icon,
 .menu__link:focus .menu__link-icon,
 .menu__link.tooltip-key--active .menu__link-icon {
+    background-color: var(--dark-25);
+    border-color: transparent;
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) transparent;
     transition: background-color var(--animate-in-segment-2\/3) linear, outline-color var(--animate-in-segment-2\/3) linear, border-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear;
 }
 
@@ -1490,33 +1493,6 @@ horizontal-timeline.timeline-in-place {
         --tri-m-10 var(--transition-triangle-profile), --tri-m-11 var(--transition-triangle-profile),
         --tri-m-12 var(--transition-triangle-profile), --tri-m-13 var(--transition-triangle-profile),
         --tri-m-14 var(--transition-triangle-profile), --tri-m-15 var(--transition-triangle-profile);
-}
-
-#profile:target~main .bg-triangle--right-alt::after {
-    --tri-a-0: rgba(0, 138, 60, 0);
-    --tri-a-1: rgba(0, 138, 60, 0.011);
-    --tri-a-2: rgba(0, 138, 60, 0.032);
-    --tri-a-3: rgba(0, 138, 60, 0.063);
-    --tri-a-4: rgba(0, 138, 60, 0.103);
-    --tri-a-5: rgba(0, 138, 60, 0.151);
-    --tri-a-6: rgba(0, 138, 60, 0.208);
-    --tri-a-7: rgba(0, 138, 60, 0.272);
-    --tri-a-8: rgba(0, 138, 60, 0.343);
-    --tri-a-9: rgba(0, 138, 60, 0.421);
-    --tri-a-10: rgba(0, 138, 60, 0.505);
-    --tri-a-11: rgba(0, 138, 60, 0.595);
-    --tri-a-12: rgba(0, 138, 60, 0.690);
-    --tri-a-13: rgba(0, 138, 60, 0.789);
-    --tri-a-14: rgba(0, 138, 60, 0.893);
-    --tri-a-15: #008a3c;
-    transition: --tri-a-0 var(--transition-triangle-profile), --tri-a-1 var(--transition-triangle-profile),
-        --tri-a-2 var(--transition-triangle-profile), --tri-a-3 var(--transition-triangle-profile),
-        --tri-a-4 var(--transition-triangle-profile), --tri-a-5 var(--transition-triangle-profile),
-        --tri-a-6 var(--transition-triangle-profile), --tri-a-7 var(--transition-triangle-profile),
-        --tri-a-8 var(--transition-triangle-profile), --tri-a-9 var(--transition-triangle-profile),
-        --tri-a-10 var(--transition-triangle-profile), --tri-a-11 var(--transition-triangle-profile),
-        --tri-a-12 var(--transition-triangle-profile), --tri-a-13 var(--transition-triangle-profile),
-        --tri-a-14 var(--transition-triangle-profile), --tri-a-15 var(--transition-triangle-profile);
 }
 
 

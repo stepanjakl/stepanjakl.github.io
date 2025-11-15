@@ -6,10 +6,10 @@
  * Brand icons: https://simpleicons.org/
  * Country flags: https://hatscripts.github.io/circle-flags/gallery
  * Colour palette: https://www.hsluv.org/
- * SVG animation: https://shapeshifter.design/
  * Easing functions: https://gist.github.com/argyleink/36e1c0153d2a783d513bd29c9f25aaf2
  * Easing gradients: https://www.figma.com/community/plugin/907899097995668330/easing-gradients
- * SVG spritesheet: https://shapeshifter.design
+ * SVG spritesheet animation: https://shapeshifter.design
+ * URL-encoder for SVG: https://yoksel.github.io/url-encoder/
  * Alic Image Compressor: JPG/PNG - 'full' (no lossy) - 'min' (95 lossy, 1600px width max)
  */
 
@@ -937,19 +937,6 @@ body {
     opacity: 1;
 }
 
-.bg-triangle--right-alt::after {
-    content: "";
-    position: absolute;
-    /* top: calc(2 * 14.6446609406725vh); */
-    right: 0;
-    /* height: calc(2 * 70.710678118655vh); */
-    /* width: calc(2 * 70.710678118655vh); */
-    transform-origin: center;
-    transform: translateX(50%) rotate(45deg);
-    background-image: linear-gradient(to top in oklch, var(--triangle-alt));
-    opacity: 0;
-}
-
 
 /* Background Triangle - Gradient Transitions */
 
@@ -1181,117 +1168,6 @@ body {
         --tri-m-14 var(--transition-triangle-base), --tri-m-15 var(--transition-triangle-base);
 }
 
-.bg-triangle--right-alt::after {
-    background: linear-gradient(to top in oklch, var(--triangle-alt));
-    background-image: linear-gradient(to top in oklch,
-            var(--tri-a-0) 0%, var(--tri-a-1) 8.6%, var(--tri-a-2) 16.29%, var(--tri-a-3) 23.22%,
-            var(--tri-a-4) 29.53%, var(--tri-a-5) 35.37%, var(--tri-a-6) 40.89%, var(--tri-a-7) 46.23%,
-            var(--tri-a-8) 51.53%, var(--tri-a-9) 56.95%, var(--tri-a-10) 62.63%, var(--tri-a-11) 68.71%,
-            var(--tri-a-12) 75.34%, var(--tri-a-13) 82.67%, var(--tri-a-14) 90.84%, var(--tri-a-15) 100%);
-    transition: --tri-a-0 var(--transition-triangle-base), --tri-a-1 var(--transition-triangle-base),
-        --tri-a-2 var(--transition-triangle-base), --tri-a-3 var(--transition-triangle-base), --tri-a-4 var(--transition-triangle-base),
-        --tri-a-5 var(--transition-triangle-base), --tri-a-6 var(--transition-triangle-base), --tri-a-7 var(--transition-triangle-base),
-        --tri-a-8 var(--transition-triangle-base), --tri-a-9 var(--transition-triangle-base), --tri-a-10 var(--transition-triangle-base),
-        --tri-a-11 var(--transition-triangle-base), --tri-a-12 var(--transition-triangle-base), --tri-a-13 var(--transition-triangle-base),
-        --tri-a-14 var(--transition-triangle-base), --tri-a-15 var(--transition-triangle-base);
-}
-
-@property --tri-a-0 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: rgba(134, 120, 0, 0);
-}
-
-@property --tri-a-1 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: rgba(134, 120, 0, 0.011);
-}
-
-@property --tri-a-2 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: rgba(134, 120, 0, 0.032);
-}
-
-@property --tri-a-3 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: rgba(134, 120, 0, 0.063);
-}
-
-@property --tri-a-4 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: rgba(134, 120, 0, 0.103);
-}
-
-@property --tri-a-5 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: rgba(134, 120, 0, 0.151);
-}
-
-@property --tri-a-6 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: rgba(134, 120, 0, 0.208);
-}
-
-@property --tri-a-7 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: rgba(134, 120, 0, 0.272);
-}
-
-@property --tri-a-8 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: rgba(134, 120, 0, 0.343);
-}
-
-@property --tri-a-9 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: rgba(134, 120, 0, 0.421);
-}
-
-@property --tri-a-10 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: rgba(134, 120, 0, 0.505);
-}
-
-@property --tri-a-11 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: rgba(134, 120, 0, 0.595);
-}
-
-@property --tri-a-12 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: rgba(134, 120, 0, 0.690);
-}
-
-@property --tri-a-13 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: rgba(134, 120, 0, 0.789);
-}
-
-@property --tri-a-14 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: rgba(134, 120, 0, 0.893);
-}
-
-@property --tri-a-15 {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: #867800;
-}
-
 
 /* Tooltip */
 
@@ -1443,7 +1319,7 @@ footer>div {
 
 @media (min-width: 45rem) {
     footer>div {
-        padding: calc(var(--segment) * 0.75) var(--segment-half) var(--segment-half) var(--segment-half);
+        padding: var(--segment) var(--segment-half) var(--segment-half) var(--segment-half);
     }
 }
 

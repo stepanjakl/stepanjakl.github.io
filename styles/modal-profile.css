@@ -11,8 +11,8 @@
     }
 }
 
-.modal--profile .modal__body dl {
-    padding: var(--segment-quarter) 0 var(--segment-quarter) var(--segment-quarter);
+.modal-profile__table {
+    padding: var(--segment-quarter) 0 var(--segment-quarter) var(--segment);
     display: grid;
     grid-template-columns: 1fr;
     list-style: none;
@@ -20,72 +20,41 @@
 }
 
 @media (min-width: 45rem) {
-    .modal--profile .modal__body dl {
-        padding: var(--segment-third) 0 var(--segment-third) var(--segment-third);
+    .modal-profile__table {
+        padding: var(--segment-third) 0 var(--segment-third) calc(var(--segment) * 1.25);
     }
 }
 
 @media (min-width: 60rem) {
-    .modal--profile .modal__body dl {
-        padding: var(--segment-half) 0 var(--segment-half) var(--segment-half);
+    .modal-profile__table {
+        padding: var(--segment-half) 0 var(--segment-half) calc(var(--segment) * 1.25);
         grid-template-columns: auto 1fr;
-        grid-row-gap: calc(var(--segment) * (3/4));
+        grid-row-gap: var(--segment);
         grid-column-gap: calc(var(--segment) * (3/4));
     }
 }
 
 @media (min-width: 75rem) {
-    .modal--profile .modal__body dl {
-        padding: var(--segment) var(--segment) var(--segment-quarter) var(--segment);
+    .modal-profile__table {
+        padding: var(--segment) 0 var(--segment) calc(var(--segment) * 1.5);
     }
 }
 
-.modal--profile .modal__body dl div {
-    padding: 1.25rem 1.75rem 0 1.25rem;
-    margin-bottom: 0.875rem;
-    grid-template-columns: 1fr;
-    row-gap: 0.875rem;
-}
-
-.modal--profile .modal__body dl div:first-child {
-    padding-top: 1.75rem;
-}
-
-.modal--profile .modal__body dl div dt {
-    padding-bottom: 0.171875rem;
-}
-
-@media (min-width: 60rem) {
-    .modal--profile .modal__body dl div {
-        padding: 0;
-        margin-bottom: 0;
-        grid-template-columns: initial;
-        row-gap: initial;
-    }
-
-    .modal--profile .modal__body dl div:first-child {
-        padding-top: 0;
-    }
-
-    .modal--profile .modal__body dl div dt {
-        padding-bottom: 0;
-    }
-}
-
-.modal--profile .modal__body dt:first-of-type,
-.modal--profile .modal__body dd:first-of-type {
-    margin-top: var(--segment-half);
-    margin-bottom: var(--segment-half);
-}
-
-.modal--profile .modal__body dt:nth-child(2n-1) {
-    margin-top: calc(var(--segment) * (3/4));
+.modal-profile__table>dt {
+    margin-top: var(--segment);
     margin-bottom: var(--segment-half);
 }
 
 @media (min-width: 60rem) {
-    .modal--profile .modal__body dt {
-        margin: 0 !important;
+
+    .modal--profile .modal__body dt:first-of-type,
+    .modal--profile .modal__body dd:first-of-type {
+        margin-top: var(--segment-half);
+        margin-bottom: var(--segment-half);
+    }
+
+    .modal-profile__table>dt {
+        margin: 0;
     }
 }
 
@@ -324,6 +293,21 @@
 .modal--profile .modal__close-button {
     backdrop-filter: blur(0.046875rem);
     -webkit-backdrop-filter: blur(0.046875rem);
+}
+
+
+/* Side ruler art */
+
+.modal-profile-side-ruler-art {
+    position: absolute;
+    inset: min(-0.75px, -0.046875rem) auto 0 0;
+    width: 1.75rem;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='28' height='101' viewBox='0 0 28 101' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0.75H14' stroke='%23FFFFFF15' stroke-width='1.5'/%3E%3Cpath d='M0 10.75H14' stroke='%23FFFFFF15' stroke-width='1.5'/%3E%3Cpath d='M0 20.75H14' stroke='%23FFFFFF15' stroke-width='1.5'/%3E%3Cpath d='M0 30.75H14' stroke='%23FFFFFF15' stroke-width='1.5'/%3E%3Cpath d='M0 80.75H14' stroke='%23FFFFFF15' stroke-width='1.5'/%3E%3Cpath d='M0 90.75H28' stroke='%23FFFFFF30' stroke-width='1.5'/%3E%3Cpath d='M0 40.75H14' stroke='%23FFFFFF15' stroke-width='1.5'/%3E%3Cpath d='M0 50.75H14' stroke='%23FFFFFF15' stroke-width='1.5'/%3E%3Cpath d='M0 60.75H14' stroke='%23FFFFFF15' stroke-width='1.5'/%3E%3Cpath d='M0 70.75H14' stroke='%23FFFFFF15' stroke-width='1.5'/%3E%3C/svg%3E%0A");
+    background-repeat: repeat-y;
+    background-size: 100% auto;
+    background-position: top;
+    mask-image: linear-gradient(to bottom, black calc(100% - var(--segment)), transparent);
 }
 
 
