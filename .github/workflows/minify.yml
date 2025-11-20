@@ -42,7 +42,7 @@ jobs:
           done
           # Minify HTML
           html-minifier --case-sensitive --collapse-inline-tag-whitespace --collapse-whitespace --minify-css --minify-js --minify-urls --quote-character='"' --remove-comments index.html --output index.html
-          # Optimize images (SVGs only)
+          # Optimise images (SVGs only)
           svgo --disable removeUselessDefs -f ./images --exclude icons.svg --exclude logos.svg
 
       # (Force) push changes to `gh-pages` branch

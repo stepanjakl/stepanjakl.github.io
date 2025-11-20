@@ -139,12 +139,6 @@ body, html {
     }
 }
 
-@media (min-width: 160rem) {
-    :root {
-        font-size: 1.125rem;
-    }
-}
-
 
 /* Page */
 
@@ -191,19 +185,18 @@ body, main {
 .intro {
     position: relative;
     z-index: 1;
-    padding-left: 1.75rem;
+    padding: 0 1.75rem;
     display: grid;
     grid-template-columns: auto;
     row-gap: 3.75rem;
-    max-width: var(--breakpoint-xl);
+    max-width: var(--breakpoint-2xl);
     margin: auto;
+    box-sizing: content-box;
 }
 
 @media (min-width: 45rem) {
     .intro {
-        padding-left: var(--segment-half);
-        padding-top: calc((var(--segment) * 1.5) - var(--segment-quarter) - max(1px, 0.0625rem));
-        padding-bottom: var(--segment-half);
+        padding: calc((var(--segment) * 1.5) - var(--segment-quarter) - max(1px, 0.0625rem)) var(--segment-half) var(--segment-half) var(--segment-half);
         grid-template-columns: calc(var(--segment) * 4) min-content;
         grid-column-gap: calc(var(--segment) * 2);
         row-gap: 0;
@@ -1312,12 +1305,13 @@ footer::before {
 footer>div {
     display: flex;
     padding: calc(var(--segment) * 0.75) 1.75rem var(--segment-half) 1.75rem;
-    width: 100%;
+    width: auto;
     height: 100%;
     column-gap: 1.125rem;
-    max-width: var(--breakpoint-xl);
+    max-width: var(--breakpoint-2xl);
     margin: auto;
     pointer-events: none;
+    box-sizing: content-box;
 }
 
 @media (min-width: 45rem) {
@@ -1326,22 +1320,15 @@ footer>div {
     }
 }
 
+@media (min-width: 105rem) {
+    footer>div {
+        padding: calc(var(--segment) * 1.5) var(--segment-half) var(--segment) var(--segment-half);
+    }
+}
+
 footer>div>div {
     display: flex;
     column-gap: 0.5rem;
-}
-
-@media (min-width: 105rem) {
-    footer>div {
-        max-width: var(--breakpoint-2xl);
-        padding: 3.5rem 5rem;
-    }
-}
-
-@media (min-width: 160rem) {
-    footer>div {
-        padding: 5rem 5rem;
-    }
 }
 
 [class^="intro__footer-square"] {
@@ -1384,5 +1371,23 @@ footer>div>div {
     .hover-cards img,
     .modal-profile__photo {
         filter: brightness(0.8);
+    }
+}
+
+
+/* Lazy Loading Images */
+
+[loading="lazy"] {
+    opacity: 0;
+    transition: opacity var(--animate-in-segment) var(--ease-in-quad);
+}
+
+[loading="lazy"].loaded {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [loading="lazy"] {
+        transition: none;
     }
 }

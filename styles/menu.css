@@ -22,7 +22,19 @@
         --menu-item-border-radius: 2rem 0.75rem 0.75rem 2rem;
         grid-auto-flow: column;
         row-gap: 0.5rem;
-        margin-top: 6.5rem;
+        margin-top: 6.25rem;
+    }
+}
+
+@media (min-width: 85rem) {
+    .menu {
+        margin-top: 10.25rem;
+    }
+}
+
+@media (min-width: 105rem) {
+    .menu {
+        margin-top: 14.25rem;
     }
 }
 
@@ -292,14 +304,6 @@ body {
         --menu-icon-bit-size: 3px;
         --menu-icon-gap: 4px;
         --menu-icon-gap-between: 10px;
-    }
-}
-
-@media (min-width: 160rem) {
-    body {
-        --menu-icon-bit-size: 3.5px;
-        --menu-icon-gap: 5px;
-        --menu-icon-gap-between: 11px;
     }
 }
 

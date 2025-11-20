@@ -93,14 +93,6 @@ body {
 }
 
 
-/* Page-loaded fade-In */
-
-html.page-loaded main {
-    opacity: 1;
-    transition: opacity var(--anim-segment) linear var(--anim-segment);
-}
-
-
 /* Intro - Footer - Rectangle */
 
 footer>* {
@@ -1243,49 +1235,21 @@ body {
     opacity: 0;
     transform: scale(1.05);
     transform-origin: top;
-    transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad), visibility 0s var(--animate-out-segment);
+    transition: opacity calc(var(--animate-out-segment) * 1.25) linear, transform calc(var(--animate-out-segment) * 1.25) var(--ease-in-quad), visibility 0s calc(var(--animate-out-segment) * 1.25);
 }
 
 #profile:target~main #modal-profile,
-body.modal-profile-open #modal-profile {
-    visibility: visible;
-    opacity: 1;
-    transform: scale(1);
-    transition: opacity var(--animate-in-segment) linear, transform var(--animate-in-segment) var(--ease-out-quad);
-}
-
+body.modal-profile-open #modal-profile,
 #archive:target~main #modal-archive,
 body.modal-archive-open #modal-archive {
     visibility: visible;
     opacity: 1;
     transform: scale(1);
-    transition: opacity var(--animate-in-segment) linear, transform var(--animate-in-segment) var(--ease-out-quad);
-}
-
-#archive:target~main .intro__left,
-body.modal-archive-open .intro__left,
-#archive:target~main .intro__right,
-body.modal-archive-open .intro__right {
-    transition: transform var(--animate-in-segment) var(--ease-out-quad);
-    transform: scale(0.95);
-}
-
-#profile:target~main .intro__left,
-body.modal-profile-open .intro__left {
-    transition: transform var(--animate-in-segment) var(--ease-out-quad), filter var(--animate-in-segment) var(--ease-out-quad);
-    transform: scale(0.95);
-    filter: blur(2rem);
-}
-
-#profile:target~main .intro__right,
-body.modal-profile-open .intro__right {
-    transition: transform var(--animate-in-segment) var(--ease-out-quad), filter var(--animate-in-segment) var(--ease-out-quad);
-    transform: scale(0.95);
-    filter: blur(3rem);
+    transition: opacity calc(var(--animate-in-segment) * 1.25) linear, transform calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad);
 }
 
 .intro__left, .intro__right {
-    transition: transform var(--animate-out-segment) var(--ease-in-quad), filter var(--animate-out-segment) var(--ease-in-quad);
+    transition: transform calc(var(--animate-out-segment) * 1.25) var(--ease-in-quad), filter calc(var(--animate-out-segment) * 1.25) var(--ease-in-quad);
     transform-origin: center;
 }
 
@@ -1295,20 +1259,42 @@ body.modal-profile-open .intro__right {
     }
 }
 
+#archive:target~main .intro__left,
+body.modal-archive-open .intro__left,
+#archive:target~main .intro__right,
+body.modal-archive-open .intro__right {
+    transition: transform calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad);
+    transform: scale(0.95);
+}
+
+#profile:target~main .intro__left,
+body.modal-profile-open .intro__left {
+    transition: transform calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad), filter calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad);
+    transform: scale(0.95);
+    filter: blur(2rem);
+}
+
+#profile:target~main .intro__right,
+body.modal-profile-open .intro__right {
+    transition: transform calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad), filter calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad);
+    transform: scale(0.95);
+    filter: blur(3rem);
+}
+
 footer>div {
-    transition: transform var(--animate-out-segment) var(--ease-in-quad), filter var(--animate-out-segment) var(--ease-in-quad);
+    transition: transform calc(var(--animate-out-segment) * 1.25) var(--ease-in-quad), filter calc(var(--animate-out-segment) * 1.25) var(--ease-in-quad);
     transform-origin: top;
 }
 
 #archive:target~main footer>div,
 body.modal-archive-open footer>div {
-    transition: transform var(--animate-in-segment) var(--ease-out-quad);
+    transition: transform calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad);
     transform: scale(0.975);
 }
 
 #profile:target~main footer>div,
 body.modal-profile-open footer>div {
-    transition: transform var(--animate-in-segment) var(--ease-out-quad), filter var(--animate-in-segment) var(--ease-out-quad);
+    transition: transform calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad), filter calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad);
     transform: scale(0.975);
     filter: blur(1.5rem);
 }
@@ -1572,4 +1558,15 @@ horizontal-timeline.timeline-in-place {
 .intro__name.highlight--active .corners__item::before,
 .intro__name.highlight--active .corners__item::after {
     transition: background-color calc(2 * var(--animate-in-segment)) var(--ease-out-quad);
+}
+
+
+/* Prevent 'Flash of Unstyled Content' (FOUC) - END */
+main {
+    opacity: 1;
+    transition: opacity var(--anim-segment) linear var(--anim-segment);
+}
+
+html.page-loaded main {
+    opacity: 1;
 }

@@ -3,37 +3,37 @@
     <head>
         <!-- Initial styles -->
         <style>
-            main {
-                opacity: 0;
-            }
+            /* Prevent 'Flash of Unstyled Content' (FOUC) - START */
+            main { opacity: 0; }
         </style>
-
-        <!-- Umami - Analytics -->
-        <script defer src="https://cloud.umami.is/script.js" data-website-id="6f9d8fb6-c4c3-410e-bba3-7b8cafd6ed04"></script>
+        <script defer
+                src="https://cloud.umami.is/script.js"
+                data-website-id="6f9d8fb6-c4c3-410e-bba3-7b8cafd6ed04"></script>
 
         <!-- GlitchTip - Error tracking -->
-        <script src="https://browser.sentry-cdn.com/10.25.0/bundle.min.js" crossorigin="anonymous"></script>
+        <script src="https://browser.sentry-cdn.com/10.25.0/bundle.min.js"
+                crossorigin="anonymous"></script>
 
         <script>
-                Sentry.init({
-                    dsn: "https://7388455908f8442ba73a83bca2c9403c@app.glitchtip.com/13576",
-                    tracesSampleRate: 0.01,
-                });
+            Sentry.init({
+                dsn: "https://7388455908f8442ba73a83bca2c9403c@app.glitchtip.com/13576",
+                tracesSampleRate: 0.01,
+            });
 
-                window.onerror = function(message, source, lineno, colno, error) {
-                    Sentry.captureException(error)
-                }
+            window.onerror = function(message, source, lineno, colno, error) {
+                Sentry.captureException(error)
+            }
 
-                window.onunhandledrejection = function(event) {
-                    Sentry.captureException(event.reason)
-                }
+            window.onunhandledrejection = function(event) {
+                Sentry.captureException(event.reason)
+            }
         </script>
 
         <!-- Page metadata -->
         <title>Štěpán Jákl | Full-stack web developer & interface designer</title>
         <meta charset="UTF-8">
         <meta name="description"
-              content="Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.">
+              content="Experienced and detail-oriented user interface engineer who specialises in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="color-scheme" content="dark light">
         <meta name="keywords" content="developer, designer">
@@ -45,7 +45,7 @@
         <meta property="og:title"
               content="Štěpán Jákl | Full-stack web developer & interface designer">
         <meta property="og:description"
-              content="Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.">
+              content="Experienced and detail-oriented user interface engineer who specialises in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.">
         <meta property="og:image"
               content="https://stepanjakl.com/images/og-banner.jpg">
         <meta property="og:image:width" content="1200">
@@ -90,6 +90,7 @@
         <link rel="stylesheet" href="styles/timeline.css">
         <link rel="stylesheet" href="styles/state.css">
         <link rel="stylesheet" href="styles/animation.css">
+        <noscript><link rel="stylesheet" href="styles/noscript.css"></noscript>
 
         <!-- Structured data (JSON-LD schema) -->
         <script type="application/ld+json">
@@ -100,7 +101,7 @@
                 "url": "https://stepanjakl.com",
                 "image": "https://stepanjakl.com/images/selfie.jpg",
                 "jobTitle": "Full-stack web developer & interface designer",
-                "description": "Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.",
+                "description": "Experienced and detail-oriented user interface engineer who specialises in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.",
                 "nationality": {
                     "@type": "Country",
                     "name": "Czech Republic"
@@ -199,7 +200,7 @@
                                     <span style="--i:6">n</span>
                                     <span style="--i:7">&nbsp;</span>
                                 </p>
-                                <p style="--i:1">
+                                    <p style="--i:8">
                                     <span style="--i:8">J</span>
                                     <span style="--i:9">á</span>
                                     <span style="--i:10">k</span>
@@ -217,7 +218,9 @@
                                 <span aria-hidden="true">L-click to copy / R-click to pronounce</span>
                             </abbr>
                         </h1>
-                        <div class="intro__logo intro__logo--animating has-corners" role="img" aria-label="Štěpán Jákl personal brand logo">
+                        <div class="intro__logo intro__logo--animating has-corners"
+                             role="img"
+                             aria-label="Štěpán Jákl personal brand logo">
                             <span class="intro__logo-frame">
                                 <div class="corners">
                                     <figure class="corners__item corners__item--tr">
@@ -232,7 +235,9 @@
                     <!-- Right column: Titles, availability & menu -->
                     <div class="intro__right">
                         <!-- Job titles -->
-                        <h2 class="intro__title intro__primary-title intro__title--animating" role="heading" aria-level="2">
+                        <h2 class="intro__title intro__primary-title intro__title--animating"
+                            role="heading"
+                            aria-level="2">
                             <span class="sr-only">Full-stack developer</span>
                             <p style="--i:2" aria-hidden="true">
                                 <span>F</span><span>u</span><span>l</span><span>l</span><span>-</span><span>s</span><span>t</span><span>a</span><span>c</span><span>k</span>
@@ -241,7 +246,9 @@
                                 <span>&nbsp;</span><span style="--i:1">d</span><span style="--i:2">e</span><span style="--i:3">v</span><span style="--i:4">e</span><span style="--i:5">l</span><span style="--i:6">o</span><span style="--i:7">p</span><span style="--i:8">e</span><span style="--i:9">r</span>
                             </p>
                         </h2>
-                        <div class="intro__title intro__secondary-title intro__title--animating" role="heading" aria-level="2">
+                        <div class="intro__title intro__secondary-title intro__title--animating"
+                             role="heading"
+                             aria-level="2">
                             <span class="sr-only">& interface designer</span>
                             <p style="--i:4" aria-hidden="true">
                                 <span>&</span><span>&nbsp;</span><span>i</span><span>n</span><span>t</span><span>e</span><span>r</span><span>f</span><span>a</span><span>c</span><span>e</span>
@@ -294,7 +301,11 @@
                                         <span>Click to copy</span>
                                     </abbr>
                                 </button>
-                                <span id="email-copy-status" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></span>
+                                <span id="email-copy-status"
+                                      role="status"
+                                      aria-live="polite"
+                                      aria-atomic="true"
+                                      class="sr-only"></span>
                             </div>
 
                             <!-- Menu navigation links -->
@@ -384,7 +395,7 @@
                                    aria-label="Close menu"></a>
 
                                 <!-- Dropdown menu content -->
-                                <dialog id="menu-dropdown" inert>
+                                <dialog id="menu-dropdown">
                                     <div>
                                         <a href="https://cal.com/stepanjakl"
                                            target="_blank"
@@ -488,9 +499,10 @@
                     <dialog id="modal-profile"
                             class="modal modal--profile"
                             aria-modal="true"
-                            aria-labelledby="modal-profile-title"
-                            inert>
-                        <h1 id="modal-profile-title" class="sr-only">Profile Information</h1>
+                            aria-labelledby="modal-profile-title">
+                        <h1 id="modal-profile-title" class="sr-only">
+                            Profile information
+                        </h1>
                         <div class="modal__content">
                             <div class="modal__controls">
                                 <a href="#"
@@ -503,7 +515,8 @@
                                 </a>
                             </div>
                             <div class="modal__body">
-                                <div class="modal-profile-side-ruler-art"></div>
+                                <div class="modal-profile-side-ruler-art">
+                                </div>
                                 <dl class="modal-profile__table">
                                     <dt>
                                         <span>Photo:</span>
@@ -536,6 +549,9 @@
                                         </p>
                                         <p>
                                             Dedicated to shaping engaging interfaces through purposeful design and seamless interactions. I value precision in every aspect of the creative process, ensuring layouts feel balanced, transitions enhance flow, and visual elements contribute meaningfully to the overall experience. Each project is an opportunity to refine the connection between form and function.
+                                        </p>
+                                        <p>
+                                            I combine design thinking with technical depth, taking on multiple roles as projects evolve — from early planning and analytical problem-solving to hands-on development. This interdisciplinary approach helps me create scalable, reliable systems rooted in practical decision-making and careful attention to detail. Whether defining project structure or refining the final look and feel, I aim to produce work that is both thoughtful and dependable.
                                         </p>
                                         <p>
                                             I have been equally dedicated to code and design as a profesional since 2014.
@@ -599,22 +615,46 @@
                                     <dd class="modal-profile__tags">
                                         <ul>
                                             <li>
-                                                <span>Dashboard/Single-page app</span>
+                                                <span>Accessibility audit/implementation</span>
+                                            </li>
+                                            <li>
+                                                <span>AI-powered features/integrations</span>
+                                            </li>
+                                            <li>
+                                                <span>API design/development</span>
+                                            </li>
+                                            <li>
+                                                <span>Component library</span>
+                                            </li>
+                                            <li>
+                                                <span>Dashboard</span>
+                                            </li>
+                                            <li>
+                                                <span>Data visualisation</span>
+                                            </li>
+                                            <li>
+                                                <span>Design system</span>
+                                            </li>
+                                            <li>
+                                                <span>Interactive prototype</span>
                                             </li>
                                             <li>
                                                 <span>Landing page</span>
                                             </li>
                                             <li>
-                                                <span>Mockup/Prototype</span>
+                                                <span>Mobile app (iOS/Android)</span>
                                             </li>
                                             <li>
-                                                <span>SaaS app</span>
+                                                <span>Performance optimisation</span>
                                             </li>
                                             <li>
-                                                <span>Styleguide</span>
+                                                <span>Progressive Web App (PWA)</span>
                                             </li>
                                             <li>
-                                                <span>Wireframe</span>
+                                                <span>Single-page app</span>
+                                            </li>
+                                            <li>
+                                                <span>Web application</span>
                                             </li>
                                             <li>
                                                 <span>& other</span>
@@ -710,9 +750,10 @@
                     <dialog id="modal-archive"
                             class="modal modal--archive"
                             aria-modal="true"
-                            aria-labelledby="modal-archive-title"
-                            inert>
-                        <h1 id="modal-archive-title" class="sr-only">Project Archive</h1>
+                            aria-labelledby="modal-archive-title">
+                        <h1 id="modal-archive-title" class="sr-only">
+                            Project archive
+                        </h1>
                         <figure class="modal__content">
                             <!-- Modal controls -->
                             <div class="modal__controls">
@@ -736,7 +777,8 @@
                                         <use xlink:href="images/icons.svg#fullscreen-off"></use>
                                     </svg>
                                 </label>
-                                <a href="#horizontal-timeline-wrapper" class="sr-only-focusable modal-archive__skip-link">Skip to timeline navigation</a>
+                                <a href="#horizontal-timeline-wrapper"
+                                   class="sr-only-focusable modal-archive__skip-link">Skip to timeline navigation</a>
                             </div>
 
                             <!-- Modal body / Timeline content -->
@@ -744,20 +786,40 @@
                                 <!-- Archive timeline -->
                                 <div class="modal-archive__timeline">
                                     <!-- Timeline section toggle controls -->
-                                    <input type="checkbox" id="timeline-section-year-2024-21" checked class="sr-only" aria-labelledby="timeline-label-2024-21">
-                                    <input type="checkbox" id="timeline-section-year-2021-19" class="sr-only" aria-labelledby="timeline-label-2021-19">
-                                    <input type="checkbox" id="timeline-section-year-2019-18" class="sr-only" aria-labelledby="timeline-label-2019-18">
-                                    <input type="checkbox" id="timeline-section-year-elsewhen" class="sr-only" aria-labelledby="timeline-label-elsewhen">
+                                    <input type="checkbox"
+                                           id="timeline-section-year-2024-21"
+                                           checked
+                                           class="sr-only"
+                                           aria-labelledby="timeline-label-2024-21">
+                                    <input type="checkbox"
+                                           id="timeline-section-year-2021-19"
+                                           class="sr-only"
+                                           aria-labelledby="timeline-label-2021-19">
+                                    <input type="checkbox"
+                                           id="timeline-section-year-2019-18"
+                                           class="sr-only"
+                                           aria-labelledby="timeline-label-2019-18">
+                                    <input type="checkbox"
+                                           id="timeline-section-year-elsewhen"
+                                           class="sr-only"
+                                           aria-labelledby="timeline-label-elsewhen">
 
                                     <!-- Timeline grid layout -->
                                     <div id="timeline-navigation" class="modal-archive__timeline-grid">
                                         <!-- Timeline section: 2024-21 -->
                                         <section data-timeline-section-title="2024-21"
                                                  class="modal-archive__timeline-section-title">
-                                            <h2 id="timeline-label-2024-21" class="sr-only">2024-21 Projects</h2>
+                                            <h2 id="timeline-label-2024-21" class="sr-only">
+                                                2024-21 projects
+                                            </h2>
                                             <div>
-                                                <label for="timeline-section-year-2024-21" tabindex="0" role="button" aria-expanded="true" aria-controls="timeline-content-2024-21">
-                                                    <span class="sr-only">Show or hide 2024-21 projects. </span><span aria-hidden="true">2024</span>
+                                                <label for="timeline-section-year-2024-21"
+                                                       tabindex="0"
+                                                       role="button"
+                                                       aria-expanded="true"
+                                                       aria-controls="timeline-content-2024-21">
+                                                    <span class="sr-only">Show or hide 2024-21 projects</span>
+                                                    <span aria-hidden="true">2024</span>
                                                 </label>
                                                 <div class="modal-archive__timeline-section-controls">
                                                     <svg>
@@ -770,7 +832,8 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section id="timeline-content-2024-21" data-timeline-section="2024-21"
+                                        <section id="timeline-content-2024-21"
+                                                 data-timeline-section="2024-21"
                                                  class="modal-archive__timeline-section">
                                             <figure aria-hidden="true">
                                                 <hr>
@@ -872,19 +935,19 @@
                                                         </li>
                                                         <li>
                                                             <p>
-                                                                Client liaison, full-stack developer, quality overseer, and technical lead
+                                                                Client liaison, full-stack developer, quality assurance lead, and technical lead
                                                             </p>
                                                         </li>
                                                     </ul>
                                                 </nav>
                                                 <p>
-                                                    Between 2021 and 2024, I collaborated with CloudRaker, a digital consulting agency, to design, build and maintain a network of websites for The Fertility Partners (TFP) — one of North America&rsquo;s largest fertility clinic groups. Over this period, I led the planning, development and long-term maintenance of seven full marketing sites and several existing ones, representing roughly 4,000 hours of work.
+                                                    Between 2021 and 2024, I collaborated with CloudRaker, a digital consulting agency, to design, build, and maintain a network of websites for The Fertility Partners (TFP) — one of North America&rsquo;s largest fertility clinic groups. Over this period, I led the planning, development, and long-term maintenance of seven full marketing sites and several existing ones, representing roughly 4,000 hours of work.
                                                     <br>
                                                     <br>
-                                                    I was the main technical lead and point of contact between CloudRaker, TFP, and my own team at Bohemica Studio. My role went far beyond coding: I translated business goals into robust technical strategies, coordinated designers and developers, and ensured every launch met high standards of performance, accessibility and SEO.
+                                                    I was the main technical lead and point of contact between CloudRaker, TFP and my team at Bohemica Studio. My role went far beyond coding: I translated business goals into robust technical strategies, coordinated designers and developers, and ensured every launch met high standards of performance, accessibility and SEO.
                                                     <br>
                                                     <br>
-                                                    All sites were built on ApostropheCMS (versions 2 and 3). I architected a system of reusable modules and custom widgets to make content editing intuitive for non-technical users. This included implementing multilingual content, continuous integration/deployment pipelines, analytics tracking and error monitoring. Throughout the project we continuously optimised load times, improved accessibility and refined the CMS editor&rsquo;s user experience. Post-launch, I managed the full suite under a long-term support agreement: applying updates, monitoring performance, and rolling out iterative improvements. The result was a unified, scalable platform that empowered the client&rsquo;s marketing teams to manage content independently across the entire clinic network.
+                                                    All sites were built on ApostropheCMS (versions 2 and 3). I architected a system of reusable modules and custom widgets to make content editing intuitive for non-technical users. This included implementing multilingual content, continuous integration/deployment pipelines, analytics tracking and error monitoring. Throughout the project, we continuously optimised load times, improved accessibility and refined the CMS editor&rsquo;s user experience. Post-launch, I managed the full suite under a long-term support agreement: applying updates, monitoring performance, and rolling out iterative improvements. The result was a unified, scalable platform that empowered the client&rsquo;s marketing teams to manage content independently across the entire clinic network.
                                                     <br>
                                                     <br>
                                                     The project&rsquo;s scale and impact were substantial. Each site comprised hundreds of pages of content in multiple languages, serving a combined audience of thousands of visitors per month. We created a centralised template system so that enhancements (new widgets, scripts or layouts) could be shared across all sites. Performance and SEO were optimised to handle high traffic, and analytics dashboards were set up to measure user engagement and guide ongoing refinements. In sum, this effort not only modernised TFP&rsquo;s digital presence but also delivered a repeatable, efficient platform for future growth.
@@ -957,7 +1020,7 @@
                                                     </ul>
                                                 </nav>
                                                 <p>
-                                                    I created a shared template and module library, implemented as a Git submodule for all Apostrophe 3 sites. It included base code, Tailwind styling, configuration and reusable components. Each new project linked this template at the start, enabling rapid deployment of common features.
+                                                    I created a shared template and module library, which I implemented as a Git submodule for all Apostrophe 3 sites. It included base code, Tailwind CSS styling, configuration and reusable components. Each new project linked this template at the start, enabling rapid deployment of common features.
                                                     <br>
                                                     <br>
                                                     As development continued, new modules and enhancements were merged back into the library so that every site benefitted from the latest improvements. The setup also supported advanced integrations such as form validation, scroll animations and WebGL content, all configurable directly through the CMS. This approach made development faster, more consistent and highly adaptable.
@@ -1100,10 +1163,17 @@
                                         <!-- Timeline section: 2021-19 -->
                                         <section data-timeline-section-title="2021-19"
                                                  class="modal-archive__timeline-section-title">
-                                            <h2 id="timeline-label-2021-19" class="sr-only">2021-19 Projects</h2>
+                                            <h2 id="timeline-label-2021-19" class="sr-only">
+                                                2021-19 projects
+                                            </h2>
                                             <div>
-                                                <label for="timeline-section-year-2021-19" tabindex="0" role="button" aria-expanded="false" aria-controls="timeline-content-2021-19">
-                                                    <span class="sr-only">Show or hide 2021-19 projects. </span><span aria-hidden="true">2021-19</span>
+                                                <label for="timeline-section-year-2021-19"
+                                                       tabindex="0"
+                                                       role="button"
+                                                       aria-expanded="false"
+                                                       aria-controls="timeline-content-2021-19">
+                                                    <span class="sr-only">Show or hide 2021-19 projects</span>
+                                                    <span aria-hidden="true">2021-19</span>
                                                 </label>
                                                 <div class="modal-archive__timeline-section-controls">
                                                     <svg>
@@ -1116,7 +1186,8 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section id="timeline-content-2021-19" data-timeline-section="2021-19"
+                                        <section id="timeline-content-2021-19"
+                                                 data-timeline-section="2021-19"
                                                  class="modal-archive__timeline-section">
                                             <figure aria-hidden="true">
                                                 <hr>
@@ -1166,7 +1237,7 @@
                                                     I led our multidisciplinary team of designers and developers, fostering a culture of open communication and mutual trust. I believe great work comes from empowering talented people, so I focused on creating an environment where team members felt confident to take initiative, share their ideas, and contribute to our shared goals.
                                                     <br>
                                                     <br>
-                                                    A key part of my role was ensuring we stayed at the cutting edge of our industry. I championed the continuous adoption of modern tools and best practices, keeping our technical stack current and our workflows efficient. This commitment to innovation ensured that we consistently delivered solutions that were not only beautifully designed but also technically excellent and built to last.
+                                                    A key part of my role was ensuring we stayed at the cutting edge of our industry. I encouraged the ongoing adoption of modern tools and best practices, keeping our technical stack current and our workflows efficient. This focus on thoughtful progress ensured that we consistently delivered solutions that were not only well-crafted but also technically sound and built to last.
                                                 </p>
                                                 <h4>
                                                     Bohemica Store
@@ -1303,10 +1374,17 @@
                                         <!-- Timeline section: 2019-18 -->
                                         <section data-timeline-section-title="2019-18"
                                                  class="modal-archive__timeline-section-title">
-                                            <h2 id="timeline-label-2019-18" class="sr-only">2019-18 Projects</h2>
+                                            <h2 id="timeline-label-2019-18" class="sr-only">
+                                                2019-18 projects
+                                            </h2>
                                             <div>
-                                                <label for="timeline-section-year-2019-18" tabindex="0" role="button" aria-expanded="false" aria-controls="timeline-content-2019-18">
-                                                    <span class="sr-only">Show or hide 2019-18 projects. </span><span aria-hidden="true">2019-18</span>
+                                                <label for="timeline-section-year-2019-18"
+                                                       tabindex="0"
+                                                       role="button"
+                                                       aria-expanded="false"
+                                                       aria-controls="timeline-content-2019-18">
+                                                    <span class="sr-only">Show or hide 2019-18 projects</span>
+                                                    <span aria-hidden="true">2019-18</span>
                                                 </label>
                                                 <div class="modal-archive__timeline-section-controls">
                                                     <svg>
@@ -1319,7 +1397,8 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <section id="timeline-content-2019-18" data-timeline-section="2019-18"
+                                        <section id="timeline-content-2019-18"
+                                                 data-timeline-section="2019-18"
                                                  class="modal-archive__timeline-section">
                                             <figure aria-hidden="true">
                                                 <hr>
@@ -1444,19 +1523,19 @@
                                                     </ul>
                                                 </nav>
                                                 <p>
-                                                    Aéropot was born from my Master's thesis in Sustainability, Entrepreneurship, and Design at Brunel University. The project was a deep dive into solving real-world challenges like urbanisation and resource scarcity through technology. The goal was to create a smart indoor gardening system that not only makes plant cultivation accessible and efficient but also serves as an educational tool. It was a multidisciplinary venture that blended environmental science with product design, software engineering, and hardware prototyping to create a fully functional proof-of-concept.
+                                                    Aéropot was born from my Master&rsquo;s thesis in Sustainability, Entrepreneurship and Design at Brunel University. The project was a deep dive into solving real-world challenges such as urbanisation and resource scarcity through technology. The goal was to create a smart indoor gardening system that not only made plant cultivation more accessible and efficient but also served as an educational tool. It was a multidisciplinary venture that blended environmental science with product design, software engineering and hardware prototyping to create a fully functional proof of concept.
                                                     <br>
                                                     <br>
-                                                    The vision was to design a device that was both useful and beautiful, fitting seamlessly into a modern home. I handled the end-to-end design process, from initial market research and competitor analysis to the final 3D CAD modelling and product rendering. The planter&rsquo;s form was carefully considered, using principles like the golden ratio and continuous curvature to create an ergonomic and aesthetically pleasing chassis. This design-led approach ensured that every technical component was housed within a structure that prioritised user experience and a clean, unobtrusive look.
+                                                    The vision was to design a device that was both useful and aesthetically pleasing, fitting seamlessly into a modern home. I handled the end-to-end design process, from initial market research and competitor analysis to the final 3D CAD modelling and product rendering. The planter&rsquo;s form was carefully considered, using principles such as the golden ratio and continuous curvature to create an ergonomic and aesthetically pleasing chassis. This design-led approach ensured that every technical component was housed within a structure that prioritised user experience and a clean, unobtrusive look.
                                                     <br>
                                                     <br>
-                                                    The most demanding technical hurdle was engineering a custom ultrasonic atomizer circuit. After discovering off-the-shelf solutions were unreliable, I had to reverse-engineer a driver circuit from scratch. This involved a deep dive into high-frequency oscillators, where I learned that component tolerances were critical; identical transistors from different manufacturers yielded vastly different results. The solution required hand-winding copper inductor coils and using an oscilloscope to meticulously fine-tune the circuit until it produced a stable 1.7MHz mist. This process of trial, error, and persistence was a powerful lesson in practical, hands-on engineering.
+                                                    The most demanding technical hurdle was engineering a custom ultrasonic atomiser circuit. After discovering off-the-shelf solutions were unreliable, I reverse-engineered a driver circuit from scratch. This involved a deep dive into high-frequency oscillators, where I learned that component tolerances were critical; identical transistors from different manufacturers yielded vastly different results. The solution required hand-winding copper inductor coils and using an oscilloscope to meticulously fine-tune the circuit until it produced a stable 1.7MHz mist. This process of trial and error, and persistence, was a powerful lesson in practical, hands-on engineering.
                                                     <br>
                                                     <br>
-                                                    The system's automation is handled by an Arduino microcontroller, which I programmed in C++ to execute a control loop that manages the plant's environment. The microcontroller continuously polls an array of sensors monitoring pH, nutrient concentration (TDS), temperature, and humidity. Based on this incoming data and pre-defined optimal ranges, it actuates the LED grow lights, ventilation fans, and nutrient atomization cycles. For remote access, I integrated an ESP8266 WiFi module to establish a complete IoT communication pipeline. Sensor data is transmitted via the Blynk platform to a Google Firebase real-time database, which is then visualised on a custom smartphone application, giving the user a live data dashboard and the ability to manually override the automated routines.
+                                                    The system&rsquo;s automation was handled by an Arduino microcontroller, which I programmed in C++ to execute a control loop that managed the plant&rsquo;s environment. The microcontroller continuously polled an array of sensors monitoring pH, nutrient concentration (TDS), temperature and humidity. Based on this incoming data and predefined optimal ranges, it actuated the LED grow lights, ventilation fans and nutrient atomisation cycles. For remote access, I integrated an ESP8266 WiFi module to establish a complete IoT communication pipeline. Sensor data was transmitted via the Blynk platform to a Google Firebase real-time database, which was then visualised on a custom smartphone application, giving the user a live data dashboard and the ability to manually override the automated routines.
                                                     <br>
                                                     <br>
-                                                    From a single concept on paper to a tangible, working prototype, Aéropot was a comprehensive exercise in turning an idea into reality. The project spanned the full product development lifecycle: business planning, user-centric design, hardware engineering, and full-stack software development. It was a rewarding challenge that pushed my skills in everything from circuit design and embedded programming to cloud-based data systems and user interface development, ultimately creating a product that is functional, sustainable, and engaging.
+                                                    From a single concept on paper to a tangible, working prototype, Aéropot was a comprehensive exercise in turning an idea into reality. The project spanned the full product development lifecycle: business planning, user-centric design, hardware engineering and full-stack software development. It was a rewarding challenge that pushed my skills in everything from circuit design and embedded programming to cloud-based data systems and user interface development, ultimately creating a product that is functional, sustainable and engaging.
                                                 </p>
                                             </div>
                                         </section>
@@ -1464,10 +1543,17 @@
                                         <!-- Timeline section: Elsewhen -->
                                         <section data-timeline-section-title="elsewhen"
                                                  class="modal-archive__timeline-section-title">
-                                            <h2 id="timeline-label-elsewhen" class="sr-only">Elsewhen Projects</h2>
+                                            <h2 id="timeline-label-elsewhen" class="sr-only">
+                                                Elsewhen projects
+                                            </h2>
                                             <div>
-                                                <label for="timeline-section-year-elsewhen" tabindex="0" role="button" aria-expanded="false" aria-controls="timeline-content-elsewhen">
-                                                    <span class="sr-only">Show or hide Elsewhen projects. </span><span aria-hidden="true">Elsewhen</span>
+                                                <label for="timeline-section-year-elsewhen"
+                                                       tabindex="0"
+                                                       role="button"
+                                                       aria-expanded="false"
+                                                       aria-controls="timeline-content-elsewhen">
+                                                    <span class="sr-only">Show or hide Elsewhen projects</span>
+                                                    <span aria-hidden="true">Elsewhen</span>
                                                 </label>
                                                 <div class="modal-archive__timeline-section-controls">
                                                     <svg>
@@ -1656,11 +1742,21 @@
 
                                 <!-- Horizontal timeline navigation -->
                                 <div id="horizontal-timeline-wrapper" tabindex="-1">
-                                    <button type="button" id="horizontal-timeline-return" class="sr-only-focusable" aria-label="Return to main content">Return to main content</button>
+                                    <button type="button"
+                                            id="horizontal-timeline-return"
+                                            class="sr-only-focusable"
+                                            aria-label="Return to main content">
+                                        Return to main content
+                                    </button>
                                     <div id="horizontal-timeline">
                                     </div>
                                     <!-- Live region for announcing current timeline section to screen readers -->
-                                    <div id="timeline-announcement" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+                                    <div id="timeline-announcement"
+                                         role="status"
+                                         aria-live="polite"
+                                         aria-atomic="true"
+                                         class="sr-only">
+                                    </div>
                                 </div>
                             </div>
 

@@ -1,0 +1,28 @@
+/*
+ * Noscript - Only applied when JavaScript is disabled
+ */
+
+.intro__name .tooltip__text--bottom {
+    display: none;
+}
+
+.menu__email-button .tooltip__text {
+    display: none;
+}
+
+.menu__email-text {
+    user-select: all;
+}
+
+#menu-dropdown label#menu-dropdown-fullscreen,
+.modal__fullscreen-button {
+    display: none;
+}
+
+[loading="lazy"] {
+    opacity: 1;
+}
+
+.modal-profile__footer-art-gradient {
+    transform: none;
+}

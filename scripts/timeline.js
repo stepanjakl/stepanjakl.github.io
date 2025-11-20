@@ -12,7 +12,7 @@
 // ============================================================================
 
 /**
- * Get appropriate scroll behavior based on user's motion preferences
+ * Get appropriate scroll behaviour based on user's motion preferences
  * Respects prefers-reduced-motion setting for accessibility
  * @returns {string} 'auto' if reduced motion is preferred, 'smooth' otherwise
  */
@@ -30,11 +30,11 @@ function getScrollBehavior() {
  * Self-contained Custom Element that renders a horizontal timeline with labels and indicator bars.
  *
  * Features:
- * - Keeps active label centered horizontally when sections intersect viewport
+ * - Keeps active label centred horizontally when sections intersect viewport
  * - Highlights matching vertical indicator above active label
  * - Syncs URL query (?year=YYYY) for deep-linking
  * - All styles embedded within component
- * - Fully configurable behavior via properties
+ * - Fully configurable behaviour via properties
  *
  * Usage:
  *   const timeline = document.createElement('horizontal-timeline')
@@ -54,23 +54,23 @@ function getScrollBehavior() {
  */
 class HorizontalTimeline extends HTMLElement {
     /**
-     * Index of the first "main" indicator (centered above the first label).
+    * Index of the first "main" indicator (centred above the first label).
      *
      * HTML Structure Explanation:
      * The timeline HTML is generated with a specific pattern of divs representing vertical bars:
      * - 2 decorative divs at the start (left edge indicators)
-     * - For each label: 5 divs (pattern: small, centered main bar, small, small, small)
+    * - For each label: 5 divs (pattern: small, centred main bar, small, small, small)
      * - 1 final decorative div at the end (right edge indicator)
      *
      * Index breakdown (0-based):
      * [0] = First decorative div (left edge)
      * [1] = Second decorative div (left edge fade)
      * [2] = First label's leading small bar
-     * [3] = First label's CENTERED MAIN BAR ← This is what we need!
+    * [3] = First label's CENTRED MAIN BAR ← This is what we need!
      * [4] = First label's trailing small bar
      * ...and so on for subsequent labels
      *
-     * This constant (3) points to the centered main bar above the first label,
+    * This constant (3) points to the centred main bar above the first label,
      * which is marked as "active" when that timeline section is visible.
      * See CSS selector: `#timeline div:nth-child(6n + 4)` for 66.67% height bars.
      */
@@ -81,7 +81,7 @@ class HorizontalTimeline extends HTMLElement {
      *
      * Pattern per label (6 divs total):
      * [0] = Small bar (left padding)
-     * [1] = Medium-tall bar (centered - the "main" indicator at nth-child(6n+4))
+    * [1] = Medium-tall bar (centred - the "main" indicator at nth-child(6n+4))
      * [2] = Small bar
      * [3] = Small bar
      * [4] = Small bar
@@ -91,7 +91,7 @@ class HorizontalTimeline extends HTMLElement {
      * we use: TIMELINE_FIRST_INDICATOR_INDEX + (labelIndex * TIMELINE_INDICATORS_PER_LABEL)
      *
      * Example for label index 2:
-     * 3 + (2 × 6) = 3 + 12 = 15 (the centered bar above the 3rd label)
+    * 3 + (2 × 6) = 3 + 12 = 15 (the centred bar above the 3rd label)
      *
      * This constant ensures the calculation stays in sync with the HTML generation
      * in the render() method, which creates exactly 6 divs per label with specific
@@ -238,11 +238,11 @@ class HorizontalTimeline extends HTMLElement {
     // ========================================================================
 
     /**
-     * Smoothly scroll horizontally to center a child element within its parent.
+    * Smoothly scroll horizontally to centre a child element within its parent.
      * Returns a Promise that resolves when scrolling completes.
      *
      * @param {HTMLElement} parent - Scrollable container
-     * @param {HTMLElement} child - Element to center
+    * @param {HTMLElement} child - Element to centre
      * @returns {Promise<void>}
      */
     scrollParentToChildCenterHorizontal(parent, child) {
@@ -301,7 +301,7 @@ class HorizontalTimeline extends HTMLElement {
         const childRect = child.getBoundingClientRect()
         const scrollAmount = childRect.top - parentRect.top - this.scrollOffset
 
-        // Use getScrollBehavior() if no explicit behavior provided
+        // Use getScrollBehavior() if no explicit behaviour provided
         const behavior = scrollBehavior || getScrollBehavior()
 
         if (behavior === 'instant' || behavior === 'auto') {
@@ -366,7 +366,7 @@ class HorizontalTimeline extends HTMLElement {
             }
         }
 
-        // Center the active label
+        // Centre the active label
         this.scrollParentToChildCenterHorizontal(this.getTimelineContentEl(), targetLabel)
 
         // Update active states
@@ -441,7 +441,7 @@ class HorizontalTimeline extends HTMLElement {
 
         if (labelIndex === -1) return
 
-        // Calculate indicator position (centered above label)
+        // Calculate indicator position (centred above label)
         const indicatorIndex = HorizontalTimeline.TIMELINE_FIRST_INDICATOR_INDEX +
             (labelIndex === 0 ? 0 : labelIndex * HorizontalTimeline.TIMELINE_INDICATORS_PER_LABEL)
 
@@ -455,7 +455,7 @@ class HorizontalTimeline extends HTMLElement {
     // ========================================================================
 
     /**
-     * Initialize all event handlers using delegation pattern.
+     * Initialise all event handlers using delegation pattern.
      */
     setupEventHandlers() {
         // Click handling - labels and indicators
@@ -534,7 +534,7 @@ class HorizontalTimeline extends HTMLElement {
                 return
             }
 
-            // Label hover -> highlight centered indicator
+            // Label hover -> highlight centred indicator
             const label = event.target.closest('#timeline_labels [data-label-for]')
             if (label && this.contains(label)) {
                 const value = label.getAttribute('data-label-for')

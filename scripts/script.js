@@ -69,14 +69,21 @@ function parseHash(hash = window.location.hash) {
  * @returns {boolean} True if animation is finished
  */
 function isMenuAnimationFinished() {
-    const el = document.querySelector('.menu--animating .menu__background')
+    const el = document.querySelector('#menu-dropdown')
+    if (!el) return true
+    const animations = el.getAnimations()
+    return !animations || animations.length === 0 || animations[0].playState === 'finished'
+}
+
+function isModalAnimationFinished() {
+    const el = document.querySelector('.modal')
     if (!el) return true
     const animations = el.getAnimations()
     return !animations || animations.length === 0 || animations[0].playState === 'finished'
 }
 
 /**
- * Get appropriate scroll behavior based on user's motion preferences
+ * Get appropriate scroll behaviour based on user's motion preferences
  * Respects prefers-reduced-motion setting for accessibility
  * @returns {string} 'auto' if reduced motion is preferred, 'smooth' otherwise
  */
@@ -503,7 +510,7 @@ class ThemeManager {
     }
 }
 
-// Initialize theme manager when DOM is ready
+// Initialise theme manager when DOM is ready
 // Since this script uses defer, DOM is already loaded
 try {
     window.App = window.App || {}
@@ -553,7 +560,7 @@ const ResizeManager = {
     },
 
     /**
-     * Initialize the debounced resize listener
+    * Initialise the debounced resize listener
      */
     init() {
         const handleResize = debounce(() => {
@@ -576,7 +583,7 @@ const ResizeManager = {
 // ============================================================================
 
 /**
- * Initialize 3D transform effect for modal profile footer art based on scroll
+ * Initialise 3D transform effect for modal profile footer art based on scroll
  * Event listeners persist for page lifetime per YAGNI principle
  */
 function initializeModalFooterArt() {
@@ -629,7 +636,7 @@ function registerDialogLifecycleHooks() {
             // Check if there's a year parameter for deep-linking
             const yearParam = window.location.hash.split('?year=')[1]
 
-            // Initialize timeline on first modal open
+            // Initialise timeline on first modal open
             if (!App.timeline) {
                 // Don't start observer if we have a year parameter (will start after deep-link scroll)
                 App.initializeTimeline(!yearParam)
@@ -698,7 +705,7 @@ function registerDialogLifecycleHooks() {
                             App.timeline.setActiveLabel(yearParam)
                             App.timeline.setActiveIndicator(yearParam)
 
-                            // Center the active label in timeline
+                            // Centre the active label in timeline
                             const activeLabel = App.timeline.querySelector(`[data-label-for="${yearParam}"]`)
                             if (activeLabel) {
                                 App.timeline.scrollParentToChildCenterHorizontal(
@@ -876,7 +883,7 @@ class KeyHandler {
         this.boundHandleKeyup = this.handleKeyup.bind(this)
         this.boundRemoveTooltips = () => this.toggleTooltipActiveClass(false)
 
-        // Initialize event listeners
+        // Initialise event listeners
         document.addEventListener('keydown', this.boundHandleKeydown)
         document.addEventListener('keyup', this.boundHandleKeyup)
         window.addEventListener('blur', this.boundRemoveTooltips)
@@ -920,7 +927,7 @@ class KeyHandler {
                 closeDialog('#')
             }
         } else {
-            if (!isMenuAnimationFinished()) return
+            if (!isMenuAnimationFinished() || !isModalAnimationFinished()) return
             switch (key) {
                 case this.KEYS.KEY_P:
                     this.toggleDialog(event, NAVIGATION_HASHES.PROFILE, DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger)
@@ -1026,7 +1033,7 @@ class NavigationHandler {
         const { base: currentHash } = parseHash()
 
         if (currentHash === NAVIGATION_HASHES.PROFILE || currentHash === NAVIGATION_HASHES.ARCHIVE) {
-            this.handleModalVerticalScroll(direction, currentHash)
+            this.handleVerticalModalScroll(direction, currentHash)
         } else {
             this.handleVerticalPageScroll(direction)
         }
@@ -1037,7 +1044,7 @@ class NavigationHandler {
      * @param {string} direction - 'up' or 'down'
      * @param {string} currentHash - Current navigation hash
      */
-    handleModalVerticalScroll(direction, currentHash) {
+    handleVerticalModalScroll(direction, currentHash) {
         if (direction !== 'up') return
 
         const modalElement = getModalElement(currentHash)
@@ -1093,14 +1100,14 @@ class WheelHandler extends NavigationHandler {
         // Bound handlers
         this.boundHandleWheelEvent = this.handleWheelEvent.bind(this)
 
-        // Initialize event listeners
+        // Initialise event listeners
         window.addEventListener('wheel', this.boundHandleWheelEvent, { passive: true })
     }
 
     // Event Handlers
 
     handleWheelEvent(event) {
-        if (!isMenuAnimationFinished()) return
+        if (!isMenuAnimationFinished() || !isModalAnimationFinished()) return
 
         const deltaX = Math.abs(event.deltaX)
         const deltaY = Math.abs(event.deltaY)
@@ -1137,7 +1144,7 @@ class TouchHandler extends NavigationHandler {
         this.boundHandleTouchStart = this.handleTouchStart.bind(this)
         this.boundHandleTouchMove = this.handleTouchMove.bind(this)
 
-        // Initialize event listeners
+        // Initialise event listeners
         window.addEventListener('touchstart', this.boundHandleTouchStart, { passive: true })
         window.addEventListener('touchmove', this.boundHandleTouchMove, { passive: true })
     }
@@ -1151,7 +1158,7 @@ class TouchHandler extends NavigationHandler {
     }
 
     handleTouchMove(event) {
-        if (!isMenuAnimationFinished()) return
+        if (!isMenuAnimationFinished() || !isModalAnimationFinished()) return
 
         const touch = event.touches[0]
         const deltaX = Math.abs(touch.clientX - this.touchStartX)
@@ -1194,7 +1201,7 @@ class HorizontalDragScroller {
         this.onMouseMoveBound = this.onMouseMove.bind(this)
         this.completeDragBound = this.completeDrag.bind(this)
 
-        // Initialize event listeners
+        // Initialise event listeners
         this.element.addEventListener('mousedown', this.onMouseDownBound)
         this.element.addEventListener('mousemove', this.onMouseMoveBound)
         this.element.addEventListener('mouseup', this.completeDragBound)
@@ -1691,7 +1698,7 @@ class Popup {
             return false
         }
 
-        // Otherwise attempt to open a centered popup window
+        // Otherwise attempt to open a centred popup window
         const popup = window.open(blobUrl, `popup_${Date.now()}`, `toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=${width},height=${height},top=${top},left=${left},popup=yes`)
 
         if (!popup || popup.closed || typeof popup.closed === 'undefined') {
@@ -1707,7 +1714,7 @@ class Popup {
     // Fallback View
 
     showFallbackView(url, isVideo, dimensions, placeholderUrl) {
-        // Initialize fallback container only once
+        // Initialise fallback container only once
         if (!this.fallbackContainer) {
             this.initializeFallbackContainer()
         }
@@ -1841,7 +1848,7 @@ class Popup {
         }
         this.focusTrap.activate()
 
-        // Initialize cursor idle detector for video close button
+        // Initialise cursor idle detector for video close button
         if (isVideo && closeButton) {
             // Stop any existing detector
             if (this.cursorIdleDetector) {
@@ -2529,7 +2536,7 @@ class Carousel {
                 break
             case 'ArrowUp':
             case 'ArrowDown':
-                // Prevent default scroll behavior but don't navigate (horizontal carousel)
+                // Prevent default scroll behaviour but don't navigate (horizontal carousel)
                 event.preventDefault()
                 return
             case 'Home':
@@ -2985,12 +2992,12 @@ async function copyToClipboard(text) {
 
 /**
  * Handles touch button/link click interactions with focus management
- * On touch devices: first tap focuses, second tap executes callback or allows default behavior
- * On non-touch devices: executes callback immediately or allows default behavior
+ * On touch devices: first tap focuses, second tap executes callback or allows default behaviour
+ * On non-touch devices: executes callback immediately or allows default behaviour
  *
  * @param {HTMLElement} element - The element being clicked
  * @param {Event} event - The click event
- * @param {Function|null} callback - Optional callback to execute on second tap. If null, allows default behavior
+ * @param {Function|null} callback - Optional callback to execute on second tap. If null, allows default behaviour
  * @param {boolean} focusAfterClick - Whether to maintain focus after callback execution
  * @returns {boolean} - True if event was handled (default prevented), false if default should proceed
  */
@@ -3089,7 +3096,7 @@ App.positionTimeline = () => {
             App.timeline.updateScrollableClass()
         }
 
-        // Initialize scrollers after timeline is positioned and painted
+        // Initialise scrollers after timeline is positioned and painted
         if (App.timeline && typeof App.timeline.initializeScrollers === 'function') {
             App.timeline.initializeScrollers()
         }
@@ -3097,7 +3104,7 @@ App.positionTimeline = () => {
 }
 
 /**
- * Initialize the timeline component with scrollers
+ * Initialise the timeline component with scrollers
  * Timeline persists for the entire session once initialized
  *
  * Integration points:
@@ -3121,7 +3128,7 @@ App.initializeTimeline = (startObserver = true) => {
         hashPrefix: '#archive',
         scrollOffset: 24, // px from top when scrolling to sections
         scrollEndTimeout: 300, // fallback for browsers without scrollend event
-        observerRootMargin: '-50% 0% -50% 0%', // center detection zone vertically
+        observerRootMargin: '-50% 0% -50% 0%', // centre detection zone vertically
         observerThresholds: [0, 0.25, 0.5, 0.75, 1] // granular intersection updates
     }
 
@@ -3145,7 +3152,7 @@ App.initializeTimeline = (startObserver = true) => {
     let dragScroll = null
 
     /**
-     * Initialize horizontal scrollers for timeline navigation
+    * Initialise horizontal scrollers for timeline navigation
      * Called after timeline is positioned in its final location
      */
     const initializeTimelineScrollers = () => {
@@ -3231,7 +3238,7 @@ function setupTimelineFocusTrap() {
         return
     }
 
-    // Initialize focus trap (returnFocusTo updated dynamically as user navigates)
+    // Initialise focus trap (returnFocusTo updated dynamically as user navigates)
     App.timelineFocusTrap = new FocusTrap(timelineWrapper, {
         returnFocusTo: skipLink,
         initialFocus: false
@@ -3303,7 +3310,7 @@ function setupTimelineFocusTrap() {
 // ============================================================================
 
 /**
- * Initialize dialog elements with ARIA attributes and backdrops
+ * Initialise dialog elements with ARIA attributes and backdrops
  */
 function initializeDialogs() {
     const dialogConfigs = [DIALOG_CONFIG.PROFILE, DIALOG_CONFIG.ARCHIVE, DIALOG_CONFIG.MENU]
@@ -3497,7 +3504,7 @@ function enhanceExternalLinks() {
 // ============================================================================
 
 /**
- * Initialize click handlers with cached querySelector results
+ * Initialise click handlers with cached querySelector results
  */
 function initializeClickHandlers() {
     // Cache DOM queries at page load
@@ -3538,7 +3545,7 @@ function initializeClickHandlers() {
 }
 
 /**
- * Initialize timeline section toggles with aria-expanded synchronization
+ * Initialise timeline section toggles with aria-expanded synchronization
  * Keeps checkbox state in sync with aria-expanded attribute for screen readers
  */
 function initializeTimelineSectionToggles() {
@@ -3574,7 +3581,7 @@ function initializeTimelineSectionToggles() {
 }
 
 /**
- * Initialize live timezone display that updates every 15 seconds
+ * Initialise live timezone display that updates every 15 seconds
  */
 function initializeTimezoneDisplay() {
     const timezoneEl = document.querySelector('.modal-profile__timezone-live')
@@ -3597,17 +3604,43 @@ function initializeTimezoneDisplay() {
 }
 
 /**
- * Initialize popup system with event delegation for media links
+ * Initialise popup system with event delegation for media links
  */
 function initializePopups() {
     // Handlers will be registered in the centralized global event manager
     // See: initializeGlobalEventHandlers()
 
-    // Initialize popup instance for use by global handlers
+    // Initialise popup instance for use by global handlers
     if (!window.App.popupInstance) {
         window.App.popupInstance = new Popup()
         window.App.popupPreloadedLinks = new WeakSet()
     }
+}
+
+/**
+ * Initialise lazy loading for images with loading="lazy" attribute
+ * Adds 'loaded' class when images intersect viewport or are already loaded
+ */
+function initializeImageLazyLoading() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.target.complete) {
+                entry.target.classList.add('loaded');
+                observer.unobserve(entry.target);
+            }
+        });
+    });
+
+    document.querySelectorAll('[loading="lazy"]').forEach(img => {
+        if (img.complete) {
+            img.classList.add('loaded');
+        } else {
+            observer.observe(img);
+            img.addEventListener('load', () => {
+                img.classList.add('loaded');
+            }, { once: true });
+        }
+    });
 }
 
 // ============================================================================
@@ -3618,13 +3651,6 @@ function initializePopups() {
  * Setup hash change handler for archive year navigation
  */
 function setupHashChangeHandler() {
-    const OVERFLOW_HIDDEN_CLASS = 'overflow-hidden'
-    let scrollTop = document.body.scrollTop
-
-    window.addEventListener('scroll', () => {
-        scrollTop = document.body.scrollTop
-    }, { passive: true })
-
     window.addEventListener('hashchange', () => {
         const { base: baseHash, params } = parseHash()
         const yearParam = params.year
@@ -3636,7 +3662,7 @@ function setupHashChangeHandler() {
             const isModalOpen = document.body.classList.contains('modal-open')
 
             if (isModalOpen) {
-                // Modal is already open (via body.modal-open class), just scroll to new section
+                // Modal is already open (via body.modal_open class), just scroll to new section
                 afterPaint(() => {
                     const targetSection = document.querySelector(`[data-timeline-section="${yearParam}"]`)
 
@@ -3658,14 +3684,6 @@ function setupHashChangeHandler() {
                 })
             }
         }
-
-        // Prevent default scroll behavior
-        document.body.classList.add(OVERFLOW_HIDDEN_CLASS)
-        window.scroll(0, scrollTop)
-
-        requestAnimationFrame(() => {
-            document.body.classList.remove(OVERFLOW_HIDDEN_CLASS)
-        })
     })
 }
 
@@ -3788,7 +3806,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Apply no animation on first click
     document.body.addEventListener('click', () => {
-        if (!isMenuAnimationFinished()) {
+        if (!isMenuAnimationFinished() || !isModalAnimationFinished()) {
             applyNoAnimation()
         }
     }, { once: true })
@@ -3798,6 +3816,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeDialogs()
     enhanceExternalLinks()
     initializePopups()
+    initializeImageLazyLoading()
     initializeGlobalEventHandlers()
 
     // Device Detection
@@ -3817,7 +3836,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Hash-Based Navigation Setup
 
-    // Initialize UI based on current hash (deep linking)
+    // Initialise UI based on current hash (deep linking)
     if (window.location.hash) {
         applyNoAnimation()
         openDialogOnLoad()
@@ -3827,7 +3846,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Global Handlers Initialization
 
-    // Initialize persistent handlers (active throughout page lifetime)
+    // Initialise persistent handlers (active throughout page lifetime)
     new WheelHandler()
     new TouchHandler()
     new KeyHandler()
@@ -3839,7 +3858,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeTimezoneDisplay()
     initializeTimelineSectionToggles()
 
-    // Initialize carousels
+    // Initialise carousels
     const carouselElements = document.querySelectorAll('[data-carousel]')
     for (let i = 0; i < carouselElements.length; i++) {
         new Carousel({ id: `carousel-${i + 1}`, element: carouselElements[i] })
@@ -3847,21 +3866,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Keyboard Navigation Setup
 
-    // Initialize keyboard navigation for hover-cards (horizontal only)
+    // Initialise keyboard navigation for hover-cards (horizontal only)
     new ImageGridNavigator({
         containerSelector: '.hover-cards',
         itemSelector: 'figure a',
         is2DGrid: false // Horizontal navigation only
     })
 
-    // Initialize keyboard navigation for image-grid (true 2D grid)
+    // Initialise keyboard navigation for image-grid (true 2D grid)
     new ImageGridNavigator({
         containerSelector: '.image-grid',
         itemSelector: 'figure a',
         is2DGrid: true // Full 2D grid navigation
     })
 
-    // Initialize keyboard navigation for menu dropdown
+    // Initialise keyboard navigation for menu dropdown
     new MenuDropdownNavigator({
         dropdownSelector: '#menu-dropdown',
         itemSelector: 'a, label, button'

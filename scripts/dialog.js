@@ -455,7 +455,7 @@ aria.Dialog.prototype.setupFocusElements = function (focusAfterClosed, focusFirs
 
     // Validate focusFirst has a focus method if it's not null
     if (this.focusFirst && typeof this.focusFirst.focus !== 'function') {
-        console.warn('aria.Dialog: focusFirst element does not have a focus() method, will use default focus behavior', this.focusFirst)
+        console.warn('aria.Dialog: focusFirst element does not have a focus() method, will use default focus behaviour', this.focusFirst)
         this.focusFirst = null
     }
 }
@@ -577,7 +577,7 @@ aria.Dialog.prototype.replace = function (newDialogId, newFocusAfterClosed, newF
     // Create new dialog
     new aria.Dialog(newDialogId, focusAfterClosed, newFocusFirst, hash)
 
-    // Initialize new modal-specific features
+    // Initialise new modal-specific features
     aria.callLifecycleHook(newDialogId, 'initialize')
 }
 
@@ -640,7 +640,7 @@ window.openDialog = (dialogId, focusAfterClosed, focusFirst, hash) => {
         new aria.Dialog(dialogId, focusAfterClosed, focusFirst, hash)
     }
 
-    // Initialize modal-specific features
+    // Initialise modal-specific features
     aria.callLifecycleHook(dialogId, 'initialize')
 }
 
@@ -667,8 +667,9 @@ window.closeDialog = (hash) => {
     // ============================================================================
 
     /**
-     * Initialize inert state for all dialogs on page load
-     * For browsers without native inert support, apply polyfill to all modals
+    * Initialise inert state for all dialogs on page load
+     * Applies inert programmatically to all dialog elements to prevent
+     * interaction when they are not open
      */
     ; (function initializeDialogInertState() {
         if (document.readyState === 'loading') {
@@ -678,15 +679,12 @@ window.closeDialog = (hash) => {
         }
 
         function applyInertToDialogs() {
-            // Only apply polyfill if browser doesn't support native inert
-            if (!aria.supportsInert) {
-                // Find all dialog elements with inert attribute
-                const dialogs = document.querySelectorAll('dialog[inert], [role="dialog"][inert], [role="alertdialog"][inert]')
+            // Find all dialog elements (native <dialog> and custom roles)
+            const dialogs = document.querySelectorAll('dialog, [role="dialog"], [role="alertdialog"]')
 
-                dialogs.forEach(dialog => {
-                    // Apply polyfill instead of native inert
-                    aria.setInert(dialog)
-                })
-            }
+            dialogs.forEach(dialog => {
+                // Apply inert programmatically using both native and polyfill support
+                aria.setInert(dialog)
+            })
         }
     })()

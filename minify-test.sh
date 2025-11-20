@@ -52,7 +52,7 @@ rsync -a --exclude="tmp" --exclude=".git" --exclude=".github" . "$TEST_DIR"
 echo "Minifying files..."
 cd "$TEST_DIR"
 
-# Initialize totals
+# Initialise totals
 total_html_before=0
 total_html_after=0
 total_css_before=0
@@ -105,16 +105,16 @@ for js_file in scripts/*.js; do
   echo ""
 done
 
-# Optimize images
-echo "Optimizing images..."
+# Optimise images
+echo "Optimising images..."
 for img_file in images/*.svg; do
   if [[ "$img_file" == "images/icons.svg" || "$img_file" == "images/logos.svg" ]]; then
-    echo "Skipping $img_file (excluded from optimization)"
+    echo "Skipping $img_file (excluded from optimisation)"
     continue
   fi
   size_before=$(stat -f%z "$img_file")
   total_img_before=$((total_img_before + size_before))
-  echo "Optimizing $img_file"
+  echo "Optimising $img_file"
   svgo "$img_file" -o "$img_file"
   size_after=$(stat -f%z "$img_file")
   total_img_after=$((total_img_after + size_after))

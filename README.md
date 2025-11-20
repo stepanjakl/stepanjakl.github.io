@@ -6,11 +6,11 @@
 
 # Personal website of Štěpán Jákl
 
-**Experienced and detail-oriented user interface engineer who specializes in crafting intuitive digital solutions.**
+**Experienced and detail-oriented user interface engineer who specialises in crafting intuitive digital solutions.**
 
 **Committed to delivering high-quality results for projects with exciting propositions and realistic goals.**
 
-**Proficient in both back-end and front-end development, with a focus on prioritizing user experience.**
+**Proficient in both back-end and front-end development, with a focus on prioritising user experience.**
 
 **Equally dedicated to code and design.**
 
