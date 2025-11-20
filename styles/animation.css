@@ -1325,14 +1325,14 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:focus {
 
 /* Modals - Archive - Horizontal timeline */
 
-horizontal-timeline {
+#horizontal-timeline {
     transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad);
     transform: scale(0.95);
     transform-origin: bottom;
     opacity: 0;
 }
 
-horizontal-timeline.timeline-in-place {
+#horizontal-timeline.timeline-in-place {
     transition: opacity var(--animate-in-segment) linear var(--anim-segment), transform var(--animate-in-segment) var(--ease-out-quad) var(--anim-segment);
     transform: scale(1);
     opacity: 1;
@@ -1562,11 +1562,8 @@ horizontal-timeline.timeline-in-place {
 
 
 /* Prevent 'Flash of Unstyled Content' (FOUC) - END */
+
 main {
     opacity: 1;
     transition: opacity var(--anim-segment) linear var(--anim-segment);
-}
-
-html.page-loaded main {
-    opacity: 1;
 }

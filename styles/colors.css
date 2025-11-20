@@ -1,9 +1,9 @@
 /*
- * Colors
+ * Colours
  */
 
 /* ===================================================================
-   COLOR PALETTES - Base color tokens
+    COLOUR PALETTES - Base colour tokens
    ================================================================ */
 
 :root {
@@ -141,11 +141,11 @@
 
 
 /* ===================================================================
-   SEMANTIC COLOR TOKENS - Dark Mode (Default)
+    SEMANTIC COLOUR TOKENS - Dark Mode (Default)
    ================================================================ */
 
 main {
-    /* Background & Pattern colors */
+    /* Background & Pattern colours */
     --background: var(--cyan-full-5);
     --background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
     --pattern-overlay: rgba(255, 255, 255, 0.01);
@@ -156,19 +156,19 @@ main {
     /* 210, 100, 10; ease-in-out-quad */
     --triangle-stripe: rgba(0, 31, 36, 0) 0%, rgba(0, 31, 36, 0.011) 8.6%, rgba(0, 31, 36, 0.032) 16.29%, rgba(0, 31, 36, 0.063) 23.22%, rgba(0, 31, 36, 0.103) 29.53%, rgba(0, 31, 36, 0.151) 35.37%, rgba(0, 31, 36, 0.208) 40.89%, rgba(0, 31, 36, 0.272) 46.23%, rgba(0, 31, 36, 0.343) 51.53%, rgba(0, 31, 36, 0.421) 56.95%, rgba(0, 31, 36, 0.505) 62.63%, rgba(0, 31, 36, 0.595) 68.71%, rgba(0, 31, 36, 0.690) 75.34%, rgba(0, 31, 36, 0.789) 82.67%, rgba(0, 31, 36, 0.893) 90.84%, #001F24 100%;
 
-    /* Text & highlight colors */
+    /* Text & highlight colours */
     --text-1: var(--cyan-full-95);
     --text-2: var(--cyan-quarter-85);
     --text-3: var(--cyan-quarter-65);
     --highlight-primary: var(--blue-full-45);
     --highlight-secondary: var(--cyan-full-45);
 
-    /* Icon colors */
+    /* Icon colours */
     --icon: var(--cyan-quarter-80);
     --icon--hover: var(--cyan-quarter-85);
     --icon-bg: var(--cyan-quarter-45);
 
-    /* Context menu colors */
+    /* Context menu colours */
     /* 210, 25, 25 */
     --context-bg: rgba(51, 61, 63, 0.5);
     /* 210, 25, 35 */
@@ -179,7 +179,7 @@ main {
     --menu-bg: #333d3f55;
     --tooltip-bg: #333d3f65;
 
-    /* Modal colors */
+    /* Modal colours */
     --modal-border-outer: var(--dark-10);
     --modal-border-inner: var(--light-15);
     /* 210, 100, 25 */
@@ -200,7 +200,7 @@ main {
     --modal-tag-bg: var(--cyan-three-quarters-45);
     --modal-tag-bg--hover: var(--cyan-three-quarters-55);
 
-    /* Carousel control colors */
+    /* Carousel control colours */
     --carousel-nav-bg: var(--light-25);
     --carousel-nav-bg-hover: var(--dark-40);
     --carousel-nav-bg-active: var(--dark-50);
@@ -209,7 +209,7 @@ main {
     --carousel-arrow-icon-bg: var(--dark-35);
     --carousel-arrow-icon-bg-hover: var(--dark-50);
 
-    /* Footer colors */
+    /* Footer colours */
     --footer-square-1: var(--highlight-primary);
     --footer-square-1--hover: var(--yellow-85);
     --footer-square-2: var(--cyan-full-85);
@@ -225,11 +225,11 @@ body, html {
 
 
 /* ===================================================================
-   SEMANTIC COLOR TOKENS - Light Mode
+    SEMANTIC COLOUR TOKENS - Light Mode
    ================================================================ */
 
 #mode:checked~main {
-    /* Background & Pattern colors */
+    /* Background & Pattern colours */
     --background: var(--cyan-quarter-95);
     /* 210, 50, 75 */
     --background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");
@@ -237,19 +237,19 @@ body, html {
     --triangle: #93d0dd00, var(--cyan-half-80);
     --triangle-stripe: transparent;
 
-    /* Text & highlight colors */
+    /* Text & highlight colours */
     --text-1: var(--cyan-half-25);
     --text-2: var(--cyan-half-35);
     --text-3: var(--cyan-quarter-65);
     --highlight-primary: var(--blue-full-80);
     --highlight-secondary: var(--cyan-half-80);
 
-    /* Icon colors */
+    /* Icon colours */
     --icon: var(--cyan-half-45);
     --icon--hover: var(--cyan-half-35);
     --icon-bg: var(--cyan-quarter-75);
 
-    /* Context menu colors */
+    /* Context menu colours */
     /* 210, 25, 70 */
     --context-bg: rgba(176, 203, 210, 0.5);
     /* 210, 25, 80 */
@@ -261,7 +261,7 @@ body, html {
     --menu-bg: #a3bdc355;
     --tooltip-bg: #a3bdc365;
 
-    /* Modal colors */
+    /* Modal colours */
     --modal-border-outer: var(--dark-15);
     --modal-border-inner: var(--light-50);
     --modal-bg-blur: var(--light-15), var(--light-35);
@@ -279,7 +279,7 @@ body, html {
     --modal-tag-bg: var(--cyan-three-quarters-80);
     --modal-tag-bg--hover: var(--cyan-three-quarters-85);
 
-    /* Carousel control colors */
+    /* Carousel control colours */
     --carousel-nav-bg: var(--dark-25);
     --carousel-nav-bg-hover: var(--dark-40);
     --carousel-nav-bg-active: var(--dark-50);
@@ -288,7 +288,7 @@ body, html {
     --carousel-arrow-icon-bg: var(--dark-35);
     --carousel-arrow-icon-bg-hover: var(--dark-50);
 
-    /* Footer colors */
+    /* Footer colours */
     --footer-square-1: var(--blue-full-75);
     --footer-square-1--hover: var(--yellow-75);
     --footer-square-2: var(--cyan-half-55);

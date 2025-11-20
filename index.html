@@ -11,10 +11,10 @@
                 data-website-id="6f9d8fb6-c4c3-410e-bba3-7b8cafd6ed04"></script>
 
         <!-- GlitchTip - Error tracking -->
-        <script src="https://browser.sentry-cdn.com/10.25.0/bundle.min.js"
-                crossorigin="anonymous"></script>
+        <!-- <script src="https://browser.sentry-cdn.com/10.25.0/bundle.min.js"
+                crossorigin="anonymous"></script> -->
 
-        <script>
+        <!-- <script>
             Sentry.init({
                 dsn: "https://7388455908f8442ba73a83bca2c9403c@app.glitchtip.com/13576",
                 tracesSampleRate: 0.01,
@@ -27,7 +27,7 @@
             window.onunhandledrejection = function(event) {
                 Sentry.captureException(event.reason)
             }
-        </script>
+        </script> -->
 
         <!-- Page metadata -->
         <title>Štěpán Jákl | Full-stack web developer & interface designer</title>
@@ -192,19 +192,19 @@
                                     <span class="corners__item corners__item--br"></span>
                                 </div>
                                 <p style="--i:0">
-                                    <span style="--i:1">Š</span>
-                                    <span style="--i:2">t</span>
-                                    <span style="--i:3">ě</span>
-                                    <span style="--i:4">p</span>
-                                    <span style="--i:5">á</span>
-                                    <span style="--i:6">n</span>
-                                    <span style="--i:7">&nbsp;</span>
+                                    <span>Š</span>
+                                    <span>t</span>
+                                    <span>ě</span>
+                                    <span>p</span>
+                                    <span>á</span>
+                                    <span>n</span>
+                                    <span>&nbsp;</span>
                                 </p>
-                                    <p style="--i:8">
-                                    <span style="--i:8">J</span>
-                                    <span style="--i:9">á</span>
-                                    <span style="--i:10">k</span>
-                                    <span style="--i:11">l</span>
+                                <p style="--i:1">
+                                    <span>J</span>
+                                    <span>á</span>
+                                    <span>k</span>
+                                    <span>l</span>
                                 </p>
                             </div>
                             <abbr class="tooltip__text--top tooltip__text">
@@ -777,8 +777,10 @@
                                         <use xlink:href="images/icons.svg#fullscreen-off"></use>
                                     </svg>
                                 </label>
-                                <a href="#horizontal-timeline-wrapper"
-                                   class="sr-only-focusable modal-archive__skip-link">Skip to timeline navigation</a>
+                                <button type="button"
+                                        id="modal-archive-skip-link"
+                                        class="sr-only-focusable"
+                                        aria-label="Skip to timeline navigation">Skip to timeline navigation</button>
                             </div>
 
                             <!-- Modal body / Timeline content -->
@@ -1671,7 +1673,7 @@
                                                                    target="_blank">
                                                                     <img src="projects/elsewhen/artifact/brock-uni-exchange-art.min.png"
                                                                          loading="lazy"
-                                                                         alt="Brock University exchange program promotional artwork"
+                                                                         alt="Brock University exchange programme promotional artwork"
                                                                          width="1600"
                                                                          height="1000">
                                                                 </a>

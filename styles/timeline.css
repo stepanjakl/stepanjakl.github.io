@@ -40,6 +40,7 @@ horizontal-timeline {
     justify-content: center;
     transition: margin var(--transition--default);
     margin: 0 var(--timeline-margin);
+    pointer-events: none;
 }
 
 horizontal-timeline:hover {
@@ -65,6 +66,7 @@ horizontal-timeline::before {
     /* 210, 100, 35 */
     background-color: rgba(0, 91, 102, 0.95);
     overflow: hidden;
+    pointer-events: auto;
 }
 
 horizontal-timeline:hover #timeline-wrapper {
@@ -448,7 +450,7 @@ horizontal-timeline:hover #timeline_labels button {
 }
 
 
-/* Light mode - consolidated color overrides */
+/* Light mode - consolidated colour overrides */
 
 #mode:checked~main #timeline-wrapper {
     /* 210, 50, 85 */
@@ -462,7 +464,7 @@ horizontal-timeline:hover #timeline_labels button {
 }
 
 
-/* Light mode - indicator colors */
+/* Light mode - indicator colours */
 
 #mode:checked~main #timeline div span { background-color: var(--dark-45); }
 #mode:checked~main #timeline div:nth-child(2) span,
@@ -471,7 +473,7 @@ horizontal-timeline:hover #timeline_labels button {
 #mode:checked~main #timeline div:last-child span { background-color: var(--dark-30); }
 
 
-/* Light mode - active state colors */
+/* Light mode - active state colours */
 
 #mode:checked~main #timeline div.active span { background-color: var(--dark-70); }
 #mode:checked~main #timeline div.active + div span,

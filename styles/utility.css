@@ -182,7 +182,7 @@ body {
 }
 
 
-/* Scroll Behavior (Used in timeline.js) */
+/* Scroll Behaviour (Used in timeline.js) */
 
 .scroll-behavior-auto {
     scroll-behavior: auto !important;
@@ -200,6 +200,7 @@ body {
 
 
 /* Mid ("midscript" text) */
+
 .mid {
     font-size: 0.666em;
     letter-spacing: 0.075em;

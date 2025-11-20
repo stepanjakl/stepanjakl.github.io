@@ -115,7 +115,7 @@ class HorizontalTimeline extends HTMLElement {
         this.isScrolling = false
         this.hasUserScrolled = false    // Track if user has manually scrolled
 
-        // Cached DOM references (lazy-initialized)
+        // Cached DOM references (lazy-initialised)
         this.timelineContentEl = null
         this.labelEls = null
         this.timelineAllDivEls = null
@@ -125,7 +125,7 @@ class HorizontalTimeline extends HTMLElement {
         // Observer instance
         this.intersectionObserver = null
 
-        // Resize handler cleanup (registered with centralized ResizeManager)
+        // Resize handler cleanup (registered with centralised ResizeManager)
         this.unregisterResize = null
 
         // Bound event handlers (for cleanup)
@@ -148,7 +148,7 @@ class HorizontalTimeline extends HTMLElement {
         this.render()
         this.setupEventHandlers()
 
-        // Notify that timeline is ready for external initialization
+        // Notify that timeline is ready for external initialisation
         if (this.onReady && typeof this.onReady === 'function') {
             // Use double rAF to ensure layout is complete before callback
             requestAnimationFrame(() => {
@@ -565,11 +565,11 @@ class HorizontalTimeline extends HTMLElement {
         this.addEventListener('mouseover', this.boundHandleMouseOver)
         this.addEventListener('mouseout', this.boundHandleMouseOut)
 
-        // Mouse leave - recenter active label
+        // Mouse leave - recentre active label
         this.boundHandleMouseLeave = () => this.handleMouseLeave()
         this.addEventListener('mouseleave', this.boundHandleMouseLeave)
 
-        // Window resize - register with centralized ResizeManager (if available)
+        // Window resize - register with centralised ResizeManager (if available)
         if (typeof ResizeManager !== 'undefined') {
             this.unregisterResize = ResizeManager.register(() => this.handleResize())
         }
@@ -584,7 +584,7 @@ class HorizontalTimeline extends HTMLElement {
      * Updates timeline state as user scrolls through sections.
      *
      * Configuration:
-     * - rootMargin centers the detection zone vertically
+    * - rootMargin centres the detection zone vertically
      * - Multiple thresholds provide granular intersection ratio updates
      */
     startIntersectionObserver() {
@@ -648,7 +648,7 @@ class HorizontalTimeline extends HTMLElement {
             }
         })
 
-        // Unregister from centralized resize manager
+        // Unregister from centralised resize manager
         if (this.unregisterResize) {
             this.unregisterResize()
             this.unregisterResize = null

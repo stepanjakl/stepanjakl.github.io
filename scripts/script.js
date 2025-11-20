@@ -7,6 +7,7 @@
  * https://github.com/stepanjakl/stepanjakl.github.io/blob/main/LICENSE
  */
 
+
 // ============================================================================
 // Utility Functions
 // ============================================================================
@@ -62,25 +63,6 @@ function parseHash(hash = window.location.hash) {
     return { base, params }
 }
 
-/**
- * Check if menu intro animation has finished
- * Prevents keyboard shortcuts and navigation gestures during initial animation
- * Shared utility used by KeyHandler, NavigationHandler, and DOMContentLoaded
- * @returns {boolean} True if animation is finished
- */
-function isMenuAnimationFinished() {
-    const el = document.querySelector('#menu-dropdown')
-    if (!el) return true
-    const animations = el.getAnimations()
-    return !animations || animations.length === 0 || animations[0].playState === 'finished'
-}
-
-function isModalAnimationFinished() {
-    const el = document.querySelector('.modal')
-    if (!el) return true
-    const animations = el.getAnimations()
-    return !animations || animations.length === 0 || animations[0].playState === 'finished'
-}
 
 /**
  * Get appropriate scroll behaviour based on user's motion preferences
@@ -91,6 +73,113 @@ function getScrollBehavior() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     return prefersReducedMotion ? 'auto' : 'smooth'
 }
+
+
+// ============================================================================
+// Transition & Animation Watchers
+// ============================================================================
+
+/**
+ * Tracks the completion of the menu background's initial animation.
+ * Used to block interactions (keyboard, gestures, navigation) until
+ * the animation fully finishes on first load.
+ */
+let isMenuInitialAnimationFinished = false
+
+function initMenuInitialAnimationWatcher() {
+    const menuBgEl = document.querySelector('.menu__background')
+    if (!menuBgEl) return
+
+    const update = (event) => {
+        const animations = menuBgEl.getAnimations()
+        isMenuInitialAnimationFinished =
+            animations.length === 0 ||
+            animations.every(a => a.playState === 'finished')
+    }
+
+    update()
+
+    menuBgEl.addEventListener('animationstart', update)
+    menuBgEl.addEventListener('animationend', update)
+    menuBgEl.addEventListener('animationcancel', update)
+}
+
+
+/**
+ * Attaches listeners to an element and tracks whether it is currently
+ * transitioning a specific CSS property (default: transform).
+ */
+function createTransitionWatcher(element, prop = 'transform', onChange) {
+    if (!element) return () => true
+
+    let finished = true
+
+    const handleTransitionStart = (e) => {
+        if (e.propertyName === prop) {
+            finished = false
+            onChange?.(finished, element)
+        }
+    }
+
+    const handleTransitionEnd = (e) => {
+        if (e.propertyName === prop) {
+            finished = true
+            onChange?.(finished, element)
+        }
+    }
+
+    element.addEventListener('transitionstart', handleTransitionStart)
+    element.addEventListener('transitionend', handleTransitionEnd)
+    element.addEventListener('transitioncancel', handleTransitionEnd)
+
+    return () => finished
+}
+
+/**
+ * Tracks whether the menu dropdown element is currently transitioning.
+ * Useful for preventing overlapping animations or input during movement.
+ */
+let isMenuDropdownTransitionFinished = true
+
+function initMenuTransitionWatcher() {
+    const menuEl = document.querySelector('#menu-dropdown')
+    if (!menuEl) return
+
+    // Create watcher that updates transition state whenever dropdown transitions
+    createTransitionWatcher(menuEl, 'opacity', (finished) => {
+        isMenuDropdownTransitionFinished = finished
+    })
+}
+
+/**
+ * Tracks transition activity across all modal elements.
+ * Ensures interactions and UI updates wait until all modals have fully
+ * completed their open/close transitions.
+ */
+let isAnyModalTransitionFinished = true
+
+function initModalTransitionWatcher() {
+    const modalEls = Array.from(document.querySelectorAll('.modal'))
+    if (modalEls.length === 0) return
+
+    const modalWatchers = []
+
+    // Callback whenever an individual modal starts or ends transitioning
+    const updateGlobalState = () => {
+        const anyActive = modalWatchers.some(fn => fn() === false)
+        isAnyModalTransitionFinished = !anyActive
+    }
+
+    // Create watchers for each modal
+    modalEls.forEach(modalEl => {
+        const watcher = createTransitionWatcher(modalEl, 'transform', updateGlobalState)
+        modalWatchers.push(watcher)
+    })
+
+    // Initial evaluation in case modals start mid-transition
+    updateGlobalState()
+}
+
 
 // ============================================================================
 // Focus Trap Utility
@@ -261,7 +350,7 @@ class FocusTrap {
      * @private
      */
     attemptFocus(element) {
-        if (!element || !this.isFocusable(element)) return false
+        if (!element || !isFocusable(element)) return false
 
         try {
             element.focus()
@@ -270,19 +359,50 @@ class FocusTrap {
             return false
         }
     }
+}
 
-    /**
-     * Check if element is focusable
-     * @param {HTMLElement} element - The element to check
-     * @returns {boolean} True if element is focusable
-     * @private
-     */
-    isFocusable(element) {
-        if (!element || element.nodeType !== 1) return false
 
-        // Check visibility (disabled/hidden already filtered by FOCUSABLE_SELECTOR)
-        const style = window.getComputedStyle(element)
-        return style.display !== 'none' && style.visibility !== 'hidden'
+
+// ============================================================================
+// Global Helper Functions
+// ============================================================================
+
+/**
+ * Check if element is focusable (comprehensive)
+ * @param {HTMLElement} element - The element to check
+ * @returns {boolean} True if element is focusable
+ */
+function isFocusable(element) {
+    if (!element || element.nodeType !== 1) return false
+
+    // Check if element is disabled or hidden
+    if (element.disabled || element.hidden) return false
+
+    // Check tabindex value
+    if (element.tabIndex < 0) return false
+
+    // Check explicit tabindex attribute
+    const tabindex = element.getAttribute('tabindex')
+    if (tabindex !== null) {
+        const tabindexValue = parseInt(tabindex, 10)
+        if (tabindexValue >= 0) return true
+    }
+
+    // Check naturally focusable elements
+    switch (element.nodeName) {
+        case 'A':
+            return !!element.href
+        case 'INPUT':
+            return element.type !== 'hidden'
+        case 'BUTTON':
+        case 'SELECT':
+        case 'TEXTAREA':
+        case 'VIDEO':
+            return true
+        default:
+            // Check computed styles as fallback
+            const style = window.getComputedStyle(element)
+            return style.display !== 'none' && style.visibility !== 'hidden'
     }
 }
 
@@ -356,22 +476,23 @@ const getModalElement = (hash) => {
     return null
 }
 
+
 // ============================================================================
 // Application Namespace
 // ============================================================================
 
 /**
  * Application namespace for global state and utilities
- * Initialized early to provide getEl helper for ThemeManager
+ * Initialised early to provide getEl helper for ThemeManager
  * Full API populated later after all classes are defined
  */
 window.App = window.App || {}
 App._elCache = App._elCache || {}
 
 /**
- * Get element by id with caching. Accepts either an id string or an element.
- * @param {string|HTMLElement} idOrEl
- * @returns {HTMLElement|null}
+ * Get element by ID with caching. Accepts either an ID string or an element.
+ * @param {string|HTMLElement} idOrEl - Element ID or element reference
+ * @returns {HTMLElement|null} Cached DOM element or null if not found
  */
 App.getEl = App.getEl || ((idOrEl) => {
     if (!idOrEl) return null
@@ -380,10 +501,10 @@ App.getEl = App.getEl || ((idOrEl) => {
 })
 
 /**
- * Helper to activate (click) an element by id and optionally focus another element.
- * Intended for use from inline handlers to keep logic centralized and consistent.
- * @param {string} clickId - id of element to .click()
- * @param {string|null} focusId - id of element to .focus()
+ * Helper to activate (click) an element by ID and optionally focus another element.
+ * Intended for use from inline handlers to keep logic centralised and consistent.
+ * @param {string} clickId - ID of element to .click()
+ * @param {string|null} focusId - ID of element to .focus()
  */
 App.keyActivate = (clickId, focusId = null) => {
     const el = App.getEl(clickId)
@@ -412,10 +533,10 @@ App.isTimelineSkipLinkActivated = null
 App.exitTimelineFocusTrap = null
 App.updateTimelineExitFocusTarget = null
 
+
 // ============================================================================
 // Theme Persistence
 // ============================================================================
-
 
 /**
  * Manages light/dark mode persistence using localStorage
@@ -426,7 +547,7 @@ class ThemeManager {
         this.STORAGE_KEY = 'theme-mode'
         this.DISABLE_TRANSITIONS_CLASS = 'disable-transitions'
 
-        // DOM Cache (lazy initialized)
+        // DOM Cache (lazy initialised)
         this.modeCheckboxElement = null
 
         this.init()
@@ -442,7 +563,7 @@ class ThemeManager {
         return this.modeCheckboxElement ??= App.getEl('mode')
     }
 
-    // Initialization
+    // Initialisation
 
     init() {
         const modeCheckbox = this.getModeCheckbox()
@@ -516,21 +637,18 @@ try {
     window.App = window.App || {}
     window.App.themeManager = new ThemeManager()
 
-    // Add page-loaded class to trigger fade-in after theme is applied
-    document.documentElement.classList.add('page-loaded')
 } catch (error) {
-    console.error('Failed to initialize theme manager:', error)
+    console.error('Failed to initialise theme manager:', error)
     // Fallback: theme will use browser/system default without localStorage persistence
-    // Still add page-loaded class to prevent indefinite opacity 0
-    document.documentElement.classList.add('page-loaded')
 }
+
 
 // ============================================================================
 // Resize Manager
 // ============================================================================
 
 /**
- * Centralized Resize Handler
+ * Centralised Resize Handler
  * Reduces redundant resize calculations by consolidating all resize handlers
  * Provides register/unregister pattern for cleanup
  */
@@ -560,7 +678,8 @@ const ResizeManager = {
     },
 
     /**
-    * Initialise the debounced resize listener
+     * Initialise the debounced resize listener
+     * Called once on first handler registration
      */
     init() {
         const handleResize = debounce(() => {
@@ -578,8 +697,9 @@ const ResizeManager = {
     }
 }
 
+
 // ============================================================================
-// Modal-Specific Initialization Functions
+// Modal-Specific Initialisation Functions
 // ============================================================================
 
 /**
@@ -606,13 +726,14 @@ function initializeModalFooterArt() {
     handleScroll()
 }
 
+
 // ============================================================================
 // Dialog Lifecycle Configuration
 // ============================================================================
 
 /**
  * Register lifecycle hooks for modal dialogs
- * This connects the generic dialog.js with project-specific initialization/cleanup
+ * This connects the generic dialog.js with project-specific initialisation/cleanup
  */
 function registerDialogLifecycleHooks() {
     // Ensure aria is available before registering hooks
@@ -762,7 +883,7 @@ function registerDialogLifecycleHooks() {
             // Update page title for better browser history
             document.title = 'Profile - ' + originalTitle
 
-            // Only initialize footer art effect once (persists for page lifetime)
+            // Only initialise footer art effect once (persists for page lifetime)
             if (!footerArtInitialized) {
                 initializeModalFooterArt()
                 footerArtInitialized = true
@@ -801,6 +922,7 @@ if (document.readyState === 'loading') {
 } else {
     registerDialogLifecycleHooks()
 }
+
 
 // ============================================================================
 // TextHighlighter Class
@@ -861,7 +983,7 @@ class TextHighlighter {
  */
 class KeyHandler {
     constructor() {
-        // DOM Cache (lazy initialized)
+        // DOM Cache (lazy initialised)
         this.tooltipElementsCache = null
         this.debugElementCache = null
 
@@ -927,7 +1049,7 @@ class KeyHandler {
                 closeDialog('#')
             }
         } else {
-            if (!isMenuAnimationFinished() || !isModalAnimationFinished()) return
+            if (!isMenuInitialAnimationFinished || !isMenuDropdownTransitionFinished || !isAnyModalTransitionFinished) return
             switch (key) {
                 case this.KEYS.KEY_P:
                     this.toggleDialog(event, NAVIGATION_HASHES.PROFILE, DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger)
@@ -1107,7 +1229,7 @@ class WheelHandler extends NavigationHandler {
     // Event Handlers
 
     handleWheelEvent(event) {
-        if (!isMenuAnimationFinished() || !isModalAnimationFinished()) return
+        if (!isMenuInitialAnimationFinished || !isMenuDropdownTransitionFinished || !isAnyModalTransitionFinished) return
 
         const deltaX = Math.abs(event.deltaX)
         const deltaY = Math.abs(event.deltaY)
@@ -1158,7 +1280,7 @@ class TouchHandler extends NavigationHandler {
     }
 
     handleTouchMove(event) {
-        if (!isMenuAnimationFinished() || !isModalAnimationFinished()) return
+        if (!isMenuInitialAnimationFinished || !isMenuDropdownTransitionFinished || !isAnyModalTransitionFinished) return
 
         const touch = event.touches[0]
         const deltaX = Math.abs(touch.clientX - this.touchStartX)
@@ -1283,7 +1405,7 @@ class HorizontalEdgeScroller {
             this.handleMouseMoveBound = this.handleMouseMove.bind(this)
             this.onResizeBound = this.onResize.bind(this)
             document.addEventListener('mousemove', this.handleMouseMoveBound)
-            // Use centralized resize manager instead of direct window listener
+            // Use centralised resize manager instead of direct window listener
             this.unregisterResize = ResizeManager.register(this.onResizeBound)
             this.onResize()
         }
@@ -1449,7 +1571,7 @@ class HorizontalEdgeScroller {
     destroy() {
         if (!isTouchDevice && this.handleMouseMoveBound) {
             document.removeEventListener('mousemove', this.handleMouseMoveBound)
-            // Unregister from centralized resize manager
+            // Unregister from centralised resize manager
             if (this.unregisterResize) {
                 this.unregisterResize()
                 this.unregisterResize = null
@@ -1590,10 +1712,9 @@ class Popup {
         this.SQUARE_RATIO_CLASS = 'square-ratio'
 
         // State
-        this.stylesInjected = false
         this.triggeringElement = null
 
-        // Lifecycle (managed through initialization and cleanup)
+        // Lifecycle (managed through initialisation and cleanup)
         this.fallbackContainer = null
         this.wrapperElement = null
         this.handleFallbackClick = null
@@ -1889,17 +2010,16 @@ class Popup {
         }
     }
 
-    // Fallback Initialization
+    // Fallback Initialisation
 
     initializeFallbackContainer() {
         this.fallbackContainer = document.createElement('div')
         this.fallbackContainer.className = 'media_fallback_overlay'
         this.fallbackContainer.innerHTML = `<div class="media_fallback-wrapper"><div class="media_fallback-content"></div></div>`
 
-        // Inject styles only once
-        if (!this.stylesInjected && !App.getEl('media_fallback-styles')) {
+        // Inject styles only once (check DOM to see if already injected)
+        if (!App.getEl('media_fallback-styles')) {
             this.injectStyles()
-            this.stylesInjected = true
         }
 
         // Add event handlers
@@ -2097,7 +2217,7 @@ class Popup {
 
     /**
      * Check if fallback viewer is open
-     * @returns {boolean}
+     * @returns {boolean} True if fallback viewer is currently open
      */
     isOpen() {
         return this.fallbackContainer?.parentElement != null
@@ -2105,8 +2225,7 @@ class Popup {
 
     /**
      * Handle escape key from global keyboard handler
-     * Returns true if handled, false otherwise
-     * @returns {boolean}
+     * @returns {boolean} True if escape was handled, false otherwise
      */
     handleEscape() {
         if (!this.isOpen()) return false
@@ -2245,48 +2364,6 @@ class Popup {
             top: Math.round(top)
         }
     }
-
-    // Focus Management Helpers
-
-    isFocusable(element) {
-        if (!element || element.nodeType !== 1) return false
-        if (element.disabled) return false
-
-        // Check explicit tabindex
-        const tabindex = element.getAttribute('tabindex')
-        if (tabindex !== null) {
-            const tabindexValue = parseInt(tabindex, 10)
-            return tabindexValue >= 0
-        }
-
-        // Check naturally focusable elements
-        switch (element.nodeName) {
-            case 'A':
-                return !!element.href
-            case 'INPUT':
-                return element.type !== 'hidden'
-            case 'BUTTON':
-            case 'SELECT':
-            case 'TEXTAREA':
-            case 'VIDEO':
-                return true
-            default:
-                return false
-        }
-    }
-
-    // Focusability Check
-
-    isFocusable(element) {
-        if (!element || element.nodeType !== 1) return false
-        if (element.disabled || element.hidden) return false
-        if (element.tabIndex < 0) return false
-
-        const style = window.getComputedStyle(element)
-        if (style.display === 'none' || style.visibility === 'hidden') return false
-
-        return true
-    }
 }
 
 
@@ -2306,7 +2383,7 @@ class Carousel {
         // Constants
         this.ACTIVE_CLASS = 'active'
 
-        // DOM Elements (initialized during component setup)
+        // DOM Elements (initialised during component setup)
         this.carouselEl = element
         this.slidesWrapperEl = this.carouselEl.querySelector('[data-carousel-slides-wrapper]')
         this.slidesEls = Array.from(this.carouselEl.querySelectorAll('[data-carousel-slides] figure'))
@@ -2329,7 +2406,7 @@ class Carousel {
         this.init()
     }
 
-    // Initialization
+    // Initialisation
 
     init() {
         this.createEdgeNavigation()
@@ -2658,6 +2735,7 @@ class Carousel {
     }
 }
 
+
 // ============================================================================
 // KeyboardNavigator Class
 // ============================================================================
@@ -2675,7 +2753,7 @@ class KeyboardNavigator {
         this.fallbackSelector = options.fallbackSelector
         this.is2DGrid = options.is2DGrid ?? true // Default to grid layout detection
 
-        // DOM Elements (initialized in init, not lazy caching)
+        // DOM Elements (initialised in init, not lazy caching)
         this.containers = null
 
         // Bound handlers
@@ -2684,7 +2762,7 @@ class KeyboardNavigator {
         this.init()
     }
 
-    // Initialization
+    // Initialisation
 
     init() {
         this.containers = Array.from(document.querySelectorAll(this.containerSelector))
@@ -2702,6 +2780,11 @@ class KeyboardNavigator {
 
     // DOM Helpers
 
+    /**
+     * Get focusable items from container
+     * @param {HTMLElement} container - Container to search within
+     * @returns {Array<HTMLElement>} Array of focusable items, or fallback if primary selector returns nothing
+     */
     getItems(container) {
         let items = Array.from(container.querySelectorAll(this.itemSelector))
 
@@ -2858,7 +2941,7 @@ class MenuDropdownNavigator {
         this.init()
     }
 
-    // Initialization
+    // Initialisation
 
     init() {
         // Listen on document to catch events from both dropdown and close button
@@ -2986,6 +3069,7 @@ async function copyToClipboard(text) {
     }
 }
 
+
 // ============================================================================
 // Touch Interaction Functions
 // ============================================================================
@@ -3053,6 +3137,7 @@ App.handleTouchButtonClick = (element, event, callback = null, focusAfterClick =
     return true
 }
 
+
 // ============================================================================
 // Timeline Functions
 // ============================================================================
@@ -3074,11 +3159,10 @@ const timelineElementCache = {
  * Related to: App.initializeTimeline
  */
 App.positionTimeline = () => {
-    // Lazy initialization with caching
+    // Lazy initialisation with caching
     timelineElementCache.archiveWrapper ??= document.querySelector('.modal-archive__timeline')
     timelineElementCache.timelineContentSection ??= document.querySelector('.modal-archive__timeline-grid [data-timeline-section]')
     timelineElementCache.timelineWrapper ??= document.querySelector('#horizontal-timeline')
-    timelineElementCache.timeline ??= document.querySelector('horizontal-timeline')
 
     if (!timelineElementCache.archiveWrapper || !timelineElementCache.timelineContentSection || !timelineElementCache.timelineWrapper) return
 
@@ -3089,7 +3173,7 @@ App.positionTimeline = () => {
     timelineElementCache.timelineWrapper.style.setProperty('right', `${archiveWrapperRect.right - timelineContentSectionRect.right}px`)
 
     afterPaint(() => {
-        timelineElementCache.timeline.classList.add('timeline-in-place')
+        timelineElementCache.timelineWrapper.classList.add('timeline-in-place')
 
         // Update scrollable class now that timeline is in final position
         if (App.timeline && typeof App.timeline.updateScrollableClass === 'function') {
@@ -3105,7 +3189,7 @@ App.positionTimeline = () => {
 
 /**
  * Initialise the timeline component with scrollers
- * Timeline persists for the entire session once initialized
+ * Timeline persists for the entire session once initialised
  *
  * Integration points:
  * - Creates <horizontal-timeline> custom element
@@ -3117,7 +3201,7 @@ App.positionTimeline = () => {
 App.initializeTimeline = (startObserver = true) => {
     // Prevent duplicate timeline creation
     if (App.timeline) {
-        console.warn('Timeline already initialized')
+        console.warn('Timeline already initialised')
         return
     }
 
@@ -3202,11 +3286,11 @@ App.initializeTimeline = (startObserver = true) => {
         // Initial setup
         handleResize()
 
-        // Register with centralized ResizeManager for cleanup and consistency
+        // Register with centralised ResizeManager for cleanup and consistency
         ResizeManager.register(handleResize)
     }
 
-    // Store initializer on timeline instance for external access
+    // Store initialiser on timeline instance for external access
     App.timeline.initializeScrollers = initializeTimelineScrollers
 
     container.appendChild(App.timeline)
@@ -3224,27 +3308,33 @@ App.initializeTimeline = (startObserver = true) => {
  * Setup focus trap for horizontal timeline accessibility
  * Creates FocusTrap instance and helper functions for keyboard navigation
  *
- * Event handlers centralized in initializeGlobalEventHandlers()
+ * Event handlers centralised in initializeGlobalEventHandlers()
  * Only one direct listener needed here (focus events don't bubble)
  * @private
  */
 function setupTimelineFocusTrap() {
     const timelineWrapper = document.querySelector('#horizontal-timeline-wrapper')
     const returnButton = document.querySelector('#horizontal-timeline-return')
-    const skipLink = document.querySelector('.modal-archive__skip-link')
+    const skipLink = document.querySelector('#modal-archive-skip-link')
 
     if (!timelineWrapper || !returnButton) {
         console.warn('Timeline: Required elements not found')
         return
     }
 
-    // Initialise focus trap (returnFocusTo updated dynamically as user navigates)
+    /**
+     * Initialise focus trap (returnFocusTo updated dynamically as user navigates)
+     * Focus trap allows navigating timeline while keeping focus contained
+     */
     App.timelineFocusTrap = new FocusTrap(timelineWrapper, {
         returnFocusTo: skipLink,
         initialFocus: false
     })
 
-    // Track skip link activation (set by global event handlers)
+    /**
+     * Track skip link activation (set by global event handlers)
+     * Used to determine when to enter timeline focus trap
+     */
     App.isTimelineSkipLinkActivated = false
 
     /**
@@ -3295,18 +3385,30 @@ function setupTimelineFocusTrap() {
             // Focus first label (user wants to navigate, not immediately return)
             requestAnimationFrame(() => {
                 const firstLabel = timelineWrapper.querySelector('#timeline_labels [data-label-for][tabindex="0"]')
-                ;(firstLabel || returnButton).focus()
+                    ; (firstLabel || returnButton).focus()
             })
         }
     })
+
+    // Handle skip link click/activation (now a button element)
+    // Programmatically focus the timeline wrapper to trigger the focus trap
+    if (skipLink) {
+        skipLink.addEventListener('click', (event) => {
+            event.preventDefault()
+            requestAnimationFrame(() => {
+                timelineWrapper.focus()
+            })
+        })
+    }
 
     // Expose functions for global event handlers
     App.exitTimelineFocusTrap = exitTimelineFocusTrap
     App.updateTimelineExitFocusTarget = updateExitFocusTarget
 }
 
+
 // ============================================================================
-// Dialog Initialization Functions
+// Dialog Initialisation Functions
 // ============================================================================
 
 /**
@@ -3345,6 +3447,7 @@ const openDialogOnLoad = () => {
     }
 }
 
+
 // ============================================================================
 // Animation Control Functions
 // ============================================================================
@@ -3376,10 +3479,10 @@ const applyNoAnimation = () => {
     }
 }
 
+
 // ============================================================================
 // Fullscreen Functions
 // ============================================================================
-
 
 /**
  * Check if browser supports fullscreen API
@@ -3451,6 +3554,7 @@ function setupFullscreenSync() {
     syncHandler()
 }
 
+
 // ============================================================================
 // Link Enhancement Functions
 // ============================================================================
@@ -3499,8 +3603,9 @@ function enhanceExternalLinks() {
     })
 }
 
+
 // ============================================================================
-// Component Initialization Functions
+// Component Initialisation Functions
 // ============================================================================
 
 /**
@@ -3607,7 +3712,7 @@ function initializeTimezoneDisplay() {
  * Initialise popup system with event delegation for media links
  */
 function initializePopups() {
-    // Handlers will be registered in the centralized global event manager
+    // Handlers will be registered in the centralised global event manager
     // See: initializeGlobalEventHandlers()
 
     // Initialise popup instance for use by global handlers
@@ -3625,23 +3730,24 @@ function initializeImageLazyLoading() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting && entry.target.complete) {
-                entry.target.classList.add('loaded');
-                observer.unobserve(entry.target);
+                entry.target.classList.add('loaded')
+                observer.unobserve(entry.target)
             }
-        });
-    });
+        })
+    })
 
     document.querySelectorAll('[loading="lazy"]').forEach(img => {
         if (img.complete) {
-            img.classList.add('loaded');
+            img.classList.add('loaded')
         } else {
-            observer.observe(img);
+            observer.observe(img)
             img.addEventListener('load', () => {
-                img.classList.add('loaded');
-            }, { once: true });
+                img.classList.add('loaded')
+            }, { once: true })
         }
-    });
+    })
 }
+
 
 // ============================================================================
 // Hash Navigation Functions
@@ -3687,12 +3793,13 @@ function setupHashChangeHandler() {
     })
 }
 
+
 // ============================================================================
 // Global Event Handlers
 // ============================================================================
 
 /**
- * Centralized global event handler for document-level events
+ * Centralised global event handler for document-level events
  * Reduces number of event listeners by consolidating similar handlers
  * Uses event delegation pattern for optimal performance
  */
@@ -3721,20 +3828,14 @@ function initializeGlobalEventHandlers() {
             App.popupInstance.open(popupLink, event)
         }
 
-        // 3. Track timeline skip link activation
-        if (event.target.closest('.modal-archive__skip-link')) {
-            App.isTimelineSkipLinkActivated = true
-            return
-        }
-
-        // 4. Handle timeline return button
+        // 3. Handle timeline return button
         if (event.target.closest('#horizontal-timeline-return')) {
             event.preventDefault()
             App.exitTimelineFocusTrap?.()
             return
         }
 
-        // 5. Update exit target when timeline label clicked
+        // 4. Update exit target when timeline label clicked
         const labelButton = event.target.closest('#timeline_labels [data-label-for]')
         if (labelButton) {
             const timelineWrapper = getTimelineWrapper()
@@ -3765,8 +3866,15 @@ function initializeGlobalEventHandlers() {
         const { key } = event
 
         // 1. Track timeline skip link keyboard activation
-        if (event.target.closest('.modal-archive__skip-link') && (key === 'Enter' || key === ' ')) {
+        if (event.target.closest('#modal-archive-skip-link') && (key === 'Enter' || key === ' ')) {
+            event.preventDefault()
             App.isTimelineSkipLinkActivated = true
+            requestAnimationFrame(() => {
+                const timelineWrapper = getTimelineWrapper()
+                if (timelineWrapper) {
+                    timelineWrapper.focus()
+                }
+            })
             return
         }
 
@@ -3797,21 +3905,13 @@ function initializeGlobalEventHandlers() {
     })
 }
 
+
 // ============================================================================
 // DOM Content Loaded Event Handler
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Animation Skip Setup
-
-    // Apply no animation on first click
-    document.body.addEventListener('click', () => {
-        if (!isMenuAnimationFinished() || !isModalAnimationFinished()) {
-            applyNoAnimation()
-        }
-    }, { once: true })
-
-    // Core Initialization
+    /* Core Initialisation */
 
     initializeDialogs()
     enhanceExternalLinks()
@@ -3819,7 +3919,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeImageLazyLoading()
     initializeGlobalEventHandlers()
 
-    // Device Detection
+    /* Device Detection */
 
     // Detect touch device and setup touch-specific handlers
     if (isTouchDevice) {
@@ -3834,7 +3934,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setupFullscreenSync()
 
-    // Hash-Based Navigation Setup
+    /* Hash-Based Navigation Setup */
 
     // Initialise UI based on current hash (deep linking)
     if (window.location.hash) {
@@ -3844,7 +3944,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setupHashChangeHandler()
 
-    // Global Handlers Initialization
+    /* Initial Animation Control */
+
+    // Apply no animation on first click
+    document.body.addEventListener('click', () => {
+        if (!isMenuInitialAnimationFinished) {
+            applyNoAnimation()
+        }
+    }, { once: true })
+
+    /* Initial Animation Control */
+
+    initMenuInitialAnimationWatcher()
+    initMenuTransitionWatcher()
+    initModalTransitionWatcher()
+
+    /* Global Handlers Initialisation */
 
     // Initialise persistent handlers (active throughout page lifetime)
     new WheelHandler()
@@ -3852,7 +3967,7 @@ document.addEventListener('DOMContentLoaded', () => {
     new KeyHandler()
     App.textHighlighter = new TextHighlighter()
 
-    // Interactive Components Initialization
+    /* Interactive Components Initialisation */
 
     initializeClickHandlers()
     initializeTimezoneDisplay()
@@ -3864,7 +3979,7 @@ document.addEventListener('DOMContentLoaded', () => {
         new Carousel({ id: `carousel-${i + 1}`, element: carouselElements[i] })
     }
 
-    // Keyboard Navigation Setup
+    /* Keyboard Navigation Setup */
 
     // Initialise keyboard navigation for hover-cards (horizontal only)
     new ImageGridNavigator({
@@ -3886,9 +4001,9 @@ document.addEventListener('DOMContentLoaded', () => {
         itemSelector: 'a, label, button'
     })
 
-    // Resize Handler Registration
+    /* Resize Handler Registration */
 
-    // Register timeline positioning with centralized resize manager
+    // Register timeline positioning with centralised resize manager
     ResizeManager.register(() => {
         if (App.timeline) {
             App.positionTimeline()
@@ -3896,17 +4011,18 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 });
 
+
 // ============================================================================
 // Console Welcome Message
 // ============================================================================
 
 /**
  * Display styled welcome message in browser console
- * Uses green-lime color scheme with margin/padding/border for supporting browsers
+ * Uses green-lime colour scheme with margin/padding/border for supporting browsers
  * Browsers without spacing support get separate log statements
  */
 (function () {
-    // Theme Colors
+    // Theme Colours
     const COLOR = '#7cce00' // Green-lime (HSL: 115, 100, 75)
     const BG_COLOR = 'rgba(124, 206, 0, 0.075)'
 

@@ -8,7 +8,7 @@
  * - Accessible modal dialogs with focus trapping
  * - Keyboard navigation (Escape key support)
  * - Dialog stacking support
- * - Lifecycle hooks for custom initialization/cleanup
+ * - Lifecycle hooks for custom initialisation/cleanup
  * - Backdrop management
  * - Self-contained styling (no external CSS dependencies)
  * - Flexible inert management via data-inert-target attribute
@@ -177,7 +177,7 @@ aria.VALID_DIALOG_ROLES = Object.freeze(['dialog', 'alertdialog'])
 
 /**
  * Lifecycle hooks registry
- * External code can register initialization and cleanup callbacks for specific dialog IDs
+ * External code can register initialisation and cleanup callbacks for specific dialog IDs
  * @example
  * aria.registerLifecycleHooks('modal-profile', {
  *   initialize: () => console.log('Profile modal opened'),
@@ -663,7 +663,7 @@ window.closeDialog = (hash) => {
 }
 
     // ============================================================================
-    // Initialization
+    // Initialisation
     // ============================================================================
 
     /**
