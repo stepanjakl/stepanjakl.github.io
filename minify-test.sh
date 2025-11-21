@@ -79,7 +79,7 @@ for css_file in styles/*.css; do
   total_css_before=$((total_css_before + size_before))
   start_time=$(python3 -c 'import time; print(int(time.time() * 1000))')
   echo "Minifying $css_file"
-  csso --force-media-merge "$css_file" --output "$css_file"
+  csso "$css_file" --output "$css_file"
   end_time=$(python3 -c 'import time; print(int(time.time() * 1000))')
   ms=$((end_time - start_time))
   size_after=$(stat -f%z "$css_file")

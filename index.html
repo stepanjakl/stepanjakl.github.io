@@ -11,10 +11,10 @@
                 data-website-id="6f9d8fb6-c4c3-410e-bba3-7b8cafd6ed04"></script>
 
         <!-- GlitchTip - Error tracking -->
-        <!-- <script src="https://browser.sentry-cdn.com/10.25.0/bundle.min.js"
-                crossorigin="anonymous"></script> -->
+        <script src="https://browser.sentry-cdn.com/10.25.0/bundle.min.js"
+                crossorigin="anonymous"></script>
 
-        <!-- <script>
+        <script>
             Sentry.init({
                 dsn: "https://7388455908f8442ba73a83bca2c9403c@app.glitchtip.com/13576",
                 tracesSampleRate: 0.01,
@@ -27,7 +27,7 @@
             window.onunhandledrejection = function(event) {
                 Sentry.captureException(event.reason)
             }
-        </script> -->
+        </script>
 
         <!-- Page metadata -->
         <title>Štěpán Jákl | Full-stack web developer & interface designer</title>
@@ -46,6 +46,7 @@
               content="Štěpán Jákl | Full-stack web developer & interface designer">
         <meta property="og:description"
               content="Experienced and detail-oriented user interface engineer who specialises in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.">
+        <meta property="og:logo" content="https://stepanjakl.com/images/logo-static-4.svg" />
         <meta property="og:image"
               content="https://stepanjakl.com/images/og-banner.jpg">
         <meta property="og:image:width" content="1200">
@@ -78,6 +79,10 @@
         <link rel="stylesheet" href="styles/font-bai-jamjuree.css">
         <link rel="stylesheet" href="styles/font-chakra-petch.css">
         <link rel="stylesheet" href="styles/font-newsreader.css">
+
+        <!-- Preloads -->
+        <link rel="preload" as="image" href="images/logo-animated-dark.svg" fetchpriority="high">
+        <link rel="preload" as="image" href="images/logo-animated-light.svg" fetchpriority="high">
 
         <!-- Stylesheets -->
         <link rel="stylesheet" href="styles/reset.css">
@@ -141,17 +146,17 @@
     <body>
         <!-- Global state controls -->
         <input id="mode"
-               type="checkbox"
+               type="hidden"
                hidden
                aria-hidden="true"
                aria-label="Toggle light and dark mode">
         <input id="debug"
-               type="checkbox"
+               type="hidden"
                hidden
                aria-hidden="true"
                aria-label="Toggle debug mode">
         <input id="fullscreen"
-               type="checkbox"
+               type="hidden"
                hidden
                aria-hidden="true"
                aria-label="Toggle fullscreen mode">
@@ -201,10 +206,10 @@
                                     <span>&nbsp;</span>
                                 </p>
                                 <p style="--i:1">
-                                    <span>J</span>
-                                    <span>á</span>
-                                    <span>k</span>
-                                    <span>l</span>
+                                    <span style="--i:8">J</span>
+                                    <span style="--i:9">á</span>
+                                    <span style="--i:10">k</span>
+                                    <span style="--i:11">l</span>
                                 </p>
                             </div>
                             <abbr class="tooltip__text--top tooltip__text">
@@ -356,27 +361,28 @@
                                 </a>
                             </div>
 
-                            <!-- Menu toggle & dropdown -->
-                            <div id="menu-toggle"
-                                 data-inert-target="menu-dropdown"
+                            <!-- Menu dropdown toggle & dropdown -->
+                            <div id="dropdown-menu-toggle"
+                                 data-inert-target="dropdown-menu"
                                  class="tooltip"
-                                 style="--i:3">
+                                 style="--i:3"
+                                 aria-label="Dropdown menu toggle">
                                 <a href="#menu"
-                                   onclick="event.preventDefault(); openDialog('menu-toggle', this, 'menu-button-close', 'menu');"
-                                   id="menu-button-open"
-                                   class="menu__button-open"
+                                   onclick="event.preventDefault(); openDialog('dropdown-menu-toggle', this, 'dropdown-menu-toggle-button-close', 'menu');"
+                                   id="dropdown-menu-toggle-button-open"
+                                   class="dropdown-menu__button-open"
                                    aria-label="Open dropdown menu"></a>
                                 <a href="#"
                                    onclick="event.preventDefault(); closeDialog('#')"
-                                   id="menu-button-close"
-                                   class="menu__button-close"
+                                   id="dropdown-menu-toggle-button-close"
+                                   class="dropdown-menu__button-close"
                                    aria-label="Close dropdown menu"></a>
-                                <button id="menu-button"
+                                <button id="dropdown-menu-toggle-button"
                                         type="button"
-                                        class="menu__button"
+                                        class="dropdown-menu__button"
                                         tabindex="-1"
                                         aria-label="Menu toggle. Keyboard shortcut: Command M">
-                                    <div class="menu__button-icon">
+                                    <div class="dropdown-menu__button-icon">
                                         <span>&nbsp;</span>
                                         <span>&nbsp;</span>
                                         <span>&nbsp;</span>
@@ -395,7 +401,7 @@
                                    aria-label="Close menu"></a>
 
                                 <!-- Dropdown menu content -->
-                                <dialog id="menu-dropdown">
+                                <dialog id="dropdown-menu">
                                     <div>
                                         <a href="https://cal.com/stepanjakl"
                                            target="_blank"
@@ -446,25 +452,25 @@
                                             <span class="sr-only">(opens in new tab)</span>
                                         </a>
                                         <hr>
-                                        <label id="menu-dropdown-light-mode"
+                                        <label id="dropdown-menu-light-mode"
                                                for="mode"
                                                tabindex="0"
-                                               onkeydown="if(event.key === 'Enter') { App.keyActivate('mode','menu-dropdown-dark-mode') }">
+                                               onkeydown="if(event.key === 'Enter') { App.keyActivate('mode','dropdown-menu-dark-mode') }">
                                             <svg>
                                                 <use xlink:href="images/icons.svg#menu-light-mode"></use>
                                             </svg>
                                             <span class="text-sm">Light mode</span>
                                         </label>
-                                        <label id="menu-dropdown-dark-mode"
+                                        <label id="dropdown-menu-dark-mode"
                                                for="mode"
                                                tabindex="0"
-                                               onkeydown="if(event.key === 'Enter') { App.keyActivate('mode','menu-dropdown-light-mode') }">
+                                               onkeydown="if(event.key === 'Enter') { App.keyActivate('mode','dropdown-menu-light-mode') }">
                                             <svg>
                                                 <use xlink:href="images/icons.svg#menu-dark-mode"></use>
                                             </svg>
                                             <span class="text-sm">Dark mode</span>
                                         </label>
-                                        <label id="menu-dropdown-fullscreen"
+                                        <label id="dropdown-menu-fullscreen"
                                                for="fullscreen"
                                                tabindex="0"
                                                onclick="App.toggleFullscreen()"
@@ -477,7 +483,7 @@
                                             </svg>
                                             <span class="text-sm">Fullscreen</span>
                                         </label>
-                                        <label id="menu-dropdown-debug"
+                                        <label id="dropdown-menu-debug"
                                                for="debug"
                                                tabindex="0"
                                                onkeydown="if(event.key === 'Enter') { App.keyActivate('debug') }">
@@ -776,6 +782,7 @@
                                     <svg class="hidden fullscreen-checked:flex">
                                         <use xlink:href="images/icons.svg#fullscreen-off"></use>
                                     </svg>
+                                    <span class="sr-only">Toggle fullscreen mode</span>
                                 </label>
                                 <button type="button"
                                         id="modal-archive-skip-link"

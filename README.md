@@ -26,11 +26,11 @@
 
 ---
 
-### 🧪 Testing & Deployment
+### 🧪 Testing & deployment
 
-- **Local Testing**: Run `./minify-test.sh` to minify assets, preview the site locally on `http://localhost:222`, and clean up automatically.
+- **Local testing**: Run `./minify-test.sh` to minify assets, preview the site locally on `http://localhost:222`, and clean up automatically.
 
-- **Release Process**: Push to the `release` branch to trigger automated minification and deployment to `gh-pages`.
+- **Release process**: Push to the `release` branch to trigger automated minification and deployment to `gh-pages`.
 
 ---
 
@@ -53,7 +53,7 @@
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-#### Copyright Notice
+#### Copyright notice
 
 © 2025 *Štěpán Jákl*. All rights reserved.
 

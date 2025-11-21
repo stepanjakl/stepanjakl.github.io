@@ -14,7 +14,7 @@
     user-select: all;
 }
 
-#menu-dropdown label#menu-dropdown-fullscreen,
+#dropdown-menu label#dropdown-menu-fullscreen,
 .modal__fullscreen-button {
     display: none;
 }

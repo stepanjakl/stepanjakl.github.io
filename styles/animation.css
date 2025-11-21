@@ -400,7 +400,7 @@ footer>* {
 
 .menu--animating .menu__email,
 .menu--animating .menu__link,
-.menu--animating #menu-toggle {
+.menu--animating #dropdown-menu-toggle {
     animation-name: fade-in-opacity;
     animation-duration: var(--duration-menu-links-fade-in);
     animation-delay: calc(var(--delay-menu-links-fade-in) + ((var(--anim-segment) * 0.75) * var(--i)));
@@ -890,101 +890,101 @@ body {
 
 /* Menu button */
 
-.menu__button-open,
-.menu__button-close {
+.dropdown-menu__button-open,
+.dropdown-menu__button-close {
     position: absolute;
     inset: 0;
 }
 
-.menu__button-open {
+.dropdown-menu__button-open {
     z-index: 3;
 }
 
-#menu:target .menu__button-open {
+#menu:target .dropdown-menu__button-open {
     pointer-events: none;
     visibility: hidden;
 }
 
-.menu__button-close {
+.dropdown-menu__button-close {
     z-index: 4;
     pointer-events: none;
     visibility: hidden;
 }
 
-#menu:target .menu__button-close {
+#menu:target .dropdown-menu__button-close {
     pointer-events: auto;
     visibility: visible;
 }
 
-.menu__button {
+.dropdown-menu__button {
     z-index: 2;
     transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, box-shadow var(--animate-out-segment-2\/3) linear, border-radius var(--animate-out-segment) var(--ease-in-quad);
     overflow: hidden;
 }
 
-#menu:target .menu__button {
+#menu:target .dropdown-menu__button {
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) rgba(0, 0, 0, 0);
 }
 
-#menu-toggle:hover .menu__button {
+#dropdown-menu-toggle:hover .dropdown-menu__button {
     border-color: var(--light-15);
 }
 
-#menu:target .menu__button,
-#menu-toggle.tooltip-key--active .menu__button {
+#menu:target .dropdown-menu__button,
+#dropdown-menu-toggle.tooltip-key--active .dropdown-menu__button {
     border-color: var(--light-25);
 }
 
-#menu-toggle:hover .menu__button,
-#menu-toggle:focus-within .menu__button,
-#menu:target .menu__button,
-#menu-toggle.tooltip-key--active .menu__button {
+#dropdown-menu-toggle:hover .dropdown-menu__button,
+#dropdown-menu-toggle:focus-within .dropdown-menu__button,
+#menu:target .dropdown-menu__button,
+#dropdown-menu-toggle.tooltip-key--active .dropdown-menu__button {
     transition: color var(--animate-in-segment-2\/3) linear, background-color var(--animate-in-segment-2\/3) linear, border-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear, outline var(--animate-in-segment-2\/3) linear;
     color: var(--icon--hover);
     background-color: var(--highlight-secondary);
 }
 
-.menu__button-icon span {
+.dropdown-menu__button-icon span {
     background-color: currentColor;
     animation-fill-mode: forwards;
 }
 
-.menu__button-icon span:nth-child(1) {
+.dropdown-menu__button-icon span:nth-child(1) {
     animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-top-left-reverse;
 }
 
-#menu:target .menu__button-icon span:nth-child(1) {
+#menu:target .dropdown-menu__button-icon span:nth-child(1) {
     animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-top-left;
 }
 
-.menu__button-icon span:nth-child(2) {
+.dropdown-menu__button-icon span:nth-child(2) {
     animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-top-right-reverse;
 }
 
-#menu:target .menu__button-icon span:nth-child(2) {
+#menu:target .dropdown-menu__button-icon span:nth-child(2) {
     animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-top-right;
 }
 
-.menu__button-icon span:nth-child(3) {
+.dropdown-menu__button-icon span:nth-child(3) {
     animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-bottom-left-reverse;
 }
 
-#menu:target .menu__button-icon span:nth-child(3) {
+#menu:target .dropdown-menu__button-icon span:nth-child(3) {
     animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-bottom-left;
 }
 
-.menu__button-icon span:nth-child(4) {
+.dropdown-menu__button-icon span:nth-child(4) {
     animation-duration: calc(var(--animate-in-segment) * 3);
     animation-name: menu-bottom-right-reverse;
 }
 
-#menu:target .menu__button-icon span:nth-child(4) {
+#menu:target .dropdown-menu__button-icon span:nth-child(4) {
     animation-duration: calc(var(--animate-out-segment) * 3);
     animation-name: menu-bottom-right;
 }
@@ -1136,7 +1136,7 @@ body {
 
 /* Menu dropdown */
 
-#menu-dropdown {
+#dropdown-menu {
     visibility: hidden;
     opacity: 0;
     transform: translateY(-0.25rem) scale(0.975);
@@ -1145,85 +1145,85 @@ body {
 }
 
 @media (min-width: 45rem) {
-    #menu-dropdown {
+    #dropdown-menu {
         transform: translateX(-0.25rem) scale(0.975);
         transform-origin: bottom right;
     }
 }
 
-#menu:target #menu-dropdown {
+#menu:target #dropdown-menu {
     visibility: visible;
     opacity: 1;
     transform: translate(0) scale(1);
     transition: opacity calc(1.25 * var(--animate-in-segment)) var(--ease-out-quad), transform calc(1.25 * var(--animate-in-segment)) var(--ease-out-quad);
 }
 
-#menu-dropdown a:hover::before,
-#menu-dropdown label:hover::before,
-#menu-dropdown a:focus::before,
-#menu-dropdown label:focus::before,
-#menu-dropdown a:focus-within::before,
-#menu-dropdown label:focus-within::before,
-#menu-dropdown a:hover::after,
-#menu-dropdown label:hover::after,
-#menu-dropdown a:focus::after,
-#menu-dropdown label:focus::after,
-#menu-dropdown a:focus-within::after,
-#menu-dropdown label:focus-within::after {
+#dropdown-menu a:hover::before,
+#dropdown-menu label:hover::before,
+#dropdown-menu a:focus::before,
+#dropdown-menu label:focus::before,
+#dropdown-menu a:focus-within::before,
+#dropdown-menu label:focus-within::before,
+#dropdown-menu a:hover::after,
+#dropdown-menu label:hover::after,
+#dropdown-menu a:focus::after,
+#dropdown-menu label:focus::after,
+#dropdown-menu a:focus-within::after,
+#dropdown-menu label:focus-within::after {
     transition: opacity var(--animate-in-segment) linear, inset var(--animate-in-segment) var(--ease-out-quad);
     opacity: 1;
 }
 
-#menu-dropdown a span,
-#menu-dropdown label span {
+#dropdown-menu a span,
+#dropdown-menu label span {
     transition: color var(--animate-out-segment) linear;
     z-index: 2;
 }
 
-#menu-dropdown a:hover span,
-#menu-dropdown label:hover span {
+#dropdown-menu a:hover span,
+#dropdown-menu label:hover span {
     transition: color var(--animate-in-segment) linear;
 }
 
-#menu-dropdown a svg,
-#menu-dropdown label svg {
+#dropdown-menu a svg,
+#dropdown-menu label svg {
     transition: color var(--animate-out-segment) linear;
     color: var(--icon);
     z-index: 2;
 }
 
-#menu-dropdown a:hover svg,
-#menu-dropdown label:hover svg {
+#dropdown-menu a:hover svg,
+#dropdown-menu label:hover svg {
     transition: color var(--animate-out-segment) linear, background-color var(--animate-out-segment) linear;
     color: var(--icon--hover);
 }
 
-#menu-dropdown label#menu-dropdown-light-mode:hover span,
-#menu-dropdown label#menu-dropdown-light-mode:hover svg,
-#menu-dropdown label#menu-dropdown-light-mode:focus span,
-#menu-dropdown label#menu-dropdown-light-mode:focus svg,
-#menu-dropdown label#menu-dropdown-light-mode:focus-within span,
-#menu-dropdown label#menu-dropdown-light-mode:focus-within svg {
+#dropdown-menu label#dropdown-menu-light-mode:hover span,
+#dropdown-menu label#dropdown-menu-light-mode:hover svg,
+#dropdown-menu label#dropdown-menu-light-mode:focus span,
+#dropdown-menu label#dropdown-menu-light-mode:focus svg,
+#dropdown-menu label#dropdown-menu-light-mode:focus-within span,
+#dropdown-menu label#dropdown-menu-light-mode:focus-within svg {
     color: var(--cyan-full-10);
 }
 
-#menu-dropdown label#menu-dropdown-light-mode::before {
+#dropdown-menu label#dropdown-menu-light-mode::before {
     /* 75, 100, 85  */
     background-image: linear-gradient(to right in oklch, rgba(238, 213, 0, 0.75), rgba(238, 213, 0, 0));
 }
 
-#menu-dropdown label#menu-dropdown-light-mode::after {
+#dropdown-menu label#dropdown-menu-light-mode::after {
     background-image: linear-gradient(to right in oklch, rgba(238, 213, 0, 1), rgba(238, 213, 0, 0));
 }
 
-#menu-dropdown label#menu-dropdown-debug::before,
-#menu-dropdown label#menu-dropdown-fullscreen::before {
+#dropdown-menu label#dropdown-menu-debug::before,
+#dropdown-menu label#dropdown-menu-fullscreen::before {
     /* 260, 100, 45 */
     background-image: linear-gradient(to right in oklch, rgba(0, 95, 241, 0.75), rgba(0, 95, 241, 0));
 }
 
-#menu-dropdown label#menu-dropdown-debug::after,
-#menu-dropdown label#menu-dropdown-fullscreen::after {
+#dropdown-menu label#dropdown-menu-debug::after,
+#dropdown-menu label#dropdown-menu-fullscreen::after {
     background-image: linear-gradient(to right in oklch, rgba(0, 95, 241, 1), rgba(0, 95, 241, 0));
 }
 

@@ -38,7 +38,7 @@ jobs:
           css_font_files=$(ls ./styles/*.css)
           echo "$css_font_files" | while IFS= read -r file; do
             echo "Minifying $file"
-            csso --force-media-merge "$file" --output "$file"
+            csso "$file" --output "$file"
           done
           # Minify HTML
           html-minifier --case-sensitive --collapse-inline-tag-whitespace --collapse-whitespace --minify-css --minify-js --minify-urls --quote-character='"' --remove-comments index.html --output index.html
@@ -49,5 +49,5 @@ jobs:
       - run: |
           git config user.name stepanjakl
           git config user.email stepan.jakl@outlook.com
-          git commit -am "Automated minify of ${{ github.sha }} (all JS files now included)"
+          git commit -am "Automated minify of ${{ github.sha }}"
           git push --force -u origin release:gh-pages

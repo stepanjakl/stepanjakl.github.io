@@ -86,7 +86,7 @@ function getScrollBehavior() {
  */
 let isMenuInitialAnimationFinished = false
 
-function initMenuInitialAnimationWatcher() {
+function initializeMenuInitialAnimationWatcher() {
     const menuBgEl = document.querySelector('.menu__background')
     if (!menuBgEl) return
 
@@ -141,8 +141,8 @@ function createTransitionWatcher(element, prop = 'transform', onChange) {
  */
 let isMenuDropdownTransitionFinished = true
 
-function initMenuTransitionWatcher() {
-    const menuEl = document.querySelector('#menu-dropdown')
+function initializeMenuTransitionWatcher() {
+    const menuEl = document.querySelector('#dropdown-menu')
     if (!menuEl) return
 
     // Create watcher that updates transition state whenever dropdown transitions
@@ -158,7 +158,7 @@ function initMenuTransitionWatcher() {
  */
 let isAnyModalTransitionFinished = true
 
-function initModalTransitionWatcher() {
+function initializeModalTransitionWatcher() {
     const modalEls = Array.from(document.querySelectorAll('.modal'))
     if (modalEls.length === 0) return
 
@@ -430,9 +430,9 @@ const DIALOG_CONFIG = Object.freeze({
         trigger: 'menu-link-archive'
     },
     MENU: {
-        id: 'menu-toggle',
-        trigger: 'menu-button-open',
-        close: 'menu-button-close'   // Element to focus when dialog opens
+        id: 'dropdown-menu-toggle',
+        trigger: 'dropdown-menu-toggle-button-open',
+        close: 'dropdown-menu-toggle-button-close'   // Element to focus when dialog opens
     }
 })
 
@@ -988,7 +988,7 @@ class KeyHandler {
         this.debugElementCache = null
 
         // Constants
-        this.TOOLTIP_ITEMS_SELECTOR = '#menu-link-profile, #menu-link-archive, #menu-toggle'
+        this.TOOLTIP_ITEMS_SELECTOR = '#menu-link-profile, #menu-link-archive, #dropdown-menu-toggle'
         this.TOOLTIP_ACTIVE_CLASS = 'tooltip-key--active'
 
         // Key constants
@@ -2932,7 +2932,7 @@ class ImageGridNavigator extends KeyboardNavigator {
 class MenuDropdownNavigator {
     constructor(options = {}) {
         // Configuration
-        this.dropdownSelector = options.dropdownSelector || '#menu-dropdown'
+        this.dropdownSelector = options.dropdownSelector || '#dropdown-menu'
         this.itemSelector = options.itemSelector || 'a, label, button'
 
         // Bound handlers
@@ -2960,7 +2960,7 @@ class MenuDropdownNavigator {
         const dropdown = document.querySelector(this.dropdownSelector)
         if (!dropdown) return
 
-        const closeButton = App.getEl('menu-button-close')
+        const closeButton = App.getEl('dropdown-menu-toggle-button-close')
 
         // Right arrow: go to close button (only if currently in dropdown)
         if (event.key === 'ArrowRight') {
@@ -3471,7 +3471,7 @@ const applyNoAnimation = () => {
             .menu--animating .menu__background,
             .menu--animating .menu__email,
             .menu--animating .menu__link,
-            .menu--animating #menu-toggle`
+            .menu--animating #dropdown-menu-toggle`
     )
 
     for (let i = 0; i < elements.length; i++) {
@@ -3955,9 +3955,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* Initial Animation Control */
 
-    initMenuInitialAnimationWatcher()
-    initMenuTransitionWatcher()
-    initModalTransitionWatcher()
+    initializeMenuInitialAnimationWatcher()
+    initializeMenuTransitionWatcher()
+    initializeModalTransitionWatcher()
 
     /* Global Handlers Initialisation */
 
@@ -3997,7 +3997,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialise keyboard navigation for menu dropdown
     new MenuDropdownNavigator({
-        dropdownSelector: '#menu-dropdown',
+        dropdownSelector: '#dropdown-menu',
         itemSelector: 'a, label, button'
     })
 

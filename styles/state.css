@@ -5,7 +5,7 @@
 
 /* No fullscreen support */
 
-body.no-fullscreen #menu-dropdown-fullscreen,
+body.no-fullscreen #dropdown-menu-fullscreen,
 body.no-fullscreen .modal__fullscreen-button {
     display: none;
 }
@@ -50,7 +50,7 @@ body.no-fullscreen .modal__fullscreen-button {
     background-color: var(--highlight-secondary);
 }
 
-#mode:checked~main .menu__button {
+#mode:checked~main .dropdown-menu__button {
     background-color: var(--light-35);
     outline-color: transparent;
     border-color: var(--dark-20);
@@ -58,7 +58,7 @@ body.no-fullscreen .modal__fullscreen-button {
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-50);
 }
 
-#mode:checked~main #menu:target .menu__button {
+#mode:checked~main #menu:target .dropdown-menu__button {
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-25);
 }
 
@@ -80,82 +80,82 @@ body.no-fullscreen .modal__fullscreen-button {
     background-color: var(--highlight-primary);
 }
 
-#mode:checked~main #menu-toggle:hover .menu__button,
-#mode:checked~main #menu-toggle:focus-within .menu__button,
-#mode:checked~main #menu-toggle.tooltip-key--active .menu__button {
+#mode:checked~main #dropdown-menu-toggle:hover .dropdown-menu__button,
+#mode:checked~main #dropdown-menu-toggle:focus-within .dropdown-menu__button,
+#mode:checked~main #dropdown-menu-toggle.tooltip-key--active .dropdown-menu__button {
     background-color: var(--highlight-secondary);
 }
 
 
 /* Light mode - Menu dropdown */
 
-#mode:checked~main #menu-dropdown>div {
+#mode:checked~main #dropdown-menu>div {
     outline-color: transparent;
     border-color: var(--dark-20);
 }
 
-#mode:checked~main #menu-dropdown>div>*:first-child {
+#mode:checked~main #dropdown-menu>div>*:first-child {
     border-top: none;
 }
 
-#mode:checked~main #menu-dropdown>div>*:first-child:before {
+#mode:checked~main #dropdown-menu>div>*:first-child:before {
     border-radius: calc(var(--menu-border-radius) - max(1px, 0.0625rem)) calc(var(--menu-border-radius) - max(1px, 0.0625rem)) 0 0;
 }
 
-#mode:checked~main #menu-dropdown>div>*:last-child {
+#mode:checked~main #dropdown-menu>div>*:last-child {
     box-shadow: inset 0 max(1px, 0.0625rem) 0 0 var(--light-50), inset max(1px, 0.0625rem) 0 0 0 var(--light-50), inset min(-1px, -0.0625rem) 0 0 0 var(--light-50), inset 0 min(-1px, -0.0625rem) 0 0 var(--light-50);
 }
 
-#mode:checked~main #menu-dropdown>div>*:last-child:before {
+#mode:checked~main #dropdown-menu>div>*:last-child:before {
     border-radius: 0 0 calc(var(--menu-border-radius) - max(1px, 0.0625rem)) calc(var(--menu-border-radius) - max(1px, 0.0625rem));
 }
 
-#mode:checked~main #menu-dropdown a,
-#mode:checked~main #menu-dropdown label {
+#mode:checked~main #dropdown-menu a,
+#mode:checked~main #dropdown-menu label {
     border-color: var(--dark-20);
     box-shadow: inset 0 max(1px, 0.0625rem) 0 0 var(--light-50), inset max(1px, 0.0625rem) 0 0 0 var(--light-50), inset min(-1px, -0.0625rem) 0 0 0 var(--light-50);
     background-image: repeating-linear-gradient(135deg, var(--pattern-overlay), var(--pattern-overlay) 0.5rem, transparent 0.5rem, transparent 1rem);
 }
 
-#mode:checked~main #menu-dropdown a::before,
-#mode:checked~main #menu-dropdown label::before {
+#mode:checked~main #dropdown-menu a::before,
+#mode:checked~main #dropdown-menu label::before {
     /* 210, 50, 75 */
     background-image: linear-gradient(to right in oklch, rgba(137, 194, 206, 0.75), rgba(137, 194, 206, 0.15));
 }
 
-#mode:checked~main #menu-dropdown a::after,
-#mode:checked~main #menu-dropdown label::after {
+#mode:checked~main #dropdown-menu a::after,
+#mode:checked~main #dropdown-menu label::after {
     background-image: none;
 }
 
-#mode:checked~main #menu-dropdown a::before,
-#mode:checked~main #menu-dropdown label::before,
-#mode:checked~main #menu-dropdown a::after,
-#mode:checked~main #menu-dropdown label::after {
+#mode:checked~main #dropdown-menu a::before,
+#mode:checked~main #dropdown-menu label::before,
+#mode:checked~main #dropdown-menu a::after,
+#mode:checked~main #dropdown-menu label::after {
     left: 0;
     top: 0;
     bottom: 0;
 }
 
-#mode:checked~main #menu-dropdown label#menu-dropdown-debug::before,
-#mode:checked~main #menu-dropdown label#menu-dropdown-fullscreen::before {
+#mode:checked~main #dropdown-menu label#dropdown-menu-debug::before,
+#mode:checked~main #dropdown-menu label#dropdown-menu-fullscreen::before {
     /* 260, 100, 75 */
     background-image: linear-gradient(to right in oklch, rgba(166, 181, 255, 0.75), rgba(166, 181, 255, 0));
 }
 
-#mode:checked~main #menu-dropdown label#menu-dropdown-dark-mode::before {
+#mode:checked~main #dropdown-menu label#dropdown-menu-dark-mode::before {
     /* 300, 100, 75  */
     background-image: linear-gradient(to right in oklch, rgba(239, 153, 255, 0.75), rgba(107, 0, 118, 0));
 }
 
-#mode:checked~main #menu-dropdown a svg:nth-of-type(2) {
+#mode:checked~main #dropdown-menu a svg:nth-of-type(2) {
     background-color: var(--dark-15);
 }
 
 
 /* Light mode - Menu dropdown - Divider */
 
-#mode:checked~main #menu-dropdown hr {
+#mode:checked~main #dropdown-menu hr {
     border-top: solid max(1px, 0.0625rem) var(--dark-20);
     background-clip: padding-box;
     background-color: var(--dark-10);
@@ -164,19 +164,19 @@ body.no-fullscreen .modal__fullscreen-button {
 
 /* Light mode - Menu dropdown - Switch icon */
 
-#mode:not(:checked)~main #menu-dropdown label#menu-dropdown-light-mode {
+#mode:not(:checked)~main #dropdown-menu label#dropdown-menu-light-mode {
     display: flex;
 }
 
-#mode:checked~main #menu-dropdown label#menu-dropdown-light-mode {
+#mode:checked~main #dropdown-menu label#dropdown-menu-light-mode {
     display: none;
 }
 
-#mode:not(:checked)~main #menu-dropdown label#menu-dropdown-dark-mode {
+#mode:not(:checked)~main #dropdown-menu label#dropdown-menu-dark-mode {
     display: none;
 }
 
-#mode:checked~main #menu-dropdown label#menu-dropdown-dark-mode {
+#mode:checked~main #dropdown-menu label#dropdown-menu-dark-mode {
     display: flex;
 }
 
