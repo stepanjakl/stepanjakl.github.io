@@ -368,7 +368,12 @@ body.modal-open footer {
 #mode:checked~main .modal__content {
     outline: none;
     border-color: var(--modal-border-outer);
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-50);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--modal-border-inner);
+}
+
+#mode:checked~main #modal-archive .modal__content {
+    --modal-border-outer: var(--dark-20);
+    --modal-border-inner: var(--light-70);
 }
 
 #mode:checked~main .modal__close-button,
@@ -421,10 +426,6 @@ body.modal-archive-open #modal-archive .modal__content {
 
 #archive:target~main .modal-archive__timeline-section-title span {
     color: var(--text-2);
-}
-
-#mode:checked~main #modal-archive .modal__content::before {
-    background-color: var(--modal-bg-archive);
 }
 
 #mode:checked~main [data-carousel-nav] button {

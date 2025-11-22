@@ -946,7 +946,9 @@
 
 /* Content background */
 
-#modal-archive .modal__content::before {
+#modal-archive .modal__content {
+    --modal-border-outer: var(--dark-15);
+    --modal-border-inner: var(--light-20);
     background-image: var(--modal-bg-pattern);
     background-color: var(--modal-bg-archive);
     /* 210, 100, 20 */

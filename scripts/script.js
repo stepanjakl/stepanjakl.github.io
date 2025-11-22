@@ -158,6 +158,13 @@ function initializeMenuTransitionWatcher() {
  */
 let isAnyModalTransitionFinished = true
 
+/**
+ * Tracks whether wheel events are currently active or in motion.
+ * Used to prevent keyboard input during wheel scrolling.
+ */
+let isWheelEventActive = false
+let wheelEventTimer = null
+
 function initializeModalTransitionWatcher() {
     const modalEls = Array.from(document.querySelectorAll('.modal'))
     if (modalEls.length === 0) return
@@ -1049,7 +1056,7 @@ class KeyHandler {
                 closeDialog('#')
             }
         } else {
-            if (!isMenuInitialAnimationFinished || !isMenuDropdownTransitionFinished || !isAnyModalTransitionFinished) return
+            if (!isMenuInitialAnimationFinished || !isMenuDropdownTransitionFinished || !isAnyModalTransitionFinished || isWheelEventActive) return
             switch (key) {
                 case this.KEYS.KEY_P:
                     this.toggleDialog(event, NAVIGATION_HASHES.PROFILE, DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger)
@@ -1219,6 +1226,9 @@ class WheelHandler extends NavigationHandler {
     constructor() {
         super()
 
+        // Constants
+        this.WHEEL_SETTLE_DELAY = 200
+
         // Bound handlers
         this.boundHandleWheelEvent = this.handleWheelEvent.bind(this)
 
@@ -1229,6 +1239,17 @@ class WheelHandler extends NavigationHandler {
     // Event Handlers
 
     handleWheelEvent(event) {
+        // Mark wheel event as active
+        isWheelEventActive = true
+
+        // Clear existing timer and set new one to mark wheel as inactive
+        if (wheelEventTimer) {
+            clearTimeout(wheelEventTimer)
+        }
+        wheelEventTimer = setTimeout(() => {
+            isWheelEventActive = false
+        }, this.WHEEL_SETTLE_DELAY)
+
         if (!isMenuInitialAnimationFinished || !isMenuDropdownTransitionFinished || !isAnyModalTransitionFinished) return
 
         const deltaX = Math.abs(event.deltaX)

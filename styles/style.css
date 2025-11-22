@@ -590,21 +590,14 @@ body, main {
     border: solid max(1px, 0.0625rem) var(--modal-border-inner);
     border-radius: var(--segment-eighth) calc((var(--modal-button-border-radius) + var(--modal-button-inset)) + min(-1px, -0.0625rem)) var(--segment-eighth) var(--segment-eighth);
     overflow: clip;
+    background-image: var(--modal-bg-pattern), linear-gradient(to bottom right in oklch, var(--modal-bg-blur));
+    background-repeat: repeat;
+    background-position: 100% 0%;
+    background-clip: padding-box;
 }
 
 .modal__content>* {
     transform: translateY(calc((var(--segment) / 5) * -1));
-}
-
-.modal__content::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: var(--modal-bg-pattern), linear-gradient(to bottom right in oklch, var(--modal-bg-blur));
-    background-repeat: repeat;
-    background-origin: content-box;
-    background-position: 100% 0%;
-    z-index: -1;
 }
 
 @media (min-width: 45rem) {
