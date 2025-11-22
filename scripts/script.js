@@ -2010,6 +2010,9 @@ class Popup {
                 returnFocusTo: this.triggeringElement,
                 initialFocus: false // We'll focus video manually below
             })
+        } else {
+            // Update return focus target for reused focus trap instance
+            this.focusTrap.returnFocusTo = this.triggeringElement
         }
         this.focusTrap.activate()
 
@@ -4093,19 +4096,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const EMAIL = 'stepan.jakl@icloud.com'
 
     // Feature detection: test if console supports CSS margin/padding
-    // More reliable than UA sniffing which breaks with browser updates
-    const testStyle = 'margin: 1px;'
-    let supportsSpacing = false
+    // Safari (WebKit without Chrome) doesn't support margin/padding in console styling
+    // This checks for WebKit-specific features while excluding Chromium browsers
+    let supportsSpacing = true
 
     try {
-        // If margin is preserved in the style string, spacing is supported
-        const tempDiv = document.createElement('div')
-        tempDiv.style.cssText = testStyle
-        supportsSpacing = tempDiv.style.margin !== ''
+        // Check if this is a WebKit browser (Safari, older Edge)
+        const isWebKit = 'WebkitAppearance' in document.documentElement.style
+
+        // Check if this is Chrome/Chromium (which does support console spacing)
+        const isChrome = !!window.chrome
+
+        // Safari is WebKit but not Chrome
+        supportsSpacing = !isWebKit || isChrome
     } catch (e) {
-        // Fallback to simple detection if feature test fails
-        supportsSpacing = false
+        // Fallback to true (assume support) if feature test fails
+        supportsSpacing = true
     }
+
 
     if (supportsSpacing) {
         // Bordered box style with padding and margin (Chrome, Firefox, Edge)

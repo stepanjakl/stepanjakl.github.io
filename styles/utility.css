@@ -207,3 +207,8 @@ body {
     font-weight: 500;
     vertical-align: middle;
 }
+
+.mid::before {
+    content: '\00A0';
+    display: inline;
+}
