@@ -7,7 +7,6 @@
  * https://github.com/stepanjakl/stepanjakl.github.io/blob/main/LICENSE
  */
 
-
 // ============================================================================
 // Utility Functions
 // ============================================================================
@@ -15,12 +14,11 @@
 /** Detect if device supports touch input */
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
 
-/**
- * Debounce function - limits how often a function can be called
- * @param {Function} func - The function to debounce
- * @param {number} wait - Time in milliseconds to wait before calling
- * @returns {Function} Debounced function
- */
+// Debounce function - prevents excessive function calls during rapid events
+// Used for resize handlers and other high-frequency events to reduce overhead
+// @param {Function} func - The function to debounce
+// @param {number} wait - Time in milliseconds to wait before calling
+// @returns {Function} Debounced function
 function debounce(func, wait) {
     let timeout
     return function executedFunction(...args) {
@@ -35,7 +33,9 @@ function debounce(func, wait) {
 
 /**
  * Double requestAnimationFrame helper - ensures callback runs after browser paint
- * Useful for DOM changes that need to sync with layout/paint cycle
+ * Necessary because single rAF can execute before paint in some browsers
+ * Used for visual updates that must happen after layout is complete
+ * Note: Also duplicated in dialog.js to keep that file standalone/reusable
  * @param {Function} callback - Function to execute after paint
  */
 function afterPaint(callback) {
@@ -64,15 +64,7 @@ function parseHash(hash = window.location.hash) {
 }
 
 
-/**
- * Get appropriate scroll behaviour based on user's motion preferences
- * Respects prefers-reduced-motion setting for accessibility
- * @returns {string} 'auto' if reduced motion is preferred, 'smooth' otherwise
- */
-function getScrollBehavior() {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    return prefersReducedMotion ? 'auto' : 'smooth'
-}
+
 
 
 // ============================================================================
@@ -80,9 +72,9 @@ function getScrollBehavior() {
 // ============================================================================
 
 /**
- * Tracks the completion of the menu background's initial animation.
- * Used to block interactions (keyboard, gestures, navigation) until
- * the animation fully finishes on first load.
+ * Tracks the completion of the menu background's initial animation
+ * Prevents jarring interruptions if user interacts before animation completes
+ * Blocking interactions during initial animation ensures smooth first impression
  */
 let isMenuInitialAnimationFinished = false
 
@@ -107,7 +99,8 @@ function initializeMenuInitialAnimationWatcher() {
 
 /**
  * Attaches listeners to an element and tracks whether it is currently
- * transitioning a specific CSS property (default: transform).
+ * transitioning a specific CSS property (default: transform)
+ * Prevents overlapping transitions which cause visual glitches
  */
 function createTransitionWatcher(element, prop = 'transform', onChange) {
     if (!element) return () => true
@@ -136,8 +129,8 @@ function createTransitionWatcher(element, prop = 'transform', onChange) {
 }
 
 /**
- * Tracks whether the menu dropdown element is currently transitioning.
- * Useful for preventing overlapping animations or input during movement.
+ * Tracks whether the menu dropdown element is currently transitioning
+ * Prevents user input from triggering conflicting animations mid-transition
  */
 let isMenuDropdownTransitionFinished = true
 
@@ -152,15 +145,16 @@ function initializeMenuTransitionWatcher() {
 }
 
 /**
- * Tracks transition activity across all modal elements.
- * Ensures interactions and UI updates wait until all modals have fully
- * completed their open/close transitions.
+ * Tracks transition activity across all modal elements
+ * Prevents keyboard/wheel inputs during transitions to avoid state conflicts
+ * Multiple modals checked because profile/archive can switch without closing
  */
 let isAnyModalTransitionFinished = true
 
 /**
- * Tracks whether wheel events are currently active or in motion.
- * Used to prevent keyboard input during wheel scrolling.
+ * Tracks whether wheel events are currently active or in motion
+ * Prevents keyboard shortcuts from firing while user is actively scrolling
+ * Avoids confusing modal switches mid-scroll gesture
  */
 let isWheelEventActive = false
 let wheelEventTimer = null
@@ -443,10 +437,16 @@ const DIALOG_CONFIG = Object.freeze({
     }
 })
 
-/** Popup link selector for media files */
+/**
+ * Popup link selector for media files
+ * Targets only external links to prevent intercepting internal navigation
+ */
 const POPUP_LINK_SELECTOR = 'a[target="_blank"][href$=".mp4"], a[target="_blank"][href$=".png"], a[target="_blank"][href$=".jpg"], a[target="_blank"][href$=".svg"]'
 
-/** Data attribute for tracking touch button primed state */
+/**
+ * Data attribute for tracking touch button primed state
+ * Two-tap pattern prevents accidental activations on touch devices
+ */
 const TOUCH_PRIMED_ATTRIBUTE = 'data-touch-primed'
 
 /** CSS class names for device and feature detection */
@@ -455,7 +455,10 @@ const DEVICE_CLASSES = Object.freeze({
     NO_FULLSCREEN: 'no-fullscreen'
 })
 
-/** Shared CSS class names for horizontal scrolling components */
+/**
+ * Shared CSS class names for horizontal scrolling components
+ * Frozen to prevent accidental modification and enable minification
+ */
 const SCROLL_CLASSES = Object.freeze({
     DRAGGING: 'x-drag-scroll--dragging',
     MOUSE_DOWN: 'x-drag-scroll--mouse-down',
@@ -470,7 +473,8 @@ const modalElementCache = {
 
 /**
  * Get modal element with caching
- * Shared utility used by WheelHandler and TouchHandler
+ * Shared by WheelHandler and TouchHandler to avoid duplicate queries
+ * Lazy caching pattern ensures minimal overhead during page load
  * @param {string} hash - Navigation hash (e.g., '#profile')
  * @returns {HTMLElement|null} Cached modal element or null if not found
  */
@@ -490,14 +494,17 @@ const getModalElement = (hash) => {
 
 /**
  * Application namespace for global state and utilities
- * Initialised early to provide getEl helper for ThemeManager
- * Full API populated later after all classes are defined
+ * Used instead of modules to maintain vanilla JS with no build step
+ * Initialised early to provide getEl helper for ThemeManager which runs on parse
+ * Full API populated later after all class definitions are complete
  */
 window.App = window.App || {}
 App._elCache = App._elCache || {}
 
 /**
- * Get element by ID with caching. Accepts either an ID string or an element.
+ * Get element by ID with caching to reduce repeated DOM queries
+ * Accepts either an ID string or an element reference for flexibility
+ * Used throughout the application to centralise element retrieval
  * @param {string|HTMLElement} idOrEl - Element ID or element reference
  * @returns {HTMLElement|null} Cached DOM element or null if not found
  */
@@ -508,10 +515,11 @@ App.getEl = App.getEl || ((idOrEl) => {
 })
 
 /**
- * Helper to activate (click) an element by ID and optionally focus another element.
- * Intended for use from inline handlers to keep logic centralised and consistent.
+ * Helper to activate (click) an element by ID and optionally focus another element
+ * Intended for use from inline HTML handlers to centralise interaction logic
+ * Keeps programmatic clicks consistent and avoids duplication across inline events
  * @param {string} clickId - ID of element to .click()
- * @param {string|null} focusId - ID of element to .focus()
+ * @param {string|null} focusId - ID of element to .focus() after click
  */
 App.keyActivate = (clickId, focusId = null) => {
     const el = App.getEl(clickId)
@@ -524,7 +532,7 @@ App.keyActivate = (clickId, focusId = null) => {
     }
 }
 
-// Public API methods (populated later, called from HTML)
+// Public API methods (populated later during DOMContentLoaded, called from HTML inline handlers)
 App.timeline = null
 App.textHighlighter = null
 App.popupInstance = null
@@ -534,7 +542,19 @@ App.positionTimeline = null
 App.handleTouchButtonClick = null
 App.toggleFullscreen = null
 
-// Timeline focus trap (populated by setupTimelineFocusTrap)
+/**
+ * Get appropriate scroll behaviour based on user's motion preferences
+ * Respects prefers-reduced-motion for users with vestibular disorders
+ * Falling back to instant scroll prevents triggering motion sickness
+ * Moved to App namespace to avoid duplication with timeline.js
+ * @returns {string} 'auto' if reduced motion is preferred, 'smooth' otherwise
+ */
+App.getScrollBehavior = () => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    return prefersReducedMotion ? 'auto' : 'smooth'
+}
+
+// Timeline focus trap API (populated by setupTimelineFocusTrap during modal initialization)
 App.timelineFocusTrap = null
 App.isTimelineSkipLinkActivated = null
 App.exitTimelineFocusTrap = null
@@ -624,8 +644,8 @@ class ThemeManager {
     }
 
     /**
-     * Temporarily disable all transitions during theme switch for instant change.
-     * Re-enables transitions after a single frame to allow normal animations.
+     * Temporarily disable all transitions during theme switch for instant change
+     * Re-enables transitions after a single frame to allow normal animations
      */
     disableTransitionsDuringSwitch() {
         const html = document.documentElement
@@ -686,7 +706,8 @@ const ResizeManager = {
 
     /**
      * Initialise the debounced resize listener
-     * Called once on first handler registration
+     * Called once on first handler registration to avoid setup overhead
+     * Single shared listener reduces event handler overhead vs. multiple addEventListener calls
      */
     init() {
         const handleResize = debounce(() => {
@@ -711,7 +732,8 @@ const ResizeManager = {
 
 /**
  * Initialise 3D transform effect for modal profile footer art based on scroll
- * Event listeners persist for page lifetime per YAGNI principle
+ * Event listeners persist for page lifetime per Y AGN I - no need for cleanup
+ * Transform updates are GPU-accelerated so performance impact is negligible
  */
 function initializeModalFooterArt() {
     const footerArtWrapper = document.querySelector('.modal-profile__footer-art')
@@ -740,7 +762,8 @@ function initializeModalFooterArt() {
 
 /**
  * Register lifecycle hooks for modal dialogs
- * This connects the generic dialog.js with project-specific initialisation/cleanup
+ * Connects generic dialog.js system with project-specific modal behaviour
+ * Allows modals to have custom initialisation/cleanup without modifying dialog.js
  */
 function registerDialogLifecycleHooks() {
     // Ensure aria is available before registering hooks
@@ -1538,7 +1561,7 @@ class HorizontalEdgeScroller {
             requestAnimationFrame(() => {
                 this.element.scrollTo({
                     left: activeSlide.offsetLeft,
-                    behavior: getScrollBehavior()
+                    behavior: App.getScrollBehavior()
                 })
             })
         }
@@ -2731,7 +2754,7 @@ class Carousel {
 
     scrollToSlide(slideEl) {
         if (slideEl) {
-            slideEl.scrollIntoView({ behavior: getScrollBehavior(), block: 'nearest', inline: 'start' })
+            slideEl.scrollIntoView({ behavior: App.getScrollBehavior(), block: 'nearest', inline: 'start' })
         }
     }
 
@@ -3257,7 +3280,7 @@ App.initializeTimeline = (startObserver = true) => {
     let dragScroll = null
 
     /**
-    * Initialise horizontal scrollers for timeline navigation
+     * Initialise horizontal scrollers for timeline navigation
      * Called after timeline is positioned in its final location
      */
     const initializeTimelineScrollers = () => {
@@ -3643,8 +3666,19 @@ function initializeClickHandlers() {
     if (nameElement && nameTooltip) {
         nameElement.onclick = function (event) {
             App.handleTouchButtonClick(this, event, () => {
-                copyToClipboard('Štěpán Jákl')
-                App.textHighlighter.highlightAndCopyText(event, nameTooltip, this, 'Copied to the clipboard')
+                const successful = copyToClipboard('Štěpán Jákl')
+                if (successful) {
+                    App.textHighlighter.highlightAndCopyText(event, nameTooltip, this, 'Copied to the clipboard')
+
+                    // Announce to screen readers
+                    const nameStatus = document.getElementById('name-copy-status')
+                    if (nameStatus) {
+                        nameStatus.textContent = 'Name copied to clipboard'
+                        setTimeout(() => {
+                            nameStatus.textContent = ''
+                        }, 3000)
+                    }
+                }
             }, true)
         }
     }
@@ -3994,7 +4028,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeTimezoneDisplay()
     initializeTimelineSectionToggles()
 
-    // Initialise carousels
+    /* Carousel Initialisation */
+
+    // C-style loop used because index is required for generating unique IDs
+    // Pattern: for...of used for simple iteration, C-style when index needed
     const carouselElements = document.querySelectorAll('[data-carousel]')
     for (let i = 0; i < carouselElements.length; i++) {
         new Carousel({ id: `carousel-${i + 1}`, element: carouselElements[i] })
@@ -4040,7 +4077,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /**
  * Display styled welcome message in browser console
  * Uses green-lime colour scheme with margin/padding/border for supporting browsers
- * Browsers without spacing support get separate log statements
+ * Falls back to simpler styling if CSS margin/padding in console is unsupported
  */
 (function () {
     // Theme Colours
@@ -4055,8 +4092,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const LINE_4 = 'Interested in working together? Reach out via email at'
     const EMAIL = 'stepan.jakl@icloud.com'
 
-    // Browser Feature Detection
-    const supportsSpacing = !navigator.userAgent.includes('Safari') || navigator.userAgent.includes('Chrome')
+    // Feature detection: test if console supports CSS margin/padding
+    // More reliable than UA sniffing which breaks with browser updates
+    const testStyle = 'margin: 1px;'
+    let supportsSpacing = false
+
+    try {
+        // If margin is preserved in the style string, spacing is supported
+        const tempDiv = document.createElement('div')
+        tempDiv.style.cssText = testStyle
+        supportsSpacing = tempDiv.style.margin !== ''
+    } catch (e) {
+        // Fallback to simple detection if feature test fails
+        supportsSpacing = false
+    }
 
     if (supportsSpacing) {
         // Bordered box style with padding and margin (Chrome, Firefox, Edge)

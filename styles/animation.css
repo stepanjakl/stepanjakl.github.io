@@ -93,7 +93,7 @@ body {
 }
 
 
-/* Intro - Footer - Rectangle */
+/* Intro footer rectangle */
 
 footer>* {
     animation-name: fade-in-opacity;
@@ -166,7 +166,7 @@ footer>* {
 }
 
 
-/* Intro - Footer - Squares */
+/* Intro footer squares */
 
 .intro__footer-square-1 {
     animation-name: square-blink;
@@ -205,7 +205,7 @@ footer>* {
 }
 
 
-/* Intro - Background */
+/* Intro background pattern */
 
 .bg-pattern {
     animation-name: fade-in-opacity;
@@ -216,7 +216,7 @@ footer>* {
 }
 
 
-/* Intro - Logo */
+/* Intro logo */
 
 .intro__logo--animating {
     animation-name: logo-animate;
@@ -238,7 +238,7 @@ footer>* {
 }
 
 
-/* Intro - Text */
+/* Intro text */
 
 .intro__name--animating .intro__name-frame>p,
 .intro__title--animating>p {
@@ -304,7 +304,7 @@ footer>* {
 }
 
 
-/* Intro - Text de-highlight */
+/* Intro text de-highlight */
 
 .intro__title--animating .intro__animated-text span:hover {
     color: var(--highlight-primary) !important;
@@ -356,7 +356,7 @@ footer>* {
 }
 
 
-/* Intro - CTA blocks */
+/* Intro CTA blocks */
 
 .availability--animating .availability__background {
     animation-name: cta-1-animate-init;
@@ -427,7 +427,7 @@ footer>* {
 }
 
 
-/* Intro - Background triangle */
+/* Intro background triangle */
 
 .bg-triangle {
     animation-name: fade-in-opacity;
@@ -1208,7 +1208,7 @@ body {
 }
 
 #dropdown-menu label#dropdown-menu-light-mode::before {
-    /* 75, 100, 85  */
+    /* Gradient colour stops: HSL(75, 100, 85) */
     background-image: linear-gradient(to right in oklch, rgba(238, 213, 0, 0.75), rgba(238, 213, 0, 0));
 }
 
@@ -1218,7 +1218,7 @@ body {
 
 #dropdown-menu label#dropdown-menu-debug::before,
 #dropdown-menu label#dropdown-menu-fullscreen::before {
-    /* 260, 100, 45 */
+    /* Gradient colour stops: HSL(260, 100, 45) */
     background-image: linear-gradient(to right in oklch, rgba(0, 95, 241, 0.75), rgba(0, 95, 241, 0));
 }
 
@@ -1300,7 +1300,7 @@ body.modal-profile-open footer>div {
 }
 
 
-/* Modals - Archive */
+/* Modals archive */
 
 .modal-archive__timeline-grid [data-timeline-section-title]>div svg {
     transition: color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, border var(--animate-out-segment-2\/3) linear;
@@ -1323,7 +1323,7 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:focus {
 }
 
 
-/* Modals - Archive - Horizontal timeline */
+/* Modals archive horizontal timeline */
 
 #horizontal-timeline {
     transition: opacity var(--animate-out-segment) linear, transform var(--animate-out-segment) var(--ease-in-quad);
@@ -1339,7 +1339,7 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:focus {
 }
 
 
-/* Modals - Archive - Carousel */
+/* Modals archive carousel */
 
 [data-carousel-nav] {
     transition: border-radius var(--animate-out-segment) var(--ease-in-quad), column-gap var(--animate-out-segment) var(--ease-in-quad), padding var(--animate-out-segment) var(--ease-in-quad), margin var(--animate-out-segment) var(--ease-in-quad);
@@ -1404,7 +1404,7 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:focus {
 }
 
 
-/* Modals - Close button */
+/* Modals close button */
 
 .modal__close-button, .modal__close-button svg,
 .modal__fullscreen-button, .modal__fullscreen-button svg {
@@ -1424,7 +1424,7 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:focus {
 }
 
 
-/* Modal - Profile - Triangle */
+/* Modal profile triangle */
 
 #profile:target~main .bg-triangle::before {
     --tri-s-0: rgba(0, 45, 15, 0);
@@ -1482,7 +1482,7 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:focus {
 }
 
 
-/* Modal - Profile - Footer art */
+/* Modal profile footer art */
 
 .modal-profile__footer-art-gradient {
     opacity: 0;
@@ -1561,7 +1561,7 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:focus {
 }
 
 
-/* Prevent 'Flash of Unstyled Content' (FOUC) - END */
+/* Prevent Flash of Unstyled Content (FOUC) */
 
 main {
     opacity: 1;

@@ -1,5 +1,7 @@
 /*
  * Style
+ *
+ * Tool references:
  * Font sizing: https://seek-oss.github.io/capsize/
  * Base64 embed fonts: https://amio.github.io/embedded-google-fonts/
  * Icons: https://fonts.google.com/icons?icon.style=Sharp
@@ -14,7 +16,7 @@
  */
 
 :root {
-    /* Breakpoints */
+    /* Responsive breakpoints */
     --breakpoint-xs: 30rem;
     --breakpoint-sm: 45rem;
     --breakpoint-md: 60rem;
@@ -65,7 +67,7 @@ main>figure {
     pointer-events: none;
 }
 
-/* Dark mode (default) */
+/* Typography */
 
 main {
     font-family: 'Bai Jamjuree', sans-serif;
@@ -75,7 +77,7 @@ body, html {
     background-color: var(--background);
 }
 
-/* Experimental CSS property for rounded corners */
+/* Experimental CSS property for rounded corners using superellipse curve */
 
 *, *::before, *::after {
     corner-shape: superellipse(1.15);
@@ -101,7 +103,7 @@ body, html {
 .sr-only-focusable,
 .sr-only-focusable:focus,
 .sr-only-focusable:active {
-    /* For screen readers and keyboard navigation only - never visible */
+    /* Hidden from visual display but accessible to screen readers and keyboard navigation */
     position: absolute !important;
     width: 1px !important;
     height: 1px !important;
@@ -115,7 +117,7 @@ body, html {
 }
 
 
-/* Root font-size */
+/* Root font size */
 
 :root {
     font-size: 0.75rem;
@@ -150,8 +152,9 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale; */
+    /* Font smoothing disabled to prevent blurry text rendering on Windows Chrome */
+    /* -webkit-font-smoothing: antialiased; */
+    /* -moz-osx-font-smoothing: grayscale; */
 }
 
 body, main {
@@ -217,7 +220,7 @@ body, main {
 }
 
 
-/* Intro - Left Column */
+/* Intro left column */
 
 .intro__left {
     display: flex;
@@ -327,7 +330,7 @@ body, main {
 }
 
 
-/* Intro - Logo */
+/* Intro logo */
 
 .intro__logo {
     user-select: none;
@@ -344,7 +347,7 @@ body, main {
 }
 
 
-/* Intro - Right Column */
+/* Intro right column */
 
 .intro__right {
     display: flex;
@@ -400,7 +403,6 @@ body, main {
     padding: 0.0624375rem 0.625rem 0 0.625rem;
     margin: 0 -0.625rem;
     letter-spacing: 0.046875rem;
-    /* font-variation-settings: "opsz" 24; */
 }
 
 @media (min-width: 45rem) {
@@ -423,7 +425,7 @@ body, main {
 }
 
 
-/* Intro - Right Column - Availability */
+/* Intro right column availability */
 
 .availability {
     --availability-border-radius: 0.75rem;
@@ -543,7 +545,7 @@ body, main {
 }
 
 
-/* Modal - Container */
+/* Modal container */
 
 .modal {
     position: fixed;
@@ -554,7 +556,7 @@ body, main {
     overflow: hidden;
     scroll-behavior: smooth;
     overscroll-behavior: none;
-    /* CSS containment for performance - isolate rendering from rest of page */
+    /* CSS containment optimisation: isolates rendering to improve performance */
     contain: layout style paint;
 }
 
@@ -576,7 +578,7 @@ body, main {
     }
 }
 
-/* Modal - Content Wrapper */
+/* Modal content wrapper */
 
 .modal__content {
     display: flex;
@@ -630,7 +632,7 @@ body, main {
     }
 }
 
-/* Modal - Body */
+/* Modal body */
 
 .modal__body {
     --modal-margin-bottom: var(--segment-half);
@@ -651,7 +653,7 @@ body, main {
 }
 
 
-/* Modal - Control Buttons */
+/* Modal control buttons */
 
 body {
     --modal-button-size: 2.75rem;
@@ -742,7 +744,7 @@ body {
 }
 
 
-/* Horizontal Drag Scroll */
+/* Horizontal drag scroll behaviour */
 
 .x-drag-scroll--mouse-down {
     cursor: grabbing !important;
@@ -857,7 +859,7 @@ body {
 }
 
 
-/* Side Background Shapes */
+/* Side background shapes */
 
 .bg-triangle {
     visibility: hidden;
@@ -881,7 +883,7 @@ body {
     position: absolute;
     left: 50vh;
     top: 0;
-    height: calc(70.710678118655vh + 16vh);
+    height: calc(70.710678118655vh + 16vh); /* Diagonal length calculation: 50√2 ≈ 70.71vh for 45° rotation */
     width: 8vh;
     transform: rotate(45deg) translateY(-8vh);
     transform-origin: top left;
@@ -906,7 +908,6 @@ body {
     position: absolute;
     right: 0;
     top: 0;
-    /* height: calc(2 * 70.710678118655vh); */
     width: 8vh;
     transform: rotate(45deg);
     transform-origin: top right;
@@ -916,10 +917,7 @@ body {
 .bg-triangle--right::after {
     content: "";
     position: absolute;
-    /* top: calc(2 * 14.6446609406725vh); */
     right: 0;
-    /* height: calc(2 * 70.710678118655vh); */
-    /* width: calc(2 * 70.710678118655vh); */
     transform-origin: center;
     transform: translateX(50%) rotate(45deg);
     background-image: linear-gradient(to top in oklch, var(--triangle));
@@ -927,10 +925,14 @@ body {
 }
 
 
-/* Background Triangle - Gradient Transitions */
+/*
+ * Background triangle gradient transitions
+ * CSS @property declarations enable smooth colour transitions for gradient stops
+ * Each property represents a stop in an eased gradient using easing-gradient.com methodology
+ */
 
 body {
-    /* Triangle transition patterns */
+    /* Triangle transition patterns with staggered timing for smooth visual transitions */
     --transition-triangle-profile: 0.6s var(--ease-in-out-quad) 0.3s;
     --transition-triangle-base: 0.4s var(--ease-in-quad);
     --transition-triangle-stripe: 0.2s linear;
@@ -1174,7 +1176,7 @@ body {
     background-color: var(--context-bg);
     background-image:
         radial-gradient(circle at 0.046875rem 0.046875rem, var(--tooltip-bg) 0.046875rem, transparent 0.046875rem),
-        radial-gradient(circle at 0.046875rem 0.046875rem, var(--tooltip-bg) 0.046875rem, transparent 0.046875rem);
+        radial-gradient(circle at 0.046875rem 0.046875rem, var(--tooltip-bg) 0.046875rem, transparent 0.046875rem); /* Dotted pattern background */
     background-size: 0.5rem 0.5rem;
     background-position: 0.0625rem 0.046875rem, 0.3125rem 0.296875rem;
     background-repeat: repeat;
@@ -1223,7 +1225,7 @@ body {
     margin-top: 0.625rem;
 }
 
-/* Tooltip - Active */
+/* Tooltip active state */
 
 .tooltip .tooltip__text--active {
     padding: 0.375rem 0.5rem;
@@ -1291,8 +1293,7 @@ footer::before {
     position: absolute;
     z-index: -1;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0, 20, 23, 0) 0%, rgba(0, 20, 23, 0.000296296) 0.03%, rgba(0, 20, 23, 0.00237037) 0.24%, rgba(0, 20, 23, 0.008) 0.8%, rgba(0, 20, 23, 0.018963) 1.9%, rgba(0, 20, 23, 0.037037) 3.7%, rgba(0, 20, 23, 0.064) 6.4%, rgba(0, 20, 23, 0.10163) 10.16%, rgba(0, 20, 23, 0.151704) 15.17%, rgba(0, 20, 23, 0.216) 21.6%, rgba(0, 20, 23, 0.296296) 29.63%, rgba(0, 20, 23, 0.39437) 39.44%, rgba(0, 20, 23, 0.512) 51.2%, rgba(0, 20, 23, 0.650963) 65.1%, rgba(0, 20, 23, 0.813037) 81.3%, #001417 100%);
-    /* 0.00, 0.00, 0.00, 1.00 */
+    background: linear-gradient(180deg, rgba(0, 20, 23, 0) 0%, rgba(0, 20, 23, 0.000296296) 0.03%, rgba(0, 20, 23, 0.00237037) 0.24%, rgba(0, 20, 23, 0.008) 0.8%, rgba(0, 20, 23, 0.018963) 1.9%, rgba(0, 20, 23, 0.037037) 3.7%, rgba(0, 20, 23, 0.064) 6.4%, rgba(0, 20, 23, 0.10163) 10.16%, rgba(0, 20, 23, 0.151704) 15.17%, rgba(0, 20, 23, 0.216) 21.6%, rgba(0, 20, 23, 0.296296) 29.63%, rgba(0, 20, 23, 0.39437) 39.44%, rgba(0, 20, 23, 0.512) 51.2%, rgba(0, 20, 23, 0.650963) 65.1%, rgba(0, 20, 23, 0.813037) 81.3%, #001417 100%); /* Eased gradient for smooth fade transition */
 }
 
 footer>div {
@@ -1356,7 +1357,7 @@ footer>div>div {
 }
 
 
-/* Images - Dark mode */
+/* Image brightness adjustment for dark mode */
 
 @media (prefers-color-scheme: dark) {
 
@@ -1368,7 +1369,7 @@ footer>div>div {
 }
 
 
-/* Lazy Loading Images */
+/* Lazy loading images with fade-in transition */
 
 [loading="lazy"] {
     opacity: 0;

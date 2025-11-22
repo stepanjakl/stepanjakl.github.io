@@ -11,15 +11,8 @@
 // Utility Functions
 // ============================================================================
 
-/**
- * Get appropriate scroll behaviour based on user's motion preferences
- * Respects prefers-reduced-motion setting for accessibility
- * @returns {string} 'auto' if reduced motion is preferred, 'smooth' otherwise
- */
-function getScrollBehavior() {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    return prefersReducedMotion ? 'auto' : 'smooth'
-}
+// Utility imported from App namespace (defined in script.js)
+// App.getScrollBehavior() - Respects prefers-reduced-motion for accessibility
 
 // ============================================================================
 // HorizontalTimeline Custom Element
@@ -27,7 +20,7 @@ function getScrollBehavior() {
 
 /**
  * <horizontal-timeline>
- * Self-contained Custom Element that renders a horizontal timeline with labels and indicator bars.
+ * Self-contained custom element that renders a horizontal timeline with labels and indicator bars.
  *
  * Features:
  * - Keeps active label centred horizontally when sections intersect viewport
@@ -39,8 +32,8 @@ function getScrollBehavior() {
  * Usage:
  *   const timeline = document.createElement('horizontal-timeline')
  *   timeline.labels = ['2024-21', '2021-19', '2019-18', 'elsewhen']
- *   timeline.hashPrefix = '#archive'  // optional, defaults to '#archive'
- *   timeline.scrollOffset = 24        // optional, defaults to 24
+ *   timeline.hashPrefix = '#archive'  // Optional, defaults to '#archive'
+ *   timeline.scrollOffset = 24        // Optional, defaults to 24
  *   container.appendChild(timeline)
  *   timeline.startIntersectionObserver()
  *
@@ -54,34 +47,34 @@ function getScrollBehavior() {
  */
 class HorizontalTimeline extends HTMLElement {
     /**
-    * Index of the first "main" indicator (centred above the first label).
+     * Index of the first "main" indicator (centred above the first label)
      *
      * HTML Structure Explanation:
      * The timeline HTML is generated with a specific pattern of divs representing vertical bars:
      * - 2 decorative divs at the start (left edge indicators)
-    * - For each label: 5 divs (pattern: small, centred main bar, small, small, small)
+     * - For each label: 5 divs (pattern: small, centred main bar, small, small, small)
      * - 1 final decorative div at the end (right edge indicator)
      *
      * Index breakdown (0-based):
      * [0] = First decorative div (left edge)
      * [1] = Second decorative div (left edge fade)
      * [2] = First label's leading small bar
-    * [3] = First label's CENTRED MAIN BAR ← This is what we need!
+     * [3] = First label's CENTRED MAIN BAR ← This is what we need!
      * [4] = First label's trailing small bar
      * ...and so on for subsequent labels
      *
-    * This constant (3) points to the centred main bar above the first label,
-     * which is marked as "active" when that timeline section is visible.
-     * See CSS selector: `#timeline div:nth-child(6n + 4)` for 66.67% height bars.
+     * This constant (3) points to the centred main bar above the first label,
+     * which is marked as "active" when that timeline section is visible
+     * See CSS selector: `#timeline div:nth-child(6n + 4)` for 66.67% height bars
      */
     static TIMELINE_FIRST_INDICATOR_INDEX = 3
 
     /**
-     * Number of indicator divs per label group.
+     * Number of indicator divs per label group
      *
      * Pattern per label (6 divs total):
      * [0] = Small bar (left padding)
-    * [1] = Medium-tall bar (centred - the "main" indicator at nth-child(6n+4))
+     * [1] = Medium-tall bar (centred - the "main" indicator at nth-child(6n+4))
      * [2] = Small bar
      * [3] = Small bar
      * [4] = Small bar
@@ -91,11 +84,11 @@ class HorizontalTimeline extends HTMLElement {
      * we use: TIMELINE_FIRST_INDICATOR_INDEX + (labelIndex * TIMELINE_INDICATORS_PER_LABEL)
      *
      * Example for label index 2:
-    * 3 + (2 × 6) = 3 + 12 = 15 (the centred bar above the 3rd label)
+     * 3 + (2 × 6) = 3 + 12 = 15 (the centred bar above the 3rd label)
      *
      * This constant ensures the calculation stays in sync with the HTML generation
      * in the render() method, which creates exactly 6 divs per label with specific
-     * data-value attributes for click/hover handling.
+     * data-value attributes for click/hover handling
      */
     static TIMELINE_INDICATORS_PER_LABEL = 6
 
@@ -238,11 +231,11 @@ class HorizontalTimeline extends HTMLElement {
     // ========================================================================
 
     /**
-    * Smoothly scroll horizontally to centre a child element within its parent.
-     * Returns a Promise that resolves when scrolling completes.
+     * Smoothly scroll horizontally to centre a child element within its parent
+     * Returns a Promise that resolves when scrolling completes
      *
      * @param {HTMLElement} parent - Scrollable container
-    * @param {HTMLElement} child - Element to centre
+     * @param {HTMLElement} child - Element to centre
      * @returns {Promise<void>}
      */
     scrollParentToChildCenterHorizontal(parent, child) {
@@ -282,13 +275,13 @@ class HorizontalTimeline extends HTMLElement {
 
             parent.scroll({
                 left: initialScrollLeft + scrollAmount,
-                behavior: getScrollBehavior()
+                behavior: App.getScrollBehavior()
             })
         })
     }
 
     /**
-     * Scroll vertically to reveal a child element with an offset from the top.
+     * Scroll vertically to reveal a child element with an offset from the top
      *
      * @param {HTMLElement} parent - Scrollable container
      * @param {HTMLElement} child - Element to scroll into view
@@ -301,8 +294,8 @@ class HorizontalTimeline extends HTMLElement {
         const childRect = child.getBoundingClientRect()
         const scrollAmount = childRect.top - parentRect.top - this.scrollOffset
 
-        // Use getScrollBehavior() if no explicit behaviour provided
-        const behavior = scrollBehavior || getScrollBehavior()
+        // Use App.getScrollBehavior() if no explicit behaviour provided
+        const behavior = scrollBehavior || App.getScrollBehavior()
 
         if (behavior === 'instant' || behavior === 'auto') {
             // Temporarily disable smooth scrolling
@@ -455,7 +448,7 @@ class HorizontalTimeline extends HTMLElement {
     // ========================================================================
 
     /**
-     * Initialise all event handlers using delegation pattern.
+     * Initialise all event handlers using delegation pattern
      */
     setupEventHandlers() {
         // Click handling - labels and indicators
@@ -525,7 +518,7 @@ class HorizontalTimeline extends HTMLElement {
 
         // Hover highlighting - bidirectional between indicators and labels
         this.boundHandleMouseOver = (event) => {
-            // Indicator hover -> highlight label
+            // Indicator hover → highlight label
             const indicator = event.target.closest('#timeline [data-value]')
             if (indicator && this.contains(indicator)) {
                 const value = indicator.getAttribute('data-value')
@@ -534,7 +527,7 @@ class HorizontalTimeline extends HTMLElement {
                 return
             }
 
-            // Label hover -> highlight centred indicator
+            // Label hover → highlight centred indicator
             const label = event.target.closest('#timeline_labels [data-label-for]')
             if (label && this.contains(label)) {
                 const value = label.getAttribute('data-label-for')
@@ -580,11 +573,11 @@ class HorizontalTimeline extends HTMLElement {
     // ========================================================================
 
     /**
-     * Start observing content sections to track which is most visible.
-     * Updates timeline state as user scrolls through sections.
+     * Start observing content sections to track which is most visible
+     * Updates timeline state as user scrolls through sections
      *
      * Configuration:
-    * - rootMargin centres the detection zone vertically
+     * - rootMargin centres the detection zone vertically
      * - Multiple thresholds provide granular intersection ratio updates
      */
     startIntersectionObserver() {
@@ -654,7 +647,7 @@ class HorizontalTimeline extends HTMLElement {
             this.unregisterResize = null
         }
 
-        // Clean up scroll end listener if exists
+        // Clean up scroll end listener if it exists
         if (this.boundHandleScrollEnd) {
             const timelineContent = this.getTimelineContentEl()
             if (timelineContent) {

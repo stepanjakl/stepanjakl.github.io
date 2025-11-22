@@ -90,7 +90,7 @@
     --blue-full-90: #dce1ff;
     --blue-full-95: #EEF0FF;
 
-    /* Colours - Accent colors */
+    /* Colours - Accent colours */
     /* 75, 100, 85 */
     --yellow-75: #d0ba00;
     --yellow-85: #EED500;
@@ -147,7 +147,7 @@
    ================================================================ */
 
 main {
-    /* Background & Pattern colours */
+    /* Background and pattern colours */
     --background: var(--cyan-full-5);
     --background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%232A3F43'/%3E%3C/svg%3E%0A");
     --pattern-overlay: rgba(255, 255, 255, 0.01);
@@ -158,7 +158,7 @@ main {
     /* 210, 100, 10; ease-in-out-quad */
     --triangle-stripe: rgba(0, 31, 36, 0) 0%, rgba(0, 31, 36, 0.011) 8.6%, rgba(0, 31, 36, 0.032) 16.29%, rgba(0, 31, 36, 0.063) 23.22%, rgba(0, 31, 36, 0.103) 29.53%, rgba(0, 31, 36, 0.151) 35.37%, rgba(0, 31, 36, 0.208) 40.89%, rgba(0, 31, 36, 0.272) 46.23%, rgba(0, 31, 36, 0.343) 51.53%, rgba(0, 31, 36, 0.421) 56.95%, rgba(0, 31, 36, 0.505) 62.63%, rgba(0, 31, 36, 0.595) 68.71%, rgba(0, 31, 36, 0.690) 75.34%, rgba(0, 31, 36, 0.789) 82.67%, rgba(0, 31, 36, 0.893) 90.84%, #001F24 100%;
 
-    /* Text & highlight colours */
+    /* Text and highlight colours */
     --text-1: var(--cyan-full-95);
     --text-2: var(--cyan-quarter-85);
     --text-3: var(--cyan-quarter-65);
@@ -231,7 +231,7 @@ body, html {
    ================================================================ */
 
 #mode:checked~main {
-    /* Background & Pattern colours */
+    /* Background and pattern colours */
     --background: var(--cyan-quarter-95);
     /* 210, 50, 75 */
     --background-pattern: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='23' y='23' width='2' height='2' fill='%2389C2CE'/%3E%3C/svg%3E%0A");

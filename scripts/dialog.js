@@ -1,8 +1,8 @@
 /**
  * ARIA Dialog - Universal Modal Dialog Manager
  *
- * A standalone, reusable dialog/modal management system with proper ARIA accessibility.
- * This file is intentionally generic and can be used in any project.
+ * A standalone, reusable dialog/modal management system with proper ARIA accessibility
+ * This file is intentionally generic and can be used in any project
  *
  * Features:
  * - Accessible modal dialogs with focus trapping
@@ -54,7 +54,7 @@ function afterPaint(callback) {
 aria._elCache = aria._elCache || {}
 
 /**
- * Get element by ID with caching. Accepts either an id string or an element.
+ * Get element by ID with caching. Accepts either an id string or an element
  * @param {string|HTMLElement} idOrEl - Element ID or element itself
  * @returns {HTMLElement|null} Element or null if not found
  */
@@ -462,19 +462,31 @@ aria.Dialog.prototype.setupFocusElements = function (focusAfterClosed, focusFirs
 
 /**
  * Create sentinel nodes for focus trapping
+ * Extracts common logic to reduce duplication
  * @private
  */
 aria.Dialog.prototype.createFocusTrapNodes = function () {
-    // Pre-dialog focus trap
-    this.preNode = document.createElement('div')
-    this.preNode.tabIndex = 0
-    this.preNode.className = this.FOCUS_TRAP_NODE_CLASS
+    /**
+     * Helper to create a focus trap sentinel node
+     * Reduces duplication between pre/post nodes
+     * @param {string} position - 'before' or 'after' for debugging context
+     * @returns {HTMLElement} Configured sentinel node
+     */
+    const createSentinel = (position) => {
+        const node = document.createElement('div')
+        node.tabIndex = 0
+        node.className = this.FOCUS_TRAP_NODE_CLASS
+        // Optional: add data attribute for debugging
+        // node.setAttribute('data-trap-position', position)
+        return node
+    }
+
+    // Pre-dialog focus trap (before dialog in DOM)
+    this.preNode = createSentinel('before')
     this.dialogNode.parentNode.insertBefore(this.preNode, this.dialogNode)
 
-    // Post-dialog focus trap
-    this.postNode = document.createElement('div')
-    this.postNode.tabIndex = 0
-    this.postNode.className = this.FOCUS_TRAP_NODE_CLASS
+    // Post-dialog focus trap (after dialog in DOM)
+    this.postNode = createSentinel('after')
     this.dialogNode.parentNode.insertBefore(this.postNode, this.dialogNode.nextSibling)
 }
 
@@ -667,7 +679,7 @@ window.closeDialog = (hash) => {
     // ============================================================================
 
     /**
-    * Initialise inert state for all dialogs on page load
+     * Initialise inert state for all dialogs on page load
      * Applies inert programmatically to all dialog elements to prevent
      * interaction when they are not open
      */

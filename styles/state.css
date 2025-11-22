@@ -144,7 +144,7 @@ body.no-fullscreen .modal__fullscreen-button {
 }
 
 #mode:checked~main #dropdown-menu label#dropdown-menu-dark-mode::before {
-    /* 300, 100, 75  */
+    /* 300, 100, 75 */
     background-image: linear-gradient(to right in oklch, rgba(239, 153, 255, 0.75), rgba(107, 0, 118, 0));
 }
 
@@ -293,6 +293,17 @@ body.no-fullscreen .modal__fullscreen-button {
 }
 
 #debug:checked~main .debug-checked\:hidden {
+    display: none;
+}
+
+
+/* Ambience */
+
+#ambience:checked~main .ambience-checked\:flex {
+    display: flex;
+}
+
+#ambience:checked~main .ambience-checked\:hidden {
     display: none;
 }
 
