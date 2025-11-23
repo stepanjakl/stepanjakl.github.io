@@ -12,18 +12,26 @@
 // ============================================================================
 
 /**
- * Epic Cinematic Ambient Music Generator
+ * Sophisticated Cinematic Ambient Music Generator
  *
  * This module procedurally generates an infinite, non-looping ambient soundtrack
- * using the Web Audio API. It blends "heroic" intervals (inspired by Star Trek)
- * with rhythmic tension (inspired by Mission Impossible) to create a unique
- * sonic identity for the website.
+ * using the Web Audio API. It creates a mature, contemplative atmosphere that is
+ * both uplifting and serious, combining heroic intervals with sophisticated
+ * jazz-influenced harmony (Maj7, Maj9) to establish a unique sonic identity
+ * for the website.
+ *
+ * Musical Character:
+ * - Warm sine wave tones for a pure, acoustic feel
+ * - Deliberate phrasing with restrained melodic movement
+ * - Rich harmonic palette including 7ths and 9ths for sophistication
+ * - Grounded foundation with occasional depth (notes below root)
+ * - Natural exponential envelopes mimicking acoustic instruments
  *
  * Architecture:
- * - Uses the Module Pattern (IIFE) to encapsulate state and expose a public API.
- * - Generates audio in real-time using Oscillators (sound sources) and GainNodes (volume control).
+ * - Uses the Module Pattern (IIFE) to encapsulate state and expose a public API
+ * - Generates audio in real-time using Oscillators (sound sources) and GainNodes (volume control)
  * - Implements a "stateless" scheduling system where each note schedules the next,
- *   allowing for infinite variation without memory leaks.
+ *   allowing for infinite variation without memory leaks
  */
 window.App = window.App || {}
 
@@ -67,76 +75,46 @@ App.audio = (function () {
     const CONFIG = Object.freeze({
         masterVolume: 0.25,
         rootFrequency: 220, // A3 - The tonal centre of our piece
-        currentTheme: 'mission', // Options: 'original', 'mission'
 
-        // Shared settings across themes
-        shared: {
-            chordTriad: [0, 4, 7], // Major triad (Root, Major 3rd, Perfect 5th) for the background pad
-            padFadeIn: 1.5,        // Seconds to fade in
-            padSustain: 3.0,       // Seconds to hold full volume
-            padFadeOut: 1.5        // Seconds to fade out
+        // Sophisticated Scale: P4 below, Root, m3, P4, P5, Maj6, Maj7, Octave, Maj9
+        // Combines depth, tension, and heroic intervals for mature character
+        scale: [-5, 0, 3, 5, 7, 9, 11, 12, 14],
+        rhythm: [0, 0.6, 1.3, 2.1, 3.0, 3.7, 4.3], // Slower, more deliberate 5-second phrase
+        waveform: 'sine', // Warm, pure tone for sophistication
+
+        // Background pad settings
+        pad: {
+            chordTriad: [0, 4, 7],   // Major triad (Root, Major 3rd, Perfect 5th)
+            fadeIn: 1.5,             // Seconds to fade in
+            sustain: 3.0,            // Seconds to hold full volume
+            fadeOut: 1.5,            // Seconds to fade out
+            repeatInterval: 6000,    // Slower, more spacious
+            randomDelay: 200         // Subtle organic variation
         },
 
-        // Theme-specific configurations
-        themes: {
-            original: {
-                scale: [0, 2, 4, 7, 9], // Major Pentatonic Scale
-                rhythm: [0, 0.75, 1.5, 2.25, 3.4], // Syncopated rhythm
-                waveform: 'triangle',   // Softer, flute-like sound
-                filter: false,
-                pad: {
-                    repeatInterval: 5000,
-                    randomDelay: 500    // Adds organic irregularity
-                },
-                melody: {
-                    volume: 0.3,
-                    attackTime: 0.08,
-                    decayTime: 0.37,
-                    releaseTime: 0.35,
-                    noteLength: 0.85,
-                    repeatInterval: 3600,
-                    panAmount: 0.2
-                },
-                choices: [
-                    { scaleIndex: 0, weight: 0.30 }, // Root
-                    { scaleIndex: 2, weight: 0.25 }, // Maj 3rd
-                    { scaleIndex: 4, weight: 0.25 }, // Maj 6th
-                    { scaleIndex: 3, weight: 0.20 }  // P5
-                ]
-            },
-            mission: {
-                // Sophisticated Scale: P4 below, Root, m3, P4, P5, Maj6, Maj7, Octave, Maj9
-                // Combines depth, tension, and heroic intervals for mature character
-                scale: [-5, 0, 3, 5, 7, 9, 11, 12, 14],
-                rhythm: [0, 0.6, 1.3, 2.1, 3.0, 3.7, 4.3], // Slower, more deliberate 5-second phrase
-                waveform: 'sine',       // Warm, pure tone for sophistication
-                filter: false,          // Clean sound, no filter
-                pad: {
-                    repeatInterval: 6000, // Slower, more spacious
-                    randomDelay: 200      // Subtle organic variation
-                },
-                melody: {
-                    volume: 0.28,         // Slightly quieter for subtlety
-                    attackTime: 0.05,     // Gentler attack for maturity
-                    decayTime: 0.35,      // Longer decay for richness
-                    releaseTime: 0.4,     // Extended release for smoothness
-                    noteLength: 1.2,      // Longer notes for gravity
-                    repeatInterval: 5000, // Matches rhythm duration
-                    panAmount: 0.15       // Subtle panning for focus
-                },
-                choices: [
-                    { scaleIndex: 0, weight: 0.05 }, // P4 below (Depth)
-                    { scaleIndex: 1, weight: 0.25 }, // Root (Foundation)
-                    { scaleIndex: 2, weight: 0.10 }, // m3 (Subtle tension)
-                    { scaleIndex: 3, weight: 0.10 }, // P4 (Stability)
-                    { scaleIndex: 4, weight: 0.25 }, // P5 (Strength)
-                    { scaleIndex: 5, weight: 0.15 }, // Maj6 (Hope)
-                    { scaleIndex: 6, weight: 0.05 }, // Maj7 (Sophistication)
-                    { scaleIndex: 7, weight: 0.03 }, // Octave (Reduced)
-                    { scaleIndex: 8, weight: 0.02 }  // Maj9 (Rare sparkle)
-                ]
-            }
+        // Melody settings
+        melody: {
+            volume: 0.28,            // Slightly quieter for subtlety
+            attackTime: 0.05,        // Gentler attack for maturity
+            decayTime: 0.35,         // Longer decay for richness
+            releaseTime: 0.4,        // Extended release for smoothness
+            noteLength: 1.2,         // Longer notes for gravity
+            repeatInterval: 5000,    // Matches rhythm duration
+            panAmount: 0.15          // Subtle panning for focus
         },
+
+        // Weighted note selection probabilities
+        noteWeights: [
+            { scaleIndex: 0, weight: 0.05 }, // P4 below (Depth)
+            { scaleIndex: 1, weight: 0.25 }, // Root (Foundation)
+            { scaleIndex: 2, weight: 0.10 }, // m3 (Subtle tension)
+            { scaleIndex: 3, weight: 0.10 }, // P4 (Stability)
+            { scaleIndex: 4, weight: 0.25 }, // P5 (Strength)
+            { scaleIndex: 5, weight: 0.15 }, // Maj6 (Hope)
+            { scaleIndex: 6, weight: 0.05 }, // Maj7 (Sophistication)
+            { scaleIndex: 7, weight: 0.03 }, // Octave (Reduced)
+            { scaleIndex: 8, weight: 0.02 }  // Maj9 (Rare sparkle)
+        ],
 
         // UI Sound Effects
         sfx: {
@@ -173,83 +151,73 @@ App.audio = (function () {
     }
 
     /**
-     * Selects a note based on the current theme's weighted probabilities.
-     * This creates a "controlled random" melody that adheres to the theme's character.
+     * Selects a note based on weighted probabilities.
+     * This creates a "controlled random" melody that adheres to our musical character.
      *
-     * @param {Object} theme - The theme configuration object.
      * @returns {number} The selected semitone interval.
      */
-    function selectNote(theme) {
+    function selectNote() {
         const rand = Math.random()
         let cumulative = 0
-        const choices = theme.choices
-        const scale = theme.scale
 
-        for (const choice of choices) {
+        for (const choice of CONFIG.noteWeights) {
             cumulative += choice.weight
             if (rand < cumulative) {
-                return scale[choice.scaleIndex]
+                return CONFIG.scale[choice.scaleIndex]
             }
         }
 
-        return scale[0] // Fallback to root if something goes wrong
+        return CONFIG.scale[1] // Fallback to root (index 1) if something goes wrong
     }
 
     /**
      * Determines the specific note for a step in the melody sequence.
-     * Encapsulates the compositional logic (e.g., "start stable, rise up, end with tension").
+     * Implements compositional logic to create a sophisticated 7-beat phrase
+     * with restrained movement and serious character.
      *
-     * @param {string} themeName - The name of the current theme.
-     * @param {Object} themeConfig - The configuration object for the theme.
      * @param {number} stepIndex - The current step index in the rhythm pattern.
      * @returns {number} The selected semitone interval.
      */
-    function getNoteForStep(themeName, themeConfig, stepIndex) {
-        if (themeName === 'mission') {
-            // Compositional Logic for "Mission" Theme (7-beat mature phrase):
-            // Creates a sophisticated arc with restrained movement and serious character
-            // 1. Foundation: Start grounded (Root or lower P4)
-            // 2. Establish: Build foundation (Root, P4, or P5)
-            // 3. Develop: Gradual upward movement (P5 or Maj6)
-            // 4. Peak: Subtle high point (Maj6, Maj7, or Maj9 - no childish octaves)
-            // 5. Reflect: Contemplative descent (P5 or Maj6)
-            // 6. Resolve: Return to stability (Root or P5)
-            // 7. Close: Final grounded statement (Root or P4)
+    function getNoteForStep(stepIndex) {
+        // Compositional Logic (7-beat mature phrase):
+        // 1. Foundation: Start grounded (Root or lower P4)
+        // 2. Establish: Build foundation (Root, P4, or P5)
+        // 3. Develop: Gradual upward movement (P5 or Maj6)
+        // 4. Peak: Subtle high point (Maj6, Maj7, or Maj9 - no childish octaves)
+        // 5. Reflect: Contemplative descent (P5 or Maj6)
+        // 6. Resolve: Return to stability (Root or P5)
+        // 7. Close: Final grounded statement (Root or P4)
 
-            if (stepIndex === 0) {
-                // Beat 1: Foundation - Grounded start
-                const r = Math.random()
-                if (r > 0.7) return -5  // P4 below for depth
-                return r > 0.3 ? 0 : 5  // Root or P4
-            } else if (stepIndex === 1) {
-                // Beat 2: Establish - Build foundation
-                return Math.random() > 0.5 ? 0 : 7
-            } else if (stepIndex === 2) {
-                // Beat 3: Develop - Gradual rise
-                return Math.random() > 0.4 ? 7 : 9
-            } else if (stepIndex === 3) {
-                // Beat 4: Peak - Sophisticated high point (no octave jumps)
-                const r = Math.random()
-                if (r > 0.8) return 14  // Maj9 for rare sparkle
-                if (r > 0.5) return 11  // Maj7 for sophistication
-                return 9  // Maj6 for heroic warmth
-            } else if (stepIndex === 4) {
-                // Beat 5: Reflect - Thoughtful descent
-                return Math.random() > 0.5 ? 9 : 7
-            } else if (stepIndex === 5) {
-                // Beat 6: Resolve - Return home
-                return Math.random() > 0.4 ? 0 : 7
-            } else {
-                // Beat 7: Close - Grounded conclusion
-                const r = Math.random()
-                if (r > 0.7) return 3   // m3 for subtle melancholy
-                if (r > 0.4) return 5   // P4 for strength
-                return 0  // Root for finality
-            }
+        if (stepIndex === 0) {
+            // Beat 1: Foundation - Grounded start
+            const r = Math.random()
+            if (r > 0.7) return -5  // P4 below for depth
+            return r > 0.3 ? 0 : 5  // Root or P4
+        } else if (stepIndex === 1) {
+            // Beat 2: Establish - Build foundation
+            return Math.random() > 0.5 ? 0 : 7
+        } else if (stepIndex === 2) {
+            // Beat 3: Develop - Gradual rise
+            return Math.random() > 0.4 ? 7 : 9
+        } else if (stepIndex === 3) {
+            // Beat 4: Peak - Sophisticated high point (no octave jumps)
+            const r = Math.random()
+            if (r > 0.8) return 14  // Maj9 for rare sparkle
+            if (r > 0.5) return 11  // Maj7 for sophistication
+            return 9  // Maj6 for heroic warmth
+        } else if (stepIndex === 4) {
+            // Beat 5: Reflect - Thoughtful descent
+            return Math.random() > 0.5 ? 9 : 7
+        } else if (stepIndex === 5) {
+            // Beat 6: Resolve - Return home
+            return Math.random() > 0.4 ? 0 : 7
+        } else {
+            // Beat 7: Close - Grounded conclusion
+            const r = Math.random()
+            if (r > 0.7) return 3   // m3 for subtle melancholy
+            if (r > 0.4) return 5   // P4 for strength
+            return 0  // Root for finality
         }
-
-        // Default random logic for other themes
-        return selectNote(themeConfig)
     }
 
     // ============================================================================
@@ -267,16 +235,14 @@ App.audio = (function () {
     function createPad() {
         if (!ctx || !masterGainNode) return
 
-        const currentTheme = CONFIG.themes[CONFIG.currentTheme] || CONFIG.themes.mission
-        const padConfig = currentTheme.pad
         const now = ctx.currentTime
         const out = ctx.createGain()
         out.gain.value = CONFIG.masterVolume
         out.connect(masterGainNode)
 
-        const totalDuration = CONFIG.shared.padFadeIn + CONFIG.shared.padSustain + CONFIG.shared.padFadeOut
+        const totalDuration = CONFIG.pad.fadeIn + CONFIG.pad.sustain + CONFIG.pad.fadeOut
 
-        CONFIG.shared.chordTriad.forEach(interval => {
+        CONFIG.pad.chordTriad.forEach(interval => {
             const osc = ctx.createOscillator()
             const gain = ctx.createGain()
 
@@ -290,12 +256,12 @@ App.audio = (function () {
             // 2. Attack: Ramp up to full volume
             gain.gain.linearRampToValueAtTime(
                 0.25, // Target volume
-                now + CONFIG.shared.padFadeIn
+                now + CONFIG.pad.fadeIn
             )
             // 3. Sustain: Slightly dip volume to create movement
             gain.gain.linearRampToValueAtTime(
                 0.25 * 0.33,
-                now + CONFIG.shared.padFadeIn + CONFIG.shared.padSustain
+                now + CONFIG.pad.fadeIn + CONFIG.pad.sustain
             )
             // 4. Release: Fade out to 0
             gain.gain.linearRampToValueAtTime(
@@ -313,7 +279,7 @@ App.audio = (function () {
 
         // Schedule next pad iteration
         // Adding randomness creates an organic, non-mechanical feel
-        const nextDelay = padConfig.repeatInterval + Math.random() * padConfig.randomDelay
+        const nextDelay = CONFIG.pad.repeatInterval + Math.random() * CONFIG.pad.randomDelay
         setTimeout(createPad, nextDelay)
     }
 
@@ -322,79 +288,59 @@ App.audio = (function () {
      *
      * Technical Details:
      * - Iterates through the rhythm array to schedule notes in the future.
-     * - Uses a BiquadFilterNode (Lowpass) for the "Mission" theme to soften the sawtooth wave.
      * - Uses a StereoPannerNode to add spatial width.
      */
     function createMelody() {
         if (!ctx || !masterGainNode) return
 
-        const themeName = CONFIG.currentTheme
-        const currentTheme = CONFIG.themes[themeName] || CONFIG.themes.mission
-        const melodyConfig = currentTheme.melody
         const now = ctx.currentTime
         const out = ctx.createGain()
         out.gain.value = CONFIG.masterVolume
         out.connect(masterGainNode)
 
-        currentTheme.rhythm.forEach((timeOffset, index) => {
+        CONFIG.rhythm.forEach((timeOffset, index) => {
             const t = now + timeOffset
-            const semitones = getNoteForStep(themeName, currentTheme, index)
+            const semitones = getNoteForStep(index)
             const freq = getFrequency(semitones)
 
             const osc = ctx.createOscillator()
             const gain = ctx.createGain()
             const pan = ctx.createStereoPanner()
 
-            osc.type = currentTheme.waveform
+            osc.type = CONFIG.waveform
             osc.frequency.setValueAtTime(freq, t)
-
-            // Signal Chain: Oscillator -> [Filter] -> Gain -> Pan -> Master
-            let source = osc
-
-            // Apply Lowpass Filter (if enabled)
-            // This mimics an analog synthesizer where the filter opens and closes
-            if (currentTheme.filter) {
-                const filter = ctx.createBiquadFilter()
-                filter.type = "lowpass"
-                filter.Q.value = 1.5 // Add resonance for character
-                // Filter Envelope: Gradual sweep for more natural expression
-                filter.frequency.setValueAtTime(1200, t)
-                filter.frequency.exponentialRampToValueAtTime(300, t + melodyConfig.noteLength)
-                osc.connect(filter)
-                source = filter
-            }
 
             // Volume Envelope (ADSR) - Exponential for natural sound
             gain.gain.setValueAtTime(0.001, t)
             // Attack - Exponential rise for organic feel
             gain.gain.exponentialRampToValueAtTime(
-                melodyConfig.volume,
-                t + melodyConfig.attackTime
+                CONFIG.melody.volume,
+                t + CONFIG.melody.attackTime
             )
             // Decay - Gentle decline to sustain level
             gain.gain.exponentialRampToValueAtTime(
-                melodyConfig.volume * 0.65,
-                t + melodyConfig.attackTime + melodyConfig.decayTime
+                CONFIG.melody.volume * 0.65,
+                t + CONFIG.melody.attackTime + CONFIG.melody.decayTime
             )
             // Release - Natural fade out
             gain.gain.exponentialRampToValueAtTime(
                 0.001,
-                t + melodyConfig.noteLength
+                t + CONFIG.melody.noteLength
             )
 
             // Spatialisation: Randomly pan slightly left or right
-            pan.pan.value = (Math.random() * 2 - 1) * melodyConfig.panAmount
+            pan.pan.value = (Math.random() * 2 - 1) * CONFIG.melody.panAmount
 
-            source.connect(gain)
+            osc.connect(gain)
             gain.connect(pan)
             pan.connect(out)
 
             osc.start(t)
-            osc.stop(t + melodyConfig.noteLength)
+            osc.stop(t + CONFIG.melody.noteLength)
         })
 
         // Schedule next melody loop
-        setTimeout(createMelody, melodyConfig.repeatInterval)
+        setTimeout(createMelody, CONFIG.melody.repeatInterval)
     }
 
     /**
