@@ -1281,15 +1281,29 @@ body.modal-profile-open .intro__right {
     filter: blur(3rem);
 }
 
+footer {
+    z-index: 1;
+    transition: z-index 0s linear calc(var(--animate-out-segment) * 1.25);
+}
+
+#profile:target~main footer,
+#archive:target~main footer,
+body.modal-open footer {
+    z-index: 0;
+    transition: none;
+}
+
 footer>div {
-    transition: transform calc(var(--animate-out-segment) * 1.25) var(--ease-in-quad), filter calc(var(--animate-out-segment) * 1.25) var(--ease-in-quad);
+    transition: transform calc(var(--animate-out-segment) * 1.25) var(--ease-in-quad), filter calc(var(--animate-out-segment) * 1.25) var(--ease-in-quad), opacity calc(var(--animate-out-segment) * 1.25) var(--ease-in-quad);
     transform-origin: top;
+    opacity: 1;
 }
 
 #archive:target~main footer>div,
 body.modal-archive-open footer>div {
-    transition: transform calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad);
+    transition: transform calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad), opacity calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad);
     transform: scale(0.975);
+    opacity: 0;
 }
 
 #profile:target~main footer>div,

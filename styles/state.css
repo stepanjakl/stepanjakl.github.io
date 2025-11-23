@@ -370,12 +370,6 @@ body.modal-archive-open #modal-archive {
     pointer-events: auto;
 }
 
-#profile:target~main footer,
-#archive:target~main footer,
-body.modal-open footer {
-    z-index: 0;
-}
-
 #mode:checked~main .modal__content {
     outline: none;
     border-color: var(--modal-border-outer);

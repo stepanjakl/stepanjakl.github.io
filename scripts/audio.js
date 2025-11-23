@@ -105,32 +105,35 @@ App.audio = (function () {
                 ]
             },
             mission: {
-                // Hybrid Scale: Root, m3, P4, Tritone, P5, Maj6, Octave
-                // Blends minor spy tension with heroic major intervals
-                scale: [0, 3, 5, 6, 7, 9, 12],
-                rhythm: [0, 1.1, 2.2, 2.8, 3.2], // 5/4-ish "Mission" feel
-                waveform: 'sawtooth',   // Brighter, brassier sound
-                filter: true,           // Lowpass filter for "analog synth" feel
+                // Sophisticated Scale: P4 below, Root, m3, P4, P5, Maj6, Maj7, Octave, Maj9
+                // Combines depth, tension, and heroic intervals for mature character
+                scale: [-5, 0, 3, 5, 7, 9, 11, 12, 14],
+                rhythm: [0, 0.6, 1.3, 2.1, 3.0, 3.7, 4.3], // Slower, more deliberate 5-second phrase
+                waveform: 'sine',       // Warm, pure tone for sophistication
+                filter: false,          // Clean sound, no filter
                 pad: {
-                    repeatInterval: 4000, // Locked to melody loop for tightness
-                    randomDelay: 0        // Strict timing
+                    repeatInterval: 6000, // Slower, more spacious
+                    randomDelay: 200      // Subtle organic variation
                 },
                 melody: {
-                    volume: 0.35,
-                    attackTime: 0.02,     // Sharp attack for punchiness
-                    decayTime: 0.15,      // Quick decay for percussive feel
-                    releaseTime: 0.2,
-                    noteLength: 0.8,
-                    repeatInterval: 4000,
-                    panAmount: 0.2
+                    volume: 0.28,         // Slightly quieter for subtlety
+                    attackTime: 0.05,     // Gentler attack for maturity
+                    decayTime: 0.35,      // Longer decay for richness
+                    releaseTime: 0.4,     // Extended release for smoothness
+                    noteLength: 1.2,      // Longer notes for gravity
+                    repeatInterval: 5000, // Matches rhythm duration
+                    panAmount: 0.15       // Subtle panning for focus
                 },
                 choices: [
-                    { scaleIndex: 0, weight: 0.25 }, // Root
-                    { scaleIndex: 1, weight: 0.10 }, // m3 (Tension)
-                    { scaleIndex: 3, weight: 0.10 }, // Tritone (Spy feel)
-                    { scaleIndex: 4, weight: 0.30 }, // P5 (Heroic)
-                    { scaleIndex: 5, weight: 0.20 }, // Maj6 (Heroic/Hopeful)
-                    { scaleIndex: 6, weight: 0.05 }  // Octave
+                    { scaleIndex: 0, weight: 0.05 }, // P4 below (Depth)
+                    { scaleIndex: 1, weight: 0.25 }, // Root (Foundation)
+                    { scaleIndex: 2, weight: 0.10 }, // m3 (Subtle tension)
+                    { scaleIndex: 3, weight: 0.10 }, // P4 (Stability)
+                    { scaleIndex: 4, weight: 0.25 }, // P5 (Strength)
+                    { scaleIndex: 5, weight: 0.15 }, // Maj6 (Hope)
+                    { scaleIndex: 6, weight: 0.05 }, // Maj7 (Sophistication)
+                    { scaleIndex: 7, weight: 0.03 }, // Octave (Reduced)
+                    { scaleIndex: 8, weight: 0.02 }  // Maj9 (Rare sparkle)
                 ]
             }
         },
@@ -203,25 +206,45 @@ App.audio = (function () {
      */
     function getNoteForStep(themeName, themeConfig, stepIndex) {
         if (themeName === 'mission') {
-            // Compositional Logic for "Mission" Theme:
-            // 1. Anchor: Start on a stable note (Root or P5).
-            // 2. Rise: Jump up to a heroic interval (P5, Maj6, Octave).
-            // 3. Sustain: Hold the high note or move to a related stable tone.
-            // 4/5. Tension: Resolve or add spy-like tension (m3, Tritone).
+            // Compositional Logic for "Mission" Theme (7-beat mature phrase):
+            // Creates a sophisticated arc with restrained movement and serious character
+            // 1. Foundation: Start grounded (Root or lower P4)
+            // 2. Establish: Build foundation (Root, P4, or P5)
+            // 3. Develop: Gradual upward movement (P5 or Maj6)
+            // 4. Peak: Subtle high point (Maj6, Maj7, or Maj9 - no childish octaves)
+            // 5. Reflect: Contemplative descent (P5 or Maj6)
+            // 6. Resolve: Return to stability (Root or P5)
+            // 7. Close: Final grounded statement (Root or P4)
 
             if (stepIndex === 0) {
-                // Beat 1: Anchor
-                return Math.random() > 0.4 ? 0 : 7
+                // Beat 1: Foundation - Grounded start
+                const r = Math.random()
+                if (r > 0.7) return -5  // P4 below for depth
+                return r > 0.3 ? 0 : 5  // Root or P4
             } else if (stepIndex === 1) {
-                // Beat 2: Rise!
-                const riseOptions = [7, 9, 12]
-                return riseOptions[Math.floor(Math.random() * riseOptions.length)]
+                // Beat 2: Establish - Build foundation
+                return Math.random() > 0.5 ? 0 : 7
             } else if (stepIndex === 2) {
-                // Beat 3: Sustain
+                // Beat 3: Develop - Gradual rise
+                return Math.random() > 0.4 ? 7 : 9
+            } else if (stepIndex === 3) {
+                // Beat 4: Peak - Sophisticated high point (no octave jumps)
+                const r = Math.random()
+                if (r > 0.8) return 14  // Maj9 for rare sparkle
+                if (r > 0.5) return 11  // Maj7 for sophistication
+                return 9  // Maj6 for heroic warmth
+            } else if (stepIndex === 4) {
+                // Beat 5: Reflect - Thoughtful descent
                 return Math.random() > 0.5 ? 9 : 7
+            } else if (stepIndex === 5) {
+                // Beat 6: Resolve - Return home
+                return Math.random() > 0.4 ? 0 : 7
             } else {
-                // Beats 4, 5: Tension/Resolution
-                return selectNote(themeConfig)
+                // Beat 7: Close - Grounded conclusion
+                const r = Math.random()
+                if (r > 0.7) return 3   // m3 for subtle melancholy
+                if (r > 0.4) return 5   // P4 for strength
+                return 0  // Root for finality
             }
         }
 
@@ -333,28 +356,29 @@ App.audio = (function () {
             if (currentTheme.filter) {
                 const filter = ctx.createBiquadFilter()
                 filter.type = "lowpass"
-                // Filter Envelope: "Wow" effect (opens up then closes)
-                filter.frequency.setValueAtTime(800, t)
-                filter.frequency.exponentialRampToValueAtTime(200, t + melodyConfig.noteLength)
+                filter.Q.value = 1.5 // Add resonance for character
+                // Filter Envelope: Gradual sweep for more natural expression
+                filter.frequency.setValueAtTime(1200, t)
+                filter.frequency.exponentialRampToValueAtTime(300, t + melodyConfig.noteLength)
                 osc.connect(filter)
                 source = filter
             }
 
-            // Volume Envelope (ADSR)
-            gain.gain.setValueAtTime(0, t)
-            // Attack
-            gain.gain.linearRampToValueAtTime(
+            // Volume Envelope (ADSR) - Exponential for natural sound
+            gain.gain.setValueAtTime(0.001, t)
+            // Attack - Exponential rise for organic feel
+            gain.gain.exponentialRampToValueAtTime(
                 melodyConfig.volume,
                 t + melodyConfig.attackTime
             )
-            // Decay
-            gain.gain.linearRampToValueAtTime(
-                melodyConfig.volume * 0.6,
+            // Decay - Gentle decline to sustain level
+            gain.gain.exponentialRampToValueAtTime(
+                melodyConfig.volume * 0.65,
                 t + melodyConfig.attackTime + melodyConfig.decayTime
             )
-            // Release
-            gain.gain.linearRampToValueAtTime(
-                0,
+            // Release - Natural fade out
+            gain.gain.exponentialRampToValueAtTime(
+                0.001,
                 t + melodyConfig.noteLength
             )
 

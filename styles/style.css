@@ -1278,7 +1278,7 @@ body {
 footer {
     position: relative;
     pointer-events: none;
-    z-index: 1;
+    contain: layout style paint;
 }
 
 @media (min-width: 45rem) {
