@@ -181,6 +181,13 @@ main {
     --menu-bg: #333d3f55;
     --tooltip-bg: #333d3f65;
 
+    /* Ambience gradient stops */
+    --ambience-stop-1: var(--yellow-75);
+    --ambience-stop-2: var(--green-lime-75);
+    --ambience-stop-3: var(--cyan-full-65);
+    --ambience-stop-4: var(--blue-full-55);
+    --ambience-stop-5: var(--yellow-75);
+
     /* Modal colours */
     --modal-border-outer: var(--dark-10);
     --modal-border-inner: var(--light-15);
@@ -262,6 +269,13 @@ body, html {
     /* 210, 25, 75 */
     --menu-bg: #a3bdc355;
     --tooltip-bg: #a3bdc365;
+
+    /* Ambience gradient stops */
+    --ambience-stop-1: var(--yellow-85);
+    --ambience-stop-2: var(--green-lime-85);
+    --ambience-stop-3: var(--cyan-full-85);
+    --ambience-stop-4: var(--blue-full-75);
+    --ambience-stop-5: var(--yellow-85);
 
     /* Modal colours */
     --modal-border-outer: var(--dark-15);

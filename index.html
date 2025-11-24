@@ -514,6 +514,18 @@
                                         </svg>
                                         <span class="text-sm">Dark mode</span>
                                     </label>
+                                    <label id="dropdown-menu-ambience"
+                                           for="ambience"
+                                           tabindex="0"
+                                           onkeydown="if(event.key === 'Enter') { App.keyActivate('ambience') }">
+                                        <svg class="ambience-checked:hidden flex">
+                                            <use xlink:href="images/icons.svg#ambience"></use>
+                                        </svg>
+                                        <svg class="hidden ambience-checked:flex">
+                                            <use xlink:href="images/icons.svg#ambience-off"></use>
+                                        </svg>
+                                        <span class="text-sm">Ambience</span>
+                                    </label>
                                     <label id="dropdown-menu-fullscreen"
                                            for="fullscreen"
                                            tabindex="0"
@@ -526,18 +538,6 @@
                                             <use xlink:href="images/icons.svg#menu-fullscreen-off"></use>
                                         </svg>
                                         <span class="text-sm">Fullscreen</span>
-                                    </label>
-                                    <label id="dropdown-menu-ambience"
-                                           for="ambience"
-                                           tabindex="0"
-                                           onkeydown="if(event.key === 'Enter') { App.keyActivate('ambience') }">
-                                        <svg class="ambience-checked:hidden flex">
-                                            <use xlink:href="images/icons.svg#ambience"></use>
-                                        </svg>
-                                        <svg class="hidden ambience-checked:flex">
-                                            <use xlink:href="images/icons.svg#ambience-off"></use>
-                                        </svg>
-                                        <span class="text-sm">Ambience</span>
                                     </label>
                                     <label id="dropdown-menu-debug"
                                            for="debug"

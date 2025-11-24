@@ -1181,7 +1181,9 @@ body {
 }
 
 #dropdown-menu a:hover span,
-#dropdown-menu label:hover span {
+#dropdown-menu label:hover span,
+#dropdown-menu a:focus span,
+#dropdown-menu label:focus span {
     transition: color var(--animate-in-segment) linear;
 }
 
@@ -1193,7 +1195,9 @@ body {
 }
 
 #dropdown-menu a:hover svg,
-#dropdown-menu label:hover svg {
+#dropdown-menu label:hover svg,
+#dropdown-menu a:focus svg,
+#dropdown-menu label:focus svg {
     transition: color var(--animate-out-segment) linear, background-color var(--animate-out-segment) linear;
     color: var(--icon--hover);
 }
@@ -1215,6 +1219,74 @@ body {
 #dropdown-menu label#dropdown-menu-light-mode::after {
     background-image: linear-gradient(to right in oklch, rgba(238, 213, 0, 1), rgba(238, 213, 0, 0));
 }
+
+@property --angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+
+@keyframes ambience-spin {
+    to {
+        --angle: 360deg;
+    }
+}
+
+/* Ambience label background gradients */
+
+#dropdown-menu label#dropdown-menu-ambience::before,
+#dropdown-menu label#dropdown-menu-ambience::after {
+    background-size: 200%;
+    background-position: calc(100% + 1.75rem) 50%;
+    animation: ambience-spin 8s linear infinite;
+}
+
+#dropdown-menu label#dropdown-menu-ambience::before {
+    background-image: conic-gradient(in oklch from var(--angle), var(--ambience-stop-1), var(--ambience-stop-2), var(--ambience-stop-3), var(--ambience-stop-4), var(--ambience-stop-5));
+    mask: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+    filter: blur(0.875rem);
+}
+
+#dropdown-menu label#dropdown-menu-ambience::after {
+    background-image: conic-gradient(in oklch from var(--angle), var(--ambience-stop-1), var(--ambience-stop-2), var(--ambience-stop-3), var(--ambience-stop-4), var(--ambience-stop-5));
+    mask: linear-gradient(#000 0 0) padding-box, linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+    mask-repeat: no-repeat;
+    mask-composite: subtract;
+    -webkit-mask-composite: destination-out;
+    filter: blur(0.125rem);
+}
+
+/* Ambience SVG icon gradient */
+
+#dropdown-menu #dropdown-menu-ambience svg {
+    filter: blur(0.125rem);
+    animation: ambience-spin 8s linear infinite;
+    transition: filter var(--animate-out-segment) linear;
+}
+
+#mode:checked~main #dropdown-menu #dropdown-menu-ambience svg {
+    filter: blur(0.125rem) brightness(0.75);
+}
+
+#dropdown-menu #dropdown-menu-ambience:hover svg,
+#dropdown-menu #dropdown-menu-ambience:focus svg,
+#mode:checked~main #dropdown-menu #dropdown-menu-ambience:focus svg,
+#mode:checked~main #dropdown-menu #dropdown-menu-ambience:hover svg {
+    filter: blur(0);
+    transition: filter var(--animate-in-segment) linear;
+}
+
+#dropdown-menu #dropdown-menu-ambience svg use {
+    transition: opacity var(--animate-out-segment) linear;
+}
+
+#dropdown-menu #dropdown-menu-ambience:hover svg use,
+#dropdown-menu #dropdown-menu-ambience:focus svg use {
+    opacity: 1;
+    transition: opacity var(--animate-in-segment) linear;
+}
+
+/* Debug and fullscreen menu items */
 
 #dropdown-menu label#dropdown-menu-debug::before,
 #dropdown-menu label#dropdown-menu-fullscreen::before {

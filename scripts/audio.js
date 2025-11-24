@@ -63,6 +63,14 @@ App.audio = (function () {
      */
     let stopTimer = null
 
+    /**
+     * Timer IDs for the generative loops.
+     * Used to cancel scheduled iterations when stopping audio.
+     * @type {number|null}
+     */
+    let padTimerId = null
+    let melodyTimerId = null
+
     // ============================================================================
     // Configuration
     // ============================================================================
@@ -233,7 +241,7 @@ App.audio = (function () {
      * - Schedules the *next* pad iteration recursively via setTimeout.
      */
     function createPad() {
-        if (!ctx || !masterGainNode) return
+        if (!ctx || !masterGainNode || padTimerId === null) return
 
         const now = ctx.currentTime
         const out = ctx.createGain()
@@ -280,7 +288,7 @@ App.audio = (function () {
         // Schedule next pad iteration
         // Adding randomness creates an organic, non-mechanical feel
         const nextDelay = CONFIG.pad.repeatInterval + Math.random() * CONFIG.pad.randomDelay
-        setTimeout(createPad, nextDelay)
+        padTimerId = setTimeout(createPad, nextDelay)
     }
 
     /**
@@ -291,7 +299,7 @@ App.audio = (function () {
      * - Uses a StereoPannerNode to add spatial width.
      */
     function createMelody() {
-        if (!ctx || !masterGainNode) return
+        if (!ctx || !masterGainNode || melodyTimerId === null) return
 
         const now = ctx.currentTime
         const out = ctx.createGain()
@@ -340,7 +348,7 @@ App.audio = (function () {
         })
 
         // Schedule next melody loop
-        setTimeout(createMelody, CONFIG.melody.repeatInterval)
+        melodyTimerId = setTimeout(createMelody, CONFIG.melody.repeatInterval)
     }
 
     /**
@@ -408,9 +416,15 @@ App.audio = (function () {
                 masterGainNode.gain.value = 0
                 masterGainNode.gain.setTargetAtTime(1, ctx.currentTime, 1)
 
-                // Begin generative loops
-                createPad()
-                createMelody()
+                // Begin generative loops (only if not already running)
+                if (padTimerId === null) {
+                    padTimerId = 0 // Set to non-null to indicate running
+                    createPad()
+                }
+                if (melodyTimerId === null) {
+                    melodyTimerId = 0 // Set to non-null to indicate running
+                    createMelody()
+                }
             } catch (e) {
                 console.error('Audio start failed:', e)
             }
@@ -425,6 +439,16 @@ App.audio = (function () {
                 masterGainNode.gain.cancelScheduledValues(ctx.currentTime)
                 masterGainNode.gain.setTargetAtTime(1, ctx.currentTime, 1)
             }
+
+            // Restart loops if they were stopped
+            if (padTimerId === null) {
+                padTimerId = 0 // Set to non-null to indicate running
+                createPad()
+            }
+            if (melodyTimerId === null) {
+                melodyTimerId = 0 // Set to non-null to indicate running
+                createMelody()
+            }
         }
     }
 
@@ -434,6 +458,16 @@ App.audio = (function () {
      */
     function stop() {
         if (ctx && masterGainNode) {
+            // Stop the generative loops by canceling scheduled timeouts
+            if (padTimerId !== null) {
+                clearTimeout(padTimerId)
+                padTimerId = null
+            }
+            if (melodyTimerId !== null) {
+                clearTimeout(melodyTimerId)
+                melodyTimerId = null
+            }
+
             // Fade Out: Smooth silence
             masterGainNode.gain.cancelScheduledValues(ctx.currentTime)
             masterGainNode.gain.setTargetAtTime(0, ctx.currentTime, 0.5)
