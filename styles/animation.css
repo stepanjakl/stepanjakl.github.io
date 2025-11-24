@@ -1217,7 +1217,7 @@ body {
 }
 
 #dropdown-menu label#dropdown-menu-light-mode::after {
-    background-image: linear-gradient(to right in oklch, rgba(238, 213, 0, 1), rgba(238, 213, 0, 0));
+    background-image: linear-gradient(to right in oklch, rgba(238, 213, 0, 0.75), rgba(238, 213, 0, 0));
 }
 
 @property --angle {
@@ -1233,6 +1233,38 @@ body {
 }
 
 /* Ambience label background gradients */
+
+@property --ambience-stop-1 {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #d0ba00;
+}
+
+@property --ambience-stop-2 {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #3fd400;
+}
+
+@property --ambience-stop-3 {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #00aec2;
+}
+
+@property --ambience-stop-4 {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #4e7bff;
+}
+
+@property --ambience-stop-5 {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #d0ba00;
+}
+
+
 
 #dropdown-menu label#dropdown-menu-ambience::before,
 #dropdown-menu label#dropdown-menu-ambience::after {
@@ -1261,19 +1293,29 @@ body {
 #dropdown-menu #dropdown-menu-ambience svg {
     filter: blur(0.125rem);
     animation: ambience-spin 8s linear infinite;
-    transition: filter var(--animate-out-segment) linear;
+    transition: filter var(--animate-out-segment) linear, --ambience-stop-1 var(--animate-out-segment) linear, --ambience-stop-2 var(--animate-out-segment) linear, --ambience-stop-3 var(--animate-out-segment) linear, --ambience-stop-4 var(--animate-out-segment) linear, --ambience-stop-5 var(--animate-out-segment) linear;
 }
 
 #mode:checked~main #dropdown-menu #dropdown-menu-ambience svg {
     filter: blur(0.125rem) brightness(0.75);
+    --ambience-stop-1: var(--yellow-85);
+    --ambience-stop-2: var(--green-lime-85);
+    --ambience-stop-3: var(--cyan-full-85);
+    --ambience-stop-4: var(--blue-full-75);
+    --ambience-stop-5: var(--yellow-85);
 }
 
 #dropdown-menu #dropdown-menu-ambience:hover svg,
 #dropdown-menu #dropdown-menu-ambience:focus svg,
 #mode:checked~main #dropdown-menu #dropdown-menu-ambience:focus svg,
 #mode:checked~main #dropdown-menu #dropdown-menu-ambience:hover svg {
+    --ambience-stop-1: var(--icon--hover);
+    --ambience-stop-2: var(--icon--hover);
+    --ambience-stop-3: var(--icon--hover);
+    --ambience-stop-4: var(--icon--hover);
+    --ambience-stop-5: var(--icon--hover);
     filter: blur(0);
-    transition: filter var(--animate-in-segment) linear;
+    transition: filter var(--animate-in-segment) linear, --ambience-stop-1 var(--animate-in-segment) linear, --ambience-stop-2 var(--animate-in-segment) linear, --ambience-stop-3 var(--animate-in-segment) linear, --ambience-stop-4 var(--animate-in-segment) linear, --ambience-stop-5 var(--animate-in-segment) linear;
 }
 
 #dropdown-menu #dropdown-menu-ambience svg use {

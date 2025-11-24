@@ -301,17 +301,6 @@ body.no-fullscreen .modal__fullscreen-button {
 }
 
 
-/* Ambience */
-
-#ambience:checked~main .ambience-checked\:flex {
-    display: flex;
-}
-
-#ambience:checked~main .ambience-checked\:hidden {
-    display: none;
-}
-
-
 /* Light mode - Debug */
 
 #mode:checked~#debug:checked~main * {
