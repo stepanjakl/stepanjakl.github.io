@@ -152,7 +152,7 @@ body.no-fullscreen .modal__fullscreen-button {
     background-image: linear-gradient(to right in oklch, rgba(239, 153, 255, 0.75), rgba(107, 0, 118, 0));
 }
 
-#mode:checked~main #dropdown-menu a svg:nth-of-type(2) {
+#mode:checked~main #dropdown-menu a[target="_blank"][href^="http"] span::before {
     background-color: var(--dark-15);
 }
 

@@ -521,18 +521,38 @@ body {
     height: 1.5rem;
 }
 
-#dropdown-menu a svg:nth-of-type(2) {
-    align-self: flex-start;
+#dropdown-menu a[target="_blank"][href^="http"] span {
+    position: relative;
 }
 
-#dropdown-menu a svg:nth-of-type(2) {
-    margin-left: 0.1875rem;
+#dropdown-menu a[target="_blank"][href^="http"] span::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(0.125rem, calc(-50% - 0.28125rem));
     width: 0.6875rem;
     height: 0.6875rem;
-    background: var(--light-15);
-    border-radius: 999rem;
+    margin-left: 0.34375rem;
     padding: 0.15625rem 0.125rem 0.09375rem 0.125rem;
     box-sizing: content-box;
+    background: var(--light-15);
+    border-radius: 999rem;
+}
+
+#dropdown-menu a[target="_blank"][href^="http"] span::after {
+    content: "";
+    display: inline-flex;
+    width: 0.6875rem;
+    height: 0.6875rem;
+    margin-left: 0.34375rem;
+    transform: translateY(-0.28125rem);
+    box-sizing: content-box;
+    background-color: var(--icon);
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="m5.313 15.834-1.896-1.896 7.854-7.854H4.667V3.417h11.167v11.167h-2.667V7.979l-7.854 7.855Z"/></svg>');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
 }
 
 

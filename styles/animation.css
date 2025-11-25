@@ -1202,6 +1202,15 @@ body {
     color: var(--icon--hover);
 }
 
+#dropdown-menu a[target="_blank"][href^="http"] span::after {
+    transition: background-color var(--animate-out-segment) linear;
+}
+
+#dropdown-menu a[target="_blank"][href^="http"]:hover span::after {
+    transition: background-color var(--animate-in-segment) linear;
+    background-color: var(--icon--hover);
+}
+
 #dropdown-menu label#dropdown-menu-light-mode:hover span,
 #dropdown-menu label#dropdown-menu-light-mode:hover svg,
 #dropdown-menu label#dropdown-menu-light-mode:focus span,
