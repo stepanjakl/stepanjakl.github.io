@@ -229,7 +229,8 @@
                         onkeydown="if(event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') { event.preventDefault(); this.click(); }"
                         oncontextmenu="if ('speechSynthesis' in window) { let msg = new SpeechSynthesisUtterance(); msg.volume= 0.5; msg.lang = 'cs-CZ'; msg.voice = speechSynthesis.getVoices().filter(voice => voice.name === 'Zuzana')[0]; msg.text = 'Štěpán Jákl'; speechSynthesis.speak(msg) }"
                         role="button"
-                        aria-label="Activate to copy name to clipboard">
+                        aria-label="Activate to copy name to clipboard"
+                        aria-describedby="name-copy-status">
                         <!-- <span class="sr-only" lang="cs">Štěpán Jákl</span> -->
                         <div class="intro__name-frame"
                              aria-hidden="true">
@@ -261,6 +262,11 @@
                         <abbr class="tooltip__text--bottom tooltip__text">
                             <span aria-hidden="true">L-click to copy / R-click to pronounce</span>
                         </abbr>
+                        <span id="name-copy-status"
+                              role="status"
+                              aria-live="polite"
+                              aria-atomic="true"
+                              class="sr-only"></span>
                     </h1>
                     <div class="intro__logo intro__logo--animating has-corners"
                          role="img"
@@ -334,28 +340,26 @@
                         <div class="menu__background">
                         </div>
                         <!-- Email contact button -->
-                        <div class="menu__item menu__email tooltip"
-                             style="--i:0">
-                            <button type="button"
-                                    class="menu__email-button"
-                                    aria-label="Contact me via email. Click to copy email address"
-                                    aria-describedby="email-copy-status">
-                                <span class="menu__email-icon">
-                                    <svg>
-                                        <use xlink:href="images/icons.svg#email"></use>
-                                    </svg>
-                                </span>
-                                <span class="text-sm menu__email-text highlight">stepan.jakl@icloud.com</span>
-                                <abbr class="tooltip__text--top tooltip__text">
-                                    <span>Click to copy</span>
-                                </abbr>
-                            </button>
+                        <button type="button"
+                                class="menu__item menu__email tooltip"
+                                aria-label="Contact me via email. Click to copy email address"
+                                aria-describedby="email-copy-status"
+                                style="--i:0">
+                            <span class="menu__email-icon">
+                                <svg>
+                                    <use xlink:href="images/icons.svg#email"></use>
+                                </svg>
+                            </span>
+                            <span class="text-sm menu__email-text highlight">stepan.jakl@icloud.com</span>
+                            <abbr class="tooltip__text--top tooltip__text">
+                                <span>Click to copy</span>
+                            </abbr>
                             <span id="email-copy-status"
                                   role="status"
                                   aria-live="polite"
                                   aria-atomic="true"
                                   class="sr-only"></span>
-                        </div>
+                        </button>
                         <!-- Menu navigation links -->
                         <div class="menu__links">
                             <a href="#profile"
@@ -487,6 +491,7 @@
                                     <label id="dropdown-menu-light-mode"
                                            for="mode"
                                            tabindex="0"
+                                           onclick="App.deferredFocus('dropdown-menu-dark-mode')"
                                            onkeydown="if(event.key === 'Enter') { App.keyActivate('mode','dropdown-menu-dark-mode') }">
                                         <svg>
                                             <use xlink:href="images/icons.svg#menu-light-mode"></use>
@@ -496,6 +501,7 @@
                                     <label id="dropdown-menu-dark-mode"
                                            for="mode"
                                            tabindex="0"
+                                           onclick="App.deferredFocus('dropdown-menu-light-mode')"
                                            onkeydown="if(event.key === 'Enter') { App.keyActivate('mode','dropdown-menu-light-mode') }">
                                         <svg>
                                             <use xlink:href="images/icons.svg#menu-dark-mode"></use>

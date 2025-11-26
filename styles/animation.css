@@ -117,6 +117,7 @@ footer>* {
     animation-direction: normal, normal;
     animation-iteration-count: infinite, infinite;
     animation-composition: replace, accumulate;
+    will-change: opacity, mask-image, background-position;
 }
 
 @media (min-width: 45rem) {
@@ -225,6 +226,7 @@ footer>* {
     animation-timing-function: var(--ease-out-quad);
     animation-fill-mode: backwards;
     transform-origin: center;
+    will-change: transform;
 }
 
 @keyframes logo-animate {
@@ -364,6 +366,7 @@ footer>* {
     animation-delay: var(--delay-availability-background-animate);
     animation-timing-function: var(--ease-in-out-quad);
     animation-fill-mode: backwards;
+    will-change: opacity, width;
 }
 
 .availability--animating .availability__content {
@@ -372,6 +375,7 @@ footer>* {
     animation-delay: var(--delay-availability-content-fade-in);
     animation-timing-function: var(--ease-out-quad);
     animation-fill-mode: backwards;
+    will-change: opacity;
 }
 
 @keyframes cta-1-animate-init {
@@ -396,6 +400,7 @@ footer>* {
     animation-delay: var(--delay-menu-background-animate);
     animation-timing-function: var(--ease-in-out-quad);
     animation-fill-mode: backwards;
+    will-change: opacity, width;
 }
 
 .menu--animating .menu__email,
@@ -451,6 +456,7 @@ footer>* {
     animation-duration: var(--duration-triangle-pull-before);
     animation-timing-function: var(--ease-out-quad);
     animation-delay: var(--delay-triangle-pull-before);
+    will-change: height;
 }
 
 @keyframes triangle-pull-before {
@@ -469,6 +475,7 @@ footer>* {
     animation-duration: var(--duration-triangle-right-pull-after);
     animation-timing-function: var(--ease-out-quad);
     animation-delay: var(--delay-triangle-right-pull-after);
+    will-change: top, height, width;
 }
 
 @keyframes triangle-right-pull-after {
@@ -767,7 +774,8 @@ body {
     animation-timing-function: linear;
     animation-duration: calc(var(--animate-in-segment) * 16);
     animation-iteration-count: infinite;
-    animation-delay: calc(var(--anim-segment) * 5);
+    animation-delay: calc(var(--delay-availability-content-fade-in) + var(--duration-availability-content-fade-in));
+    will-change: opacity;
 }
 
 .availability__button:hover .availability__dot,
@@ -815,18 +823,31 @@ body {
 
 /* Intro links */
 
+.menu__email,
 .menu__link,
 .menu__email-icon,
 .menu__link-icon {
     transition: background-color var(--animate-out-segment-2\/3) linear, outline-color var(--animate-out-segment-2\/3) linear, border-color var(--animate-out-segment-2\/3) linear, box-shadow var(--animate-out-segment-2\/3) linear;
 }
 
+.menu__email:hover,
+.menu__email:focus {
+    background-color: var(--light-15);
+    border-color: var(--light-15);
+    transition: background-color var(--animate-in-segment-2\/3) linear, outline-color var(--animate-in-segment-2\/3) linear, border-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear;
+}
+
+.menu__email:hover .menu__email-icon,
+.menu__email:focus .menu__email-icon {
+    background-color: var(--dark-10);
+    border-color: var(--light-15);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--dark-15);
+    transition: background-color var(--animate-in-segment-2\/3) linear, outline-color var(--animate-in-segment-2\/3) linear, border-color var(--animate-in-segment-2\/3) linear, box-shadow var(--animate-in-segment-2\/3) linear;
+}
+
 .menu__link:hover,
 .menu__link:focus,
 .menu__link.tooltip-key--active,
-.menu__link:hover .menu__email-icon,
-.menu__link:focus .menu__email-icon,
-.menu__link.tooltip-key--active .menu__email-icon,
 .menu__link:hover .menu__link-icon,
 .menu__link:focus .menu__link-icon,
 .menu__link.tooltip-key--active .menu__link-icon {
@@ -840,7 +861,7 @@ body {
 .menu__link:focus,
 .menu__link.tooltip-key--active {
     background-color: var(--highlight-secondary);
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-25);
+    border-color: var(--light-25);
 }
 
 .menu__link--profile:hover,
@@ -850,15 +871,15 @@ body {
 }
 
 .menu__link svg,
-.menu__email-button svg {
+.menu__email svg {
     transition: color var(--animate-out-segment-2\/3) linear;
     color: var(--icon);
 }
 
 .menu__link:hover svg,
 .menu__link:focus svg,
-.menu__email-button:hover svg,
-.menu__email-button:focus svg {
+.menu__email:hover svg,
+.menu__email:focus svg {
     transition: color var(--animate-in-segment-2\/3) linear;
     color: var(--icon--hover);
 }
@@ -871,8 +892,8 @@ body {
 
 .menu__link:hover .menu__link-label-text,
 .menu__link:focus .menu__link-label-text,
-.menu__email-button:hover .menu__email-text,
-.menu__email-button:focus .menu__email-text {
+.menu__email:hover .menu__email-text,
+.menu__email:focus .menu__email-text {
     transition: color var(--animate-in-segment-2\/3) linear;
     color: var(--text-1);
 }
@@ -1273,13 +1294,17 @@ body {
     initial-value: #d0ba00;
 }
 
-
-
 #dropdown-menu label#dropdown-menu-ambience::before,
 #dropdown-menu label#dropdown-menu-ambience::after {
     background-size: 200%;
     background-position: calc(100% + 1.75rem) 50%;
     animation: ambience-spin 8s linear infinite;
+    animation-play-state: paused;
+}
+
+#menu:target #dropdown-menu label#dropdown-menu-ambience::before,
+#menu:target #dropdown-menu label#dropdown-menu-ambience::after {
+    animation-play-state: running;
 }
 
 #dropdown-menu label#dropdown-menu-ambience::before {
@@ -1301,8 +1326,13 @@ body {
 
 #dropdown-menu #dropdown-menu-ambience svg {
     filter: blur(0.125rem);
-    animation: ambience-spin 8s linear infinite;
     transition: filter var(--animate-out-segment) linear, --ambience-stop-1 var(--animate-out-segment) linear, --ambience-stop-2 var(--animate-out-segment) linear, --ambience-stop-3 var(--animate-out-segment) linear, --ambience-stop-4 var(--animate-out-segment) linear, --ambience-stop-5 var(--animate-out-segment) linear;
+    animation: ambience-spin 8s linear infinite;
+    animation-play-state: paused;
+}
+
+#menu:target #dropdown-menu #dropdown-menu-ambience svg {
+    animation-play-state: running;
 }
 
 #mode:checked~main #dropdown-menu #dropdown-menu-ambience svg {
@@ -1395,6 +1425,7 @@ body.modal-profile-open .intro__left {
     transition: transform calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad), filter calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad);
     transform: scale(0.95);
     filter: blur(2rem);
+    will-change: transform, filter;
 }
 
 #profile:target~main .intro__right,
@@ -1402,6 +1433,7 @@ body.modal-profile-open .intro__right {
     transition: transform calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad), filter calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad);
     transform: scale(0.95);
     filter: blur(3rem);
+    will-change: transform, filter;
 }
 
 footer {
@@ -1640,12 +1672,14 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:focus {
     opacity: 1;
     pointer-events: auto;
     transition: opacity var(--animate-in-segment) linear;
+    will-change: opacity;
 }
 
 #debug:not(:checked)~#archive:target~main #underlay-modal-archive {
     opacity: 1;
     pointer-events: auto;
     transition: opacity var(--animate-in-segment) linear;
+    will-change: opacity;
 }
 
 #debug:not(:checked)~main #menu:target #underlay-menu {
@@ -1653,6 +1687,7 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:focus {
     opacity: 1;
     pointer-events: auto;
     transition: opacity var(--animate-in-segment) linear;
+    will-change: opacity;
 }
 
 
@@ -1677,8 +1712,8 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:focus {
 }
 
 .highlight.highlight--active,
-.menu__email-button:hover .highlight.highlight--active,
-.menu__email-button:focus .highlight.highlight--active {
+.menu__email:hover .highlight.highlight--active,
+.menu__email:focus .highlight.highlight--active {
     transition: color calc(2 * var(--animate-in-segment)) var(--ease-out-quad);
     color: var(--green-lime-85);
 }

@@ -33,11 +33,8 @@ body.no-fullscreen .modal__fullscreen-button {
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-25);
 }
 
-#mode:checked~main .menu__link:hover .menu__email-icon,
 #mode:checked~main .menu__link:hover .menu__link-icon,
-#mode:checked~main .menu__link:focus .menu__email-icon,
 #mode:checked~main .menu__link:focus .menu__link-icon,
-#mode:checked~main .menu__link.tooltip-key--active .menu__email-icon,
 #mode:checked~main .menu__link.tooltip-key--active .menu__link-icon {
     background-color: var(--light-35);
     outline-color: transparent;

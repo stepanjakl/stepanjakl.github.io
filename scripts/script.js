@@ -532,6 +532,19 @@ App.keyActivate = (clickId, focusId = null) => {
     }
 }
 
+/**
+ * Helper to defer focus to an element until after the next paint
+ * Useful when the element to be focused is currently hidden but will become visible
+ * @param {string} focusId - ID of element to .focus()
+ */
+App.deferredFocus = (focusId) => {
+    if (!focusId) return
+    afterPaint(() => {
+        const f = App.getEl(focusId)
+        if (f && typeof f.focus === 'function') f.focus()
+    })
+}
+
 // Public API methods (populated later during DOMContentLoaded, called from HTML inline handlers)
 App.timeline = null
 App.textHighlighter = null
@@ -3663,31 +3676,124 @@ function initializeClickHandlers() {
     const nameTooltip = document.querySelector('.intro__name .tooltip__text--bottom span')
     const emailTooltip = document.querySelector('.menu__email .tooltip__text span')
     const emailHighlight = document.querySelector('.menu__email .highlight')
+    const nameStatus = document.getElementById('name-copy-status')
 
     // Setup name element click handler
     const nameElement = document.querySelector('.intro__name')
     if (nameElement && nameTooltip) {
-        nameElement.onclick = function (event) {
-            App.handleTouchButtonClick(this, event, () => {
-                const successful = copyToClipboard('Štěpán Jákl')
-                if (successful) {
-                    App.textHighlighter.highlightAndCopyText(event, nameTooltip, this, 'Copied to the clipboard')
+        // Update tooltip text based on device type
+        if (isTouchDevice) {
+            nameTooltip.textContent = 'Tap to copy / Double-tap to pronounce'
+        }
 
-                    // Announce to screen readers
-                    const nameStatus = document.getElementById('name-copy-status')
-                    if (nameStatus) {
-                        nameStatus.textContent = 'Name copied to clipboard'
-                        setTimeout(() => {
-                            nameStatus.textContent = ''
-                        }, 3000)
-                    }
+        // State management for tap interactions
+        let lastTapTime = 0
+        let singleTapTimer = null
+        let isElementPrimed = false
+        let isCopyInProgress = false
+        const DOUBLE_TAP_DELAY = 300
+
+        // Pronounce name using speech synthesis
+        const pronounceName = () => {
+            const speak = () => {
+                const msg = new SpeechSynthesisUtterance()
+                msg.volume = 0.5
+                msg.lang = 'cs-CZ'
+                msg.text = 'Štěpán Jákl'
+
+                const voices = speechSynthesis.getVoices()
+                const czechVoice = voices.find(voice => voice.name === 'Zuzana' || voice.lang.startsWith('cs'))
+                if (czechVoice) msg.voice = czechVoice
+
+                speechSynthesis.speak(msg)
+            }
+
+            speechSynthesis.getVoices().length > 0 ? speak() : speechSynthesis.addEventListener('voiceschanged', speak, { once: true })
+        }
+
+        // Copy name to clipboard with screen reader announcement
+        const copyNameToClipboard = async (element, event) => {
+            isCopyInProgress = true
+
+            const successful = await copyToClipboard('Štěpán Jákl')
+            if (successful) {
+                App.textHighlighter.highlightAndCopyText(event, nameTooltip, element, 'Copied to the clipboard')
+
+                if (nameStatus) {
+                    nameStatus.textContent = 'Name copied to clipboard'
+                    setTimeout(() => nameStatus.textContent = '', 3000)
                 }
-            }, true)
+            }
+
+            // Restore focus and clear flag
+            element.focus()
+            isCopyInProgress = false
+        }
+
+        // Reset state helper
+        const resetTapState = () => {
+            lastTapTime = 0
+            if (singleTapTimer) {
+                clearTimeout(singleTapTimer)
+                singleTapTimer = null
+            }
+        }
+
+        // Reset primed state when element loses focus (but not during copy)
+        nameElement.addEventListener('blur', () => {
+            if (isCopyInProgress) return
+            isElementPrimed = false
+            resetTapState()
+        })
+
+        // Click handler for both mouse and touch
+        nameElement.onclick = function (event) {
+            // Touch devices: first tap focuses element, shows tooltip
+            if (isTouchDevice) {
+                if (!isElementPrimed) {
+                    event.preventDefault()
+                    this.focus()
+                    isElementPrimed = true
+                    return
+                }
+            } else {
+                // Desktop: Copy immediately
+                copyNameToClipboard(this, event)
+                return
+            }
+
+            const currentTime = Date.now()
+            const tapInterval = currentTime - lastTapTime
+
+            // Double-tap detection
+            if (lastTapTime > 0 && tapInterval < DOUBLE_TAP_DELAY) {
+                event.preventDefault()
+                resetTapState()
+                pronounceName()
+                // Haptic feedback if available
+                if (navigator.vibrate) navigator.vibrate(50)
+                // Keep element primed for next action
+                return
+            }
+
+            // Single tap
+            lastTapTime = currentTime
+
+            // Clear any existing timer
+            if (singleTapTimer) clearTimeout(singleTapTimer)
+
+            const element = this
+
+            // Execute copy after delay if no second tap
+            singleTapTimer = setTimeout(async () => {
+                await copyNameToClipboard(element, event)
+                resetTapState()
+            }, DOUBLE_TAP_DELAY)
         }
     }
 
     // Setup email button click handler
-    const emailButton = document.querySelector('.menu__email-button')
+    const emailButton = document.querySelector('.menu__email')
     const emailStatus = document.getElementById('email-copy-status')
     if (emailButton && emailTooltip && emailHighlight) {
         emailButton.onclick = function (event) {

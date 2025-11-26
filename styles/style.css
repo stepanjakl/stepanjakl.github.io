@@ -98,6 +98,7 @@ body, html {
     position: absolute !important;
     width: 1px !important;
     white-space: nowrap !important;
+    user-select: none !important;
 }
 
 .sr-only-focusable,
@@ -114,6 +115,7 @@ body, html {
     clip-path: inset(50%) !important;
     white-space: nowrap !important;
     border: 0 !important;
+    user-select: none !important;
 }
 
 
@@ -1170,7 +1172,7 @@ body {
 
 .tooltip .tooltip__text {
     position: absolute;
-    z-index: 100;
+    z-index: 10;
     left: 50%;
     transform: translateX(-50%);
     padding: 0.5625rem;
