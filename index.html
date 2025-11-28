@@ -9,26 +9,13 @@
             opacity: 0;
         }
     </style>
-    <script defer
-            src="https://cloud.umami.is/script.js"
-            data-website-id="6f9d8fb6-c4c3-410e-bba3-7b8cafd6ed04"></script>
-    <!-- GlitchTip - Error tracking -->
-    <script src="https://browser.sentry-cdn.com/10.25.0/bundle.min.js"
-            crossorigin="anonymous"></script>
-    <script>
-        Sentry.init({
-            dsn: "https://7388455908f8442ba73a83bca2c9403c@app.glitchtip.com/13576",
-            tracesSampleRate: 0.01,
-        })
-
-        window.onerror = function (message, source, lineno, colno, error) {
-            Sentry.captureException(error)
-        }
-
-        window.onunhandledrejection = function (event) {
-            Sentry.captureException(event.reason)
-        }
-    </script>
+    <!-- DNS Prefetch for external services -->
+    <link rel="dns-prefetch"
+          href="https://cloud.umami.is">
+    <link rel="dns-prefetch"
+          href="https://browser.sentry-cdn.com">
+    <link rel="dns-prefetch"
+          href="https://www.clarity.ms">
     <!-- Page metadata -->
     <title>Štěpán Jákl | Full-stack web developer & interface designer</title>
     <meta charset="UTF-8">
@@ -182,6 +169,13 @@
 </head>
 
 <body>
+    <!-- Skip navigation links for keyboard accessibility -->
+    <div id="global-skip-link-group">
+        <a href="#menu"
+           class="skip-link">Skip to navigation</a>
+        <a href="#intro-content"
+           class="skip-link">Skip to main content</a>
+    </div>
     <!-- Global state controls -->
     <input id="mode"
            type="checkbox"
@@ -203,6 +197,12 @@
            hidden
            aria-hidden="true"
            aria-label="Toggle ambience audio">
+    <input id="animations"
+           type="checkbox"
+           hidden
+           aria-hidden="true"
+           aria-label="Toggle animations"
+           checked>
     <input id="profile"
            type="hidden"
            hidden
@@ -283,7 +283,8 @@
                     </div>
                 </div>
                 <!-- Right column: Titles, availability & menu -->
-                <div class="intro__right">
+                <div id="intro-content"
+                     class="intro__right">
                     <!-- Job titles -->
                     <h2 class="intro__title intro__primary-title intro__title--animating"
                         role="heading"
@@ -513,7 +514,8 @@
                                            tabindex="0"
                                            onkeydown="if(event.key === 'Enter') { App.keyActivate('ambience') }">
                                         <svg></svg>
-                                        <span class="text-sm">Ambience</span>
+                                        <span class="text-sm ambience-checked:flex hidden">Ambience off</span>
+                                        <span class="text-sm flex ambience-checked:hidden">Ambience</span>
                                     </label>
                                     <label id="dropdown-menu-fullscreen"
                                            for="fullscreen"
@@ -526,20 +528,42 @@
                                         <svg class="hidden fullscreen-checked:flex">
                                             <use xlink:href="images/icons.svg#menu-fullscreen-off"></use>
                                         </svg>
-                                        <span class="text-sm">Fullscreen</span>
+                                        <span class="text-sm fullscreen-checked:flex hidden">Exit</span>
+                                        <span class="text-sm flex fullscreen-checked:hidden">Fullscreen</span>
                                     </label>
-                                    <label id="dropdown-menu-debug"
-                                           for="debug"
-                                           tabindex="0"
-                                           onkeydown="if(event.key === 'Enter') { App.keyActivate('debug') }">
-                                        <svg class="debug-checked:hidden flex">
-                                            <use xlink:href="images/icons.svg#menu-debug"></use>
-                                        </svg>
-                                        <svg class="hidden debug-checked:flex">
-                                            <use xlink:href="images/icons.svg#menu-debug-off"></use>
-                                        </svg>
-                                        <span class="text-sm">Debug</span>
-                                    </label>
+                                    <hr>
+                                    <div class="dropdown-menu__group">
+                                        <label id="dropdown-menu-debug"
+                                               for="debug"
+                                               tabindex="0"
+                                               onkeydown="if(event.key === 'Enter') { App.keyActivate('debug') }">
+                                            <div>
+                                                <svg class="debug-checked:hidden flex">
+                                                    <use xlink:href="images/icons.svg#menu-debug"></use>
+                                                </svg>
+                                                <svg class="hidden debug-checked:flex">
+                                                    <use xlink:href="images/icons.svg#menu-debug-off"></use>
+                                                </svg>
+                                            </div>
+                                            <span class="text-sm debug-checked:flex hidden">Debug off</span>
+                                            <span class="text-sm flex debug-checked:hidden">Debug</span>
+                                        </label>
+                                        <label id="dropdown-menu-reduce"
+                                               for="animations"
+                                               tabindex="0"
+                                               onkeydown="if(event.key === 'Enter') { App.keyActivate('animations') }">
+                                            <div>
+                                                <svg class="reduce-checked:flex hidden">
+                                                    <use xlink:href="images/icons.svg#menu-reduce"></use>
+                                                </svg>
+                                                <svg class="flex reduce-checked:hidden">
+                                                    <use xlink:href="images/icons.svg#menu-reduce-off"></use>
+                                                </svg>
+                                            </div>
+                                            <span class="text-sm reduce-checked:flex hidden">Reduce</span>
+                                            <span class="text-sm flex reduce-checked:hidden">Restore</span>
+                                        </label>
+                                    </div>
                                 </div>
                             </dialog>
                         </div>
@@ -587,13 +611,30 @@
                                     <span>Štěpán Jákl</span>
                                 </dd>
                                 <dt>
-                                    <span>Summary:</span>
+                                    <span>Profile:</span>
                                 </dt>
                                 <dd class="modal-profile__summary">
-                                    <p>Experienced and detail-oriented user interface engineer who specialises in crafting digital solutions that balance clarity and creativity. Committed to delivering high-quality results for projects with exciting propositions and realistic goals. Proficient across both back-end and front-end development, with a strong emphasis on user-focused outcomes.</p>
-                                    <p>Eager to explore modern frameworks and emerging tools while maintaining a solid foundation in web development fundamentals such as clean semantics, cross-browser reliability, and accessibility best practices.</p>
-                                    <p>Dedicated to shaping engaging interfaces through purposeful design and seamless interactions. I value precision in every aspect of the creative process, ensuring layouts feel balanced, transitions enhance flow, and visual elements contribute meaningfully to the overall experience. Each project is an opportunity to refine the connection between form and function.</p>
-                                    <p>I combine design thinking with technical depth, taking on multiple roles as projects evolve — from early planning and analytical problem-solving to hands-on development. This interdisciplinary approach helps me create scalable, reliable systems rooted in practical decision-making and careful attention to detail. Whether defining project structure or refining the final look and feel, I aim to produce work that is both thoughtful and dependable.</p>
+                                    <p>Experienced and detail-oriented user interface engineer who specialises in crafting digital solutions that balance clarity and creativity.</p>
+                                    <p>Committed to delivering high-quality results for projects with exciting propositions and realistic goals.</p>
+                                    <h3 class="modal-profile__summary-heading">Technical Expertise</h3>
+                                    <ul class="modal-profile__summary-list">
+                                        <li><span>Proficient across back-end and front-end development</span></li>
+                                        <li><span>Strong emphasis on user-focused outcomes</span></li>
+                                        <li><span>Eager to explore modern frameworks and emerging tools</span></li>
+                                        <li><span>Solid foundation in web development fundamentals</span></li>
+                                        <li><span>Clean semantics, cross-browser reliability, and accessibility best practices</span></li>
+                                    </ul>
+                                    <h3 class="modal-profile__summary-heading">Design Philosophy</h3>
+                                    <p>Dedicated to shaping engaging interfaces through purposeful design and seamless interactions. I value precision in every aspect of the creative process.</p>
+                                    <ul class="modal-profile__summary-list">
+                                        <li><span>Ensuring layouts feel balanced</span></li>
+                                        <li><span>Transitions enhance flow</span></li>
+                                        <li><span>Visual elements contribute meaningfully to the overall experience</span></li>
+                                        <li><span>Each project refines the connection between form and function</span></li>
+                                    </ul>
+                                    <h3 class="modal-profile__summary-heading">Approach</h3>
+                                    <p>I combine design thinking with technical depth, taking on multiple roles as projects evolve — from early planning and analytical problem-solving to hands-on development.</p>
+                                    <p>This interdisciplinary approach helps me create scalable, reliable systems rooted in practical decision-making and careful attention to detail.</p>
                                     <p>I have been equally dedicated to code and design as a professional since 2014.</p>
                                 </dd>
                                 <dt>
@@ -817,7 +858,7 @@
                             </label>
                             <button type="button"
                                     id="modal-archive-skip-link"
-                                    class="sr-only-focusable"
+                                    class="skip-link"
                                     aria-label="Skip to timeline navigation">Skip to timeline navigation</button>
                         </div>
                         <!-- Modal body / Timeline content -->
@@ -1712,18 +1753,18 @@
                             <!-- Horizontal timeline navigation -->
                             <div id="horizontal-timeline-wrapper"
                                  tabindex="-1">
-                                <button type="button"
-                                        id="horizontal-timeline-return"
-                                        class="sr-only-focusable"
-                                        aria-label="Return to main content">Return to main content</button>
                                 <div id="horizontal-timeline">
-                                </div>
-                                <!-- Live region for announcing current timeline section to screen readers -->
-                                <div id="timeline-announcement"
-                                     role="status"
-                                     aria-live="polite"
-                                     aria-atomic="true"
-                                     class="sr-only">
+                                    <button type="button"
+                                            id="horizontal-timeline-return"
+                                            class="skip-link"
+                                            aria-label="Return to main content">Return to main content</button>
+                                    <!-- Live region for announcing current timeline section to screen readers -->
+                                    <div id="timeline-announcement"
+                                         role="status"
+                                         aria-live="polite"
+                                         aria-atomic="true"
+                                         class="sr-only">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1794,6 +1835,42 @@
                   fill="url(#debug-grid-outline)" />
         </svg>
     </main>
+    <!-- Analytics & Error Tracking (loaded at end for performance) -->
+    <!-- Umami Analytics -->
+    <script defer
+            src="https://cloud.umami.is/script.js"
+            data-website-id="6f9d8fb6-c4c3-410e-bba3-7b8cafd6ed04"></script>
+    <!-- GlitchTip Error Tracking -->
+    <script defer
+            src="https://browser.sentry-cdn.com/10.25.0/bundle.min.js"
+            crossorigin="anonymous"></script>
+    <script>
+        // Wait for Sentry to load before initializing
+        window.addEventListener('DOMContentLoaded', function () {
+            if (typeof Sentry !== 'undefined') {
+                Sentry.init({
+                    dsn: "https://7388455908f8442ba73a83bca2c9403c@app.glitchtip.com/13576",
+                    tracesSampleRate: 0.01,
+                })
+
+                window.onerror = function (message, source, lineno, colno, error) {
+                    Sentry.captureException(error)
+                }
+
+                window.onunhandledrejection = function (event) {
+                    Sentry.captureException(event.reason)
+                }
+            }
+        });
+    </script>
+    <!-- Clarity Analytics -->
+    <script>
+        (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) }
+            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i
+            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y)
+        })(window, document, "clarity", "script", "7tuzqus5sw");
+    </script>
 </body>
 
 </html>

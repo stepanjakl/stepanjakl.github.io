@@ -684,6 +684,98 @@ try {
 
 
 // ============================================================================
+// Animation Preference Manager
+// ============================================================================
+
+/**
+ * Manages animation preference persistence using localStorage
+ * Extends ThemeManager pattern for consistency
+ * Allows users to control animations beyond OS prefers-reduced-motion setting
+ * WCAG 2.2.2 Pause, Stop, Hide (A)
+ */
+class AnimationPreferenceManager {
+    constructor() {
+        // Constants
+        this.STORAGE_KEY = 'animations-enabled'
+
+        // DOM Cache (lazy initialised)
+        this.animationsCheckboxElement = null
+
+        this.init()
+    }
+
+    // DOM Helpers
+
+    /**
+     * Get animations checkbox element with lazy caching
+     * @returns {HTMLElement|null} Cached animations checkbox element
+     */
+    getAnimationsCheckbox() {
+        return this.animationsCheckboxElement ??= App.getEl('animations')
+    }
+
+    // Initialisation
+
+    init() {
+        const animationsCheckbox = this.getAnimationsCheckbox()
+        if (!animationsCheckbox) {
+            console.warn('Animations checkbox not found')
+            return
+        }
+
+        // Apply saved preference on page load
+        this.applySavedPreference()
+
+        // Listen for changes and persist them
+        animationsCheckbox.addEventListener('change', () => {
+            this.savePreference()
+        })
+    }
+
+    // Preference Management
+
+    applySavedPreference() {
+        const animationsCheckbox = this.getAnimationsCheckbox()
+        if (!animationsCheckbox) return
+
+        try {
+            const savedPreference = localStorage.getItem(this.STORAGE_KEY)
+
+            if (savedPreference === 'enabled') {
+                animationsCheckbox.checked = true
+            } else if (savedPreference === 'disabled') {
+                animationsCheckbox.checked = false
+            }
+            // If no saved preference, default to enabled (checked)
+        } catch (error) {
+            console.warn('Failed to load animation preference:', error)
+        }
+    }
+
+    savePreference() {
+        const animationsCheckbox = this.getAnimationsCheckbox()
+        if (!animationsCheckbox) return
+
+        try {
+            const preference = animationsCheckbox.checked ? 'enabled' : 'disabled'
+            localStorage.setItem(this.STORAGE_KEY, preference)
+        } catch (error) {
+            console.warn('Failed to save animation preference:', error)
+        }
+    }
+}
+
+// Initialise animation preference manager
+try {
+    window.App = window.App || {}
+    window.App.animationPreferenceManager = new AnimationPreferenceManager()
+} catch (error) {
+    console.error('Failed to initialise animation preference manager:', error)
+    // Fallback: animations will use default state (enabled) without localStorage persistence
+}
+
+
+// ============================================================================
 // Resize Manager
 // ============================================================================
 
@@ -774,6 +866,36 @@ function initializeModalFooterArt() {
 // ============================================================================
 
 /**
+ * Setup close button unfocus behaviour for a modal
+ * Blurs the close button when the user scrolls the modal while the button is focused
+ * Reduces code duplication across modal lifecycle hooks
+ *
+ * @param {HTMLElement} modalElement - The modal element containing the close button
+ */
+function setupCloseButtonUnfocus(modalElement) {
+    if (!modalElement) return
+
+    const closeButton = modalElement.querySelector('.modal__close-button')
+    if (!closeButton) return
+
+    let isCloseButtonFocused = false
+
+    closeButton.addEventListener('focus', () => {
+        isCloseButtonFocused = true
+    })
+
+    closeButton.addEventListener('blur', () => {
+        isCloseButtonFocused = false
+    })
+
+    modalElement.addEventListener('scroll', () => {
+        if (isCloseButtonFocused && document.activeElement === closeButton) {
+            closeButton.blur()
+        }
+    }, { passive: true })
+}
+
+/**
  * Register lifecycle hooks for modal dialogs
  * Connects generic dialog.js system with project-specific modal behaviour
  * Allows modals to have custom initialisation/cleanup without modifying dialog.js
@@ -848,6 +970,9 @@ function registerDialogLifecycleHooks() {
                 }
                 modalArchive.addEventListener('scroll', handleUserScroll, { once: true, passive: true })
             }
+
+            // Setup close button unfocus on scroll
+            setupCloseButtonUnfocus(modalArchive)
 
             // Handle deep-link scrolling if ?year= parameter is present
             if (yearParam) {
@@ -931,6 +1056,10 @@ function registerDialogLifecycleHooks() {
                 initializeModalFooterArt()
                 footerArtInitialized = true
             }
+
+            // Setup close button unfocus on scroll
+            const modalProfile = getModalElement(NAVIGATION_HASHES.PROFILE)
+            setupCloseButtonUnfocus(modalProfile)
         },
         cleanup: () => {
             // Remove modal-specific class from body
@@ -3992,14 +4121,40 @@ function initializeGlobalEventHandlers() {
             App.popupInstance.open(popupLink, event)
         }
 
-        // 3. Handle timeline return button
+        // 3. Handle skip-to-menu link (navigate to menu)
+        if (event.target.closest('a[href="#menu"].skip-link')) {
+            event.preventDefault()
+            // Open the menu dropdown programmatically instead of relying on hash change
+            // This ensures proper focus management and dialog activation
+            const menuToggleOpen = document.getElementById('dropdown-menu-toggle-button-open')
+            const menuToggleClose = document.getElementById('dropdown-menu-toggle-button-close')
+            if (menuToggleOpen) {
+                openDialog('dropdown-menu-toggle', menuToggleOpen, menuToggleClose, 'menu')
+            }
+            return
+        }
+
+        // 4. Handle archive modal skip link (skip to timeline navigation)
+        if (event.target.closest('#modal-archive-skip-link')) {
+            event.preventDefault()
+            App.isTimelineSkipLinkActivated = true
+            requestAnimationFrame(() => {
+                const timelineWrapper = getTimelineWrapper()
+                if (timelineWrapper) {
+                    timelineWrapper.focus()
+                }
+            })
+            return
+        }
+
+        // 5. Handle timeline return button
         if (event.target.closest('#horizontal-timeline-return')) {
             event.preventDefault()
             App.exitTimelineFocusTrap?.()
             return
         }
 
-        // 4. Update exit target when timeline label clicked
+        // 6. Update exit target when timeline label clicked
         const labelButton = event.target.closest('#timeline_labels [data-label-for]')
         if (labelButton) {
             const timelineWrapper = getTimelineWrapper()
@@ -4029,27 +4184,7 @@ function initializeGlobalEventHandlers() {
     document.addEventListener('keydown', (event) => {
         const { key } = event
 
-        // 1. Track timeline skip link keyboard activation
-        if (event.target.closest('#modal-archive-skip-link') && (key === 'Enter' || key === ' ')) {
-            event.preventDefault()
-            App.isTimelineSkipLinkActivated = true
-            requestAnimationFrame(() => {
-                const timelineWrapper = getTimelineWrapper()
-                if (timelineWrapper) {
-                    timelineWrapper.focus()
-                }
-            })
-            return
-        }
-
-        // 2. Handle timeline return button
-        if (event.target.closest('#horizontal-timeline-return') && (key === 'Enter' || key === ' ')) {
-            event.preventDefault()
-            App.exitTimelineFocusTrap?.()
-            return
-        }
-
-        // 3. Update exit target during timeline arrow navigation
+        // Update exit target during timeline arrow navigation
         if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(key)) {
             const labelButton = event.target.closest('#timeline_labels [data-label-for]')
             if (labelButton) {

@@ -1185,12 +1185,18 @@ body {
 #dropdown-menu label:focus::before,
 #dropdown-menu a:focus-within::before,
 #dropdown-menu label:focus-within::before,
+#dropdown-menu>div>.dropdown-menu__group>label:hover::before,
+#dropdown-menu>div>.dropdown-menu__group>label:focus::before,
+#dropdown-menu>div>.dropdown-menu__group>label:focus-within::before,
 #dropdown-menu a:hover::after,
 #dropdown-menu label:hover::after,
 #dropdown-menu a:focus::after,
 #dropdown-menu label:focus::after,
 #dropdown-menu a:focus-within::after,
-#dropdown-menu label:focus-within::after {
+#dropdown-menu label:focus-within::after,
+#dropdown-menu>div>.dropdown-menu__group>label:hover::after,
+#dropdown-menu>div>.dropdown-menu__group>label:focus::after,
+#dropdown-menu>div>.dropdown-menu__group>label:focus-within::after {
     transition: opacity var(--animate-in-segment) linear, inset var(--animate-in-segment) var(--ease-out-quad);
     opacity: 1;
 }
@@ -1213,6 +1219,7 @@ body {
     transition: color var(--animate-out-segment) linear;
     color: var(--icon);
     z-index: 2;
+    transform: translateZ(0);
 }
 
 #dropdown-menu a:hover svg,
@@ -1335,15 +1342,6 @@ body {
     animation-play-state: running;
 }
 
-#mode:checked~main #dropdown-menu #dropdown-menu-ambience svg {
-    filter: blur(0.125rem) brightness(0.75);
-    --ambience-stop-1: var(--yellow-85);
-    --ambience-stop-2: var(--green-lime-85);
-    --ambience-stop-3: var(--cyan-full-85);
-    --ambience-stop-4: var(--blue-full-75);
-    --ambience-stop-5: var(--yellow-85);
-}
-
 #dropdown-menu #dropdown-menu-ambience:hover svg,
 #dropdown-menu #dropdown-menu-ambience:focus svg,
 #mode:checked~main #dropdown-menu #dropdown-menu-ambience:focus svg,
@@ -1369,15 +1367,77 @@ body {
 
 /* Debug and fullscreen menu items */
 
-#dropdown-menu label#dropdown-menu-debug::before,
 #dropdown-menu label#dropdown-menu-fullscreen::before {
     /* Gradient colour stops: HSL(260, 100, 45) */
     background-image: linear-gradient(to right in oklch, rgba(0, 95, 241, 0.75), rgba(0, 95, 241, 0));
 }
 
-#dropdown-menu label#dropdown-menu-debug::after,
 #dropdown-menu label#dropdown-menu-fullscreen::after {
     background-image: linear-gradient(to right in oklch, rgba(0, 95, 241, 1), rgba(0, 95, 241, 0));
+}
+
+#dropdown-menu label#dropdown-menu-debug::before,
+#dropdown-menu label#dropdown-menu-reduce::before {
+    background-image: linear-gradient(to top in oklch, rgba(0, 95, 241, 0.75), rgba(0, 95, 241, 0));
+}
+
+#dropdown-menu label#dropdown-menu-debug::after,
+#dropdown-menu label#dropdown-menu-reduce::after {
+    background-image: linear-gradient(to top in oklch, rgba(0, 95, 241, 1), rgba(0, 95, 241, 0));
+}
+
+
+/* Dropdown menu group labels */
+
+#dropdown-menu>div>.dropdown-menu__group>label {
+    transition: flex-grow var(--animate-out-segment) var(--ease-in-quad);
+}
+
+#dropdown-menu>div>.dropdown-menu__group>label:hover,
+#dropdown-menu>div>.dropdown-menu__group>label:focus {
+    flex-grow: 5;
+    transition: flex-grow var(--animate-in-segment) var(--ease-out-quad) var(--animate-in-segment);
+}
+
+#dropdown-menu>div>.dropdown-menu__group:has(label:hover)>label:focus:not(:hover) {
+    flex-grow: 1;
+    transition: flex-grow var(--animate-out-segment) var(--ease-in-quad);
+}
+
+#dropdown-menu>div>.dropdown-menu__group>label>div {
+    transition: flex-grow var(--animate-out-segment) var(--ease-in-quad);
+}
+
+#dropdown-menu>div>.dropdown-menu__group>label:hover>div,
+#dropdown-menu>div>.dropdown-menu__group>label:focus>div {
+    flex-grow: 1;
+    transition: flex-grow var(--animate-in-segment) var(--ease-out-quad);
+}
+
+#dropdown-menu>div>.dropdown-menu__group:has(label:hover)>label:focus:not(:hover)>div {
+    flex-grow: 0;
+    transition: flex-grow var(--animate-out-segment) var(--ease-in-quad);
+}
+
+#dropdown-menu>div>.dropdown-menu__group>label>span {
+    transition: opacity var(--animate-out-segment-2\/3) linear;
+}
+
+#dropdown-menu>div>.dropdown-menu__group>label:hover>span,
+#dropdown-menu>div>.dropdown-menu__group>label:focus>span {
+    opacity: 1;
+    transition: opacity var(--animate-in-segment-2\/3) linear calc(var(--animate-in-segment) * 2);
+}
+
+#dropdown-menu>div>.dropdown-menu__group:has(label:hover)>label:focus:not(:hover)>span {
+    opacity: 0;
+    transition: opacity var(--animate-out-segment-2\/3) linear;
+}
+
+#dropdown-menu>div>.dropdown-menu__group:has(label:hover)>label:focus:not(:hover)::before,
+#dropdown-menu>div>.dropdown-menu__group:has(label:hover)>label:focus:not(:hover)::after {
+    opacity: 0;
+    transition: opacity var(--animate-out-segment-2\/3) linear;
 }
 
 
@@ -1702,6 +1762,17 @@ section[data-timeline-section]>div>nav ul li:not(:first-child) a:focus {
 .tooltip.tooltip-key--active .tooltip__text--active, .tooltip:focus-within.tooltip-key--active .tooltip__text--active {
     transition: opacity var(--animate-in-segment-2\/3) linear var(--animate-in-segment);
     opacity: 1;
+}
+
+
+/* Skip link */
+
+.skip-link {
+    transition: opacity var(--animate-out-segment-2\/3) linear, color var(--animate-out-segment-2\/3) linear, background-color var(--animate-out-segment-2\/3) linear, box-shadow var(--animate-out-segment-2\/3) linear, border-color var(--animate-out-segment-2\/3) linear;
+}
+
+.skip-link:focus {
+    transition: opacity var(--animate-in-segment-2\/3) linear var(--animate-in-segment), color var(--animate-in-segment-2\/3) linear var(--animate-in-segment), background-color var(--animate-in-segment-2\/3) linear var(--animate-in-segment), box-shadow var(--animate-in-segment-2\/3) linear var(--animate-in-segment), border-color var(--animate-in-segment-2\/3) linear var(--animate-in-segment);
 }
 
 

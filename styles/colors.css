@@ -111,6 +111,7 @@
     --navy-25: #6b0076;
 
     /* Opacity tokens */
+    --light-5: rgba(255, 255, 255, 0.05);
     --light-10: rgba(255, 255, 255, 0.1);
     --light-15: rgba(255, 255, 255, 0.15);
     --light-20: rgba(255, 255, 255, 0.2);
@@ -178,8 +179,8 @@ main {
     --context-bg-modal: var(--light-15);
 
     /* 210, 25, 25 */
-    --menu-bg: #333d3f55;
-    --tooltip-bg: #333d3f65;
+    --menu-bg: rgba(255, 255, 255, 0.035);
+    --tooltip-bg: var(--light-5);
 
     /* Modal colours */
     --modal-border-outer: var(--dark-10);

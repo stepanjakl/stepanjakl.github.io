@@ -151,7 +151,7 @@
 .modal-profile__table dd>span,
 .modal-profile__table dd>p {
     font-size: 1.07143125rem;
-    line-height: 1.625rem;
+    line-height: 1.75rem;
     font-weight: 500;
     display: inline;
 }
@@ -189,6 +189,83 @@
 
 .modal-profile__summary>p:last-child {
     padding-bottom: var(--segment-third);
+}
+
+.modal-profile__summary-heading {
+    display: inline-flex;
+    font-family: 'Chakra Petch', monospace;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.3125rem;
+    font-size: 14.2857px;;
+    line-height: 0.875rem;
+    padding-top: 0.09375rem;
+    margin-top: 1.5rem;
+}
+
+@media (min-width: 45rem) {
+    .modal-profile__summary-heading {
+        font-weight: 600;
+    }
+}
+
+.modal-profile__summary-heading::before {
+    content: "";
+    margin-bottom: -0.132em;
+    display: table;
+}
+
+.modal-profile__summary-heading::after {
+    content: "";
+    margin-top: -0.148em;
+    display: table;
+}
+
+.modal-profile__summary-list {
+    list-style: none;
+    list-style-position: initial;
+    list-style-image: initial;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    row-gap: 1.5rem;
+    margin-top: 0.5rem;
+    margin-left: 2.5rem;
+}
+
+.modal-profile__summary-list li {
+    margin-bottom: 0.25rem;
+    font-size: 1.07143125rem;
+    line-height: 1.75rem;
+    font-weight: 500;
+}
+
+.modal-profile__summary-list li span::before {
+    content: "⬢";
+    font-size: 0.675em;
+    display: inline-block;
+    margin-right: 1.25rem;
+    vertical-align: middle;
+    transform: translateY(-0.15625rem);
+}
+
+@media (min-width: 45rem) {
+    .modal-profile__summary-list li {
+        font-weight: 400;
+    }
+}
+
+.modal-profile__summary-list li::before {
+    content: "";
+    margin-bottom: -0.4333em;
+    display: table;
+}
+
+.modal-profile__summary-list li::after {
+    content: "";
+    margin-top: -0.3833em;
+    display: table;
 }
 
 

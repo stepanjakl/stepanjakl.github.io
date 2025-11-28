@@ -20,9 +20,16 @@ body.no-fullscreen .modal__fullscreen-button {
 
 #mode:checked~main .menu__email,
 #mode:checked~main .menu__link {
+    border-color: var(--light-50);
     background-color: var(--light-35);
     outline-color: var(--dark-20);
-    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-50);
+}
+
+#mode:checked~main .menu__email:hover,
+#mode:checked~main .menu__email:focus {
+    border-color: var(--light-60);
+    background-color: var(--light-45);
+    outline-color: var(--dark-25);
 }
 
 #mode:checked~main .menu__email-icon,
@@ -31,6 +38,13 @@ body.no-fullscreen .modal__fullscreen-button {
     background-color: var(--light-10);
     outline: solid max(1px, 0.0625rem) var(--dark-10);
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-25);
+}
+
+#mode:checked~main .menu__email:hover .menu__email-icon,
+#mode:checked~main .menu__email:focus .menu__email-icon {
+    background-color: var(--light-20);
+    outline-color: var(--dark-15);
+    box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-35);
 }
 
 #mode:checked~main .menu__link:hover .menu__link-icon,
@@ -99,10 +113,6 @@ body.no-fullscreen .modal__fullscreen-button {
     border-radius: calc(var(--menu-border-radius) - max(1px, 0.0625rem)) calc(var(--menu-border-radius) - max(1px, 0.0625rem)) 0 0;
 }
 
-#mode:checked~main #dropdown-menu>div>*:last-child {
-    box-shadow: inset 0 max(1px, 0.0625rem) 0 0 var(--light-50), inset max(1px, 0.0625rem) 0 0 0 var(--light-50), inset min(-1px, -0.0625rem) 0 0 0 var(--light-50), inset 0 min(-1px, -0.0625rem) 0 0 var(--light-50);
-}
-
 #mode:checked~main #dropdown-menu>div>*:last-child:before {
     border-radius: 0 0 calc(var(--menu-border-radius) - max(1px, 0.0625rem)) calc(var(--menu-border-radius) - max(1px, 0.0625rem));
 }
@@ -138,8 +148,18 @@ body.no-fullscreen .modal__fullscreen-button {
     background-image: conic-gradient(in oklch from var(--angle), var(--ambience-stop-1), var(--ambience-stop-2), var(--ambience-stop-3), var(--ambience-stop-4), var(--ambience-stop-5));
 }
 
+#mode:checked~main #dropdown-menu #dropdown-menu-ambience svg {
+    filter: blur(0.125rem) brightness(0.75);
+    --ambience-stop-1: var(--yellow-85);
+    --ambience-stop-2: var(--green-lime-85);
+    --ambience-stop-3: var(--cyan-full-85);
+    --ambience-stop-4: var(--blue-full-75);
+    --ambience-stop-5: var(--yellow-85);
+}
+
+#mode:checked~main #dropdown-menu label#dropdown-menu-fullscreen::before,
 #mode:checked~main #dropdown-menu label#dropdown-menu-debug::before,
-#mode:checked~main #dropdown-menu label#dropdown-menu-fullscreen::before {
+#mode:checked~main #dropdown-menu label#dropdown-menu-reduce::before {
     /* 260, 100, 75 */
     background-image: linear-gradient(to right in oklch, rgba(166, 181, 255, 0.75), rgba(166, 181, 255, 0));
 }
@@ -151,6 +171,34 @@ body.no-fullscreen .modal__fullscreen-button {
 
 #mode:checked~main #dropdown-menu a[target="_blank"][href^="http"] span::before {
     background-color: var(--dark-15);
+}
+
+
+/* Light mode - Menu dropdown - Bottom group */
+
+#mode:checked~main #dropdown-menu>div>.dropdown-menu__group {
+    border-top-color: var(--dark-15);
+    box-shadow: none;
+}
+
+#mode:checked~main #dropdown-menu>div>.dropdown-menu__group>label:first-child {
+    border-right: none;
+}
+
+#mode:checked~main #dropdown-menu>div>.dropdown-menu__group>label:first-child {
+    border-bottom-left-radius: calc(var(--menu-border-radius) - max(1px, 0.0625rem));
+}
+
+#mode:checked~main #dropdown-menu>div>.dropdown-menu__group>label:last-child {
+    border-bottom-right-radius: calc(var(--menu-border-radius) - max(1px, 0.0625rem));
+}
+
+#mode:checked~main #dropdown-menu>div>.dropdown-menu__group>label:first-child::before {
+    border-radius: 0 0 0 calc(var(--menu-border-radius) - max(1px, 0.0625rem));
+}
+
+#mode:checked~main #dropdown-menu>div>.dropdown-menu__group>label:last-child::before {
+    border-radius: 0 0 calc(var(--menu-border-radius) - max(1px, 0.0625rem)) 0;
 }
 
 
@@ -303,7 +351,7 @@ body.no-fullscreen .modal__fullscreen-button {
 #mode:checked~#debug:checked~main * {
     outline: solid max(1px, 0.0625rem) var(--blue-full-45) !important;
     outline-offset: min(-1px, -0.0625rem);
-    transition: none !important;
+    /* transition: none !important; */
 }
 
 #mode:checked~#debug:checked~main #debug-grid * {
@@ -329,7 +377,7 @@ body.no-fullscreen .modal__fullscreen-button {
 #mode:not(:checked)~#debug:checked~main * {
     outline: solid max(1px, 0.0625rem) var(--blue-full-55);
     outline-offset: min(-1px, -0.0625rem);
-    transition: none !important;
+    /* transition: none !important; */
 }
 
 #mode:not(:checked)~#debug:checked~main #debug-grid * {
@@ -348,6 +396,59 @@ body.no-fullscreen .modal__fullscreen-button {
     color: transparent;
     /* var(--blue-full-25) */
 }
+
+/* Ambience */
+
+#ambience:checked~main .ambience-checked\:flex {
+    display: flex;
+}
+
+#ambience:checked~main .ambience-checked\:hidden {
+    display: none;
+}
+
+
+/* Animations Toggle */
+
+/* State-based class helpers for animations checkbox */
+.reduce-checked\:flex {
+    display: none;
+}
+
+.reduce-checked\:hidden {
+    display: flex;
+}
+
+#animations:checked~main .reduce-checked\:flex {
+    display: flex;
+}
+
+#animations:checked~main .reduce-checked\:hidden {
+    display: none;
+}
+
+/**
+ * User-controlled animation toggle
+ * Mimics prefers-reduced-motion behavior when disabled
+ * Allows users to control animations beyond OS preference
+ * Useful for users who want animations sometimes but not always
+ * Complements @media (prefers-reduced-motion) with explicit control
+ */
+/* #animations:not(:checked) ~ main *,
+#animations:not(:checked) ~ main *::before,
+#animations:not(:checked) ~ main *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+}
+
+#animations:not(:checked) ~ main [aria-live],
+#animations:not(:checked) ~ main [role="status"],
+#animations:not(:checked) ~ main [role="alert"] {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+} */
 
 
 /* Modals */
@@ -536,12 +637,20 @@ body.modal-archive-open #modal-archive .modal__content {
 }
 
 
-/* Prefers media features */
+/**
+ * Prefers media features
+ * Respect user's motion preferences for cognitive accessibility
+ * Reduces or eliminates animations for users with vestibular disorders,
+ * ADHD, or sensory sensitivities who set prefers-reduced-motion in their OS
+ * WCAG 2.3.3 Animation from Interactions (AAA)
+ */
 
 @media (prefers-reduced-motion: reduce), (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active) {
     *, *::before, *::after {
-        animation: none !important;
-        transition: none !important;
+        animation-duration: 0s !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0s !important;
+        scroll-behavior: auto !important;
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
         filter: none !important;
@@ -590,3 +699,67 @@ body.modal-archive-open #modal-archive .modal__content {
         transform: none;
     }
 }
+
+
+/**
+ * User-controlled animation toggle
+ * Mimics prefers-reduced-motion behavior when disabled
+ * Allows users to control animations beyond OS preference
+ * Useful for users who want animations sometimes but not always
+ * Complements @media (prefers-reduced-motion) with explicit control
+ */
+
+#animations:not(:checked) ~ main *,
+#animations:not(:checked) ~ main *::before,
+#animations:not(:checked) ~ main *::after {
+        animation-duration: 0s !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0s !important;
+        scroll-behavior: auto !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        filter: none !important;
+        scroll-behavior: auto !important;
+    }
+
+#animations:not(:checked) ~ main {
+        --context-bg: var(--cyan-quarter-25);
+        --context-bg-2: var(--cyan-quarter-35);
+        --modal-bg-blur: var(--cyan-three-quarters-25), var(--cyan-three-quarters-25);
+        --modal-bg-archive: var(--cyan-three-quarters-25);
+        --modal-bg-pattern: none;
+        --menu-bg: transparent;
+
+        --tooltip-bg: transparent;
+    }
+
+    #mode:checked~#animations:not(:checked) ~ main {
+        --context-bg: var(--cyan-quarter-80);
+        --context-bg-2: var(--cyan-quarter-90);
+        --modal-bg-blur: var(--cyan-quarter-95), var(--cyan-quarter-95);
+        --modal-bg-archive: var(--cyan-quarter-95);
+        --modal-bg-pattern: none;
+        --menu-bg: transparent;
+
+        --tooltip-bg: transparent;
+    }
+
+    #animations:not(:checked) ~ main #timeline-wrapper {
+        background-color: var(--cyan-full-40);
+    }
+
+    #mode:checked~#animations:not(:checked) ~ main #timeline-wrapper {
+        background-color: var(--cyan-half-85);
+    }
+
+    #animations:not(:checked) ~ main .modal-profile-side-ruler-art {
+        display: none;
+    }
+
+    #animations:not(:checked) ~ main .modal-profile__footer-art {
+        display: none;
+    }
+
+    #animations:not(:checked) ~ main [data-carousel-slides] figure a img {
+        transform: none;
+    }
