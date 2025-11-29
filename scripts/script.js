@@ -181,6 +181,34 @@ function initializeModalTransitionWatcher() {
     updateGlobalState()
 }
 
+/**
+ * Handles hover interactions for dropdown menu groups
+ * 1. Workaround for Safari :has() invalidation bug
+ * 2. Blurs focused labels when another label in the group is hovered to prevent conflicting states
+ */
+function initializeMenuGroupHoverLogic() {
+    const groups = document.querySelectorAll('.dropdown-menu__group')
+    groups.forEach(group => {
+        const labels = group.querySelectorAll('label')
+        labels.forEach(label => {
+            label.addEventListener('mouseenter', () => {
+                group.classList.add('has-hovered-label')
+
+                // Blur any other focused label in this group
+                // Prevents "double active" state where one is focused and another is hovered
+                labels.forEach(l => {
+                    if (l !== label && l === document.activeElement) {
+                        l.blur()
+                    }
+                })
+            })
+            label.addEventListener('mouseleave', () => {
+                group.classList.remove('has-hovered-label')
+            })
+        })
+    })
+}
+
 
 // ============================================================================
 // Focus Trap Utility
@@ -3286,7 +3314,12 @@ App.handleTouchButtonClick = (element, event, callback = null, focusAfterClick =
     }
 
     // Check if this is the second tap by looking for our marker attribute
-    const isSecondTap = element.getAttribute(TOUCH_PRIMED_ATTRIBUTE) === 'true'
+    // OR if the element was already focused BEFORE this tap (tracked via data attribute set in pointerdown)
+    const wasFocusedBeforeTap = element.getAttribute('data-was-focused') === 'true'
+    const isSecondTap = element.getAttribute(TOUCH_PRIMED_ATTRIBUTE) === 'true' || wasFocusedBeforeTap
+
+    // Clean up the focus tracking attribute
+    element.removeAttribute('data-was-focused')
 
     // If this is the second tap, execute callback
     if (isSecondTap) {
@@ -4103,6 +4136,17 @@ function initializeGlobalEventHandlers() {
         return timelineWrapperCache ??= document.querySelector('#horizontal-timeline-wrapper')
     }
 
+    // Track focus state before pointer interaction (fires before focus changes)
+    // This allows handleTouchButtonClick to distinguish between "was already focused"
+    // vs "just got focused by this tap" (important for labels which focus before onclick)
+    document.addEventListener('pointerdown', (event) => {
+        const target = event.target
+        // Mark element if it's currently focused before any focus change happens
+        if (document.activeElement === target) {
+            target.setAttribute('data-was-focused', 'true')
+        }
+    })
+
     // Single document click handler for multiple concerns
     document.addEventListener('click', (event) => {
         // 1. Clear touch button primed states when user taps elsewhere
@@ -4311,6 +4355,9 @@ document.addEventListener('DOMContentLoaded', () => {
             App.positionTimeline()
         }
     })
+
+    // Initialize menu hover logic (Safari fix + focus management)
+    initializeMenuGroupHoverLogic()
 });
 
 

@@ -149,17 +149,37 @@
 /* Table content text */
 
 .modal-profile__table dd>span,
-.modal-profile__table dd>p {
+.modal-profile__table dd>p,
+.modal-profile__summary-list li {
+    text-align: justify;
     font-size: 1.07143125rem;
     line-height: 1.75rem;
     font-weight: 500;
     display: inline;
 }
 
+/* Profile summary paragraphs - hyphenation */
+.modal-profile__summary>p,
+.modal-profile__table dd>span,
+.modal-profile__table dd>p,
+.modal-profile__summary-list li {
+    text-justify: inter-word;
+    text-wrap: pretty;
+    hyphens: auto;
+    hyphenate-limit-chars: 7 3 3;
+    hyphenate-limit-lines: 9;
+    hyphenate-limit-zone: 10%;
+    -webkit-hyphenate-limit-before: 4;
+    -webkit-hyphenate-limit-after: 4;
+    -webkit-hyphenate-limit-lines: 2;
+}
+
 @media (min-width: 45rem) {
 
     .modal-profile__table dd>span,
-    .modal-profile__table dd>p {
+    .modal-profile__table dd>p,
+    .modal-profile__summary-list li {
+        text-align: left;
         font-weight: 400;
     }
 }
@@ -185,6 +205,13 @@
     display: inline-flex;
     flex-direction: column;
     row-gap: 2rem;
+    margin-left: 1rem;
+}
+
+@media (min-width: 60rem) {
+    .modal-profile__summary {
+        margin-left: 0;
+    }
 }
 
 .modal-profile__summary>p:last-child {
@@ -197,7 +224,7 @@
     text-transform: uppercase;
     font-weight: 700;
     letter-spacing: 0.3125rem;
-    font-size: 14.2857px;;
+    font-size: 0.80356875rem;
     line-height: 0.875rem;
     padding-top: 0.09375rem;
     margin-top: 1.5rem;
@@ -205,6 +232,7 @@
 
 @media (min-width: 45rem) {
     .modal-profile__summary-heading {
+        font-size: 0.89285625rem;
         font-weight: 600;
     }
 }
@@ -231,7 +259,13 @@
     align-items: start;
     row-gap: 1.5rem;
     margin-top: 0.5rem;
-    margin-left: 2.5rem;
+    margin-left: 0.75rem;
+}
+
+@media (min-width: 45rem) {
+    .modal-profile__summary-list {
+        margin-left: 2.5rem;
+    }
 }
 
 .modal-profile__summary-list li {
@@ -243,11 +277,19 @@
 
 .modal-profile__summary-list li span::before {
     content: "⬢";
-    font-size: 0.675em;
+    font-size: 0.6em;
     display: inline-block;
-    margin-right: 1.25rem;
+    margin-right: 0.8125rem;
     vertical-align: middle;
-    transform: translateY(-0.15625rem);
+    transform: translateY(-0.125rem);
+}
+
+@media (min-width: 45rem) {
+    .modal-profile__summary-list li span::before {
+        font-size: 0.675em;
+        margin-right: 1.25rem;
+        transform: translateY(-0.15625rem);
+    }
 }
 
 @media (min-width: 45rem) {

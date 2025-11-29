@@ -1399,7 +1399,8 @@ body {
     transition: flex-grow var(--animate-in-segment) var(--ease-out-quad) var(--animate-in-segment);
 }
 
-#dropdown-menu>div>.dropdown-menu__group:has(label:hover)>label:focus:not(:hover) {
+#dropdown-menu>div>.dropdown-menu__group:has(label:hover)>label:focus:not(:hover),
+#dropdown-menu>div>.dropdown-menu__group.has-hovered-label>label:focus:not(:hover) {
     flex-grow: 1;
     transition: flex-grow var(--animate-out-segment) var(--ease-in-quad);
 }
@@ -1414,7 +1415,8 @@ body {
     transition: flex-grow var(--animate-in-segment) var(--ease-out-quad);
 }
 
-#dropdown-menu>div>.dropdown-menu__group:has(label:hover)>label:focus:not(:hover)>div {
+#dropdown-menu>div>.dropdown-menu__group:has(label:hover)>label:focus:not(:hover)>div,
+#dropdown-menu>div>.dropdown-menu__group.has-hovered-label>label:focus:not(:hover)>div {
     flex-grow: 0;
     transition: flex-grow var(--animate-out-segment) var(--ease-in-quad);
 }
@@ -1429,13 +1431,16 @@ body {
     transition: opacity var(--animate-in-segment-2\/3) linear calc(var(--animate-in-segment) * 2);
 }
 
-#dropdown-menu>div>.dropdown-menu__group:has(label:hover)>label:focus:not(:hover)>span {
+#dropdown-menu>div>.dropdown-menu__group:has(label:hover)>label:focus:not(:hover)>span,
+#dropdown-menu>div>.dropdown-menu__group.has-hovered-label>label:focus:not(:hover)>span {
     opacity: 0;
     transition: opacity var(--animate-out-segment-2\/3) linear;
 }
 
 #dropdown-menu>div>.dropdown-menu__group:has(label:hover)>label:focus:not(:hover)::before,
-#dropdown-menu>div>.dropdown-menu__group:has(label:hover)>label:focus:not(:hover)::after {
+#dropdown-menu>div>.dropdown-menu__group:has(label:hover)>label:focus:not(:hover)::after,
+#dropdown-menu>div>.dropdown-menu__group.has-hovered-label>label:focus:not(:hover)::before,
+#dropdown-menu>div>.dropdown-menu__group.has-hovered-label>label:focus:not(:hover)::after {
     opacity: 0;
     transition: opacity var(--animate-out-segment-2\/3) linear;
 }

@@ -536,7 +536,8 @@
                                         <label id="dropdown-menu-debug"
                                                for="debug"
                                                tabindex="0"
-                                               onkeydown="if(event.key === 'Enter') { App.keyActivate('debug') }">
+                                               onkeydown="if(event.key === 'Enter') { App.keyActivate('debug') }"
+                                               onclick="App.handleTouchButtonClick(this, event, () => { App.keyActivate('debug') })">
                                             <div>
                                                 <svg class="debug-checked:hidden flex">
                                                     <use xlink:href="images/icons.svg#menu-debug"></use>
@@ -551,7 +552,8 @@
                                         <label id="dropdown-menu-reduce"
                                                for="animations"
                                                tabindex="0"
-                                               onkeydown="if(event.key === 'Enter') { App.keyActivate('animations') }">
+                                               onkeydown="if(event.key === 'Enter') { App.keyActivate('animations') }"
+                                               onclick="App.handleTouchButtonClick(this, event, () => { App.keyActivate('animations') })">
                                             <div>
                                                 <svg class="reduce-checked:flex hidden">
                                                     <use xlink:href="images/icons.svg#menu-reduce"></use>
@@ -613,7 +615,7 @@
                                 <dt>
                                     <span>Profile:</span>
                                 </dt>
-                                <dd class="modal-profile__summary">
+                                <dd class="modal-profile__summary hyphens-auto">
                                     <p>Experienced and detail-oriented user interface engineer who specialises in crafting digital solutions that balance clarity and creativity.</p>
                                     <p>Committed to delivering high-quality results for projects with exciting propositions and realistic goals.</p>
                                     <h3 class="modal-profile__summary-heading">Technical Expertise</h3>
@@ -862,7 +864,7 @@
                                     aria-label="Skip to timeline navigation">Skip to timeline navigation</button>
                         </div>
                         <!-- Modal body / Timeline content -->
-                        <div class="modal__body">
+                        <div class="modal__body hyphens-auto">
                             <!-- Archive timeline -->
                             <div class="modal-archive__timeline">
                                 <!-- Timeline section toggle controls -->

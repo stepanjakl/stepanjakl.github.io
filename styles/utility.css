@@ -212,3 +212,18 @@ body {
     content: '\00A0';
     display: inline;
 }
+
+
+/* Hyphenation & Text Wrapping (Applied to long-form content) */
+
+.hyphens-auto * {
+    text-justify: inter-word;
+    text-wrap: pretty;
+    hyphens: auto;
+    hyphenate-limit-chars: 7 3 3;
+    hyphenate-limit-lines: 9;
+    hyphenate-limit-zone: 10%;
+    -webkit-hyphenate-limit-before: 4;
+    -webkit-hyphenate-limit-after: 4;
+    -webkit-hyphenate-limit-lines: 2;
+}
