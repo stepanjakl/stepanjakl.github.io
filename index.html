@@ -111,14 +111,14 @@
     <link rel="stylesheet"
           href="styles/timeline.css">
     <link rel="stylesheet"
-          href="styles/state.css">
-    <link rel="stylesheet"
           href="styles/animation.css">
+    <link rel="stylesheet"
+          href="styles/state.css">
     <noscript>
         <link rel="stylesheet"
               href="styles/noscript.css">
     </noscript>
-    <!-- Structured data (JSON-LD schema) -->
+    <!-- Structured data (JSON-LD schema) - Person -->
     <script type="application/ld+json">
             {
                 "@context": "https://schema.org",
@@ -157,6 +157,21 @@
                 ]
             }
         </script>
+    <!-- Structured data (JSON-LD schema) - WebSite -->
+    <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "url": "https://stepanjakl.com",
+                "name": "Štěpán Jákl Portfolio",
+                "description": "Portfolio website showcasing web development and interface design work by Štěpán Jákl",
+                "inLanguage": "en-GB",
+                "author": {
+                    "@type": "Person",
+                    "name": "Štěpán Jákl"
+                }
+            }
+        </script>
     <!-- Scripts -->
     <script defer
             src="scripts/dialog.js"></script>
@@ -169,13 +184,6 @@
 </head>
 
 <body>
-    <!-- Skip navigation links for keyboard accessibility -->
-    <div id="global-skip-link-group">
-        <a href="#menu"
-           class="skip-link">Skip to navigation</a>
-        <a href="#intro-content"
-           class="skip-link">Skip to main content</a>
-    </div>
     <!-- Global state controls -->
     <input id="mode"
            type="checkbox"
@@ -213,6 +221,13 @@
            hidden
            aria-hidden="true"
            aria-label="Archive dialog">
+    <!-- Skip navigation links for keyboard accessibility -->
+    <div id="global-skip-link-group">
+        <a href="#menu"
+           class="skip-link">Skip to navigation</a>
+        <a href="#intro-content"
+           class="skip-link">Skip to main content</a>
+    </div>
     <!-- Main layout -->
     <main>
         <!-- Background pattern -->
@@ -271,7 +286,7 @@
                     <div class="intro__logo intro__logo--animating has-corners"
                          role="img"
                          aria-label="Personal brand logo"
-                         tabindex="-999">
+                         tabindex="-1">
                         <span class="intro__logo-frame">
                             <div class="corners">
                                 <figure class="corners__item corners__item--tr">
@@ -286,9 +301,7 @@
                 <div id="intro-content"
                      class="intro__right">
                     <!-- Job titles -->
-                    <h2 class="intro__title intro__primary-title intro__title--animating"
-                        role="heading"
-                        aria-level="2">
+                    <h2 class="intro__title intro__primary-title intro__title--animating">
                         <span class="sr-only">Full-stack developer</span>
                         <p style="--i:2"
                            aria-hidden="true">
@@ -348,7 +361,7 @@
                                 style="--i:0">
                             <span class="menu__email-icon">
                                 <svg>
-                                    <use xlink:href="images/icons.svg#email"></use>
+                                    <use href="images/icons.svg#email"></use>
                                 </svg>
                             </span>
                             <span class="text-sm menu__email-text highlight">stepan.jakl@icloud.com</span>
@@ -396,7 +409,7 @@
                                style="--i:2">
                                 <span class="menu__link-icon">
                                     <svg>
-                                        <use xlink:href="images/icons.svg#archive"></use>
+                                        <use href="images/icons.svg#archive"></use>
                                     </svg>
                                 </span>
                                 <span class="menu__link-label">
@@ -456,7 +469,7 @@
                                        target="_blank"
                                        aria-label="Schedule a call (opens in new tab)">
                                         <svg aria-hidden="true">
-                                            <use xlink:href="images/icons.svg#menu-call"></use>
+                                            <use href="images/icons.svg#menu-call"></use>
                                         </svg>
                                         <span class="text-sm">Virtual meeting</span>
                                         <span class="sr-only">(opens in new tab)</span>
@@ -465,7 +478,7 @@
                                        target="_blank"
                                        aria-label="Find out more about me on LinkedIn (opens in new tab)">
                                         <svg aria-hidden="true">
-                                            <use xlink:href="images/icons.svg#menu-linkedin"></use>
+                                            <use href="images/icons.svg#menu-linkedin"></use>
                                         </svg>
                                         <span class="text-sm">LinkedIn profile</span>
                                         <span class="sr-only">(opens in new tab)</span>
@@ -474,7 +487,7 @@
                                        target="_blank"
                                        aria-label="Visit my profile on GitHub (opens in new tab)">
                                         <svg aria-hidden="true">
-                                            <use xlink:href="images/icons.svg#menu-github"></use>
+                                            <use href="images/icons.svg#menu-github"></use>
                                         </svg>
                                         <span class="text-sm">GitHub profile</span>
                                         <span class="sr-only">(opens in new tab)</span>
@@ -483,7 +496,7 @@
                                        target="_blank"
                                        aria-label="Visit my profile on CodePen (opens in new tab)">
                                         <svg aria-hidden="true">
-                                            <use xlink:href="images/icons.svg#menu-codepen"></use>
+                                            <use href="images/icons.svg#menu-codepen"></use>
                                         </svg>
                                         <span class="text-sm">CodePen profile</span>
                                         <span class="sr-only">(opens in new tab)</span>
@@ -495,7 +508,7 @@
                                            onclick="App.deferredFocus('dropdown-menu-dark-mode')"
                                            onkeydown="if(event.key === 'Enter') { App.keyActivate('mode','dropdown-menu-dark-mode') }">
                                         <svg>
-                                            <use xlink:href="images/icons.svg#menu-light-mode"></use>
+                                            <use href="images/icons.svg#menu-light-mode"></use>
                                         </svg>
                                         <span class="text-sm">Light mode</span>
                                     </label>
@@ -505,7 +518,7 @@
                                            onclick="App.deferredFocus('dropdown-menu-light-mode')"
                                            onkeydown="if(event.key === 'Enter') { App.keyActivate('mode','dropdown-menu-light-mode') }">
                                         <svg>
-                                            <use xlink:href="images/icons.svg#menu-dark-mode"></use>
+                                            <use href="images/icons.svg#menu-dark-mode"></use>
                                         </svg>
                                         <span class="text-sm">Dark mode</span>
                                     </label>
@@ -523,10 +536,10 @@
                                            onclick="App.toggleFullscreen()"
                                            onkeydown="if(event.key === 'Enter') { App.toggleFullscreen() }">
                                         <svg class="fullscreen-checked:hidden flex">
-                                            <use xlink:href="images/icons.svg#menu-fullscreen"></use>
+                                            <use href="images/icons.svg#menu-fullscreen"></use>
                                         </svg>
                                         <svg class="hidden fullscreen-checked:flex">
-                                            <use xlink:href="images/icons.svg#menu-fullscreen-off"></use>
+                                            <use href="images/icons.svg#menu-fullscreen-off"></use>
                                         </svg>
                                         <span class="text-sm fullscreen-checked:flex hidden">Exit</span>
                                         <span class="text-sm flex fullscreen-checked:hidden">Fullscreen</span>
@@ -540,10 +553,10 @@
                                                onclick="App.handleTouchButtonClick(this, event, () => { App.keyActivate('debug') })">
                                             <div>
                                                 <svg class="debug-checked:hidden flex">
-                                                    <use xlink:href="images/icons.svg#menu-debug"></use>
+                                                    <use href="images/icons.svg#menu-debug"></use>
                                                 </svg>
                                                 <svg class="hidden debug-checked:flex">
-                                                    <use xlink:href="images/icons.svg#menu-debug-off"></use>
+                                                    <use href="images/icons.svg#menu-debug-off"></use>
                                                 </svg>
                                             </div>
                                             <span class="text-sm debug-checked:flex hidden">Debug off</span>
@@ -556,10 +569,10 @@
                                                onclick="App.handleTouchButtonClick(this, event, () => { App.keyActivate('animations') })">
                                             <div>
                                                 <svg class="reduce-checked:flex hidden">
-                                                    <use xlink:href="images/icons.svg#menu-reduce"></use>
+                                                    <use href="images/icons.svg#menu-reduce"></use>
                                                 </svg>
                                                 <svg class="flex reduce-checked:hidden">
-                                                    <use xlink:href="images/icons.svg#menu-reduce-off"></use>
+                                                    <use href="images/icons.svg#menu-reduce-off"></use>
                                                 </svg>
                                             </div>
                                             <span class="text-sm reduce-checked:flex hidden">Reduce</span>
@@ -585,7 +598,7 @@
                                class="modal__close-button"
                                aria-label="Close modal">
                                 <svg>
-                                    <use xlink:href="images/icons.svg#close"></use>
+                                    <use href="images/icons.svg#close"></use>
                                 </svg>
                             </a>
                         </div>
@@ -750,67 +763,67 @@
                                     <ul>
                                         <li>
                                             <svg>
-                                                <use xlink:href="images/logos.svg#html5"></use>
+                                                <use href="images/logos.svg#html5"></use>
                                             </svg>
                                             <span>HTML</span>
                                             <svg>
-                                                <use xlink:href="images/logos.svg#css3"></use>
+                                                <use href="images/logos.svg#css3"></use>
                                             </svg>
                                             <span>CSS</span>
                                             <svg>
-                                                <use xlink:href="images/logos.svg#javascript"></use>
+                                                <use href="images/logos.svg#javascript"></use>
                                             </svg>
                                             <span>JavaScript</span>
                                         </li>
                                         <li>
                                             <svg>
-                                                <use xlink:href="images/logos.svg#react"></use>
+                                                <use href="images/logos.svg#react"></use>
                                             </svg>
                                             <span>ReactJS</span>
                                             <svg>
-                                                <use xlink:href="images/logos.svg#vue"></use>
+                                                <use href="images/logos.svg#vue"></use>
                                             </svg>
                                             <span>VueJS</span>
                                             <svg>
-                                                <use xlink:href="images/logos.svg#alpine"></use>
+                                                <use href="images/logos.svg#alpine"></use>
                                             </svg>
                                             <span>AlpineJS</span>
                                         </li>
                                         <li>
                                             <svg>
-                                                <use xlink:href="images/logos.svg#tailwindcss"></use>
+                                                <use href="images/logos.svg#tailwindcss"></use>
                                             </svg>
                                             <span>TailwindCSS</span>
                                             <svg>
-                                                <use xlink:href="images/logos.svg#jamstack"></use>
+                                                <use href="images/logos.svg#jamstack"></use>
                                             </svg>
                                             <span>JAMstack</span>
                                             <svg>
-                                                <use xlink:href="images/logos.svg#astro"></use>
+                                                <use href="images/logos.svg#astro"></use>
                                             </svg>
                                             <span>Astro</span>
                                         </li>
                                         <li>
                                             <svg>
-                                                <use xlink:href="images/logos.svg#apostrophe"></use>
+                                                <use href="images/logos.svg#apostrophe"></use>
                                             </svg>
                                             <span>ApostropheCMS</span>
                                             <svg>
-                                                <use xlink:href="images/logos.svg#mongodb"></use>
+                                                <use href="images/logos.svg#mongodb"></use>
                                             </svg>
                                             <span>MongoDB</span>
                                         </li>
                                         <li>
                                             <svg>
-                                                <use xlink:href="images/logos.svg#figma"></use>
+                                                <use href="images/logos.svg#figma"></use>
                                             </svg>
                                             <span>Figma/Sketch</span>
                                             <svg>
-                                                <use xlink:href="images/logos.svg#framer"></use>
+                                                <use href="images/logos.svg#framer"></use>
                                             </svg>
                                             <span>Framer</span>
                                             <svg>
-                                                <use xlink:href="images/logos.svg#motion"></use>
+                                                <use href="images/logos.svg#motion"></use>
                                             </svg>
                                             <span>Motion</span>
                                         </li>
@@ -842,7 +855,7 @@
                                class="modal__close-button"
                                aria-label="Close modal">
                                 <svg>
-                                    <use xlink:href="images/icons.svg#close"></use>
+                                    <use href="images/icons.svg#close"></use>
                                 </svg>
                             </a>
                             <label for="fullscreen"
@@ -851,10 +864,10 @@
                                    onkeydown="if(event.key === 'Enter') { App.toggleFullscreen() }"
                                    class="modal__fullscreen-button">
                                 <svg class="fullscreen-checked:hidden flex">
-                                    <use xlink:href="images/icons.svg#fullscreen"></use>
+                                    <use href="images/icons.svg#fullscreen"></use>
                                 </svg>
                                 <svg class="hidden fullscreen-checked:flex">
-                                    <use xlink:href="images/icons.svg#fullscreen-off"></use>
+                                    <use href="images/icons.svg#fullscreen-off"></use>
                                 </svg>
                                 <span class="sr-only">Toggle fullscreen mode</span>
                             </label>
@@ -904,10 +917,10 @@
                                             </label>
                                             <div class="modal-archive__timeline-section-controls">
                                                 <svg>
-                                                    <use xlink:href="images/icons.svg#plus"></use>
+                                                    <use href="images/icons.svg#plus"></use>
                                                 </svg>
                                                 <svg>
-                                                    <use xlink:href="images/icons.svg#minus"></use>
+                                                    <use href="images/icons.svg#minus"></use>
                                                 </svg>
                                                 <span>2024<sup>/21</sup></span>
                                             </div>
@@ -1224,10 +1237,10 @@
                                             </label>
                                             <div class="modal-archive__timeline-section-controls">
                                                 <svg>
-                                                    <use xlink:href="images/icons.svg#plus"></use>
+                                                    <use href="images/icons.svg#plus"></use>
                                                 </svg>
                                                 <svg>
-                                                    <use xlink:href="images/icons.svg#minus"></use>
+                                                    <use href="images/icons.svg#minus"></use>
                                                 </svg>
                                                 <span>2021<sup>/19</sup></span>
                                             </div>
@@ -1409,10 +1422,10 @@
                                             </label>
                                             <div class="modal-archive__timeline-section-controls">
                                                 <svg>
-                                                    <use xlink:href="images/icons.svg#plus"></use>
+                                                    <use href="images/icons.svg#plus"></use>
                                                 </svg>
                                                 <svg>
-                                                    <use xlink:href="images/icons.svg#minus"></use>
+                                                    <use href="images/icons.svg#minus"></use>
                                                 </svg>
                                                 <span>2019<sup>/18</sup></span>
                                             </div>
@@ -1566,10 +1579,10 @@
                                             </label>
                                             <div class="modal-archive__timeline-section-controls">
                                                 <svg>
-                                                    <use xlink:href="images/icons.svg#plus"></use>
+                                                    <use href="images/icons.svg#plus"></use>
                                                 </svg>
                                                 <svg>
-                                                    <use xlink:href="images/icons.svg#minus"></use>
+                                                    <use href="images/icons.svg#minus"></use>
                                                 </svg>
                                                 <span>Elsewhen</span>
                                             </div>
@@ -1839,7 +1852,7 @@
     </main>
     <!-- Analytics & Error Tracking (loaded at end for performance) -->
     <!-- Umami Analytics -->
-    <script defer
+    <script async
             src="https://cloud.umami.is/script.js"
             data-website-id="6f9d8fb6-c4c3-410e-bba3-7b8cafd6ed04"></script>
     <!-- GlitchTip Error Tracking -->
@@ -1847,20 +1860,19 @@
             src="https://browser.sentry-cdn.com/10.25.0/bundle.min.js"
             crossorigin="anonymous"></script>
     <script>
-        // Wait for Sentry to load before initializing
-        window.addEventListener('DOMContentLoaded', function () {
+        window.addEventListener('load', function () {
             if (typeof Sentry !== 'undefined') {
                 Sentry.init({
-                    dsn: "https://7388455908f8442ba73a83bca2c9403c@app.glitchtip.com/13576",
+                    dsn: 'https://7388455908f8442ba73a83bca2c9403c@app.glitchtip.com/13576',
                     tracesSampleRate: 0.01,
                 })
 
-                window.onerror = function (message, source, lineno, colno, error) {
-                    Sentry.captureException(error)
+                window.onerror = function (msg, src, line, col, err) {
+                    Sentry.captureException(err)
                 }
 
-                window.onunhandledrejection = function (event) {
-                    Sentry.captureException(event.reason)
+                window.onunhandledrejection = function (e) {
+                    Sentry.captureException(e.reason)
                 }
             }
         });
@@ -1869,9 +1881,9 @@
     <script>
         (function (c, l, a, r, i, t, y) {
             c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) }
-            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i
+            t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i
             y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y)
-        })(window, document, "clarity", "script", "7tuzqus5sw");
+        })(window, document, 'clarity', 'script', '7tuzqus5sw');
     </script>
 </body>
 

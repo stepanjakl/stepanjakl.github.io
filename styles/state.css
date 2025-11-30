@@ -679,6 +679,21 @@ body.modal-archive-open #modal-archive .modal__content {
         --tooltip-bg: transparent;
     }
 
+    #dropdown-menu label#dropdown-menu-reduce {
+        pointer-events: none;
+    }
+
+    #dropdown-menu label#dropdown-menu-reduce::after {
+        opacity: 1;
+        background-color: var(--dark-10);
+        background-image: none;
+        mask-image: none;
+    }
+
+    #dropdown-menu label#dropdown-menu-reduce>div {
+        opacity: 0.5;
+    }
+
     #timeline-wrapper {
         background-color: var(--cyan-full-40);
     }
@@ -698,6 +713,10 @@ body.modal-archive-open #modal-archive .modal__content {
     [data-carousel-slides] figure a img {
         transform: none;
     }
+
+    [loading="lazy"] {
+        transition: none;
+    }
 }
 
 
@@ -709,57 +728,62 @@ body.modal-archive-open #modal-archive .modal__content {
  * Complements @media (prefers-reduced-motion) with explicit control
  */
 
-#animations:not(:checked) ~ main *,
-#animations:not(:checked) ~ main *::before,
-#animations:not(:checked) ~ main *::after {
-        animation-duration: 0s !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0s !important;
-        scroll-behavior: auto !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        filter: none !important;
-        scroll-behavior: auto !important;
-    }
+#animations:not(:checked)~main *,
+#animations:not(:checked)~main *::before,
+#animations:not(:checked)~main *::after,
+#animations:not(:checked)~#global-skip-link-group * {
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
+    scroll-behavior: auto !important;
+}
 
-#animations:not(:checked) ~ main {
-        --context-bg: var(--cyan-quarter-25);
-        --context-bg-2: var(--cyan-quarter-35);
-        --modal-bg-blur: var(--cyan-three-quarters-25), var(--cyan-three-quarters-25);
-        --modal-bg-archive: var(--cyan-three-quarters-25);
-        --modal-bg-pattern: none;
-        --menu-bg: transparent;
+#animations:not(:checked)~main {
+    --context-bg: var(--cyan-quarter-25);
+    --context-bg-2: var(--cyan-quarter-35);
+    --modal-bg-blur: var(--cyan-three-quarters-25), var(--cyan-three-quarters-25);
+    --modal-bg-archive: var(--cyan-three-quarters-25);
+    --modal-bg-pattern: none;
+    --menu-bg: transparent;
 
-        --tooltip-bg: transparent;
-    }
+    --tooltip-bg: transparent;
+}
 
-    #mode:checked~#animations:not(:checked) ~ main {
-        --context-bg: var(--cyan-quarter-80);
-        --context-bg-2: var(--cyan-quarter-90);
-        --modal-bg-blur: var(--cyan-quarter-95), var(--cyan-quarter-95);
-        --modal-bg-archive: var(--cyan-quarter-95);
-        --modal-bg-pattern: none;
-        --menu-bg: transparent;
+#mode:checked~#animations:not(:checked)~main {
+    --context-bg: var(--cyan-quarter-80);
+    --context-bg-2: var(--cyan-quarter-90);
+    --modal-bg-blur: var(--cyan-quarter-95), var(--cyan-quarter-95);
+    --modal-bg-archive: var(--cyan-quarter-95);
+    --modal-bg-pattern: none;
+    --menu-bg: transparent;
 
-        --tooltip-bg: transparent;
-    }
+    --tooltip-bg: transparent;
+}
 
-    #animations:not(:checked) ~ main #timeline-wrapper {
-        background-color: var(--cyan-full-40);
-    }
+#animations:not(:checked)~main #timeline-wrapper {
+    background-color: var(--cyan-full-40);
+}
 
-    #mode:checked~#animations:not(:checked) ~ main #timeline-wrapper {
-        background-color: var(--cyan-half-85);
-    }
+#mode:checked~#animations:not(:checked)~main #timeline-wrapper {
+    background-color: var(--cyan-half-85);
+}
 
-    #animations:not(:checked) ~ main .modal-profile-side-ruler-art {
-        display: none;
-    }
+#animations:not(:checked)~main .modal-profile-side-ruler-art {
+    display: none;
+}
 
-    #animations:not(:checked) ~ main .modal-profile__footer-art {
-        display: none;
-    }
+#animations:not(:checked)~main .modal-profile__footer-art {
+    display: none;
+}
 
-    #animations:not(:checked) ~ main [data-carousel-slides] figure a img {
-        transform: none;
-    }
+#animations:not(:checked)~main [data-carousel-slides] figure a img {
+    transform: none;
+}
+
+#animations:not(:checked)~main [loading="lazy"] {
+    transition: none;
+}

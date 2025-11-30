@@ -408,18 +408,19 @@
 }
 
 .modal-archive__timeline-section nav li:nth-child(2) p::before {
-  content: "";
-  margin-bottom: -0.2253em;
-  display: table;
+    content: "";
+    margin-bottom: -0.2253em;
+    display: table;
 }
 
 .modal-archive__timeline-section nav li:nth-child(2) p::after {
-  content: "";
-  margin-top: -0.2413em;
-  display: table;
+    content: "";
+    margin-top: -0.2413em;
+    display: table;
 }
 
 @media (min-width: 45rem) {
+
     .modal-archive__timeline-section nav li:nth-child(2),
     .modal-archive__timeline-section nav li:nth-child(2) p {
         font-weight: 400;
@@ -543,7 +544,7 @@
 }
 
 /* Reset focused-within to default when sibling is hovered */
-.hover-cards:has(figure:hover) > figure:focus-within:not(:hover) {
+.hover-cards:has(figure:hover)>figure:focus-within:not(:hover) {
     flex-grow: 1;
 }
 

@@ -145,8 +145,9 @@ body, html {
     backdrop-filter: blur(1.25rem);
     -webkit-backdrop-filter: blur(1.25rem);
     background-image:
-    radial-gradient(circle at 0.046875rem 0.046875rem, rgba(255, 255, 255, 0.05) 0.046875rem, transparent 0.046875rem),
-    radial-gradient(circle at 0.046875rem 0.046875rem, rgba(255, 255, 255, 0.05) 0.046875rem, transparent 0.046875rem); /* Dotted pattern background */
+        radial-gradient(circle at 0.046875rem 0.046875rem, rgba(255, 255, 255, 0.05) 0.046875rem, transparent 0.046875rem),
+        radial-gradient(circle at 0.046875rem 0.046875rem, rgba(255, 255, 255, 0.05) 0.046875rem, transparent 0.046875rem);
+    /* Dotted pattern background */
     background-size: 0.5rem 0.5rem;
     background-position: 0.0625rem 0.046875rem, 0.3125rem 0.296875rem;
     background-repeat: repeat;
@@ -969,7 +970,8 @@ body {
     position: absolute;
     left: 50vh;
     top: 0;
-    height: calc(70.710678118655vh + 16vh); /* Diagonal length calculation: 50√2 ≈ 70.71vh for 45° rotation */
+    height: calc(70.710678118655vh + 16vh);
+    /* Diagonal length calculation: 50√2 ≈ 70.71vh for 45° rotation */
     width: 8vh;
     transform: rotate(45deg) translateY(-8vh);
     transform-origin: top left;
@@ -1264,7 +1266,8 @@ body {
     -webkit-backdrop-filter: blur(0.625rem);
     background-image:
         radial-gradient(circle at 0.046875rem 0.046875rem, var(--tooltip-bg) 0.046875rem, transparent 0.046875rem),
-        radial-gradient(circle at 0.046875rem 0.046875rem, var(--tooltip-bg) 0.046875rem, transparent 0.046875rem); /* Dotted pattern background */
+        radial-gradient(circle at 0.046875rem 0.046875rem, var(--tooltip-bg) 0.046875rem, transparent 0.046875rem);
+    /* Dotted pattern background */
     background-size: 0.5rem 0.5rem;
     background-position: 0.0625rem 0.046875rem, 0.3125rem 0.296875rem;
     background-repeat: repeat;
@@ -1379,7 +1382,8 @@ footer::before {
     position: absolute;
     z-index: -1;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0, 20, 23, 0) 0%, rgba(0, 20, 23, 0.000296296) 0.03%, rgba(0, 20, 23, 0.00237037) 0.24%, rgba(0, 20, 23, 0.008) 0.8%, rgba(0, 20, 23, 0.018963) 1.9%, rgba(0, 20, 23, 0.037037) 3.7%, rgba(0, 20, 23, 0.064) 6.4%, rgba(0, 20, 23, 0.10163) 10.16%, rgba(0, 20, 23, 0.151704) 15.17%, rgba(0, 20, 23, 0.216) 21.6%, rgba(0, 20, 23, 0.296296) 29.63%, rgba(0, 20, 23, 0.39437) 39.44%, rgba(0, 20, 23, 0.512) 51.2%, rgba(0, 20, 23, 0.650963) 65.1%, rgba(0, 20, 23, 0.813037) 81.3%, #001417 100%); /* Eased gradient for smooth fade transition */
+    background: linear-gradient(180deg, rgba(0, 20, 23, 0) 0%, rgba(0, 20, 23, 0.000296296) 0.03%, rgba(0, 20, 23, 0.00237037) 0.24%, rgba(0, 20, 23, 0.008) 0.8%, rgba(0, 20, 23, 0.018963) 1.9%, rgba(0, 20, 23, 0.037037) 3.7%, rgba(0, 20, 23, 0.064) 6.4%, rgba(0, 20, 23, 0.10163) 10.16%, rgba(0, 20, 23, 0.151704) 15.17%, rgba(0, 20, 23, 0.216) 21.6%, rgba(0, 20, 23, 0.296296) 29.63%, rgba(0, 20, 23, 0.39437) 39.44%, rgba(0, 20, 23, 0.512) 51.2%, rgba(0, 20, 23, 0.650963) 65.1%, rgba(0, 20, 23, 0.813037) 81.3%, #001417 100%);
+    /* Eased gradient for smooth fade transition */
 }
 
 footer>div {
@@ -1464,10 +1468,4 @@ footer>div>div {
 
 [loading="lazy"].loaded {
     opacity: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    [loading="lazy"] {
-        transition: none;
-    }
 }

@@ -1135,7 +1135,8 @@ if (document.readyState === 'loading') {
 class TextHighlighter {
     constructor() {
         // State
-        this.originalText = ''
+        this.originalTextMap = new WeakMap()
+        this.activeTimeouts = new WeakMap()
 
         // Constants
         this.HIGHLIGHT_DURATION = 1000
@@ -1157,17 +1158,34 @@ class TextHighlighter {
         // Set attribute to mark as copying in progress
         target.setAttribute('data-copying', 'true')
 
-        this.originalText = textElement.textContent
+        // Only save the original text if we haven't already (prevent overwrites on concurrent calls)
+        if (!this.originalTextMap.has(textElement)) {
+            this.originalTextMap.set(textElement, textElement.textContent)
+        }
+
+        // Clear any existing timeout for this element
+        const existingTimeout = this.activeTimeouts.get(textElement)
+        if (existingTimeout) {
+            clearTimeout(existingTimeout)
+        }
+
         if (temporaryText) {
             textElement.textContent = temporaryText
         }
         highlightElement.classList.add(this.HIGHLIGHT_ACTIVE_CLASS)
 
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
             target.removeAttribute('data-copying')
-            textElement.textContent = this.originalText
+            textElement.textContent = this.originalTextMap.get(textElement)
             highlightElement.classList.remove(this.HIGHLIGHT_ACTIVE_CLASS)
+
+            // Clean up the maps
+            this.originalTextMap.delete(textElement)
+            this.activeTimeouts.delete(textElement)
         }, this.HIGHLIGHT_DURATION)
+
+        // Store the timeout for potential cancellation
+        this.activeTimeouts.set(textElement, timeoutId)
     }
 }
 

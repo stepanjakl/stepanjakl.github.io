@@ -87,13 +87,11 @@ horizontal-timeline:hover #timeline-wrapper {
     scrollbar-width: none;
     -ms-overflow-style: none;
     padding: var(--timeline-padding);
-    mask-image: linear-gradient(
-        90deg,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 1) var(--segment, 1.5rem),
-        rgba(0, 0, 0, 1) calc(100% - var(--segment, 1.5rem)),
-        rgba(0, 0, 0, 0) 100%
-    );
+    mask-image: linear-gradient(90deg,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 1) var(--segment, 1.5rem),
+            rgba(0, 0, 0, 1) calc(100% - var(--segment, 1.5rem)),
+            rgba(0, 0, 0, 0) 100%);
 }
 
 #timeline-content::-webkit-scrollbar {
@@ -109,7 +107,7 @@ horizontal-timeline:hover #timeline-content {
     padding: var(--timeline-padding--hover);
 }
 
-#timeline-content > div {
+#timeline-content>div {
     display: inline-flex;
     flex-direction: column;
 }
@@ -152,17 +150,27 @@ horizontal-timeline:hover #timeline {
 
 /* Pattern-based indicator heights */
 
-#timeline div:nth-child(6n + 4) span { height: var(--indicator-height-xl); }
+#timeline div:nth-child(6n + 4) span {
+    height: var(--indicator-height-xl);
+}
+
 #timeline div:nth-child(6n + 3) span,
-#timeline div:nth-child(6n + 5) span { height: var(--indicator-height-md); }
+#timeline div:nth-child(6n + 5) span {
+    height: var(--indicator-height-md);
+}
 
 
 /* Edge indicators with reduced opacity */
 
 #timeline div:nth-child(2) span,
-#timeline div:nth-last-child(2) span { background-color: var(--light-35); }
+#timeline div:nth-last-child(2) span {
+    background-color: var(--light-35);
+}
+
 #timeline div:first-child span,
-#timeline div:last-child span { background-color: var(--light-25); }
+#timeline div:last-child span {
+    background-color: var(--light-25);
+}
 
 
 /* Active state - base styling with ripple effect */
@@ -172,29 +180,29 @@ horizontal-timeline:hover #timeline {
     height: 100%;
 }
 
-#timeline div.active + div span,
+#timeline div.active+div span,
 #timeline div:has(+ div.active) span {
     background-color: var(--light-70);
     height: var(--indicator-height-xxl);
 }
 
-#timeline div.active + div + div span,
+#timeline div.active+div+div span,
 #timeline div:has(+ div + div.active) span {
     background-color: var(--light-65);
     height: var(--indicator-height-lg);
 }
 
-#timeline div.active + div + div + div span,
+#timeline div.active+div+div+div span,
 #timeline div:has(+ div + div + div.active) span {
     background-color: var(--light-60);
 }
 
-#timeline div.active + div + div + div + div span,
+#timeline div.active+div+div+div+div span,
 #timeline div:has(+ div + div + div + div.active) span {
     background-color: var(--light-55);
 }
 
-#timeline div.active + div + div + div + div + div span,
+#timeline div.active+div+div+div+div+div span,
 #timeline div:has(+ div + div + div + div + div.active) span {
     background-color: var(--light-50);
 }
@@ -208,16 +216,16 @@ horizontal-timeline:hover #timeline {
 }
 
 #timeline div:has(+ div:hover) span,
-#timeline div:hover + div span,
+#timeline div:hover+div span,
 #timeline div:has(+ div.highlight) span,
-#timeline div.highlight + div span {
+#timeline div.highlight+div span {
     height: var(--indicator-height-xxl);
 }
 
 #timeline div:has(+ div + div:hover) span,
-#timeline div:hover + div + div span,
+#timeline div:hover+div+div span,
 #timeline div:has(+ div + div.highlight) span,
-#timeline div.highlight + div + div span {
+#timeline div.highlight+div+div span {
     height: var(--indicator-height-lg);
 }
 
@@ -237,82 +245,82 @@ horizontal-timeline:hover #timeline {
     height: 100%;
 }
 
-#timeline div.active + div:hover span,
-#timeline div.active + div + div:hover span,
-#timeline div.active + div + div + div:hover span,
-#timeline div.active + div + div + div + div:hover span,
-#timeline div.active + div + div + div + div + div:hover span,
-#timeline div.active + div.highlight span,
-#timeline div.active + div + div.highlight span,
-#timeline div.active + div + div + div.highlight span,
-#timeline div.active + div + div + div + div.highlight span,
-#timeline div.active + div + div + div + div + div.highlight span {
+#timeline div.active+div:hover span,
+#timeline div.active+div+div:hover span,
+#timeline div.active+div+div+div:hover span,
+#timeline div.active+div+div+div+div:hover span,
+#timeline div.active+div+div+div+div+div:hover span,
+#timeline div.active+div.highlight span,
+#timeline div.active+div+div.highlight span,
+#timeline div.active+div+div+div.highlight span,
+#timeline div.active+div+div+div+div.highlight span,
+#timeline div.active+div+div+div+div+div.highlight span {
     height: 100%;
 }
 
-#timeline div.active + div:hover + div span,
-#timeline div.active + div + div:hover + div span,
-#timeline div.active + div + div + div:hover + div span,
-#timeline div.active + div + div + div + div:hover + div span,
-#timeline div.active + div.highlight + div span,
-#timeline div.active + div + div.highlight + div span,
-#timeline div.active + div + div + div.highlight + div span,
-#timeline div.active + div + div + div + div.highlight + div span {
+#timeline div.active+div:hover+div span,
+#timeline div.active+div+div:hover+div span,
+#timeline div.active+div+div+div:hover+div span,
+#timeline div.active+div+div+div+div:hover+div span,
+#timeline div.active+div.highlight+div span,
+#timeline div.active+div+div.highlight+div span,
+#timeline div.active+div+div+div.highlight+div span,
+#timeline div.active+div+div+div+div.highlight+div span {
     height: var(--indicator-height-xxl);
 }
 
-#timeline div.active + div:hover + div + div span,
-#timeline div.active + div + div:hover + div + div span,
-#timeline div.active + div + div + div:hover + div + div span,
-#timeline div.active + div.highlight + div + div span,
-#timeline div.active + div + div.highlight + div + div span,
-#timeline div.active + div + div + div.highlight + div + div span {
+#timeline div.active+div:hover+div+div span,
+#timeline div.active+div+div:hover+div+div span,
+#timeline div.active+div+div+div:hover+div+div span,
+#timeline div.active+div.highlight+div+div span,
+#timeline div.active+div+div.highlight+div+div span,
+#timeline div.active+div+div+div.highlight+div+div span {
     height: var(--indicator-height-lg);
 }
 
-#timeline div.active + div:has(+ div:hover) span,
-#timeline div.active + div + div:has(+ div:hover) span,
-#timeline div.active + div + div + div:has(+ div:hover) span,
-#timeline div.active + div + div + div + div:has(+ div:hover) span,
-#timeline div.active + div:has(+ div.highlight) span,
-#timeline div.active + div + div:has(+ div.highlight) span,
-#timeline div.active + div + div + div:has(+ div.highlight) span,
-#timeline div.active + div + div + div + div:has(+ div.highlight) span {
+#timeline div.active+div:has(+ div:hover) span,
+#timeline div.active+div+div:has(+ div:hover) span,
+#timeline div.active+div+div+div:has(+ div:hover) span,
+#timeline div.active+div+div+div+div:has(+ div:hover) span,
+#timeline div.active+div:has(+ div.highlight) span,
+#timeline div.active+div+div:has(+ div.highlight) span,
+#timeline div.active+div+div+div:has(+ div.highlight) span,
+#timeline div.active+div+div+div+div:has(+ div.highlight) span {
     height: var(--indicator-height-xxl);
 }
 
-#timeline div.active + div:has(+ div + div:hover) span,
-#timeline div.active + div + div:has(+ div + div:hover) span,
-#timeline div.active + div + div + div:has(+ div + div:hover) span,
-#timeline div.active + div:has(+ div + div.highlight) span,
-#timeline div.active + div + div:has(+ div + div.highlight) span,
-#timeline div.active + div + div + div:has(+ div + div.highlight) span {
+#timeline div.active+div:has(+ div + div:hover) span,
+#timeline div.active+div+div:has(+ div + div:hover) span,
+#timeline div.active+div+div+div:has(+ div + div:hover) span,
+#timeline div.active+div:has(+ div + div.highlight) span,
+#timeline div.active+div+div:has(+ div + div.highlight) span,
+#timeline div.active+div+div+div:has(+ div + div.highlight) span {
     height: var(--indicator-height-lg);
 }
 
-#timeline div:hover + div:has(+ div.active) span,
-#timeline div:hover + div:has(+ div + div.active) span,
-#timeline div:hover + div:has(+ div + div + div.active) span,
-#timeline div:hover + div:has(+ div + div + div + div.active) span {
+#timeline div:hover+div:has(+ div.active) span,
+#timeline div:hover+div:has(+ div + div.active) span,
+#timeline div:hover+div:has(+ div + div + div.active) span,
+#timeline div:hover+div:has(+ div + div + div + div.active) span {
     height: var(--indicator-height-xxl);
 }
 
-#timeline div:hover + div + div:has(+ div.active) span,
-#timeline div:hover + div + div:has(+ div + div.active) span,
-#timeline div:hover + div + div:has(+ div + div + div.active) span {
+#timeline div:hover+div+div:has(+ div.active) span,
+#timeline div:hover+div+div:has(+ div + div.active) span,
+#timeline div:hover+div+div:has(+ div + div + div.active) span {
     height: var(--indicator-height-lg);
 }
 
-#timeline div.highlight + div:has(+ div.active) span,
-#timeline div.highlight + div:has(+ div + div.active) span,
-#timeline div.highlight + div:has(+ div + div + div.active) span,
-#timeline div.highlight + div:has(+ div + div + div + div.active) span {
+#timeline div.highlight+div:has(+ div.active) span,
+#timeline div.highlight+div:has(+ div + div.active) span,
+#timeline div.highlight+div:has(+ div + div + div.active) span,
+#timeline div.highlight+div:has(+ div + div + div + div.active) span {
     height: var(--indicator-height-xxl);
 }
 
-#timeline div.highlight + div + div:has(+ div.active) span,
-#timeline div.highlight + div + div:has(+ div + div.active) span,
-#timeline div.highlight + div + div:has(+ div + div + div.active) span {
+#timeline div.highlight+div+div:has(+ div.active) span,
+#timeline div.highlight+div+div:has(+ div + div.active) span,
+#timeline div.highlight+div+div:has(+ div + div + div.active) span {
     height: var(--indicator-height-lg);
 }
 
@@ -364,7 +372,7 @@ horizontal-timeline:hover #timeline_labels button {
     padding-top: 0.875rem;
 }
 
-#timeline_labels button > span {
+#timeline_labels button>span {
     position: relative;
     transition: color var(--transition-color);
     text-align: center;
@@ -380,13 +388,13 @@ horizontal-timeline:hover #timeline_labels button {
 
 /* Text cropping for better vertical alignment */
 
-#timeline_labels button > span::before {
+#timeline_labels button>span::before {
     content: "";
     margin-bottom: -0.1864em;
     display: table;
 }
 
-#timeline_labels button > span::after {
+#timeline_labels button>span::after {
     content: "";
     margin-top: -0.2024em;
     display: table;
@@ -395,16 +403,16 @@ horizontal-timeline:hover #timeline_labels button {
 
 /* Special styling for last label ("elsewhen") */
 
-#timeline_labels button:last-child > span {
+#timeline_labels button:last-child>span {
     font-size: 0.75892875rem;
     line-height: 0.84375rem;
 }
 
-#timeline_labels button:last-child > span::before {
+#timeline_labels button:last-child>span::before {
     margin-bottom: -0.1986em;
 }
 
-#timeline_labels button:last-child > span::after {
+#timeline_labels button:last-child>span::after {
     margin-top: -0.21455em;
 }
 
@@ -416,7 +424,7 @@ horizontal-timeline:hover #timeline_labels button {
 
 /* Label background pill (animated on hover/active) */
 
-#timeline_labels button > span > span {
+#timeline_labels button>span>span {
     z-index: -1;
     transition: opacity var(--transition-color), inset var(--transition-indicator);
     content: "";
@@ -427,10 +435,10 @@ horizontal-timeline:hover #timeline_labels button {
     border-radius: 999rem;
 }
 
-#timeline_labels button.active > span > span,
-#timeline_labels button.highlight > span > span,
-#timeline_labels button:hover > span > span,
-#timeline_labels button:focus > span > span {
+#timeline_labels button.active>span>span,
+#timeline_labels button.highlight>span>span,
+#timeline_labels button:hover>span>span,
+#timeline_labels button:focus>span>span {
     transition: opacity var(--transition-color), inset var(--transition-indicator);
     opacity: 1;
     inset: -0.09375rem 0 0 0;
@@ -459,33 +467,58 @@ horizontal-timeline:hover #timeline_labels button {
     box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-35);
 }
 
-#mode:checked~main #timeline_labels button > span > span {
+#mode:checked~main #timeline_labels button>span>span {
     background-color: var(--light-50);
 }
 
 
 /* Light mode - indicator colours */
 
-#mode:checked~main #timeline div span { background-color: var(--dark-45); }
+#mode:checked~main #timeline div span {
+    background-color: var(--dark-45);
+}
+
 #mode:checked~main #timeline div:nth-child(2) span,
-#mode:checked~main #timeline div:nth-last-child(2) span { background-color: var(--dark-40); }
+#mode:checked~main #timeline div:nth-last-child(2) span {
+    background-color: var(--dark-40);
+}
+
 #mode:checked~main #timeline div:first-child span,
-#mode:checked~main #timeline div:last-child span { background-color: var(--dark-30); }
+#mode:checked~main #timeline div:last-child span {
+    background-color: var(--dark-30);
+}
 
 
 /* Light mode - active state colours */
 
-#mode:checked~main #timeline div.active span { background-color: var(--dark-70); }
-#mode:checked~main #timeline div.active + div span,
-#mode:checked~main #timeline div:has(+ div.active) span { background-color: var(--dark-70); }
-#mode:checked~main #timeline div.active + div + div span,
-#mode:checked~main #timeline div:has(+ div + div.active) span { background-color: var(--dark-65); }
-#mode:checked~main #timeline div.active + div + div + div span,
-#mode:checked~main #timeline div:has(+ div + div + div.active) span { background-color: var(--dark-60); }
-#mode:checked~main #timeline div.active + div + div + div + div span,
-#mode:checked~main #timeline div:has(+ div + div + div + div.active) span { background-color: var(--dark-55); }
-#mode:checked~main #timeline div.active + div + div + div + div + div span,
-#mode:checked~main #timeline div:has(+ div + div + div + div + div.active) span { background-color: var(--dark-50); }
+#mode:checked~main #timeline div.active span {
+    background-color: var(--dark-70);
+}
+
+#mode:checked~main #timeline div.active+div span,
+#mode:checked~main #timeline div:has(+ div.active) span {
+    background-color: var(--dark-70);
+}
+
+#mode:checked~main #timeline div.active+div+div span,
+#mode:checked~main #timeline div:has(+ div + div.active) span {
+    background-color: var(--dark-65);
+}
+
+#mode:checked~main #timeline div.active+div+div+div span,
+#mode:checked~main #timeline div:has(+ div + div + div.active) span {
+    background-color: var(--dark-60);
+}
+
+#mode:checked~main #timeline div.active+div+div+div+div span,
+#mode:checked~main #timeline div:has(+ div + div + div + div.active) span {
+    background-color: var(--dark-55);
+}
+
+#mode:checked~main #timeline div.active+div+div+div+div+div span,
+#mode:checked~main #timeline div:has(+ div + div + div + div + div.active) span {
+    background-color: var(--dark-50);
+}
 
 
 /* No-JS: Expand hit area for anchor-based navigation */
