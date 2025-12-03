@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+build/
+*.min.css
+
+# Git
+.git/
+.github/
+
+# Project specific
+.dropstone/

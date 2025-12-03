@@ -2,192 +2,187 @@
  * Utility Classes
  */
 
-
 /* Typography */
 
 body {
-    --text-xxs-font-weight: 600;
-    --text-xxs-font-size: 0.80356875rem;
-    --text-xxs-line-height: 0.875rem;
-    --text-xxs-letter-spacing: 0.1875rem;
-    --text-xxs_before-margin-bottom: -0.2194em;
-    --text-xxs_after-margin-top: -0.1694em;
+	--text-xxs-font-weight: 600;
+	--text-xxs-font-size: 0.80356875rem;
+	--text-xxs-line-height: 0.875rem;
+	--text-xxs-letter-spacing: 0.1875rem;
+	--text-xxs_before-margin-bottom: -0.2194em;
+	--text-xxs_after-margin-top: -0.1694em;
 
-    --text-xs-font-weight: 600;
-    --text-xs-font-size: 0.89285625rem;
-    --text-xs-line-height: 1rem;
-    --text-xs-letter-spacing: 0.15625rem;
-    --text-xs_before-margin-bottom: -0.235em;
-    --text-xs_after-margin-top: -0.185em;
+	--text-xs-font-weight: 600;
+	--text-xs-font-size: 0.89285625rem;
+	--text-xs-line-height: 1rem;
+	--text-xs-letter-spacing: 0.15625rem;
+	--text-xs_before-margin-bottom: -0.235em;
+	--text-xs_after-margin-top: -0.185em;
 
-    --text-sm-font-weight: 500;
-    --text-sm-font-size: 1.07143125rem;
-    --text-sm-line-height: 1.25rem;
-    --text-sm-letter-spacing: 0.03125rem;
-    --text-sm_before-margin-bottom: -0.2583em;
-    --text-sm_after-margin-top: -0.2083em;
+	--text-sm-font-weight: 500;
+	--text-sm-font-size: 1.07143125rem;
+	--text-sm-line-height: 1.25rem;
+	--text-sm-letter-spacing: 0.03125rem;
+	--text-sm_before-margin-bottom: -0.2583em;
+	--text-sm_after-margin-top: -0.2083em;
 
-    --text-md-font-weight: 400;
-    --text-md-font-size: 1.7857125rem;
-    --text-md-line-height: 2rem;
-    --text-md-letter-spacing: 0.040625rem;
-    --text-md_before-margin-bottom: -0.235em;
-    --text-md_after-margin-top: -0.185em;
+	--text-md-font-weight: 400;
+	--text-md-font-size: 1.7857125rem;
+	--text-md-line-height: 2rem;
+	--text-md-letter-spacing: 0.040625rem;
+	--text-md_before-margin-bottom: -0.235em;
+	--text-md_after-margin-top: -0.185em;
 
-    --text-lg-font-weight: 300;
-    --text-lg-font-size: 2.85714375rem;
-    --text-lg-line-height: 4rem;
-    --text-lg-letter-spacing: -0.03125rem;
-    --text-lg_before-margin-bottom: -0.375em;
-    --text-lg_after-margin-top: -0.325em;
+	--text-lg-font-weight: 300;
+	--text-lg-font-size: 2.85714375rem;
+	--text-lg-line-height: 4rem;
+	--text-lg-letter-spacing: -0.03125rem;
+	--text-lg_before-margin-bottom: -0.375em;
+	--text-lg_after-margin-top: -0.325em;
 
-    --text-xl-font-weight: 300;
-    --text-xl-font-size: 4.2857125rem;
-    --text-xl-line-height: 6rem;
-    --text-xl-letter-spacing: -0.0625rem;
-    --text-xl_before-margin-bottom: -0.375em;
-    --text-xl_after-margin-top: -0.325em;
+	--text-xl-font-weight: 300;
+	--text-xl-font-size: 4.2857125rem;
+	--text-xl-line-height: 6rem;
+	--text-xl-letter-spacing: -0.0625rem;
+	--text-xl_before-margin-bottom: -0.375em;
+	--text-xl_after-margin-top: -0.325em;
 }
 
 @media (min-width: 45rem) {
-    body {
-        --text-xs-font-weight: 500;
+	body {
+		--text-xs-font-weight: 500;
 
-        --text-sm-font-weight: 400;
+		--text-sm-font-weight: 400;
 
-        --text-md-font-weight: 300;
+		--text-md-font-weight: 300;
 
-        --text-lg-font-weight: 200;
-        --text-lg-letter-spacing: normal;
+		--text-lg-font-weight: 200;
+		--text-lg-letter-spacing: normal;
 
-        --text-xl-font-weight: 200;
-        --text-xl-letter-spacing: normal;
-    }
+		--text-xl-font-weight: 200;
+		--text-xl-letter-spacing: normal;
+	}
 }
-
 
 /* Shared text utility base */
 
-[class^="text-"]::before {
-    content: "";
-    display: table;
+[class^='text-']::before {
+	content: '';
+	display: table;
 }
 
-[class^="text-"]::after {
-    content: "";
-    display: table;
+[class^='text-']::after {
+	content: '';
+	display: table;
 }
 
 .text-xxs {
-    font-weight: var(--text-xxs-font-weight);
-    font-size: var(--text-xxs-font-size);
-    line-height: var(--text-xxs-line-height);
-    letter-spacing: var(--text-xxs-letter-spacing);
-    text-transform: uppercase;
+	font-weight: var(--text-xxs-font-weight);
+	font-size: var(--text-xxs-font-size);
+	line-height: var(--text-xxs-line-height);
+	letter-spacing: var(--text-xxs-letter-spacing);
+	text-transform: uppercase;
 }
 
 .text-xxs::before {
-    margin-bottom: var(--text-xxs_before-margin-bottom);
+	margin-bottom: var(--text-xxs_before-margin-bottom);
 }
 
 .text-xxs::after {
-    margin-top: var(--text-xxs_after-margin-top);
+	margin-top: var(--text-xxs_after-margin-top);
 }
 
 .text-xs {
-    font-weight: var(--text-xs-font-weight);
-    font-size: var(--text-xs-font-size);
-    line-height: var(--text-xs-line-height);
-    letter-spacing: var(--text-xs-letter-spacing);
-    text-transform: uppercase;
+	font-weight: var(--text-xs-font-weight);
+	font-size: var(--text-xs-font-size);
+	line-height: var(--text-xs-line-height);
+	letter-spacing: var(--text-xs-letter-spacing);
+	text-transform: uppercase;
 }
 
 .text-xs::before {
-    margin-bottom: var(--text-xs_before-margin-bottom);
+	margin-bottom: var(--text-xs_before-margin-bottom);
 }
 
 .text-xs::after {
-    margin-top: var(--text-xs_after-margin-top);
+	margin-top: var(--text-xs_after-margin-top);
 }
 
 .text-sm {
-    font-weight: var(--text-sm-font-weight);
-    font-size: var(--text-sm-font-size);
-    line-height: var(--text-sm-line-height);
-    letter-spacing: var(--text-sm-letter-spacing);
+	font-weight: var(--text-sm-font-weight);
+	font-size: var(--text-sm-font-size);
+	line-height: var(--text-sm-line-height);
+	letter-spacing: var(--text-sm-letter-spacing);
 }
 
 .text-sm::before {
-    margin-bottom: var(--text-sm_before-margin-bottom);
+	margin-bottom: var(--text-sm_before-margin-bottom);
 }
 
 .text-sm::after {
-    margin-top: var(--text-sm_after-margin-top);
+	margin-top: var(--text-sm_after-margin-top);
 }
 
 .text-md {
-    font-weight: var(--text-md-font-weight);
-    font-size: var(--text-md-font-size);
-    line-height: var(--text-md-line-height);
-    letter-spacing: var(--text-md-letter-spacing);
+	font-weight: var(--text-md-font-weight);
+	font-size: var(--text-md-font-size);
+	line-height: var(--text-md-line-height);
+	letter-spacing: var(--text-md-letter-spacing);
 }
 
 .text-md::before {
-    margin-bottom: var(--text-md_before-margin-bottom);
+	margin-bottom: var(--text-md_before-margin-bottom);
 }
 
 .text-md::after {
-    margin-top: var(--text-md_after-margin-top);
+	margin-top: var(--text-md_after-margin-top);
 }
 
 .text-lg {
-    font-weight: var(--text-lg-font-weight);
-    font-size: var(--text-lg-font-size);
-    line-height: var(--text-lg-line-height);
-    letter-spacing: var(--text-lg-letter-spacing);
+	font-weight: var(--text-lg-font-weight);
+	font-size: var(--text-lg-font-size);
+	line-height: var(--text-lg-line-height);
+	letter-spacing: var(--text-lg-letter-spacing);
 }
 
 .text-lg::before {
-    margin-bottom: var(--text-lg_before-margin-bottom);
+	margin-bottom: var(--text-lg_before-margin-bottom);
 }
 
 .text-lg::after {
-    margin-top: var(--text-lg_after-margin-top);
+	margin-top: var(--text-lg_after-margin-top);
 }
 
 .text-xl {
-    font-weight: var(--text-xl-font-weight);
-    font-size: var(--text-xl-font-size);
-    line-height: var(--text-xl-line-height);
-    letter-spacing: var(--text-xl-letter-spacing);
+	font-weight: var(--text-xl-font-weight);
+	font-size: var(--text-xl-font-size);
+	line-height: var(--text-xl-line-height);
+	letter-spacing: var(--text-xl-letter-spacing);
 }
 
 .text-xl::before {
-    margin-bottom: var(--text-xl_before-margin-bottom);
+	margin-bottom: var(--text-xl_before-margin-bottom);
 }
 
 .text-xl::after {
-    margin-top: var(--text-xl_after-margin-top);
+	margin-top: var(--text-xl_after-margin-top);
 }
-
 
 /* Display (Essential for state management and JS) */
 
 .flex {
-    display: flex;
+	display: flex;
 }
 
 .hidden {
-    display: none;
+	display: none;
 }
-
 
 /* Scroll Behaviour (Used in timeline.js) */
 
 .scroll-behavior-auto {
-    scroll-behavior: auto !important;
+	scroll-behavior: auto !important;
 }
-
 
 /* Disable Transitions (Used during theme switching) */
 
@@ -195,35 +190,33 @@ body {
 .disable-transitions *,
 .disable-transitions *::before,
 .disable-transitions *::after {
-    transition: none !important;
+	transition: none !important;
 }
-
 
 /* Mid ("midscript" text) */
 
 .mid {
-    font-size: 0.666em;
-    letter-spacing: 0.075em;
-    font-weight: 500;
-    vertical-align: middle;
+	font-size: 0.666em;
+	letter-spacing: 0.075em;
+	font-weight: 500;
+	vertical-align: middle;
 }
 
 .mid::before {
-    content: '\00A0';
-    display: inline;
+	content: '\00A0';
+	display: inline;
 }
-
 
 /* Hyphenation & Text Wrapping (Applied to long-form content) */
 
 .hyphens-auto * {
-    text-justify: inter-word;
-    text-wrap: pretty;
-    hyphens: auto;
-    hyphenate-limit-chars: 7 3 3;
-    hyphenate-limit-lines: 9;
-    hyphenate-limit-zone: 10%;
-    -webkit-hyphenate-limit-before: 4;
-    -webkit-hyphenate-limit-after: 4;
-    -webkit-hyphenate-limit-lines: 2;
+	text-justify: inter-word;
+	text-wrap: pretty;
+	hyphens: auto;
+	hyphenate-limit-chars: 7 3 3;
+	hyphenate-limit-lines: 9;
+	hyphenate-limit-zone: 10%;
+	-webkit-hyphenate-limit-before: 4;
+	-webkit-hyphenate-limit-after: 4;
+	-webkit-hyphenate-limit-lines: 2;
 }

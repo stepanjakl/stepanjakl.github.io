@@ -1,49 +1,49 @@
 {
-    "id": "/",
-    "name": "Štěpán Jákl - Full-stack web developer & interface designer",
-    "short_name": "Štěpán Jákl",
-    "description": "Experienced and detail-oriented user interface engineer who specialises in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.",
-    "start_url": "/",
-    "scope": "/",
-    "display": "standalone",
-    "display_override": [ "standalone", "minimal-ui" ],
-    "orientation": "portrait-primary",
-    "theme_color": "#005FF1",
-    "background_color": "#001417",
-    "lang": "en-GB",
-    "dir": "ltr",
-    "categories": ["portfolio", "technology", "design", "development", "business"],
-    "icons": [
-        {
-            "src": "images/android-touch-icon-small.png",
-            "sizes": "192x192",
-            "type": "image/png",
-            "purpose": "any maskable"
-        },
-        {
-            "src": "images/android-touch-icon-large.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "any maskable"
-        },
-        {
-            "src": "images/apple-touch-icon.png",
-            "sizes": "180x180",
-            "type": "image/png"
-        },
-        {
-            "src": "images/favicon.svg",
-            "sizes": "any",
-            "type": "image/svg+xml"
-        }
-    ],
-    "screenshots": [
-        {
-            "src": "images/selfie.jpg",
-            "sizes": "960x960",
-            "type": "image/jpeg",
-            "form_factor": "wide",
-            "label": "Portfolio homepage"
-        }
-    ]
+	"id": "/",
+	"name": "Štěpán Jákl - Full-stack web developer & interface designer",
+	"short_name": "Štěpán Jákl",
+	"description": "Experienced and detail-oriented user interface engineer who specialises in crafting intuitive digital solutions. Committed to delivering high-quality results for projects with exciting propositions and realistic goals.",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"display_override": ["standalone", "minimal-ui"],
+	"orientation": "portrait-primary",
+	"theme_color": "#005FF1",
+	"background_color": "#001417",
+	"lang": "en-GB",
+	"dir": "ltr",
+	"categories": ["portfolio", "technology", "design", "development", "business"],
+	"icons": [
+		{
+			"src": "images/android-touch-icon-small.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any maskable"
+		},
+		{
+			"src": "images/android-touch-icon-large.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any maskable"
+		},
+		{
+			"src": "images/apple-touch-icon.png",
+			"sizes": "180x180",
+			"type": "image/png"
+		},
+		{
+			"src": "images/favicon.svg",
+			"sizes": "any",
+			"type": "image/svg+xml"
+		}
+	],
+	"screenshots": [
+		{
+			"src": "images/selfie.jpg",
+			"sizes": "960x960",
+			"type": "image/jpeg",
+			"form_factor": "wide",
+			"label": "Portfolio homepage"
+		}
+	]
 }

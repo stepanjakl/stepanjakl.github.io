@@ -1,0 +1,48 @@
+{
+	"name": "stepanjakl.github.io",
+	"description": "Personal website of Štěpán Jákl - Full-stack web developer & interface designer",
+	"private": true,
+	"scripts": {
+		"format": "prettier --write \"**/*.{js,css,html,json,md}\"",
+		"format:check": "prettier --check \"**/*.{js,css,html,json,md}\"",
+		"format:files": "prettier --list-different \"**/*.{js,css,html,json,md}\"",
+		"format:files:open": "npm run format:files | xargs code",
+		"lint": "npm run lint:js && npm run lint:css && npm run lint:json",
+		"lint:js": "eslint \"scripts/**/*.js\"",
+		"lint:js:files": "eslint \"scripts/**/*.js\" --format unix 2>&1 | grep \".js:\" | cut -d\":\" -f1 | sort -u",
+		"lint:js:files:open": "npm run lint:js:files | xargs code",
+		"lint:css": "stylelint \"styles/**/*.css\"",
+		"lint:css:files": "stylelint \"styles/**/*.css\" --formatter unix 2>&1 | grep \".css:\" | cut -d\":\" -f1 | sort -u",
+		"lint:css:files:open": "npm run lint:css:files | xargs code",
+		"lint:json": "eslint \"**/*.json\"",
+		"lint:json:files": "eslint \"**/*.json\" --format unix 2>&1 | grep \".json:\" | cut -d\":\" -f1 | sort -u",
+		"lint:json:files:open": "npm run lint:json:files | xargs code",
+		"lint:fix": "npm run lint:js:fix && npm run lint:css:fix && npm run lint:json:fix",
+		"lint:js:fix": "eslint --fix \"scripts/**/*.js\"",
+		"lint:css:fix": "stylelint --fix \"styles/**/*.css\"",
+		"lint:json:fix": "eslint --fix \"**/*.json\"",
+		"prepare": "husky"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/stepanjakl/stepanjakl.github.io.git"
+	},
+	"author": "Štěpán Jákl",
+	"license": "MIT",
+	"devDependencies": {
+		"eslint": "^9.39.1",
+		"eslint-formatter-unix": "^9.0.1",
+		"eslint-plugin-jsonc": "^2.21.0",
+		"husky": "^9.1.7",
+		"jsonc-eslint-parser": "^2.4.1",
+		"lint-staged": "^16.2.7",
+		"prettier": "^3.7.3",
+		"stylelint": "^16.26.1",
+		"stylelint-config-standard": "^39.0.1"
+	},
+	"lint-staged": {
+		"*.{js,css,html,json,md}": "prettier --write",
+		"*.js": "eslint --fix",
+		"*.css": "stylelint --fix"
+	}
+}

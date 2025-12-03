@@ -3,27 +3,27 @@
  */
 
 .intro__name .tooltip__text--bottom {
-    display: none;
+	display: none;
 }
 
 .menu__email .tooltip__text {
-    display: none;
+	display: none;
 }
 
 .menu__email-text {
-    user-select: all;
+	user-select: all;
 }
 
 #dropdown-menu label#dropdown-menu-ambience,
 #dropdown-menu label#dropdown-menu-fullscreen,
 .modal__fullscreen-button {
-    display: none;
+	display: none;
 }
 
-[loading="lazy"] {
-    opacity: 1;
+[loading='lazy'] {
+	opacity: 1;
 }
 
 .modal-profile__footer-art-gradient {
-    transform: none;
+	transform: none;
 }

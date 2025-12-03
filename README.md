@@ -6,13 +6,11 @@
 
 # Personal website of Štěpán Jákl
 
-**Experienced and detail-oriented user interface engineer who specialises in crafting intuitive digital solutions.**
+**Experienced and detail-oriented user interface engineer focused on crafting intuitive, high-performance digital experiences.**
+
+**Equally dedicated to engineering and design, with a pragmatic mindset and a strong emphasis on user experience.**
 
 **Committed to delivering high-quality results for projects with exciting propositions and realistic goals.**
-
-**Proficient in both back-end and front-end development, with a focus on prioritising user experience.**
-
-**Equally dedicated to code and design.**
 
 ---
 
@@ -26,35 +24,56 @@
 
 ---
 
-### 🧪 Testing & deployment
+## 🛠️ Engineering workflow
 
-- **Local testing**: Run `./minify-test.sh` to minify assets, preview the site locally on `http://localhost:222`, and clean up automatically.
+This project follows a **zero-dependency philosophy**, emphasising clarity, minimalism, and full control over the output.
 
-- **Release process**: Push to the `release` branch to trigger automated minification and deployment to `gh-pages`.
+All tooling is intentionally lightweight and focused solely on maintaining code quality and ensuring predictable deployments.
+
+### 📏 Code quality & consistency
+
+- **Static analysis**:
+  JavaScript and CSS are validated through **ESLint** and **Stylelint**, enforcing strict, custom rulesets.
+
+- **Formatting**:
+  **Prettier** maintains a consistent style across all files, including tabs for indentation, single quotes, and required semicolons.
+
+- **Automated pre-commit checks**:
+  **Husky** and **lint-staged** run linters and formatters before every commit, ensuring only clean, compliant code enters the repository.
+
+### 🧪 Build process & deployment
+
+- **Local production simulation**:
+  Execute `./minify-test.sh` to locally replicate the full production build—minifying assets and serving the site at `localhost:222` for testing.
+
+- **Continuous delivery**:
+  Pushing to the `release` branch triggers a GitHub Actions pipeline that optimises assets and deploys the site to `gh-pages`.
 
 ---
 
-#### 📧 **Interested in working together?** Reach out at [stepan.jakl@icloud.com](mailto:stepan.jakl@icloud.com)
+#### 📧 **Interested in working together?**
+
+Feel free to reach out at **[stepan.jakl@icloud.com](mailto:stepan.jakl@icloud.com)**
 
 ---
 
 ### 🔗 Connect
 
-| Platform | Description | Link |
-|----------|-------------|------|
-| **GitHub** | Code & projects | [View profile](https://github.com/stepanjakl) |
-| **CodePen** | Experiments | [View pens](https://codepen.io/stepj/pens/public) |
-| **LinkedIn** | Professional | [View profile](https://www.linkedin.com/in/stepanjakl) |
-| **Calendly** | Schedule a call | [Book time](https://calendly.com/stepanjakl) |
+| Platform     | Description     | Link                                                   |
+| ------------ | --------------- | ------------------------------------------------------ |
+| **GitHub**   | Code & projects | [View profile](https://github.com/stepanjakl)          |
+| **CodePen**  | Experiments     | [View pens](https://codepen.io/stepj/pens/public)      |
+| **LinkedIn** | Professional    | [View profile](https://www.linkedin.com/in/stepanjakl) |
+| **Calendly** | Schedule a call | [Book time](https://calendly.com/stepanjakl)           |
 
 ---
 
 ### 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
-#### Copyright notice
+#### Copyright
 
-© 2025 *Štěpán Jákl*. All rights reserved.
+© 2025 _Štěpán Jákl_. All rights reserved.
 
-> **Note:** While this codebase is open source under the MIT license, all content, designs, artwork, and other creative assets remain the exclusive intellectual property of Štěpán Jákl and may not be used without explicit permission.
+> **Note:** While the codebase is open source under MIT, all content, designs, artwork, and other creative assets remain the exclusive intellectual property of **Štěpán Jákl** and may not be used without explicit permission.
