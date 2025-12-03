@@ -1417,7 +1417,6 @@ body {
 		linear-gradient(to right, rgb(0, 0, 0, 1), rgb(0, 0, 0, 0));
 	mask-repeat: no-repeat;
 	mask-composite: subtract;
-	mask-composite: destination-out;
 	filter: blur(0.125rem);
 }
 

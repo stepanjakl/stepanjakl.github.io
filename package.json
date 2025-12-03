@@ -21,7 +21,8 @@
 		"lint:js:fix": "eslint --fix \"scripts/**/*.js\"",
 		"lint:css:fix": "stylelint --fix \"styles/**/*.css\"",
 		"lint:json:fix": "eslint --fix \"**/*.json\"",
-		"prepare": "husky"
+		"prepare": "husky",
+		"test": "npm run format && npm run lint"
 	},
 	"repository": {
 		"type": "git",
