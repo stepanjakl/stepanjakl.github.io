@@ -4,7 +4,8 @@
 		<!-- Initial styles -->
 		<style>
 			/* Prevent 'Flash of Unstyled Content' (FOUC) - START */
-			main {
+			main,
+			#global-skip-link-group {
 				opacity: 0;
 			}
 		</style>
@@ -839,7 +840,7 @@
 									<dt>
 										<span>Profile:</span>
 									</dt>
-									<dd class="modal-profile__summary hyphens-auto">
+									<dd class="modal-profile__summary">
 										<p>
 											A detail-oriented interface engineer and full-stack developer with experience in crafting intuitive digital solutions that balance clarity and creativity.
 										</p>
@@ -891,12 +892,14 @@
 												target="_blank"
 												aria-label="See where I am from (opens in new tab)">
 												<span lang="cs">Czech</span>
-												<img
-													alt="Czech flag"
-													src="images/cs.svg"
-													width="512"
-													height="512"
-													loading="lazy" />
+												<span class="flag-icon-wrapper">
+													<img
+														alt="Czech flag"
+														src="images/cs.svg"
+														width="512"
+														height="512"
+														loading="lazy" />
+												</span>
 												<span class="sr-only">(opens in new tab)</span>
 											</a>
 										</span>
@@ -911,12 +914,14 @@
 												target="_blank"
 												aria-label="See where I currently live (opens in new tab)">
 												<span lang="en-GB">West Yorkshire, United Kingdom</span>
-												<img
-													alt="United Kingdom flag"
-													src="images/gb.svg"
-													width="512"
-													height="512"
-													loading="lazy" />
+												<span class="flag-icon-wrapper">
+													<img
+														alt="United Kingdom flag"
+														src="images/gb.svg"
+														width="512"
+														height="512"
+														loading="lazy" />
+												</span>
 												<span class="sr-only">(opens in new tab)</span>
 											</a>
 										</span>

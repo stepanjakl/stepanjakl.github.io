@@ -69,6 +69,9 @@ body {
 	--duration-rectangle-bg-animate: 60s;
 	--duration-footer-square-1-blink: 12.5s;
 	--delay-footer-square-1-blink: calc(var(--anim-segment) * 22.75);
+
+	/* Scale modal effect */
+	--scale-modal-effect: 0.9;
 }
 
 @media (min-width: 45rem) {
@@ -76,6 +79,7 @@ body {
 		--duration-rectangle-mask-animate: 15s;
 		--duration-footer-square-1-blink: 15s;
 		--duration-rectangle-bg-animate: 90s;
+		--scale-modal-effect: 0.95;
 	}
 }
 
@@ -454,7 +458,7 @@ footer > * {
 		opacity: 0;
 		width: 0%;
 		border-radius: 0rem;
-		transform: scale(0.95);
+		transform: scale(var(--scale-modal-effect));
 	}
 
 	25% {
@@ -1593,7 +1597,7 @@ body.modal-archive-open .intro__left,
 #archive:target ~ main .intro__right,
 body.modal-archive-open .intro__right {
 	transition: transform calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad);
-	transform: scale(0.95);
+	transform: scale(var(--scale-modal-effect));
 }
 
 #profile:target ~ main .intro__left,
@@ -1601,7 +1605,7 @@ body.modal-profile-open .intro__left {
 	transition:
 		transform calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad),
 		filter calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad);
-	transform: scale(0.95);
+	transform: scale(var(--scale-modal-effect));
 	filter: blur(2rem);
 	will-change: transform, filter;
 }
@@ -1611,7 +1615,7 @@ body.modal-profile-open .intro__right {
 	transition:
 		transform calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad),
 		filter calc(var(--animate-in-segment) * 1.25) var(--ease-out-quad);
-	transform: scale(0.95);
+	transform: scale(var(--scale-modal-effect));
 	filter: blur(3rem);
 	will-change: transform, filter;
 }
@@ -1694,7 +1698,7 @@ section[data-timeline-section] > div > nav ul li:not(:first-child) a:focus {
 	transition:
 		opacity var(--animate-out-segment) linear,
 		transform var(--animate-out-segment) var(--ease-in-quad);
-	transform: scale(0.95);
+	transform: scale(var(--scale-modal-effect));
 	transform-origin: bottom;
 	opacity: 0;
 }
@@ -1752,16 +1756,20 @@ section[data-timeline-section] > div > nav ul li:not(:first-child) a:focus {
 	height: 0.75rem;
 }
 
+[data-carousel-nav] button {
+	background-color: var(--carousel-nav-bg);
+}
+
 [data-carousel-nav] button:hover,
 [data-carousel-nav] button:focus {
 	transition: background-color var(--animate-out-segment-2\/3) linear;
-	background-color: var(--light-50);
+	background-color: var(--carousel-nav-bg-hover);
 }
 
 [data-carousel-nav] button[aria-current] {
 	pointer-events: none;
 	width: 1.75rem;
-	background-color: var(--light-50);
+	background-color: var(--carousel-nav-bg-active);
 }
 
 [data-carousel-nav]:hover button[aria-current],
@@ -1776,17 +1784,18 @@ section[data-timeline-section] > div > nav ul li:not(:first-child) a:focus {
 [data-carousel-arrows] li button:hover,
 [data-carousel-arrows] li button:focus {
 	transition: background-color var(--animate-out-segment-2\/3) linear;
-	background-color: var(--light-25);
+	background-color: var(--carousel-arrow-bg-hover);
 }
 
 [data-carousel-arrows] li button::before {
 	transition: background-color var(--animate-out-segment-2\/3) linear;
-	background-color: var(--light-35);
+	background-color: var(--carousel-arrow-icon-bg);
 }
 
-[data-carousel-arrows] li button:hover::before {
+[data-carousel-arrows] li button:hover::before,
+[data-carousel-arrows] li button:focus::before {
 	transition: background-color var(--animate-in-segment-2\/3) linear;
-	background-color: var(--light-50);
+	background-color: var(--carousel-arrow-icon-bg-hover);
 }
 
 /* Modals close button */
@@ -1822,6 +1831,33 @@ section[data-timeline-section] > div > nav ul li:not(:first-child) a:focus {
 .modal__fullscreen-button:hover svg,
 .modal__fullscreen-button:focus svg {
 	color: var(--modal-icon--hover);
+}
+
+/* Modal profile links */
+
+.modal--profile .modal__body a {
+	transition: text-decoration-color var(--animate-out-segment-2\/3) linear;
+}
+
+.modal--profile .modal__body a:hover,
+.modal--profile .modal__body a:focus {
+	transition: text-decoration-color var(--animate-in-segment-2\/3) linear;
+	text-decoration-color: var(--text-2);
+}
+
+.modal--profile .modal__body a .flag-icon-wrapper {
+	transition: background-color var(--animate-out-segment-2\/3) linear;
+}
+
+.modal--profile .modal__body a:hover .flag-icon-wrapper,
+.modal--profile .modal__body a:focus .flag-icon-wrapper {
+	transition: background-color var(--animate-in-segment-2\/3) linear;
+	background-color: var(--light-25);
+}
+
+#mode:checked ~ main .modal--profile .modal__body a:hover .flag-icon-wrapper,
+#mode:checked ~ main .modal--profile .modal__body a:focus .flag-icon-wrapper {
+	background-color: var(--cyan-quarter-70);
 }
 
 /* Modal profile triangle */
@@ -2003,11 +2039,4 @@ section[data-timeline-section] > div > nav ul li:not(:first-child) a:focus {
 .intro__name.highlight--active .corners__item::before,
 .intro__name.highlight--active .corners__item::after {
 	transition: background-color calc(2 * var(--animate-in-segment)) var(--ease-out-quad);
-}
-
-/* Prevent Flash of Unstyled Content (FOUC) */
-
-main {
-	opacity: 1;
-	transition: opacity var(--anim-segment) linear var(--anim-segment);
 }

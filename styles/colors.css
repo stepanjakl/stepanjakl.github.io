@@ -229,12 +229,12 @@ main {
 
 	/* Carousel control colours */
 	--carousel-nav-bg: var(--light-25);
-	--carousel-nav-bg-hover: var(--dark-40);
-	--carousel-nav-bg-active: var(--dark-50);
+	--carousel-nav-bg-hover: var(--light-50);
+	--carousel-nav-bg-active: var(--light-50);
 	--carousel-arrow-bg: var(--context-bg-modal);
-	--carousel-arrow-bg-hover: var(--context-bg-modal--hover);
-	--carousel-arrow-icon-bg: var(--dark-35);
-	--carousel-arrow-icon-bg-hover: var(--dark-50);
+	--carousel-arrow-bg-hover: var(--light-25);
+	--carousel-arrow-icon-bg: var(--light-35);
+	--carousel-arrow-icon-bg-hover: var(--light-50);
 
 	/* Footer colours */
 	--footer-square-1: var(--highlight-primary);
@@ -286,7 +286,6 @@ html {
 	/* 210, 25, 80 */
 	--context-bg-2: var(--light-50);
 	--context-bg-modal: var(--cyan-quarter-80);
-	--context-bg-modal--hover: var(--cyan-quarter-85);
 
 	/* 210, 25, 75 */
 	--menu-bg: #a3bdc355;
@@ -316,7 +315,7 @@ html {
 	--carousel-nav-bg-hover: var(--dark-40);
 	--carousel-nav-bg-active: var(--dark-50);
 	--carousel-arrow-bg: var(--context-bg-modal);
-	--carousel-arrow-bg-hover: var(--context-bg-modal--hover);
+	--carousel-arrow-bg-hover: var(--cyan-quarter-85);
 	--carousel-arrow-icon-bg: var(--dark-35);
 	--carousel-arrow-icon-bg-hover: var(--dark-50);
 

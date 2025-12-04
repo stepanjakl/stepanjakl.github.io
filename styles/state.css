@@ -506,32 +506,6 @@ body.modal-archive-open #modal-archive .modal__content {
 	color: var(--text-2);
 }
 
-#mode:checked ~ main [data-carousel-nav] button {
-	background-color: var(--carousel-nav-bg);
-}
-
-#mode:checked ~ main [data-carousel-nav] button[aria-current] {
-	background-color: var(--carousel-nav-bg-active);
-}
-
-#mode:checked ~ main [data-carousel-nav] button:hover,
-#mode:checked ~ main [data-carousel-nav] button:focus {
-	background-color: var(--carousel-nav-bg-hover);
-}
-
-#mode:checked ~ main [data-carousel-arrows] li button:hover,
-#mode:checked ~ main [data-carousel-arrows] li button:focus {
-	background-color: var(--carousel-arrow-bg-hover);
-}
-
-#mode:checked ~ main [data-carousel-arrows] li button::before {
-	background-color: var(--carousel-arrow-icon-bg);
-}
-
-#mode:checked ~ main [data-carousel-arrows] li button:hover::before {
-	background-color: var(--carousel-arrow-icon-bg-hover);
-}
-
 #mode:checked ~ main .modal-archive__footer-art-left {
 	/* 210, 25, 60 */
 	background-image: url("data:image/svg+xml,%3Csvg width='192' height='192' viewBox='0 0 192 192' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%23809499' stroke-width='1' vector-effect='non-scaling-stroke' d='M32 16v34.74L149.26 168H192'/%3E%3C/svg%3E%0A");
@@ -762,4 +736,12 @@ body.modal-archive-open #modal-archive .modal__content {
 
 #animations:not(:checked) ~ main [loading='lazy'] {
 	transition: none;
+}
+
+/* Prevent Flash of Unstyled Content (FOUC) */
+
+main,
+#global-skip-link-group {
+	opacity: 1;
+	transition: opacity var(--anim-segment) linear var(--anim-segment);
 }

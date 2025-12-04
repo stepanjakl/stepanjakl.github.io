@@ -85,32 +85,6 @@
 	display: table;
 }
 
-/* Links and images */
-
-.modal--profile .modal__body a {
-	height: 0.75rem;
-	display: inline-flex;
-	align-items: center;
-	text-decoration: underline;
-	text-decoration-thickness: 0.09375rem;
-	text-underline-offset: 0.1875rem;
-	text-decoration-color: transparent;
-	transition: text-decoration-color var(--animate-out-segment-2\/3) linear;
-	cursor: ne-resize;
-}
-
-.modal--profile .modal__body a:hover,
-.modal--profile .modal__body a:focus {
-	text-decoration-color: var(--text-2);
-	transition: text-decoration-color var(--animate-in-segment-2\/3) linear;
-}
-
-.modal--profile .modal__body a img {
-	height: 0.9375rem;
-	margin-left: 0.5rem;
-	box-sizing: content-box;
-}
-
 /* Timezone display */
 
 .modal-profile__timezone {
@@ -146,34 +120,16 @@
 .modal-profile__table dd > span,
 .modal-profile__table dd > p,
 .modal-profile__summary-list li {
-	text-align: justify;
 	font-size: 1.07143125rem;
 	line-height: 1.75rem;
 	font-weight: 500;
 	display: inline;
 }
 
-/* Profile summary paragraphs - hyphenation */
-.modal-profile__summary > p,
-.modal-profile__table dd > span,
-.modal-profile__table dd > p,
-.modal-profile__summary-list li {
-	text-justify: inter-word;
-	text-wrap: pretty;
-	hyphens: auto;
-	hyphenate-limit-chars: 7 3 3;
-	hyphenate-limit-lines: 9;
-	hyphenate-limit-zone: 10%;
-	-webkit-hyphenate-limit-before: 4;
-	-webkit-hyphenate-limit-after: 4;
-	-webkit-hyphenate-limit-lines: 2;
-}
-
 @media (min-width: 45rem) {
 	.modal-profile__table dd > span,
 	.modal-profile__table dd > p,
 	.modal-profile__summary-list li {
-		text-align: left;
 		font-weight: 400;
 	}
 }
@@ -252,7 +208,7 @@
 	align-items: start;
 	row-gap: 1.5rem;
 	margin-top: 0.5rem;
-	margin-left: 0.75rem;
+	margin-left: 0;
 }
 
 @media (min-width: 45rem) {
@@ -278,16 +234,14 @@
 }
 
 @media (min-width: 45rem) {
+	.modal-profile__summary-list li {
+		font-weight: 400;
+	}
+
 	.modal-profile__summary-list li span::before {
 		font-size: 0.675em;
 		margin-right: 1.25rem;
 		transform: translateY(-0.15625rem);
-	}
-}
-
-@media (min-width: 45rem) {
-	.modal-profile__summary-list li {
-		font-weight: 400;
 	}
 }
 
@@ -325,8 +279,8 @@
 }
 
 .modal-profile__tags svg {
-	width: 0.875rem;
-	height: 0.875rem;
+	width: round(up, 0.875rem, 1px);
+	height: round(up, 0.875rem, 1px);
 	fill: currentcolor;
 }
 
@@ -371,15 +325,37 @@
 	border: solid 0.25rem var(--context-bg-modal);
 }
 
-/* Flag images */
+/* Links */
 
-.modal--profile .modal__body img[alt$='flag'] {
+.modal--profile .modal__body a {
+	height: 0.75rem;
+	display: inline-flex;
+	align-items: center;
+	text-decoration: underline;
+	text-decoration-thickness: 0.09375rem;
+	text-underline-offset: 0.1875rem;
+	text-decoration-color: transparent;
+	cursor: ne-resize;
+}
+
+.modal--profile .modal__body .flag-icon-wrapper {
+	display: inline-flex;
 	width: 1.625rem;
 	height: 1.625rem;
-	flex-shrink: 0;
-	background-color: var(--context-bg-modal);
+	margin-left: 0.5rem;
 	border: solid 0.125rem transparent;
 	border-radius: 999rem;
+	background-color: var(--context-bg-modal);
+	overflow: hidden;
+	box-sizing: content-box;
+	corner-shape: unset;
+}
+
+.modal--profile .modal__body .flag-icon-wrapper img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	filter: brightness(0.9);
 	corner-shape: unset;
 }
 
