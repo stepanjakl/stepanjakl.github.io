@@ -332,6 +332,16 @@ body.no-fullscreen .modal__fullscreen-button {
 	border: solid max(1px, 0.0625rem) var(--dark-15);
 }
 
+#mode:checked ~ main #modal-archive .tooltip .tooltip__text {
+	/* 210, 50, 90 */
+	background-color: #c6e9f1bf;
+	box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-40);
+	border: solid max(1px, 0.0625rem) var(--dark-20);
+	background-image:
+		radial-gradient(circle at 0.046875rem 0.046875rem, var(--dark-5) 0.046875rem, transparent 0.046875rem),
+		radial-gradient(circle at 0.046875rem 0.046875rem, var(--dark-5) 0.046875rem, transparent 0.046875rem);
+}
+
 /* Fullscreen */
 
 #fullscreen:checked ~ main .fullscreen-checked\:flex {
@@ -457,7 +467,8 @@ body.modal-archive-open #modal-archive {
 }
 
 #mode:checked ~ main .modal__close-button,
-#mode:checked ~ main .modal__fullscreen-button {
+#mode:checked ~ main .modal__fullscreen-button,
+#mode:checked ~ main .modal__timeline-button {
 	outline: solid max(1px, 0.0625rem) var(--dark-20);
 	box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--light-35);
 }
@@ -465,7 +476,9 @@ body.modal-archive-open #modal-archive {
 #mode:checked ~ main .modal__close-button:hover,
 #mode:checked ~ main .modal__close-button:focus,
 #mode:checked ~ main .modal__fullscreen-button:hover,
-#mode:checked ~ main .modal__fullscreen-button:focus {
+#mode:checked ~ main .modal__fullscreen-button:focus,
+#mode:checked ~ main .modal__timeline-button:hover,
+#mode:checked ~ main .modal__timeline-button:focus {
 	outline-color: var(--highlight-secondary);
 	box-shadow: inset 0 0 0 max(1px, 0.0625rem) var(--highlight-secondary);
 }
@@ -582,6 +595,70 @@ body.modal-archive-open #modal-archive .modal__content {
 	}
 }
 
+/* Modal - Archive - Timeline */
+
+#timeline:checked ~ main #horizontal-timeline-wrapper,
+.modal__timeline-button-wrapper {
+	bottom: calc((var(--segment) / 5) * -1);
+}
+
+@media (min-width: 45rem) {
+	#timeline:checked ~ main #horizontal-timeline-wrapper,
+	.modal__timeline-button-wrapper {
+		bottom: calc(var(--segment-quarter) * -1);
+	}
+}
+
+@media (min-width: 60rem) {
+	#timeline:checked ~ main #horizontal-timeline-wrapper,
+	.modal__timeline-button-wrapper {
+		bottom: calc(var(--segment-half) * -1);
+	}
+}
+
+@media (min-width: 75rem) {
+	#timeline:checked ~ main #horizontal-timeline-wrapper,
+	.modal__timeline-button-wrapper {
+		bottom: calc(var(--segment) * -1);
+	}
+}
+
+.modal__timeline-button-icon path:nth-child(2),
+.modal__timeline-button-icon path:nth-child(3),
+.modal__timeline-button-icon path:nth-child(4) {
+	visibility: hidden;
+}
+
+.modal__timeline-button:hover .modal__timeline-button-icon path:nth-child(1),
+.modal__timeline-button:focus .modal__timeline-button-icon path:nth-child(1) {
+	visibility: hidden;
+}
+
+.modal__timeline-button:hover .modal__timeline-button-icon path:nth-child(2),
+.modal__timeline-button:focus .modal__timeline-button-icon path:nth-child(2) {
+	visibility: visible;
+}
+
+#timeline:checked ~ main .modal__timeline-button-icon path:nth-child(1),
+#timeline:checked ~ main .modal__timeline-button-icon path:nth-child(2),
+#timeline:checked ~ main .modal__timeline-button-icon path:nth-child(3) {
+	visibility: hidden;
+}
+
+#timeline:checked ~ main .modal__timeline-button-icon path:nth-child(4) {
+	visibility: visible;
+}
+
+#timeline:checked ~ main .modal__timeline-button:hover .modal__timeline-button-icon path:nth-child(3),
+#timeline:checked ~ main .modal__timeline-button:focus .modal__timeline-button-icon path:nth-child(3) {
+	visibility: visible;
+}
+
+#timeline:checked ~ main .modal__timeline-button:hover .modal__timeline-button-icon path:nth-child(4),
+#timeline:checked ~ main .modal__timeline-button:focus .modal__timeline-button-icon path:nth-child(4) {
+	visibility: hidden;
+}
+
 /* Images - Light mode override */
 
 #mode:checked ~ main .modal__content img,
@@ -655,6 +732,11 @@ body.modal-archive-open #modal-archive .modal__content {
 		background-color: var(--cyan-half-85);
 	}
 
+	#mode:checked ~ #timeline-wrapper::before {
+		border-radius: calc(var(--timeline-radius) + max(1px, 0.0625rem));
+		background-image: linear-gradient(to bottom, var(--dark-30), var(--dark-45));
+	}
+
 	.modal-profile-side-ruler-art {
 		display: none;
 	}
@@ -669,6 +751,10 @@ body.modal-archive-open #modal-archive .modal__content {
 
 	[loading='lazy'] {
 		transition: none;
+	}
+
+	:has(> img[loading='lazy'])::before {
+		animation: none;
 	}
 }
 

@@ -398,6 +398,28 @@ footer > * {
 	}
 }
 
+/* Modal profile ruler art hover effect */
+
+.modal-profile-side-ruler-art::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-image: url("data:image/svg+xml,%3Csvg width='28' height='101' viewBox='0 0 28 101' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0.75H14' stroke='%237dac3b' stroke-opacity='0.5' stroke-width='1.5'/%3E%3Cpath d='M0 10.75H14' stroke='%237dac3b' stroke-opacity='0.5' stroke-width='1.5'/%3E%3Cpath d='M0 20.75H14' stroke='%237dac3b' stroke-opacity='0.5' stroke-width='1.5'/%3E%3Cpath d='M0 30.75H14' stroke='%237dac3b' stroke-opacity='0.5' stroke-width='1.5'/%3E%3Cpath d='M0 80.75H14' stroke='%237dac3b' stroke-opacity='0.5' stroke-width='1.5'/%3E%3Cpath d='M0 90.75H28' stroke='%237dac3b' stroke-opacity='0.8' stroke-width='1.5'/%3E%3Cpath d='M0 40.75H14' stroke='%237dac3b' stroke-opacity='0.5' stroke-width='1.5'/%3E%3Cpath d='M0 50.75H14' stroke='%237dac3b' stroke-opacity='0.5' stroke-width='1.5'/%3E%3Cpath d='M0 60.75H14' stroke='%237dac3b' stroke-opacity='0.5' stroke-width='1.5'/%3E%3Cpath d='M0 70.75H14' stroke='%237dac3b' stroke-opacity='0.5' stroke-width='1.5'/%3E%3C/svg%3E%0A");
+	opacity: 0.75;
+	transition: var(--transition-triangle-base);
+}
+
+body.modal-profile-open .modal-profile-side-ruler-art::after {
+	opacity: 0.15;
+	transition: opacity 0.6s var(--ease-out-quad);
+	transition-delay: 0.6s;
+}
+
+body.modal-profile-open .modal-profile-side-ruler-art:hover::after {
+	animation: corner-flicker 0.45s var(--ease-out-quad) infinite;
+	animation-delay: 0s;
+}
+
 /* Intro CTA blocks */
 
 .availability--animating .availability__background {
@@ -1695,20 +1717,33 @@ section[data-timeline-section] > div > nav ul li:not(:first-child) a:focus {
 /* Modals archive horizontal timeline */
 
 #horizontal-timeline {
-	transition:
-		opacity var(--animate-out-segment) linear,
-		transform var(--animate-out-segment) var(--ease-in-quad);
-	transform: scale(var(--scale-modal-effect));
+	scale: var(--scale-modal-effect);
 	transform-origin: bottom;
 	opacity: 0;
 }
 
 #horizontal-timeline.timeline-in-place {
 	transition:
-		opacity var(--animate-in-segment) linear var(--anim-segment),
-		transform var(--animate-in-segment) var(--ease-out-quad) var(--anim-segment);
-	transform: scale(1);
+		opacity var(--animate-in-segment) linear,
+		scale var(--animate-in-segment) var(--ease-in-quad),
+		transform var(--animate-in-segment) var(--ease-in-quad);
+	transform: translateY(calc(100% + max(1px, 0.0625rem)));
+	scale: var(--scale-modal-effect);
+	opacity: 0;
+}
+
+#timeline:checked ~ main #horizontal-timeline.timeline-in-place {
+	transition:
+		opacity var(--animate-in-segment) linear,
+		scale var(--animate-in-segment) var(--ease-out-quad),
+		transform var(--animate-in-segment) var(--ease-out-quad);
+	transform: translateY(0%);
+	scale: 1;
 	opacity: 1;
+}
+
+#horizontal-timeline-wrapper {
+	transition: bottom var(--animate-in-segment) var(--ease-out-quad);
 }
 
 /* Modals archive carousel */
@@ -1803,7 +1838,9 @@ section[data-timeline-section] > div > nav ul li:not(:first-child) a:focus {
 .modal__close-button,
 .modal__close-button svg,
 .modal__fullscreen-button,
-.modal__fullscreen-button svg {
+.modal__fullscreen-button svg,
+.modal__timeline-button,
+.modal__timeline-button svg {
 	transition:
 		color var(--animate-out-segment-2\/3) linear,
 		background-color var(--animate-out-segment-2\/3) linear,
@@ -1815,7 +1852,9 @@ section[data-timeline-section] > div > nav ul li:not(:first-child) a:focus {
 .modal__close-button:hover,
 .modal__close-button:focus,
 .modal__fullscreen-button:hover,
-.modal__fullscreen-button:focus {
+.modal__fullscreen-button:focus,
+.modal__timeline-button:hover,
+.modal__timeline-button:focus {
 	transition:
 		color var(--animate-in-segment-2\/3) linear,
 		background-color var(--animate-in-segment-2\/3) linear,
@@ -1829,7 +1868,9 @@ section[data-timeline-section] > div > nav ul li:not(:first-child) a:focus {
 .modal__close-button:hover svg,
 .modal__close-button:focus svg,
 .modal__fullscreen-button:hover svg,
-.modal__fullscreen-button:focus svg {
+.modal__fullscreen-button:focus svg,
+.modal__timeline-button:hover svg,
+.modal__timeline-button:focus svg {
 	color: var(--modal-icon--hover);
 }
 

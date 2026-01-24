@@ -9,16 +9,27 @@
 				opacity: 0;
 			}
 		</style>
-		<!-- DNS Prefetch for external services -->
-		<link
-			rel="dns-prefetch"
-			href="https://cloud.umami.is" />
-		<link
-			rel="dns-prefetch"
-			href="https://browser.sentry-cdn.com" />
-		<link
-			rel="dns-prefetch"
-			href="https://www.clarity.ms" />
+		<!-- Analytics & Error Tracking -->
+		<!-- Umami Analytics -->
+		<script
+			defer
+			src="https://cloud.umami.is/script.js"
+			data-website-id="6f9d8fb6-c4c3-410e-bba3-7b8cafd6ed04"></script>
+		<!-- GlitchTip Error Tracking -->
+		<script
+			src="https://browser.sentry-cdn.com/10.36.0/bundle.min.js"
+			crossorigin="anonymous"></script>
+
+		<script>
+			if (window.Sentry) {
+				Sentry.init({
+					dsn: 'https://7388455908f8442ba73a83bca2c9403c@app.glitchtip.com/13576',
+					tracesSampleRate: 0.01,
+					attachStacktrace: true,
+					autoSessionTracking: true
+				});
+			}
+		</script>
 		<!-- Page metadata -->
 		<title>Štěpán Jákl | Full-stack web developer & interface designer</title>
 		<meta charset="UTF-8" />
@@ -228,6 +239,9 @@
 		<script
 			defer
 			src="scripts/script.js"></script>
+		<!-- <script
+			defer
+			src="scripts/image.js"></script> -->
 		<script
 			defer
 			src="scripts/audio.js"></script>
@@ -265,6 +279,13 @@
 			hidden
 			aria-hidden="true"
 			aria-label="Toggle animations"
+			checked />
+		<input
+			id="timeline"
+			type="checkbox"
+			hidden
+			aria-hidden="true"
+			aria-label="Toggle timeline"
 			checked />
 		<input
 			id="profile"
@@ -491,7 +512,7 @@
 							<button
 								type="button"
 								class="menu__item menu__email tooltip"
-								aria-label="Contact me via email. Click to copy email address"
+								aria-label="Contact me via email. Click to copy my email address"
 								aria-describedby="email-copy-status"
 								style="--i: 0">
 								<span class="menu__email-icon">
@@ -501,7 +522,7 @@
 								</span>
 								<span class="text-sm menu__email-text highlight">stepan.jakl@icloud.com</span>
 								<abbr class="tooltip__text--top tooltip__text">
-									<span>Click to copy</span>
+									<span>Click to copy my email</span>
 								</abbr>
 								<span
 									id="email-copy-status"
@@ -564,7 +585,7 @@
 										<span class="text-xs menu__link-label-text">Archive</span>
 									</span>
 									<abbr class="tooltip__text--bottom tooltip__text">
-										<span>Explore snippets of my past work</span>
+										<span>Explore my past work</span>
 									</abbr>
 									<abbr class="tooltip__text--bottom tooltip__text tooltip__text--active">
 										<kbd><span>⌘</span></kbd>
@@ -708,8 +729,8 @@
 												}
 											">
 											<svg></svg>
-											<span class="text-sm ambience-checked:flex hidden">Ambience off</span>
-											<span class="text-sm flex ambience-checked:hidden">Ambience</span>
+											<span class="hidden ambience-checked:flex text-sm">Ambience off</span>
+											<span class="ambience-checked:hidden flex text-sm">Ambience</span>
 										</label>
 										<label
 											id="dropdown-menu-fullscreen"
@@ -727,8 +748,8 @@
 											<svg class="hidden fullscreen-checked:flex">
 												<use href="images/icons.svg#menu-fullscreen-off"></use>
 											</svg>
-											<span class="text-sm fullscreen-checked:flex hidden">Exit</span>
-											<span class="text-sm flex fullscreen-checked:hidden">Fullscreen</span>
+											<span class="hidden fullscreen-checked:flex text-sm">Exit</span>
+											<span class="fullscreen-checked:hidden flex text-sm">Fullscreen</span>
 										</label>
 										<hr />
 										<div class="dropdown-menu__group">
@@ -754,8 +775,8 @@
 														<use href="images/icons.svg#menu-debug-off"></use>
 													</svg>
 												</div>
-												<span class="text-sm debug-checked:flex hidden">Debug off</span>
-												<span class="text-sm flex debug-checked:hidden">Debug</span>
+												<span class="hidden debug-checked:flex text-sm">Debug off</span>
+												<span class="debug-checked:hidden flex text-sm">Debug</span>
 											</label>
 											<label
 												id="dropdown-menu-reduce"
@@ -772,15 +793,15 @@
 													})
 												">
 												<div>
-													<svg class="reduce-checked:flex hidden">
+													<svg class="hidden reduce-checked:flex">
 														<use href="images/icons.svg#menu-reduce"></use>
 													</svg>
-													<svg class="flex reduce-checked:hidden">
+													<svg class="reduce-checked:hidden flex">
 														<use href="images/icons.svg#menu-reduce-off"></use>
 													</svg>
 												</div>
-												<span class="text-sm reduce-checked:flex hidden">Reduce</span>
-												<span class="text-sm flex reduce-checked:hidden">Restore</span>
+												<span class="hidden reduce-checked:flex text-sm">Reduce</span>
+												<span class="reduce-checked:hidden flex text-sm">Restore</span>
 											</label>
 										</div>
 									</div>
@@ -829,7 +850,8 @@
 											width="960"
 											class="modal-profile__photo"
 											fetchpriority="high"
-											loading="eager" />
+											loading="eager"
+											style="aspect-ratio: 960 / 960" />
 									</dd>
 									<dt>
 										<span>Full name:</span>
@@ -845,6 +867,10 @@
 											A detail-oriented interface engineer and full-stack developer with experience in crafting intuitive digital solutions that balance clarity and creativity.
 										</p>
 										<p>Committed to delivering high-quality results for projects with exciting propositions and realistic goals.</p>
+										<p>
+											I&rsquo;m particularly interested in work that meaningfully improves quality of life — contributing to better products and services, stronger local impact,
+											and more thoughtful built and natural environments.
+										</p>
 										<h3 class="modal-profile__summary-heading">Technical Expertise</h3>
 										<ul class="modal-profile__summary-list">
 											<li><span>Proficient across back-end and front-end development</span></li>
@@ -866,13 +892,23 @@
 											<li>
 												<span>Each project refines the connection between form and function</span>
 											</li>
+											<li>
+												<span>Using 3D tools to inform form, scale, and interaction</span>
+											</li>
 										</ul>
 										<h3 class="modal-profile__summary-heading">Approach</h3>
 										<p>
 											I combine design thinking with technical depth, taking on multiple roles as projects evolve — from early planning and analytical problem-solving to hands-on
 											development.
 										</p>
-										<p>This interdisciplinary approach helps me create scalable, reliable systems rooted in practical decision-making and careful attention to detail.</p>
+										<p>
+											I bring a pragmatic, multidisciplinary mindset to my work, drawing from a broad range of disciplines while staying focused on practical, effective
+											solutions. This allows me to learn quickly, adapt to new contexts, and contribute meaningfully across sectors and roles.
+										</p>
+										<p>
+											This interdisciplinary approach helps me create scalable, reliable products, services or systems rooted in practical decision-making and careful attention
+											to detail.
+										</p>
 										<p>I have been equally dedicated to code and design as a professional since 2014.</p>
 									</dd>
 									<dt>
@@ -898,7 +934,8 @@
 														src="images/cs.svg"
 														width="512"
 														height="512"
-														loading="lazy" />
+														loading="lazy"
+														style="aspect-ratio: 512 / 512" />
 												</span>
 												<span class="sr-only">(opens in new tab)</span>
 											</a>
@@ -920,7 +957,8 @@
 														src="images/gb.svg"
 														width="512"
 														height="512"
-														loading="lazy" />
+														loading="lazy"
+														style="aspect-ratio: 512 / 512" />
 												</span>
 												<span class="sr-only">(opens in new tab)</span>
 											</a>
@@ -1060,6 +1098,16 @@
 												<span>Motion</span>
 											</li>
 											<li>
+												<svg>
+													<use href="images/logos.svg#solidworks"></use>
+												</svg>
+												<span>SolidWorks (CAD)</span>
+												<svg>
+													<use href="images/logos.svg#sketchup"></use>
+												</svg>
+												<span>SketchUp</span>
+											</li>
+											<li>
 												<span>& other</span>
 											</li>
 										</ul>
@@ -1106,7 +1154,7 @@
 											App.toggleFullscreen();
 										}
 									"
-									class="modal__fullscreen-button">
+									class="modal__fullscreen-button tooltip">
 									<svg class="fullscreen-checked:hidden flex">
 										<use href="images/icons.svg#fullscreen"></use>
 									</svg>
@@ -1114,6 +1162,9 @@
 										<use href="images/icons.svg#fullscreen-off"></use>
 									</svg>
 									<span class="sr-only">Toggle fullscreen mode</span>
+									<abbr class="tooltip__text--left tooltip__text">
+										<span>Toggle fullscreen mode</span>
+									</abbr>
 								</label>
 								<button
 									type="button"
@@ -1124,7 +1175,7 @@
 								</button>
 							</div>
 							<!-- Modal body / Timeline content -->
-							<div class="modal__body hyphens-auto">
+							<div class="hyphens-auto modal__body">
 								<!-- Archive timeline -->
 								<div class="modal-archive__timeline">
 									<!-- Timeline section toggle controls -->
@@ -1207,11 +1258,12 @@
 																	href="projects/2024-21/cloudraker-tfp/landing-hero-ovo.full.png"
 																	target="_blank">
 																	<img
-																		loading="lazy"
+																		loading="eager"
 																		src="projects/2024-21/cloudraker-tfp/landing-hero-ovo.min.png"
 																		alt="OVO Fertility landing page hero section"
 																		width="1600"
-																		height="899" />
+																		height="899"
+																		style="aspect-ratio: 1600 / 899" />
 																</a>
 															</div>
 														</figure>
@@ -1221,11 +1273,12 @@
 																	href="projects/2024-21/cloudraker-tfp/landing-hero-olive.full.png"
 																	target="_blank">
 																	<img
-																		loading="lazy"
+																		loading="eager"
 																		src="projects/2024-21/cloudraker-tfp/landing-hero-olive.min.png"
 																		alt="Olive Fertility landing page hero section"
 																		width="1600"
-																		height="899" />
+																		height="899"
+																		style="aspect-ratio: 1600 / 899" />
 																</a>
 															</div>
 														</figure>
@@ -1235,11 +1288,12 @@
 																	href="projects/2024-21/cloudraker-tfp/landing-hero-heartland.full.png"
 																	target="_blank">
 																	<img
-																		loading="lazy"
+																		loading="eager"
 																		src="projects/2024-21/cloudraker-tfp/landing-hero-heartland.min.png"
 																		alt="Heartland Fertility landing page hero section"
 																		width="1600"
-																		height="899" />
+																		height="899"
+																		style="aspect-ratio: 1600 / 899" />
 																</a>
 															</div>
 														</figure>
@@ -1249,11 +1303,12 @@
 																	href="projects/2024-21/cloudraker-tfp/landing-hero-conceptia.full.png"
 																	target="_blank">
 																	<img
-																		loading="lazy"
+																		loading="eager"
 																		src="projects/2024-21/cloudraker-tfp/landing-hero-conceptia.min.png"
 																		alt="Conceptia Fertility landing page hero section"
 																		width="1600"
-																		height="899" />
+																		height="899"
+																		style="aspect-ratio: 1600 / 899" />
 																</a>
 															</div>
 														</figure>
@@ -1263,11 +1318,12 @@
 																	href="projects/2024-21/cloudraker-tfp/landing-hero-grace.full.png"
 																	target="_blank">
 																	<img
-																		loading="lazy"
+																		loading="eager"
 																		src="projects/2024-21/cloudraker-tfp/landing-hero-grace.min.png"
 																		alt="Grace Fertility landing page hero section"
 																		width="1600"
-																		height="899" />
+																		height="899"
+																		style="aspect-ratio: 1600 / 899" />
 																</a>
 															</div>
 														</figure>
@@ -1366,7 +1422,8 @@
 																		src="projects/2024-21/apostrophe-template/template-widget-live.min.png"
 																		alt="ApostropheCMS template widget displayed in live preview mode"
 																		width="1600"
-																		height="933" />
+																		height="933"
+																		style="aspect-ratio: 1600 / 933" />
 																</a>
 															</div>
 														</figure>
@@ -1380,7 +1437,8 @@
 																		src="projects/2024-21/apostrophe-template/template-widget-setting.min.png"
 																		alt="ApostropheCMS template widget configuration settings interface"
 																		width="1600"
-																		height="933" />
+																		height="933"
+																		style="aspect-ratio: 1600 / 933" />
 																</a>
 															</div>
 														</figure>
@@ -1394,7 +1452,8 @@
 																		src="projects/2024-21/apostrophe-template/template-widget-code-ide.min.png"
 																		alt="ApostropheCMS template widget code editor interface"
 																		width="1600"
-																		height="933" />
+																		height="933"
+																		style="aspect-ratio: 1600 / 933" />
 																</a>
 															</div>
 														</figure>
@@ -1473,7 +1532,8 @@
 																		loading="lazy"
 																		alt="Stripe store built with Alpine.js - product listing page"
 																		width="1600"
-																		height="891" />
+																		height="891"
+																		style="aspect-ratio: 1600 / 891" />
 																</a>
 															</figure>
 															<figure data-value="slide-2">
@@ -1485,7 +1545,8 @@
 																		loading="lazy"
 																		alt="Stripe store built with Alpine.js - shopping cart view"
 																		width="1600"
-																		height="891" />
+																		height="891"
+																		style="aspect-ratio: 1600 / 891" />
 																</a>
 															</figure>
 															<figure data-value="slide-3">
@@ -1497,7 +1558,8 @@
 																		loading="lazy"
 																		alt="Stripe store built with Alpine.js - product details page"
 																		width="1600"
-																		height="891" />
+																		height="891"
+																		style="aspect-ratio: 1600 / 891" />
 																</a>
 															</figure>
 															<figure data-value="slide-4">
@@ -1509,7 +1571,8 @@
 																		loading="lazy"
 																		alt="Stripe store built with Alpine.js - checkout process"
 																		width="1600"
-																		height="891" />
+																		height="891"
+																		style="aspect-ratio: 1600 / 891" />
 																</a>
 															</figure>
 															<figure data-value="slide-5">
@@ -1521,7 +1584,8 @@
 																		loading="lazy"
 																		alt="Stripe store built with HTMX - product listing page"
 																		width="1600"
-																		height="891" />
+																		height="891"
+																		style="aspect-ratio: 1600 / 891" />
 																</a>
 															</figure>
 															<figure data-value="slide-6">
@@ -1533,7 +1597,8 @@
 																		loading="lazy"
 																		alt="Stripe store built with HTMX - shopping cart view"
 																		width="1600"
-																		height="891" />
+																		height="891"
+																		style="aspect-ratio: 1600 / 891" />
 																</a>
 															</figure>
 														</div>
@@ -1632,14 +1697,17 @@
 												<h3>
 													<span>Bohemica Studio Team</span>
 												</h3>
-												<picture>
-													<img
-														loading="lazy"
-														src="projects/2021-19/bohemica-studio/bohemica-studio-hero.min.png"
-														alt="Bohemica Studio team branding and website hero section"
-														width="1600"
-														height="600" />
-												</picture>
+												<figure class="modal-archive__project-hero">
+													<picture>
+														<img
+															loading="lazy"
+															src="projects/2021-19/bohemica-studio/bohemica-studio-hero.min.png"
+															alt="Bohemica Studio team branding and website hero section"
+															width="1600"
+															height="600"
+															style="aspect-ratio: 1600 / 600" />
+													</picture>
+												</figure>
 												<nav>
 													<ul>
 														<li>
@@ -1710,12 +1778,12 @@
 																	href="projects/2021-19/bohemica-signage/overview-screen.full.png"
 																	target="_blank">
 																	<img
-																		style="object-position: left"
 																		loading="lazy"
 																		src="projects/2021-19/bohemica-signage/overview-screen.min.png"
 																		alt="Bohemica Signage dashboard overview screen"
 																		width="1600"
-																		height="912" />
+																		height="912"
+																		style="object-position: left; aspect-ratio: 1600 / 912" />
 																</a>
 															</div>
 														</figure>
@@ -1729,7 +1797,8 @@
 																		src="projects/2021-19/bohemica-signage/groups-screen.min.png"
 																		alt="Bohemica Signage groups management screen"
 																		width="1600"
-																		height="912" />
+																		height="912"
+																		style="aspect-ratio: 1600 / 912" />
 																</a>
 															</div>
 														</figure>
@@ -1743,7 +1812,8 @@
 																		src="projects/2021-19/bohemica-signage/display-detail-live-screen.min.jpg"
 																		alt="Bohemica Signage display detail with live preview"
 																		width="1600"
-																		height="912" />
+																		height="912"
+																		style="aspect-ratio: 1600 / 912" />
 																</a>
 															</div>
 														</figure>
@@ -1753,12 +1823,12 @@
 																	href="projects/2021-19/bohemica-signage/wireframe-screens.full.png"
 																	target="_blank">
 																	<img
-																		style="object-position: left"
 																		loading="lazy"
 																		src="projects/2021-19/bohemica-signage/wireframe-screens.min.png"
 																		alt="Bohemica Signage wireframe mockups showing multiple screens"
 																		width="1600"
-																		height="912" />
+																		height="912"
+																		style="object-position: left; aspect-ratio: 1600 / 912" />
 																</a>
 															</div>
 														</figure>
@@ -1804,14 +1874,17 @@
 												<h3>
 													<span>MMT Company Web Identity</span>
 												</h3>
-												<picture>
-													<img
-														loading="lazy"
-														src="projects/2021-19/mmt/mmt-logo-hero.svg"
-														alt="MMT Company logo design"
-														width="800"
-														height="300" />
-												</picture>
+												<figure class="modal-archive__project-hero">
+													<picture>
+														<img
+															loading="lazy"
+															src="projects/2021-19/mmt/mmt-logo-hero.svg"
+															alt="MMT Company logo design"
+															width="800"
+															height="300"
+															style="aspect-ratio: 800 / 300" />
+													</picture>
+												</figure>
 												<nav>
 													<ul>
 														<li>
@@ -1896,7 +1969,8 @@
 																		loading="lazy"
 																		alt="Aéropot smart ultraponic system hero cover showcasing the product"
 																		width="1600"
-																		height="1067" />
+																		height="1067"
+																		style="aspect-ratio: 1600 / 1067" />
 																</a>
 															</figure>
 															<figure data-value="slide-2">
@@ -1908,7 +1982,8 @@
 																		loading="lazy"
 																		alt="Aéropot 3D model showing different perspective views"
 																		width="1600"
-																		height="1067" />
+																		height="1067"
+																		style="aspect-ratio: 1600 / 1067" />
 																</a>
 															</figure>
 															<figure data-value="slide-3">
@@ -1920,7 +1995,8 @@
 																		loading="lazy"
 																		alt="Collage of 3D printed Aéropot components"
 																		width="1600"
-																		height="1067" />
+																		height="1067"
+																		style="aspect-ratio: 1600 / 1067" />
 																</a>
 															</figure>
 															<figure data-value="slide-4">
@@ -1932,7 +2008,8 @@
 																		loading="lazy"
 																		alt="Ultraponic root growth demonstration in Aéropot system"
 																		width="1600"
-																		height="1067" />
+																		height="1067"
+																		style="aspect-ratio: 1600 / 1067" />
 																</a>
 															</figure>
 															<figure data-value="slide-5">
@@ -1944,7 +2021,8 @@
 																		loading="lazy"
 																		alt="Aéropot translucent top cover with LED light effect"
 																		width="1600"
-																		height="1067" />
+																		height="1067"
+																		style="aspect-ratio: 1600 / 1067" />
 																</a>
 															</figure>
 															<figure data-value="slide-6">
@@ -1956,7 +2034,8 @@
 																		loading="lazy"
 																		alt="Blynk app interface for controlling Aéropot system"
 																		width="1600"
-																		height="1067" />
+																		height="1067"
+																		style="aspect-ratio: 1600 / 1067" />
 																</a>
 															</figure>
 															<figure data-value="slide-7">
@@ -1968,7 +2047,8 @@
 																		loading="lazy"
 																		alt="Work in progress photos of Aéropot development"
 																		width="1600"
-																		height="1067" />
+																		height="1067"
+																		style="aspect-ratio: 1600 / 1067" />
 																</a>
 															</figure>
 														</div>
@@ -2109,14 +2189,17 @@
 												<hr />
 											</figure>
 											<div>
-												<picture style="margin-top: 0">
-													<img
-														loading="lazy"
-														src="projects/elsewhen/elsewhen-hero.min.jpg"
-														alt="Collection of work artifacts and projects from various periods"
-														width="2800"
-														height="850" />
-												</picture>
+												<figure class="modal-archive__project-hero">
+													<picture style="margin-top: 0">
+														<img
+															loading="lazy"
+															src="projects/elsewhen/elsewhen-hero.min.jpg"
+															alt="Collection of work artifacts and projects from various periods"
+															width="2800"
+															height="850"
+															style="aspect-ratio: 2800 / 850" />
+													</picture>
+												</figure>
 												<p>Work and artifacts from different projects and moments that stand apart from full case studies but still belong here.</p>
 												<h3>
 													<span class="spark">Logos</span>
@@ -2131,7 +2214,8 @@
 																src="projects/elsewhen/logo/eightshop.min.png"
 																alt="Eightshop logo design"
 																width="1600"
-																height="1600" />
+																height="1600"
+																style="aspect-ratio: 1600 / 1600" />
 														</a>
 													</figure>
 													<figure>
@@ -2143,7 +2227,8 @@
 																src="projects/elsewhen/logo/drop-visuals.min.jpg"
 																alt="Drop Visuals logo design"
 																width="1600"
-																height="1600" />
+																height="1600"
+																style="aspect-ratio: 1600 / 1600" />
 														</a>
 													</figure>
 													<figure>
@@ -2155,7 +2240,8 @@
 																loading="lazy"
 																alt="Moment logo design"
 																width="1200"
-																height="1200" />
+																height="1200"
+																style="aspect-ratio: 1200 / 1200" />
 														</a>
 													</figure>
 													<figure>
@@ -2167,7 +2253,8 @@
 																src="projects/elsewhen/logo/w.min.png"
 																alt="W letter mark logo design"
 																width="1600"
-																height="1600" />
+																height="1600"
+																style="aspect-ratio: 1600 / 1600" />
 														</a>
 													</figure>
 													<figure>
@@ -2179,7 +2266,8 @@
 																loading="lazy"
 																alt="US logo design"
 																width="1200"
-																height="1200" />
+																height="1200"
+																style="aspect-ratio: 1200 / 1200" />
 														</a>
 													</figure>
 													<figure>
@@ -2191,7 +2279,8 @@
 																src="projects/elsewhen/logo/fish.min.png"
 																alt="Fish-themed logo design"
 																width="1600"
-																height="1600" />
+																height="1600"
+																style="aspect-ratio: 1600 / 1600" />
 														</a>
 													</figure>
 												</div>
@@ -2235,7 +2324,8 @@
 																		loading="lazy"
 																		alt="Brock University exchange programme promotional artwork"
 																		width="1600"
-																		height="1000" />
+																		height="1000"
+																		style="aspect-ratio: 1600 / 1000" />
 																</a>
 															</figure>
 															<figure data-value="slide-2">
@@ -2247,7 +2337,8 @@
 																		loading="lazy"
 																		alt="Botasko project cover design"
 																		width="1600"
-																		height="1000" />
+																		height="1000"
+																		style="aspect-ratio: 1600 / 1000" />
 																</a>
 															</figure>
 															<figure data-value="slide-3">
@@ -2259,7 +2350,8 @@
 																		loading="lazy"
 																		alt="Den portfolio cover page design"
 																		width="1600"
-																		height="1000" />
+																		height="1000"
+																		style="aspect-ratio: 1600 / 1000" />
 																</a>
 															</figure>
 															<figure data-value="slide-4">
@@ -2271,7 +2363,8 @@
 																		loading="lazy"
 																		alt="Shoe product life cycle assessment infographic board"
 																		width="1600"
-																		height="1000" />
+																		height="1000"
+																		style="aspect-ratio: 1600 / 1000" />
 																</a>
 															</figure>
 															<figure data-value="slide-5">
@@ -2283,7 +2376,8 @@
 																		loading="lazy"
 																		alt="University device assessment presentation board"
 																		width="1600"
-																		height="1000" />
+																		height="1000"
+																		style="aspect-ratio: 1600 / 1000" />
 																</a>
 															</figure>
 															<figure data-value="slide-6">
@@ -2295,7 +2389,8 @@
 																		loading="lazy"
 																		alt="Subtitle editor application interface screenshot"
 																		width="1600"
-																		height="1000" />
+																		height="1000"
+																		style="aspect-ratio: 1600 / 1000" />
 																</a>
 															</figure>
 														</div>
@@ -2312,11 +2407,50 @@
 										</section>
 									</div>
 								</div>
+								<!-- Modal timeline button -->
+								<div class="modal__timeline-button-wrapper">
+									<label
+										for="timeline"
+										class="modal__timeline-button tooltip">
+										<svg
+											class="modal__timeline-button-icon"
+											viewBox="0 0 100 100">
+											<path
+												fill="none"
+												stroke="currentColor"
+												stroke-width="2.5"
+												vector-effect="non-scaling-stroke"
+												d="M0 25 L100 25"></path>
+											<path
+												fill="none"
+												stroke="currentColor"
+												stroke-width="2.5"
+												vector-effect="non-scaling-stroke"
+												d="M0 25 L50 12.5 L100 25"></path>
+											<path
+												fill="none"
+												stroke="currentColor"
+												stroke-width="2.5"
+												vector-effect="non-scaling-stroke"
+												d="M0 75 L50 87.5 L100 75"></path>
+											<path
+												fill="none"
+												stroke="currentColor"
+												stroke-width="2.5"
+												vector-effect="non-scaling-stroke"
+												d="M0 75 L50 75 L100 75"></path>
+										</svg>
+										<abbr class="tooltip__text--left tooltip__text">
+											<span>Toggle timeline navigation</span>
+										</abbr>
+									</label>
+								</div>
 								<!-- Horizontal timeline navigation -->
 								<div
 									id="horizontal-timeline-wrapper"
 									tabindex="-1">
 									<div id="horizontal-timeline">
+										<!-- Return to main content button -->
 										<button
 											type="button"
 											id="horizontal-timeline-return"
@@ -2406,49 +2540,5 @@
 					fill="url(#debug-grid-outline)" />
 			</svg>
 		</main>
-		<!-- Analytics & Error Tracking (loaded at end for performance) -->
-		<!-- Umami Analytics -->
-		<script
-			async
-			src="https://cloud.umami.is/script.js"
-			data-website-id="6f9d8fb6-c4c3-410e-bba3-7b8cafd6ed04"></script>
-		<!-- GlitchTip Error Tracking -->
-		<script
-			defer
-			src="https://browser.sentry-cdn.com/10.25.0/bundle.min.js"
-			crossorigin="anonymous"></script>
-		<script>
-			window.addEventListener('load', function () {
-				if (typeof Sentry !== 'undefined') {
-					Sentry.init({
-						dsn: 'https://7388455908f8442ba73a83bca2c9403c@app.glitchtip.com/13576',
-						tracesSampleRate: 0.01
-					});
-
-					window.onerror = function (msg, src, line, col, err) {
-						Sentry.captureException(err);
-					};
-
-					window.onunhandledrejection = function (e) {
-						Sentry.captureException(e.reason);
-					};
-				}
-			});
-		</script>
-		<!-- Clarity Analytics -->
-		<script>
-			(function (c, l, a, r, i, t, y) {
-				c[a] =
-					c[a] ||
-					function () {
-						(c[a].q = c[a].q || []).push(arguments);
-					};
-				t = l.createElement(r);
-				t.async = 1;
-				t.src = 'https://www.clarity.ms/tag/' + i;
-				y = l.getElementsByTagName(r)[0];
-				y.parentNode.insertBefore(t, y);
-			})(window, document, 'clarity', 'script', '7tuzqus5sw');
-		</script>
 	</body>
 </html>

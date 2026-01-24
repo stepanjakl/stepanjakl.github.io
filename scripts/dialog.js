@@ -441,6 +441,11 @@ aria.Dialog = function (dialogId, focusAfterClosed, focusFirst, hash) {
  * @private
  */
 aria.Dialog.prototype.validateDialogRole = function () {
+	// Native dialog element is valid without explicit role attribute
+	if (this.dialogNode.tagName === 'DIALOG') {
+		return;
+	}
+
 	const role = (this.dialogNode.getAttribute('role') || '').trim();
 	const roles = role.split(/\s+/g);
 	const hasValidRole = roles.some((token) => aria.VALID_DIALOG_ROLES.includes(token));

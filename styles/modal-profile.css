@@ -225,12 +225,16 @@
 }
 
 .modal-profile__summary-list li span::before {
-	content: '⬢';
-	font-size: 0.6em;
-	display: inline-block;
+	content: '';
+	display: inline-flex;
+	width: 0.75em;
+	height: 0.75em;
+	background-color: currentcolor;
+	mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.423 11a2 2 0 0 1 0 2l-1.846 3.196a2 2 0 0 1-1.732 1h-3.69a2 2 0 0 1-1.732-1L6.577 13a2 2 0 0 1 0-2l1.846-3.196a2 2 0 0 1 1.732-1h3.69a2 2 0 0 1 1.732 1L17.423 11Z"/></svg>');
+	mask-size: contain;
+	mask-repeat: no-repeat;
 	margin-right: 0.8125rem;
-	vertical-align: middle;
-	transform: translateY(-0.125rem);
+	vertical-align: -0.046875rem;
 }
 
 @media (min-width: 45rem) {
@@ -238,11 +242,11 @@
 		font-weight: 400;
 	}
 
-	.modal-profile__summary-list li span::before {
+	/* .modal-profile__summary-list li span::before {
 		font-size: 0.675em;
 		margin-right: 1.25rem;
 		transform: translateY(-0.15625rem);
-	}
+	} */
 }
 
 .modal-profile__summary-list li::before {
@@ -339,6 +343,7 @@
 }
 
 .modal--profile .modal__body .flag-icon-wrapper {
+	position: relative;
 	display: inline-flex;
 	width: 1.625rem;
 	height: 1.625rem;
@@ -377,11 +382,14 @@
 
 /* Side ruler art */
 
-.modal-profile-side-ruler-art {
+.modal-profile-side-ruler-art,
+.modal-profile-side-ruler-art::after {
 	position: absolute;
+	z-index: 1;
 	inset: min(-0.75px, -0.046875rem) auto 0 0;
 	width: 1.75rem;
-	pointer-events: none;
+
+	/* pointer-events: none; */
 	background-image: url("data:image/svg+xml,%3Csvg width='28' height='101' viewBox='0 0 28 101' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0.75H14' stroke='%23FFFFFF' stroke-opacity='0.1' stroke-width='1.5'/%3E%3Cpath d='M0 10.75H14' stroke='%23FFFFFF' stroke-opacity='0.1' stroke-width='1.5'/%3E%3Cpath d='M0 20.75H14' stroke='%23FFFFFF' stroke-opacity='0.1' stroke-width='1.5'/%3E%3Cpath d='M0 30.75H14' stroke='%23FFFFFF' stroke-opacity='0.1' stroke-width='1.5'/%3E%3Cpath d='M0 80.75H14' stroke='%23FFFFFF' stroke-opacity='0.1' stroke-width='1.5'/%3E%3Cpath d='M0 90.75H28' stroke='%23FFFFFF' stroke-opacity='0.2' stroke-width='1.5'/%3E%3Cpath d='M0 40.75H14' stroke='%23FFFFFF' stroke-opacity='0.1' stroke-width='1.5'/%3E%3Cpath d='M0 50.75H14' stroke='%23FFFFFF' stroke-opacity='0.1' stroke-width='1.5'/%3E%3Cpath d='M0 60.75H14' stroke='%23FFFFFF' stroke-opacity='0.1' stroke-width='1.5'/%3E%3Cpath d='M0 70.75H14' stroke='%23FFFFFF' stroke-opacity='0.1' stroke-width='1.5'/%3E%3C/svg%3E%0A");
 	background-repeat: repeat-y;
 	background-size: 100% auto;

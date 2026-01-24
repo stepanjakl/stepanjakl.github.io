@@ -18,6 +18,7 @@
 	--cyan-full-35: #005b66;
 	--cyan-full-40: #006875;
 	--cyan-full-45: #007684;
+	--cyan-full-50: #008393;
 	--cyan-full-55: #0091a2;
 	--cyan-full-65: #00aec2;
 	--cyan-full-70: #00bcd2;
@@ -28,6 +29,8 @@
 
 	/* 210, 75, 25-95 */
 	--cyan-three-quarters-25: #1c4047;
+	--cyan-three-quarters-30: #234d54;
+	--cyan-three-quarters-35: #295962;
 	--cyan-three-quarters-40: #30666f;
 	--cyan-three-quarters-45: #37737e;
 	--cyan-three-quarters-50: #3e808c;
@@ -130,6 +133,7 @@
 	--light-25: rgb(255, 255, 255, 0.25);
 	--light-30: rgb(255, 255, 255, 0.3);
 	--light-35: rgb(255, 255, 255, 0.35);
+	--light-40: rgb(255, 255, 255, 0.4);
 	--light-45: rgb(255, 255, 255, 0.45);
 	--light-50: rgb(255, 255, 255, 0.5);
 	--light-55: rgb(255, 255, 255, 0.55);
@@ -137,7 +141,11 @@
 	--light-65: rgb(255, 255, 255, 0.65);
 	--light-70: rgb(255, 255, 255, 0.7);
 	--light-75: rgb(255, 255, 255, 0.75);
+	--light-80: rgb(255, 255, 255, 0.8);
+	--light-85: rgb(255, 255, 255, 0.85);
+	--light-90: rgb(255, 255, 255, 0.9);
 	--light-95: rgb(255, 255, 255, 0.95);
+	--dark-5: rgb(0, 0, 0, 0.05);
 	--dark-10: rgb(0, 0, 0, 0.1);
 	--dark-15: rgb(0, 0, 0, 0.15);
 	--dark-20: rgb(0, 0, 0, 0.2);

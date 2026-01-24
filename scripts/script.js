@@ -2406,7 +2406,7 @@ class Popup {
                 inset: 0;
             }
             .media_fallback_overlay:has(.media_fallback-content video) {
-                background: rgba(0, 0, 0, 0.75);
+                background: rgb(0, 0, 0, 0.75);
             }
             .media_fallback-wrapper {
                 position: relative;
@@ -3555,7 +3555,9 @@ function positionTimeline() {
 	);
 
 	afterPaint(() => {
-		timelineElementCache.timelineWrapper.classList.add('timeline-in-place');
+		setTimeout(() => {
+			timelineElementCache.timelineWrapper.classList.add('timeline-in-place');
+		}, 400);
 
 		// Update scrollable class now that timeline is in final position
 		if (App.timeline && typeof App.timeline.updateScrollableClass === 'function') {
@@ -4600,7 +4602,7 @@ document.addEventListener('DOMContentLoaded', () => {
 (function () {
 	// Theme Colours
 	const COLOR = '#7cce00'; // Green-lime (HSL: 115, 100, 75)
-	const BG_COLOR = 'rgba(124, 206, 0, 0.075)';
+	const BG_COLOR = 'rgb(124, 206, 0, 0.075)';
 
 	// Message Content
 	const HEADER = 'Štěpán Jákl | Full-stack developer & interface designer';

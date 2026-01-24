@@ -69,7 +69,7 @@ class HorizontalTimeline extends HTMLElement {
 	 *
 	 * This constant (3) points to the centred main bar above the first label,
 	 * which is marked as "active" when that timeline section is visible
-	 * See CSS selector: `#timeline div:nth-child(6n + 4)` for 66.67% height bars
+	 * See CSS selector: `#timeline_bars div:nth-child(6n + 4)` for 66.67% height bars
 	 */
 	static TIMELINE_FIRST_INDICATOR_INDEX = 3;
 
@@ -175,7 +175,7 @@ class HorizontalTimeline extends HTMLElement {
             <div id="timeline-wrapper">
                 <div id="timeline-content">
                     <div>
-                        <div id="timeline">
+                        <div id="timeline_bars">
                             ${this.labels
 								.map(
 									(label, index) => `
@@ -213,7 +213,7 @@ class HorizontalTimeline extends HTMLElement {
 	}
 
 	getTimelineAllDivEls() {
-		return (this.timelineAllDivEls ??= Array.from(this.querySelectorAll('#timeline div')));
+		return (this.timelineAllDivEls ??= Array.from(this.querySelectorAll('#timeline_bars div')));
 	}
 
 	getSectionEls() {
@@ -476,7 +476,7 @@ class HorizontalTimeline extends HTMLElement {
 			}
 
 			// Handle indicator clicks - delegate to corresponding label
-			const indicator = event.target.closest('#timeline [data-value]');
+			const indicator = event.target.closest('#timeline_bars [data-value]');
 			if (indicator && this.contains(indicator)) {
 				const value = indicator.getAttribute('data-value');
 				const label = this.querySelector(`[data-label-for="${value}"]`);
@@ -534,7 +534,7 @@ class HorizontalTimeline extends HTMLElement {
 		// Hover highlighting - bidirectional between indicators and labels
 		this.boundHandleMouseOver = (event) => {
 			// Indicator hover → highlight label
-			const indicator = event.target.closest('#timeline [data-value]');
+			const indicator = event.target.closest('#timeline_bars [data-value]');
 			if (indicator && this.contains(indicator)) {
 				const value = indicator.getAttribute('data-value');
 				const label = this.querySelector(`[data-label-for="${value}"]`);
@@ -547,7 +547,7 @@ class HorizontalTimeline extends HTMLElement {
 			if (label && this.contains(label)) {
 				const value = label.getAttribute('data-label-for');
 				const indicator = this.querySelector(
-					`#timeline div:nth-child(6n + 4)[data-value="${value}"]`
+					`#timeline_bars div:nth-child(6n + 4)[data-value="${value}"]`
 				);
 				if (indicator) indicator.classList.add('highlight');
 			}
@@ -555,7 +555,7 @@ class HorizontalTimeline extends HTMLElement {
 
 		this.boundHandleMouseOut = (event) => {
 			// Remove highlight from indicator-triggered label
-			const indicator = event.target.closest('#timeline [data-value]');
+			const indicator = event.target.closest('#timeline_bars [data-value]');
 			if (indicator && this.contains(indicator)) {
 				const value = indicator.getAttribute('data-value');
 				const label = this.querySelector(`[data-label-for="${value}"]`);
@@ -568,7 +568,7 @@ class HorizontalTimeline extends HTMLElement {
 			if (label && this.contains(label)) {
 				const value = label.getAttribute('data-label-for');
 				const indicator = this.querySelector(
-					`#timeline div:nth-child(6n + 4)[data-value="${value}"]`
+					`#timeline_bars div:nth-child(6n + 4)[data-value="${value}"]`
 				);
 				if (indicator) indicator.classList.remove('highlight');
 			}

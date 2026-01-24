@@ -224,6 +224,7 @@ html {
 body,
 html {
 	overscroll-behavior: none;
+	scrollbar-gutter: stable;
 }
 
 body {
@@ -633,6 +634,7 @@ main {
 	overflow: hidden;
 	scroll-behavior: smooth;
 	overscroll-behavior: none;
+	scrollbar-gutter: stable;
 
 	/* CSS containment optimisation: isolates rendering to improve performance */
 	contain: layout style paint;
@@ -753,9 +755,9 @@ body {
 	display: flex;
 	flex-direction: column;
 	row-gap: var(--modal-button-gap);
+	align-self: end;
 	position: sticky;
 	z-index: 2;
-	align-self: end;
 	top: var(--modal-button-inset);
 	margin-top: var(--modal-button-inset);
 	margin-right: var(--modal-button-inset);
@@ -763,12 +765,12 @@ body {
 }
 
 .modal__close-button,
-.modal__fullscreen-button {
+.modal__fullscreen-button,
+.modal__timeline-button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
-	top: var(--modal-button-inset);
 	width: var(--modal-button-size);
 	height: var(--modal-button-size);
 	border-radius: var(--modal-button-border-radius);
@@ -776,11 +778,50 @@ body {
 }
 
 .modal__close-button svg,
-.modal__fullscreen-button svg {
+.modal__fullscreen-button svg,
+.modal__timeline-button svg {
 	color: var(--modal-icon);
 	fill: currentcolor;
 	width: 1.125rem;
 	height: 1.125rem;
+	overflow: visible;
+}
+
+.modal__timeline-button-wrapper {
+	display: none;
+	position: sticky;
+	z-index: 100;
+	right: 0;
+	margin-left: calc(100% + var(--modal-button-inset));
+	overflow: visible;
+}
+
+.modal__timeline-button {
+	position: absolute !important;
+	top: 0;
+	transform: translateY(-100%);
+}
+
+@media (min-width: 45rem) {
+	.modal__timeline-button-wrapper {
+		display: flex;
+	}
+}
+
+.modal__timeline-button .icon {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	height: 2.5px;
+	top: calc(0.5rem - 2.5px);
+}
+
+.modal__timeline-button .icon::before,
+.modal__timeline-button .icon::after {
+	content: '';
+	width: calc(50% + (2.5px) * tan(15deg));
+	height: 100%;
+	background-color: currentcolor;
 }
 
 /* Underlay */
@@ -845,7 +886,7 @@ body {
 #horizontal-timeline-wrapper {
 	z-index: 50;
 	position: sticky;
-	bottom: calc((var(--segment) / 5) * -1);
+	bottom: calc(var(--segment) * -1.5);
 }
 
 #horizontal-timeline {
@@ -862,10 +903,6 @@ body {
 }
 
 @media (min-width: 45rem) {
-	#horizontal-timeline-wrapper {
-		bottom: calc(var(--segment-quarter) * -1);
-	}
-
 	#horizontal-timeline {
 		display: block;
 	}
@@ -873,18 +910,6 @@ body {
 	.timeline-scrollable [data-edge-scroll-left],
 	.timeline-scrollable [data-edge-scroll-right] {
 		display: block !important;
-	}
-}
-
-@media (min-width: 60rem) {
-	#horizontal-timeline-wrapper {
-		bottom: calc(var(--segment-half) * -1);
-	}
-}
-
-@media (min-width: 75rem) {
-	#horizontal-timeline-wrapper {
-		bottom: calc(var(--segment) * -1);
 	}
 }
 
@@ -1329,6 +1354,7 @@ body {
 	letter-spacing: 0.0234375rem;
 	font-size: 0.98214375rem;
 	line-height: 0.6875rem;
+	white-space: nowrap;
 }
 
 .tooltip__text span::before {
@@ -1343,14 +1369,19 @@ body {
 	display: table;
 }
 
-.tooltip__text--top {
+.tooltip .tooltip__text--top {
 	bottom: 100%;
 	margin-bottom: 0.625rem;
 }
 
-.tooltip__text--bottom {
+.tooltip .tooltip__text--bottom {
 	top: 100%;
 	margin-top: 0.625rem;
+}
+
+.tooltip .tooltip__text--left {
+	left: -0.625rem;
+	transform: translateX(-100%);
 }
 
 /* Tooltip active state */
@@ -1518,9 +1549,66 @@ footer > div > div {
 
 [loading='lazy'] {
 	opacity: 0;
-	transition: opacity var(--animate-in-segment) var(--ease-in-quad);
+	transition: opacity var(--anim-segment) var(--ease-in-quad) var(--anim-segment);
 }
 
 [loading='lazy'].loaded {
 	opacity: 1;
+}
+
+/* Image placeholder - Seamless grid with randomized cell opacities */
+
+/* Automatically applies to any element containing a lazy-loading image */
+
+:has(> img[loading='lazy']) {
+	position: relative;
+	overflow: hidden;
+}
+
+:has(> img[loading='lazy'])::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+
+	/* SVG with 8x6 grid (48 cells) with randomized opacities - no vertical repeats */
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' preserveAspectRatio='none'%3E%3Crect x='0' y='0' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='100' y='0' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='200' y='0' width='100' height='100' fill='white' opacity='0.45'/%3E%3Crect x='300' y='0' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='400' y='0' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='500' y='0' width='100' height='100' fill='white' opacity='0.45'/%3E%3Crect x='600' y='0' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='700' y='0' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='0' y='100' width='100' height='100' fill='white' opacity='0.45'/%3E%3Crect x='100' y='100' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='200' y='100' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='300' y='100' width='100' height='100' fill='white' opacity='0.45'/%3E%3Crect x='400' y='100' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='500' y='100' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='600' y='100' width='100' height='100' fill='white' opacity='0.45'/%3E%3Crect x='700' y='100' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='0' y='200' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='100' y='200' width='100' height='100' fill='white' opacity='0.45'/%3E%3Crect x='200' y='200' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='300' y='200' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='400' y='200' width='100' height='100' fill='white' opacity='0.45'/%3E%3Crect x='500' y='200' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='600' y='200' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='700' y='200' width='100' height='100' fill='white' opacity='0.45'/%3E%3Crect x='0' y='300' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='100' y='300' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='200' y='300' width='100' height='100' fill='white' opacity='0.45'/%3E%3Crect x='300' y='300' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='400' y='300' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='500' y='300' width='100' height='100' fill='white' opacity='0.45'/%3E%3Crect x='600' y='300' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='700' y='300' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='0' y='400' width='100' height='100' fill='white' opacity='0.45'/%3E%3Crect x='100' y='400' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='200' y='400' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='300' y='400' width='100' height='100' fill='white' opacity='0.45'/%3E%3Crect x='400' y='400' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='500' y='400' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='600' y='400' width='100' height='100' fill='white' opacity='0.45'/%3E%3Crect x='700' y='400' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='0' y='500' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='100' y='500' width='100' height='100' fill='white' opacity='0.45'/%3E%3Crect x='200' y='500' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='300' y='500' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='400' y='500' width='100' height='100' fill='white' opacity='0.45'/%3E%3Crect x='500' y='500' width='100' height='100' fill='white' opacity='0.30'/%3E%3Crect x='600' y='500' width='100' height='100' fill='white' opacity='0.15'/%3E%3Crect x='700' y='500' width='100' height='100' fill='white' opacity='0.45'/%3E%3C/svg%3E");
+	background-size: 100% 100%;
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	animation: invert 2s linear infinite;
+	pointer-events: none;
+	z-index: 5;
+	opacity: 1;
+}
+
+/* Hide placeholder when image has loaded */
+:has(> img[loading='lazy'].loaded)::before {
+	opacity: 0;
+	transition: opacity var(--anim-segment) var(--ease-in-quad) var(--anim-segment);
+}
+
+@keyframes invert {
+	/* 0% → 24.99% : normal */
+	0%,
+	24.99% {
+		transform: scale(1, 1);
+	}
+
+	/* 25% → 49.99% : invert Y */
+	25%,
+	49.99% {
+		transform: scale(1, -1);
+	}
+
+	/* 50% → 74.99% : invert X and Y */
+	50%,
+	74.99% {
+		transform: scale(-1, -1);
+	}
+
+	/* 75% → 100% : invert X */
+	75%,
+	100% {
+		transform: scale(-1, 1);
+	}
 }
