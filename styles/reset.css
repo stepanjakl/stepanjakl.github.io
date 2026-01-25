@@ -53,6 +53,7 @@ picture {
 	max-width: 100%;
 	display: block;
 	user-select: none;
+	user-select: none;
 	user-drag: none;
 	-webkit-user-drag: none;
 }
@@ -66,6 +67,7 @@ select {
 
 a,
 button {
+	user-select: none;
 	user-select: none;
 }
 

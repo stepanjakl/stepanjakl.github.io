@@ -65,6 +65,8 @@ horizontal-timeline:hover {
 	background-color: rgb(0, 131, 147, 0.9625);
 	background-image: linear-gradient(to bottom, var(--dark-30), var(--dark-45)), linear-gradient(to bottom, var(--light-25), var(--light-15));
 	pointer-events: auto;
+	user-select: none;
+	user-select: none;
 }
 
 #timeline-wrapper::before,
@@ -414,6 +416,8 @@ horizontal-timeline:hover #timeline_labels button {
 	line-height: 0.875rem;
 	letter-spacing: 0.125rem;
 	text-transform: uppercase;
+	user-select: none;
+	user-select: none;
 }
 
 /* Text cropping for better vertical alignment */

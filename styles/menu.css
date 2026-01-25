@@ -140,6 +140,7 @@
 	letter-spacing: 0.078125rem;
 	cursor: text;
 	user-select: none;
+	user-select: none;
 }
 
 /* Menu links */
@@ -227,6 +228,7 @@
 
 .menu__link-label-text {
 	text-transform: uppercase;
+	user-select: none;
 	user-select: none;
 }
 
@@ -488,6 +490,7 @@ body {
 	padding: var(--dropdown-padding-top) var(--dropdown-padding-right) var(--dropdown-padding-bottom) var(--dropdown-padding-left);
 	box-shadow: inset 0 max(1px, 0.0625rem) 0 0 var(--dark-20);
 	border-top: solid max(1px, 0.0625rem) var(--light-15);
+	user-select: none;
 	user-select: none;
 }
 

@@ -320,6 +320,7 @@ main {
 .intro__name {
 	display: inline-flex;
 	user-select: none;
+	user-select: none;
 	color: var(--text-1);
 	background: none;
 	padding-top: var(--segment-third);
@@ -331,6 +332,7 @@ main {
 .intro__name-frame {
 	display: inline-flex;
 	flex-wrap: wrap;
+	user-select: none;
 	user-select: none;
 	padding-top: 0.0624375rem;
 	--corner-length: 1.5rem;
@@ -412,6 +414,7 @@ main {
 
 .intro__logo {
 	user-select: none;
+	user-select: none;
 }
 
 .intro__logo-frame {
@@ -437,6 +440,7 @@ main {
 .intro__secondary-title,
 .intro__secondary-title p {
 	display: inline-flex;
+	user-select: none;
 	user-select: none;
 	color: var(--text-1);
 }
@@ -600,6 +604,7 @@ main {
 	line-height: 0.625rem;
 	text-transform: uppercase;
 	white-space: nowrap;
+	user-select: none;
 	user-select: none;
 	margin-top: 0.03125rem;
 }
@@ -895,6 +900,7 @@ body {
 	bottom: 0;
 	left: 0;
 	right: 0;
+	pointer-events: none;
 }
 
 [data-edge-scroll-left],
@@ -967,6 +973,7 @@ body {
 	inset: 0;
 	overflow: hidden;
 	pointer-events: none;
+	user-select: none;
 	user-select: none;
 }
 
@@ -1344,6 +1351,7 @@ body {
 	pointer-events: none;
 	line-height: 0;
 	white-space: nowrap;
+	user-select: none;
 	user-select: none;
 }
 

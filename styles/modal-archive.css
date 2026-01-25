@@ -692,6 +692,7 @@ figure.modal-archive__project-hero {
 		bottom: 0;
 		width: 25%;
 		user-select: none;
+		user-select: none;
 	}
 
 	[data-carousel-edge-left] {
@@ -736,11 +737,11 @@ figure.modal-archive__project-hero {
 		view-timeline-axis: x;
 	}
 
-	[data-carousel-slides] figure a {
-		transform: translate(-50%, 0%);
-	}
-
 	@keyframes parallax {
+		from {
+			transform: translate(-50%, 0%);
+		}
+
 		to {
 			transform: translate(50%, 0%);
 		}

@@ -745,8 +745,8 @@ body.modal-archive-open #modal-archive .modal__content {
 		display: none;
 	}
 
-	[data-carousel-slides] figure a img {
-		transform: none;
+	[data-carousel-slides] figure a {
+		animation: none;
 	}
 
 	[loading='lazy'] {
@@ -754,7 +754,7 @@ body.modal-archive-open #modal-archive .modal__content {
 	}
 
 	:has(> img[loading='lazy'])::before {
-		animation: none;
+		display: none;
 	}
 }
 
@@ -816,12 +816,16 @@ body.modal-archive-open #modal-archive .modal__content {
 	display: none;
 }
 
-#animations:not(:checked) ~ main [data-carousel-slides] figure a img {
-	transform: none;
+#animations:not(:checked) ~ main [data-carousel-slides] figure a {
+	animation: none;
 }
 
 #animations:not(:checked) ~ main [loading='lazy'] {
 	transition: none;
+}
+
+#animations:not(:checked) ~ main :has(> img[loading='lazy'])::before {
+	display: none;
 }
 
 /* Prevent Flash of Unstyled Content (FOUC) */
