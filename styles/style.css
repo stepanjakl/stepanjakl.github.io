@@ -1550,7 +1550,7 @@ footer > div > div {
 
 [loading='lazy'] {
 	opacity: 0;
-	transition: opacity var(--anim-segment) var(--ease-in-quad) var(--anim-segment);
+	transition: opacity var(--anim-segment) var(--ease-in-quad);
 }
 
 [loading='lazy'].loaded {

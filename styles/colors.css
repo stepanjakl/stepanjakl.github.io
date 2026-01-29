@@ -211,6 +211,9 @@ main {
 	--menu-bg: rgb(255, 255, 255, 0.035);
 	--tooltip-bg: var(--light-5);
 
+	/* 210, 75, 30 */
+	--modal-archive-tooltip-bg: #234d54bf;
+
 	/* Modal colours */
 	--modal-border-outer: var(--dark-10);
 	--modal-border-inner: var(--light-15);
@@ -298,6 +301,9 @@ html {
 	/* 210, 25, 75 */
 	--menu-bg: #a3bdc355;
 	--tooltip-bg: #a3bdc365;
+
+	/* 210, 50, 90 */
+	--modal-archive-tooltip-bg: #c6e9f1bf;
 
 	/* Modal colours */
 	--modal-border-outer: var(--dark-15);

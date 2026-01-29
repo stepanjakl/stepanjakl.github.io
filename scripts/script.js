@@ -948,33 +948,40 @@ function initializeModalFooterArt() {
 // ============================================================================
 
 /**
- * Setup close button unfocus behaviour for a modal
- * Blurs the close button when the user scrolls the modal while the button is focused
+ * Setup control buttons unfocus behaviour for a modal
+ * Blurs the control buttons (close, timeline) when the user scrolls the modal while a button is focused
  * Reduces code duplication across modal lifecycle hooks
  *
- * @param {HTMLElement} modalElement - The modal element containing the close button
+ * @param {HTMLElement} modalElement - The modal element containing the control buttons
  */
-function setupCloseButtonUnfocus(modalElement) {
+function setupControlButtonsUnfocus(modalElement) {
 	if (!modalElement) return;
 
-	const closeButton = modalElement.querySelector('.modal__close-button');
-	if (!closeButton) return;
+	const controlButtons = modalElement.querySelectorAll(
+		'.modal__close-button, .modal__fullscreen-button, .modal__timeline-button'
+	);
+	if (!controlButtons.length) return;
 
-	let isCloseButtonFocused = false;
+	let isControlTriggerFocused = false;
 
-	closeButton.addEventListener('focus', () => {
-		isCloseButtonFocused = true;
-	});
+	controlButtons.forEach((button) => {
+		button.addEventListener('focus', () => {
+			isControlTriggerFocused = true;
+		});
 
-	closeButton.addEventListener('blur', () => {
-		isCloseButtonFocused = false;
+		button.addEventListener('blur', () => {
+			isControlTriggerFocused = false;
+		});
 	});
 
 	modalElement.addEventListener(
 		'scroll',
 		() => {
-			if (isCloseButtonFocused && document.activeElement === closeButton) {
-				closeButton.blur();
+			if (
+				isControlTriggerFocused &&
+				Array.from(controlButtons).includes(document.activeElement)
+			) {
+				document.activeElement.blur();
 			}
 		},
 		{ passive: true }
@@ -1115,8 +1122,8 @@ function registerDialogLifecycleHooks() {
 				});
 			}
 
-			// Setup close button unfocus on scroll
-			setupCloseButtonUnfocus(modalArchive);
+			// Setup control buttons unfocus on scroll
+			setupControlButtonsUnfocus(modalArchive);
 
 			// Handle deep-link scrolling if ?year= parameter is present
 			if (yearParam) {
@@ -1218,9 +1225,9 @@ function registerDialogLifecycleHooks() {
 				footerArtInitialized = true;
 			}
 
-			// Setup close button unfocus on scroll
+			// Setup control buttons unfocus on scroll
 			const modalProfile = getModalElement(NAVIGATION_HASHES.PROFILE);
-			setupCloseButtonUnfocus(modalProfile);
+			setupControlButtonsUnfocus(modalProfile);
 		},
 		cleanup: () => {
 			// Remove modal-specific class from body
