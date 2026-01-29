@@ -981,7 +981,7 @@ body {
 }
 
 .menu__link-label-text,
-.menu__email-text {
+.menu__email-text.highlight {
 	transition: color var(--animate-out-segment-2\/3) linear;
 	color: var(--text-2);
 }

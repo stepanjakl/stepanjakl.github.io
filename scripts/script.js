@@ -204,6 +204,61 @@ function initializeMenuGroupHoverLogic() {
 	});
 }
 
+/**
+ * Improves focus accessibility for the timeline button by virtually reordering it
+ * to appear after the fullscreen button in the tab order.
+ * Also ensures the label is keyboard accessible (tabindex + enter/space).
+ */
+function initializeTimelineAccessibility() {
+	const timelineNavigation = document.querySelector('#timeline-navigation');
+	const fullscreenBtn = document.querySelector('.modal__fullscreen-button');
+	const timelineBtn = document.querySelector('.modal__timeline-button');
+	const timelineSkipLink = document.querySelector('#modal-archive-timline-skip-link');
+
+	if (!fullscreenBtn || !timelineBtn || !timelineSkipLink) return;
+
+	// Ensure timeline button is keyboard focusable
+	timelineBtn.setAttribute('tabindex', '0');
+
+	// Add keyboard activation (Enter/Space)
+	timelineBtn.addEventListener('keydown', (e) => {
+		if (e.key === 'Enter' || e.key === ' ') {
+			e.preventDefault();
+			timelineBtn.click();
+		}
+	});
+
+	// From Skip Link -> Tab -> Timeline
+	timelineSkipLink.addEventListener('keydown', (e) => {
+		if (e.key === 'Tab' && !e.shiftKey) {
+			e.preventDefault();
+			timelineBtn.focus();
+		}
+	});
+
+	// From Timeline -> Shift+Tab -> Timeline Skip Link
+	timelineBtn.addEventListener('keydown', (e) => {
+		if (e.key === 'Tab' && e.shiftKey) {
+			e.preventDefault();
+			timelineSkipLink.focus();
+		}
+	});
+
+	// From Timeline -> Tab -> Main Content
+	timelineBtn.addEventListener('keydown', (e) => {
+		if (e.key === 'Tab' && !e.shiftKey) {
+			e.preventDefault();
+
+			for (const el of timelineNavigation.querySelectorAll('*')) {
+				if (el.tabIndex >= 0 && el.offsetParent !== null) {
+					el.focus();
+					break;
+				}
+			}
+		}
+	});
+}
+
 // ============================================================================
 // Focus Trap Utility
 // ============================================================================
@@ -941,6 +996,34 @@ function registerDialogLifecycleHooks() {
 	// Store original page title for restoration
 	const originalTitle = document.title;
 
+	// Mobile Archive Handler: Syncs URL and enforces accordion behavior
+	// Defined here to be shared between initialize and cleanup
+	const handleMobileArchiveChange = (event) => {
+		const input = event.target;
+		if (!input.id.startsWith('timeline-section-year-')) return;
+
+		const year = input.id.replace('timeline-section-year-', '');
+		const baseHash = window.location.hash.split('?')[0];
+
+		if (input.checked) {
+			// Enforce accordion behavior: uncheck others
+			const allInputs = document.querySelectorAll('input[id^="timeline-section-year-"]');
+			allInputs.forEach((other) => {
+				if (other !== input) other.checked = false;
+			});
+
+			// Update URL with year parameter
+			window.history.replaceState(
+				null,
+				'',
+				`${window.location.pathname}${baseHash}?year=${year}`
+			);
+		} else {
+			// Section collapsed: remove year parameter
+			window.history.replaceState(null, '', `${window.location.pathname}${baseHash}`);
+		}
+	};
+
 	// Archive modal lifecycle
 	aria.registerLifecycleHooks(DIALOG_CONFIG.ARCHIVE.id, {
 		initialize: () => {
@@ -952,6 +1035,30 @@ function registerDialogLifecycleHooks() {
 
 			// Check if there's a year parameter for deep-linking
 			const yearParam = window.location.hash.split('?year=')[1];
+
+			// Mobile support: Update accordion state to match deep link
+			if (yearParam) {
+				const targetCheckbox = document.getElementById(
+					`timeline-section-year-${yearParam}`
+				);
+				if (targetCheckbox) {
+					// Uncheck all section toggles first to ensure mutually exclusive state (accordion behavior)
+					const allCheckboxes = document.querySelectorAll(
+						'input[id^="timeline-section-year-"]'
+					);
+					allCheckboxes.forEach((cb) => {
+						cb.checked = false;
+					});
+					// Check the target section
+					targetCheckbox.checked = true;
+				}
+			}
+
+			// Mobile support: Attach event listeners for user interaction
+			const mobileInputs = document.querySelectorAll('input[id^="timeline-section-year-"]');
+			mobileInputs.forEach((input) => {
+				input.addEventListener('change', handleMobileArchiveChange);
+			});
 
 			// Initialise timeline on first modal open
 			if (!App.timeline) {
@@ -1020,7 +1127,7 @@ function registerDialogLifecycleHooks() {
 					afterPaint(() => {
 						// Scroll to the section title (header) rather than the content section
 						const targetSection = document.querySelector(
-							`[data-timeline-section="${yearParam}"]`
+							`[data-timeline-section-title="${yearParam}"]`
 						);
 						const modalArchive = getModalElement(NAVIGATION_HASHES.ARCHIVE);
 
@@ -1080,6 +1187,12 @@ function registerDialogLifecycleHooks() {
 
 			// Restore original page title
 			document.title = originalTitle;
+
+			// Mobile support: Remove event listeners
+			const mobileInputs = document.querySelectorAll('input[id^="timeline-section-year-"]');
+			mobileInputs.forEach((input) => {
+				input.removeEventListener('change', handleMobileArchiveChange);
+			});
 
 			if (App.timeline) {
 				App.timeline.stopIntersectionObserver();
@@ -2726,6 +2839,7 @@ class Carousel {
 		// DOM Elements (initialised during component setup)
 		this.carouselEl = element;
 		this.slidesWrapperEl = this.carouselEl.querySelector('[data-carousel-slides-wrapper]');
+		this.slidesContainerEl = this.carouselEl.querySelector('[data-carousel-slides]');
 		this.slidesEls = Array.from(
 			this.carouselEl.querySelectorAll('[data-carousel-slides] figure')
 		);
@@ -2741,9 +2855,6 @@ class Carousel {
 		// State
 		this.observer = null;
 		this.activeSlide = null;
-
-		// Bound handlers
-		this.boundHandleSlidesKeydown = this.handleSlidesKeydown.bind(this);
 
 		this.init();
 	}
@@ -2921,7 +3032,7 @@ class Carousel {
 	/**
 	 * Setup keyboard navigation for slides (arrow keys to navigate)
 	 * Pattern: Tab to focus first link, arrows to navigate slides, Tab to exit
-	 * Similar to hover-cards pattern but for horizontal carousel
+	 * Uses event delegation on the slides container
 	 */
 	setupSlidesKeyboardNavigation() {
 		// Get all focusable links within slides
@@ -2934,70 +3045,68 @@ class Carousel {
 		// Set initial tabindex: first link focusable, rest not
 		slideLinks.forEach((link, index) => {
 			link.setAttribute('tabindex', index === 0 ? '0' : '-1');
-			link.addEventListener('keydown', this.boundHandleSlidesKeydown);
 		});
-	}
 
-	/**
-	 * Handle keyboard navigation within carousel slides
-	 * @param {KeyboardEvent} event - The keyboard event
-	 */
-	handleSlidesKeydown(event) {
-		const currentLink = event.target;
-		const currentSlide = currentLink.closest('figure');
-		if (!currentSlide) return;
+		// Attach single event listener to container (event delegation)
+		this.slidesContainerEl.addEventListener('keydown', (event) => {
+			const currentLink = event.target.closest('a');
+			if (!currentLink) return;
 
-		const currentIndex = this.slidesEls.indexOf(currentSlide);
-		let targetIndex = -1;
-		let handled = false;
+			const currentSlide = currentLink.closest('figure');
+			if (!currentSlide) return;
 
-		switch (event.key) {
-			case 'ArrowLeft':
-				// Navigate to previous slide
-				targetIndex = Math.max(currentIndex - 1, 0);
-				handled = true;
-				break;
-			case 'ArrowRight':
-				// Navigate to next slide
-				targetIndex = Math.min(currentIndex + 1, this.slidesEls.length - 1);
-				handled = true;
-				break;
-			case 'ArrowUp':
-			case 'ArrowDown':
-				// Prevent default scroll behaviour but don't navigate (horizontal carousel)
+			const currentIndex = this.slidesEls.indexOf(currentSlide);
+			let targetIndex = -1;
+			let handled = false;
+
+			switch (event.key) {
+				case 'ArrowLeft':
+					// Navigate to previous slide
+					targetIndex = Math.max(currentIndex - 1, 0);
+					handled = true;
+					break;
+				case 'ArrowRight':
+					// Navigate to next slide
+					targetIndex = Math.min(currentIndex + 1, this.slidesEls.length - 1);
+					handled = true;
+					break;
+				case 'ArrowUp':
+				case 'ArrowDown':
+					// Prevent default scroll behaviour but don't navigate (horizontal carousel)
+					event.preventDefault();
+					return;
+				case 'Home':
+					// Go to first slide
+					targetIndex = 0;
+					handled = true;
+					break;
+				case 'End':
+					// Go to last slide
+					targetIndex = this.slidesEls.length - 1;
+					handled = true;
+					break;
+			}
+
+			// Always prevent default for handled keys to avoid glitches
+			if (handled) {
 				event.preventDefault();
-				return;
-			case 'Home':
-				// Go to first slide
-				targetIndex = 0;
-				handled = true;
-				break;
-			case 'End':
-				// Go to last slide
-				targetIndex = this.slidesEls.length - 1;
-				handled = true;
-				break;
-		}
+			}
 
-		// Always prevent default for handled keys to avoid glitches
-		if (handled) {
-			event.preventDefault();
-		}
+			if (handled && targetIndex !== -1 && targetIndex !== currentIndex) {
+				// Scroll to target slide
+				const targetSlide = this.slidesEls[targetIndex];
+				if (targetSlide) {
+					this.scrollToSlide(targetSlide);
 
-		if (handled && targetIndex !== -1 && targetIndex !== currentIndex) {
-			// Scroll to target slide
-			const targetSlide = this.slidesEls[targetIndex];
-			if (targetSlide) {
-				this.scrollToSlide(targetSlide);
-
-				// Focus the target slide's link immediately
-				// The intersection observer will update tabindex when the slide becomes active
-				const targetLink = targetSlide.querySelector('a');
-				if (targetLink) {
-					targetLink.focus();
+					// Focus the target slide's link immediately
+					// The intersection observer will update tabindex when the slide becomes active
+					const targetLink = targetSlide.querySelector('a');
+					if (targetLink) {
+						targetLink.focus({ preventScroll: true });
+					}
 				}
 			}
-		}
+		});
 	}
 
 	// Intersection Observer
@@ -3064,6 +3173,7 @@ class Carousel {
 
 	scrollToSlide(slideEl) {
 		if (slideEl) {
+			console.log('Scrolling to slide:', slideEl);
 			slideEl.scrollIntoView({
 				behavior: App.getScrollBehavior(),
 				block: 'nearest',
@@ -3086,7 +3196,6 @@ class Carousel {
 			.map((slide) => slide.querySelector('a'))
 			.filter((link) => link !== null);
 		slideLinks.forEach((link) => {
-			link.removeEventListener('keydown', this.boundHandleSlidesKeydown);
 			link.removeAttribute('tabindex');
 		});
 
@@ -3704,7 +3813,7 @@ App.initializeTimeline = initializeTimeline;
 function setupTimelineFocusTrap() {
 	const timelineWrapper = document.querySelector('#horizontal-timeline-wrapper');
 	const returnButton = document.querySelector('#horizontal-timeline-return');
-	const skipLink = document.querySelector('#modal-archive-skip-link');
+	const skipLink = document.querySelector('#modal-archive-timline-skip-link');
 
 	if (!timelineWrapper || !returnButton) {
 		console.warn('Timeline: Required elements not found');
@@ -4395,7 +4504,7 @@ function initializeGlobalEventHandlers() {
 			}
 
 			// 4. Handle archive modal skip link (skip to timeline navigation)
-			if (event.target.closest('#modal-archive-skip-link')) {
+			if (event.target.closest('#modal-archive-timline-skip-link')) {
 				event.preventDefault();
 				App.isTimelineSkipLinkActivated = true;
 				requestAnimationFrame(() => {
@@ -4588,6 +4697,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// Initialize menu hover logic (Safari fix + focus management)
 	initializeMenuGroupHoverLogic();
+
+	// Initialize timeline button accessibility focus order
+	initializeTimelineAccessibility();
 });
 
 // ============================================================================
