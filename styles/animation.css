@@ -2035,6 +2035,11 @@ section[data-timeline-section] > div > nav ul li:not(:first-child) a:focus {
 	opacity: 1;
 }
 
+/* Hovered tooltip should always appear above focused tooltip */
+.tooltip:hover .tooltip__text {
+	z-index: 11;
+}
+
 /* Skip link */
 
 .skip-link {

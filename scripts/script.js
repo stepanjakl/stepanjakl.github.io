@@ -3608,6 +3608,30 @@ async function copyToClipboard(text) {
 }
 
 // ============================================================================
+// Hover Focus Management
+// ============================================================================
+
+/**
+ * Blur focused element when hovering over a different focusable element
+ * This ensures only one element has visual focus/hover state at a time.
+ * Keyboard-only users are unaffected as they don't trigger mouseenter events.
+ */
+function setupHoverBlurBehaviour() {
+	document.addEventListener(
+		'mouseenter',
+		(event) => {
+			const hoveredFocusable = event.target.closest(
+				'a, button, input, select, textarea, [tabindex]'
+			);
+			if (hoveredFocusable && document.activeElement !== hoveredFocusable) {
+				document.activeElement.blur();
+			}
+		},
+		true
+	); // Capture phase to catch all elements
+}
+
+// ============================================================================
 // Touch Interaction Functions
 // ============================================================================
 
@@ -4666,6 +4690,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	initializePopups();
 	initializeImageLazyLoading();
 	initializeGlobalEventHandlers();
+	setupHoverBlurBehaviour();
 
 	/* Device Detection */
 
