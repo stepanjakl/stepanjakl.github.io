@@ -126,11 +126,24 @@
 	display: inline;
 }
 
+.modal-profile__table dd > p.highlight {
+	align-self: self-start;
+	background-color: var(--modal-text-highlight);
+	padding: 0.875rem 0.625rem;
+	border-left: 0.375rem solid var(--modal-text-highlight-border);
+	border-right: 0.375rem solid var(--modal-text-highlight-border);
+}
+
 @media (min-width: 45rem) {
 	.modal-profile__table dd > span,
 	.modal-profile__table dd > p,
 	.modal-profile__summary-list li {
 		font-weight: 400;
+	}
+
+	.modal-profile__table dd > p.highlight {
+		font-weight: 500;
+		padding: 0.5rem;
 	}
 }
 

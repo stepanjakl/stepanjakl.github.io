@@ -949,7 +949,7 @@ function initializeModalFooterArt() {
 
 /**
  * Setup control buttons unfocus behaviour for a modal
- * Blurs the control buttons (close, timeline) when the user scrolls the modal while a button is focused
+ * Blurs the control buttons (close, fullscreen, timeline) when the user scrolls the modal while a button is focused
  * Reduces code duplication across modal lifecycle hooks
  *
  * @param {HTMLElement} modalElement - The modal element containing the control buttons
@@ -962,25 +962,22 @@ function setupControlButtonsUnfocus(modalElement) {
 	);
 	if (!controlButtons.length) return;
 
-	let isControlTriggerFocused = false;
+	let isControlButtonFocused = false;
 
 	controlButtons.forEach((button) => {
 		button.addEventListener('focus', () => {
-			isControlTriggerFocused = true;
+			isControlButtonFocused = true;
 		});
 
 		button.addEventListener('blur', () => {
-			isControlTriggerFocused = false;
+			isControlButtonFocused = false;
 		});
 	});
 
 	modalElement.addEventListener(
 		'scroll',
 		() => {
-			if (
-				isControlTriggerFocused &&
-				Array.from(controlButtons).includes(document.activeElement)
-			) {
+			if (isControlButtonFocused) {
 				document.activeElement.blur();
 			}
 		},
@@ -2875,6 +2872,7 @@ class Carousel {
 		this.setupControlNavigationEventListeners();
 		this.setupSlidesKeyboardNavigation();
 		this.setupIntersectionObserver();
+		this.setupPreloadingEventListeners();
 	}
 
 	// Edge Navigation
@@ -3187,6 +3185,71 @@ class Carousel {
 				inline: 'start'
 			});
 		}
+	}
+
+	// Image Preloading
+
+	/**
+	 * Preload a lazy image by switching its loading attribute to eager
+	 * This triggers the browser to start loading the image immediately
+	 * @param {HTMLImageElement} img - Image element to preload
+	 */
+	preloadImage(img) {
+		if (img && img.getAttribute('loading') === 'lazy') {
+			img.setAttribute('loading', 'eager');
+		}
+	}
+
+	/**
+	 * Preload the image(s) within a slide
+	 * @param {HTMLElement} slideEl - Slide element containing image(s)
+	 */
+	preloadSlideImages(slideEl) {
+		if (!slideEl) return;
+
+		const lazyImages = slideEl.querySelectorAll('img[loading="lazy"]');
+		lazyImages.forEach((img) => this.preloadImage(img));
+	}
+
+	/**
+	 * Setup event listeners to preload images on hover over navigation elements
+	 * - Right edge hover: preloads next slide's image
+	 * - Next button hover: preloads next slide's image
+	 * - Nav dot hover: preloads the corresponding slide's image
+	 */
+	setupPreloadingEventListeners() {
+		// Preload next slide when hovering over right edge
+		this.rightEdgeEl.addEventListener('mouseenter', () => {
+			if (this.activeSlide?.nextElementSibling) {
+				this.preloadSlideImages(this.activeSlide.nextElementSibling);
+			}
+		});
+
+		// Preload next slide when hovering over next button
+		this.nextButtonEl.addEventListener('mouseenter', () => {
+			if (this.activeSlide?.nextElementSibling) {
+				this.preloadSlideImages(this.activeSlide.nextElementSibling);
+			}
+		});
+
+		// Preload corresponding slide when hovering over nav dots
+		this.navEl.addEventListener(
+			'mouseenter',
+			(event) => {
+				const button = event.target.closest('button[data-label-for]');
+				if (!button) return;
+
+				const targetValue = button.getAttribute('data-label-for');
+				const targetSlideEl = this.carouselEl.querySelector(
+					`figure[data-value="${targetValue}"]`
+				);
+
+				if (targetSlideEl) {
+					this.preloadSlideImages(targetSlideEl);
+				}
+			},
+			true
+		); // Use capture to catch hover on any button within nav
 	}
 
 	// Cleanup

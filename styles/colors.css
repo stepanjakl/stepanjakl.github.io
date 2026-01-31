@@ -237,6 +237,8 @@ main {
 	--modal-line-3: var(--cyan-half-55);
 	--modal-tag-bg: var(--cyan-three-quarters-45);
 	--modal-tag-bg--hover: var(--cyan-three-quarters-55);
+	--modal-text-highlight: var(--cyan-three-quarters-35);
+	--modal-text-highlight-border: var(--cyan-three-quarters-45);
 
 	/* Carousel control colours */
 	--carousel-nav-bg: var(--light-25);
@@ -323,6 +325,8 @@ html {
 	--modal-line-3: var(--cyan-quarter-80);
 	--modal-tag-bg: var(--cyan-three-quarters-80);
 	--modal-tag-bg--hover: var(--cyan-three-quarters-85);
+	--modal-text-highlight: var(--cyan-three-quarters-90);
+	--modal-text-highlight-border: var(--cyan-three-quarters-80);
 
 	/* Carousel control colours */
 	--carousel-nav-bg: var(--dark-25);
