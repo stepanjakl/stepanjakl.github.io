@@ -529,7 +529,7 @@ body.modal-archive-open #modal-archive .modal__content {
 	content: '';
 	position: absolute;
 	inset: 0 50% 0 0;
-	border-width: min(2px, 0.125rem);
+	border-width: max(2px, 0.125rem);
 	border-style: solid;
 	border-color: var(--blue-full-65);
 	pointer-events: none;

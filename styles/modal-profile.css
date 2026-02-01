@@ -129,9 +129,10 @@
 .modal-profile__table dd > p.highlight {
 	align-self: self-start;
 	background-color: var(--modal-text-highlight);
+	margin-top: 0.625rem;
 	padding: 0.875rem 0.625rem;
-	border-left: 0.375rem solid var(--modal-text-highlight-border);
-	border-right: 0.375rem solid var(--modal-text-highlight-border);
+	border-left: 0.1875rem solid var(--modal-text-highlight-border);
+	border-right: 0.1875rem solid var(--modal-text-highlight-border);
 }
 
 @media (min-width: 45rem) {
@@ -144,6 +145,8 @@
 	.modal-profile__table dd > p.highlight {
 		font-weight: 500;
 		padding: 0.5rem;
+		border-left: 0.375rem solid var(--modal-text-highlight-border);
+		border-right: 0.375rem solid var(--modal-text-highlight-border);
 	}
 }
 
@@ -254,12 +257,6 @@
 	.modal-profile__summary-list li {
 		font-weight: 400;
 	}
-
-	/* .modal-profile__summary-list li span::before {
-		font-size: 0.675em;
-		margin-right: 1.25rem;
-		transform: translateY(-0.15625rem);
-	} */
 }
 
 .modal-profile__summary-list li::before {
@@ -291,7 +288,7 @@
 	justify-content: center;
 	column-gap: 0.25rem;
 	border-radius: 999rem;
-	border: solid min(2px, 0.125rem) var(--modal-tag-bg);
+	border: solid max(2px, 0.125rem) var(--modal-tag-bg);
 	padding: 0.609375rem 0.75rem 0.5rem;
 }
 
