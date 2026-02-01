@@ -986,6 +986,33 @@ function setupControlButtonsUnfocus(modalElement) {
 }
 
 /**
+ * Resets modal scroll position after the fade-out transition completes
+ * Ensures next open starts at the top, but only after the closing animation finishes
+ *
+ * @param {HTMLElement} modalElement - The modal element to reset
+ */
+function resetModalScrollOnClose(modalElement) {
+	if (!modalElement) return;
+
+	const handleTransitionEnd = (event) => {
+		// Wait for the transform transition to finish (coincides with opacity/visibility)
+		if (event.target === modalElement && event.propertyName === 'transform') {
+			modalElement.removeEventListener('transitionend', handleTransitionEnd);
+			modalElement.scrollTop = 0;
+		}
+	};
+
+	modalElement.addEventListener('transitionend', handleTransitionEnd);
+
+	// Fallback: Timeout in case transitionend doesn't fire (e.g. detached DOM or suppressed animations)
+	// Animation duration is ~0.125s, so 400ms is a safe buffer
+	setTimeout(() => {
+		modalElement.removeEventListener('transitionend', handleTransitionEnd);
+		modalElement.scrollTop = 0;
+	}, 400);
+}
+
+/**
  * Register lifecycle hooks for modal dialogs
  * Connects generic dialog.js system with project-specific modal behaviour
  * Allows modals to have custom initialisation/cleanup without modifying dialog.js
@@ -1186,6 +1213,10 @@ function registerDialogLifecycleHooks() {
 			}
 		},
 		cleanup: () => {
+			// Schedule scroll reset after transition
+			const modalArchive = getModalElement(NAVIGATION_HASHES.ARCHIVE);
+			resetModalScrollOnClose(modalArchive);
+
 			// Remove modal-specific class from body
 			document.body.classList.remove('modal-open', 'modal-archive-open');
 
@@ -1227,6 +1258,10 @@ function registerDialogLifecycleHooks() {
 			setupControlButtonsUnfocus(modalProfile);
 		},
 		cleanup: () => {
+			// Schedule scroll reset after transition
+			const modalProfile = getModalElement(NAVIGATION_HASHES.PROFILE);
+			resetModalScrollOnClose(modalProfile);
+
 			// Remove modal-specific class from body
 			document.body.classList.remove('modal-open', 'modal-profile-open');
 

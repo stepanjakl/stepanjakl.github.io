@@ -135,6 +135,13 @@
 	border-right: 0.1875rem solid var(--modal-text-highlight-border);
 }
 
+@media (min-width: 75rem) {
+	.modal-profile__table dd > p.highlight {
+		border-left: 0.3125rem solid var(--modal-text-highlight-border);
+		border-right: 0.3125rem solid var(--modal-text-highlight-border);
+	}
+}
+
 @media (min-width: 45rem) {
 	.modal-profile__table dd > span,
 	.modal-profile__table dd > p,
@@ -144,9 +151,7 @@
 
 	.modal-profile__table dd > p.highlight {
 		font-weight: 500;
-		padding: 0.5rem;
-		border-left: 0.375rem solid var(--modal-text-highlight-border);
-		border-right: 0.375rem solid var(--modal-text-highlight-border);
+		padding: 0.5rem 0.625rem;
 	}
 }
 
