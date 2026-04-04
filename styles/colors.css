@@ -218,6 +218,17 @@ main {
 	--modal-border-outer: var(--dark-10);
 	--modal-border-inner: var(--light-15);
 
+	/* Utility border patterns - Inset borders (1px subtle borders) */
+	--border-inset-dark-10: inset 0 0 0 max(1px, 0.0625rem) var(--dark-10);
+	--border-inset-dark-15: inset 0 0 0 max(1px, 0.0625rem) var(--dark-15);
+	--border-inset-dark-20: inset 0 0 0 max(1px, 0.0625rem) var(--dark-20);
+	--border-inset-light-15: inset 0 0 0 max(1px, 0.0625rem) var(--light-15);
+	--border-inset-light-25: inset 0 0 0 max(1px, 0.0625rem) var(--light-25);
+	--border-inset-light-35: inset 0 0 0 max(1px, 0.0625rem) var(--light-35);
+	--border-inset-light-40: inset 0 0 0 max(1px, 0.0625rem) var(--light-40);
+	--border-inset-light-50: inset 0 0 0 max(1px, 0.0625rem) var(--light-50);
+	--border-inset-transparent: inset 0 0 0 max(1px, 0.0625rem) transparent;
+
 	/* 210, 100, 25 */
 	--modal-bg-blur: #00424b59, rgb(0, 66, 75, 0.65);
 

@@ -688,6 +688,7 @@ figure.modal-archive__project-hero {
 		bottom: 0;
 		width: 25%;
 		user-select: none;
+		-webkit-user-select: none;
 	}
 
 	[data-carousel-edge-left] {

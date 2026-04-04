@@ -8,6 +8,7 @@
 		"custom-property-empty-line-before": null,
 		"alpha-value-notation": "number",
 		"color-function-notation": "legacy",
+		"color-function-alias-notation": null,
 		"media-feature-range-notation": "prefix",
 		"length-zero-no-unit": null,
 		"number-max-precision": 13,
@@ -17,6 +18,12 @@
 			true,
 			{
 				"ignoreProperties": ["corner-shape", "corner-bottom-left-shape", "user-drag"]
+			}
+		],
+		"property-no-vendor-prefix": [
+			true,
+			{
+				"ignoreProperties": ["user-select"]
 			}
 		],
 		"declaration-property-value-no-unknown": null,

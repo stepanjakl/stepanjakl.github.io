@@ -252,12 +252,6 @@
 			aria-hidden="true"
 			aria-label="Toggle light and dark mode" />
 		<input
-			id="debug"
-			type="checkbox"
-			hidden
-			aria-hidden="true"
-			aria-label="Toggle debug mode" />
-		<input
 			id="fullscreen"
 			type="checkbox"
 			hidden
@@ -269,6 +263,12 @@
 			hidden
 			aria-hidden="true"
 			aria-label="Toggle ambience audio" />
+		<input
+			id="debug"
+			type="checkbox"
+			hidden
+			aria-hidden="true"
+			aria-label="Toggle debug mode" />
 		<input
 			id="animations"
 			type="checkbox"
@@ -557,7 +557,7 @@
 										<span>Learn more about me</span>
 									</abbr>
 									<abbr class="tooltip__text--bottom tooltip__text tooltip__text--active">
-										<kbd><span>⌘</span></kbd>
+										<kbd><span>^</span></kbd>
 										<kbd><span>P</span></kbd>
 									</abbr>
 								</a>
@@ -584,7 +584,7 @@
 										<span>Explore my past work</span>
 									</abbr>
 									<abbr class="tooltip__text--bottom tooltip__text tooltip__text--active">
-										<kbd><span>⌘</span></kbd>
+										<kbd><span>^</span></kbd>
 										<kbd><span>A</span></kbd>
 									</abbr>
 								</a>
@@ -628,7 +628,7 @@
 									</div>
 								</button>
 								<abbr class="tooltip__text--top tooltip__text tooltip__text--active">
-									<kbd><span>⌘</span></kbd>
+									<kbd><span>^</span></kbd>
 									<kbd><span>M</span></kbd>
 								</abbr>
 								<a
@@ -644,6 +644,10 @@
 								<!-- Dropdown menu content -->
 								<dialog id="dropdown-menu">
 									<div>
+										<!-- CONTACT Section -->
+										<div class="dropdown-menu__section-label">
+											<span class="text-xs">CONTACT</span>
+										</div>
 										<a
 											href="https://cal.com/stepanjakl"
 											target="_blank"
@@ -651,44 +655,43 @@
 											<svg aria-hidden="true">
 												<use href="images/icons.svg#menu-call"></use>
 											</svg>
-											<span class="text-sm">Virtual meeting</span>
+											<span class="text-sm">Video call</span>
 											<span class="sr-only">(opens in new tab)</span>
 										</a>
+										<!-- PLATFORMS Section -->
+										<div class="dropdown-menu__section-label">
+											<span class="text-xs">Platforms</span>
+										</div>
 										<a
 											href="https://linkedin.com/in/stepanjakl"
 											target="_blank"
 											aria-label="Find out more about me on LinkedIn (opens in new tab)">
-											<svg aria-hidden="true">
-												<use href="images/icons.svg#menu-linkedin"></use>
-											</svg>
-											<span class="text-sm">LinkedIn profile</span>
+											<span class="text-sm dropdown-menu__link-profile">LinkedIn profile</span>
 											<span class="sr-only">(opens in new tab)</span>
 										</a>
 										<a
 											href="https://github.com/stepanjakl"
 											target="_blank"
 											aria-label="Visit my profile on GitHub (opens in new tab)">
-											<svg aria-hidden="true">
-												<use href="images/icons.svg#menu-github"></use>
-											</svg>
-											<span class="text-sm">GitHub profile</span>
+											<span class="text-sm dropdown-menu__link-profile">GitHub profile</span>
 											<span class="sr-only">(opens in new tab)</span>
 										</a>
 										<a
 											href="https://codepen.io/stepj/pens/public"
 											target="_blank"
 											aria-label="Visit my profile on CodePen (opens in new tab)">
-											<svg aria-hidden="true">
-												<use href="images/icons.svg#menu-codepen"></use>
-											</svg>
-											<span class="text-sm">CodePen profile</span>
+											<span class="text-sm dropdown-menu__link-profile">CodePen profile</span>
 											<span class="sr-only">(opens in new tab)</span>
 										</a>
-										<hr />
+										<!-- PREFERENCES Section -->
+										<div class="dropdown-menu__section-label">
+											<span class="text-xs">Preferences</span>
+										</div>
 										<label
 											id="dropdown-menu-light-mode"
 											for="mode"
 											tabindex="0"
+											class="dropdown-menu__toggle"
 											onclick="App.deferredFocus('dropdown-menu-dark-mode')"
 											onkeydown="
 												if (event.key === 'Enter') {
@@ -699,11 +702,16 @@
 												<use href="images/icons.svg#menu-light-mode"></use>
 											</svg>
 											<span class="text-sm">Light mode</span>
+											<abbr class="dropdown-menu__shortcut--bottom dropdown-menu__shortcut">
+												<kbd><span>^</span></kbd>
+												<kbd><span>T</span></kbd>
+											</abbr>
 										</label>
 										<label
 											id="dropdown-menu-dark-mode"
 											for="mode"
 											tabindex="0"
+											class="dropdown-menu__toggle"
 											onclick="App.deferredFocus('dropdown-menu-light-mode')"
 											onkeydown="
 												if (event.key === 'Enter') {
@@ -714,30 +722,44 @@
 												<use href="images/icons.svg#menu-dark-mode"></use>
 											</svg>
 											<span class="text-sm">Dark mode</span>
+											<abbr class="dropdown-menu__shortcut--bottom dropdown-menu__shortcut">
+												<kbd><span>^</span></kbd>
+												<kbd><span>T</span></kbd>
+											</abbr>
 										</label>
 										<label
 											id="dropdown-menu-ambience"
 											for="ambience"
 											tabindex="0"
+											class="dropdown-menu__toggle"
+											onclick="App.toggleAmbience(event)"
 											onkeydown="
 												if (event.key === 'Enter') {
-													App.keyActivate('ambience');
+													document.getElementById('ambience').checked = !document.getElementById('ambience').checked;
+													document.getElementById('ambience').dispatchEvent(new Event('change', { bubbles: true }));
 												}
 											">
-											<svg></svg>
+											<figure class="dropdown-menu__state-indicator"></figure>
+											<svg aria-hidden="true"></svg>
 											<span class="hidden ambience-checked:flex text-sm">Ambience off</span>
 											<span class="ambience-checked:hidden flex text-sm">Ambience</span>
+											<abbr class="dropdown-menu__shortcut--bottom dropdown-menu__shortcut">
+												<kbd><span>^</span></kbd>
+												<kbd><span>E</span></kbd>
+											</abbr>
 										</label>
 										<label
 											id="dropdown-menu-fullscreen"
 											for="fullscreen"
 											tabindex="0"
+											class="dropdown-menu__toggle"
 											onclick="App.toggleFullscreen()"
 											onkeydown="
 												if (event.key === 'Enter') {
 													App.toggleFullscreen();
 												}
 											">
+											<figure class="dropdown-menu__state-indicator"></figure>
 											<svg class="fullscreen-checked:hidden flex">
 												<use href="images/icons.svg#menu-fullscreen"></use>
 											</svg>
@@ -746,6 +768,10 @@
 											</svg>
 											<span class="hidden fullscreen-checked:flex text-sm">Exit</span>
 											<span class="fullscreen-checked:hidden flex text-sm">Fullscreen</span>
+											<abbr class="dropdown-menu__shortcut--bottom dropdown-menu__shortcut">
+												<kbd><span>^</span></kbd>
+												<kbd><span>F</span></kbd>
+											</abbr>
 										</label>
 										<hr />
 										<div class="dropdown-menu__group">
@@ -753,6 +779,7 @@
 												id="dropdown-menu-debug"
 												for="debug"
 												tabindex="0"
+												class="dropdown-menu__toggle"
 												onkeydown="
 													if (event.key === 'Enter') {
 														App.keyActivate('debug');
@@ -763,6 +790,7 @@
 														App.keyActivate('debug');
 													})
 												">
+												<figure class="dropdown-menu__state-indicator"></figure>
 												<div>
 													<svg class="debug-checked:hidden flex">
 														<use href="images/icons.svg#menu-debug"></use>
@@ -778,6 +806,7 @@
 												id="dropdown-menu-reduce"
 												for="animations"
 												tabindex="0"
+												class="dropdown-menu__toggle"
 												onkeydown="
 													if (event.key === 'Enter') {
 														App.keyActivate('animations');
@@ -788,6 +817,7 @@
 														App.keyActivate('animations');
 													})
 												">
+												<figure class="dropdown-menu__state-indicator"></figure>
 												<div>
 													<svg class="hidden reduce-checked:flex">
 														<use href="images/icons.svg#menu-reduce"></use>

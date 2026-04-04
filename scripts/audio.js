@@ -496,7 +496,8 @@ App.audio = (function () {
 			(e) => {
 				if (
 					e.target.matches &&
-					e.target.matches('a, button, input, label, [tabindex], summary')
+					e.target.matches('a, button, input, label, [tabindex], summary') &&
+					e.target.getAttribute('tabindex') !== '-1'
 				) {
 					playSFX('hover');
 				}
@@ -510,7 +511,8 @@ App.audio = (function () {
 			(e) => {
 				if (
 					e.target.matches &&
-					e.target.matches('a, button, input, label, [tabindex], summary')
+					e.target.matches('a, button, input, label, [tabindex], summary') &&
+					e.target.getAttribute('tabindex') !== '-1'
 				) {
 					playSFX('hover');
 				}

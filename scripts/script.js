@@ -186,20 +186,21 @@ function initializeMenuGroupHoverLogic() {
 	groups.forEach((group) => {
 		const labels = group.querySelectorAll('label');
 		labels.forEach((label) => {
-			label.addEventListener('mouseenter', () => {
+			const handleMouseEnter = () => {
 				group.classList.add('has-hovered-label');
-
-				// Blur any other focused label in this group
+				// Blur any focused label in this group (except the hovered one)
 				// Prevents "double active" state where one is focused and another is hovered
-				labels.forEach((l) => {
-					if (l !== label && l === document.activeElement) {
-						l.blur();
-					}
-				});
-			});
-			label.addEventListener('mouseleave', () => {
+				const focusedLabel = group.querySelector('label:focus');
+				if (focusedLabel && focusedLabel !== label) {
+					focusedLabel.blur();
+				}
+			};
+			const handleMouseLeave = () => {
 				group.classList.remove('has-hovered-label');
-			});
+			};
+
+			label.addEventListener('mouseenter', handleMouseEnter, { passive: true });
+			label.addEventListener('mouseleave', handleMouseLeave, { passive: true });
 		});
 	});
 }
@@ -220,41 +221,34 @@ function initializeTimelineAccessibility() {
 	// Ensure timeline button is keyboard focusable
 	timelineBtn.setAttribute('tabindex', '0');
 
-	// Add keyboard activation (Enter/Space)
+	// Consolidated keyboard handler for timeline button
+	// Handles: activation (Enter/Space), shift+tab (to skip link), tab (to next focusable element)
 	timelineBtn.addEventListener('keydown', (e) => {
 		if (e.key === 'Enter' || e.key === ' ') {
 			e.preventDefault();
 			timelineBtn.click();
+		} else if (e.key === 'Tab') {
+			e.preventDefault();
+			if (e.shiftKey) {
+				// Shift+Tab: Focus skip link
+				timelineSkipLink.focus();
+			} else {
+				// Tab: Focus first focusable element in timeline navigation
+				for (const el of timelineNavigation.querySelectorAll('*')) {
+					if (el.tabIndex >= 0 && el.offsetParent !== null) {
+						el.focus();
+						break;
+					}
+				}
+			}
 		}
 	});
 
-	// From Skip Link -> Tab -> Timeline
+	// Skip link keyboard navigation: Tab navigates to timeline button
 	timelineSkipLink.addEventListener('keydown', (e) => {
 		if (e.key === 'Tab' && !e.shiftKey) {
 			e.preventDefault();
 			timelineBtn.focus();
-		}
-	});
-
-	// From Timeline -> Shift+Tab -> Timeline Skip Link
-	timelineBtn.addEventListener('keydown', (e) => {
-		if (e.key === 'Tab' && e.shiftKey) {
-			e.preventDefault();
-			timelineSkipLink.focus();
-		}
-	});
-
-	// From Timeline -> Tab -> Main Content
-	timelineBtn.addEventListener('keydown', (e) => {
-		if (e.key === 'Tab' && !e.shiftKey) {
-			e.preventDefault();
-
-			for (const el of timelineNavigation.querySelectorAll('*')) {
-				if (el.tabIndex >= 0 && el.offsetParent !== null) {
-					el.focus();
-					break;
-				}
-			}
 		}
 	});
 }
@@ -1285,6 +1279,20 @@ function registerDialogLifecycleHooks() {
 			document.title = originalTitle;
 		}
 	});
+
+	// Dropdown menu lifecycle - hide keyboard shortcuts on close
+	aria.registerLifecycleHooks('dropdown-menu-toggle', {
+		initialize: () => {
+			// Shortcuts will be shown when Cmd/Ctrl is pressed
+		},
+		cleanup: () => {
+			// Update shortcut visibility when dropdown menu closes
+			const keyHandler = KeyHandler.instance;
+			if (keyHandler) {
+				keyHandler.updateShortcutVisibility();
+			}
+		}
+	});
 }
 
 // Register hooks when aria is available
@@ -1371,14 +1379,32 @@ class TextHighlighter {
  */
 class KeyHandler {
 	constructor() {
+		// Store static instance for access from other contexts
+		KeyHandler.instance = this;
+
 		// DOM Cache (lazy initialised)
 		this.tooltipElementsCache = null;
 		this.debugElementCache = null;
+		this.shortcutElementsCache = null;
 
 		// Constants
 		this.TOOLTIP_ITEMS_SELECTOR =
 			'#menu-link-profile, #menu-link-archive, #dropdown-menu-toggle';
 		this.TOOLTIP_ACTIVE_CLASS = 'tooltip-key--active';
+		this.SHORTCUT_SELECTOR = '.dropdown-menu__shortcut';
+		this.SHORTCUT_ACTIVE_CLASS = 'dropdown-menu__shortcut--active';
+
+		// Modifier key codes for efficient checking
+		this.MODIFIER_KEYS_SET = new Set([
+			'MetaLeft',
+			'MetaRight',
+			'ControlLeft',
+			'ControlRight',
+			'ShiftLeft',
+			'ShiftRight',
+			'AltLeft',
+			'AltRight'
+		]);
 
 		// Key constants
 		this.KEYS = {
@@ -1389,16 +1415,29 @@ class KeyHandler {
 			KEY_D: 'd'
 		};
 
+		// Dropdown menu shortcut keys (cached as set for O(1) lookup)
+		this.DROPDOWN_KEYS = {
+			MODE_TOGGLE: 'KeyT', // Ctrl+T or Cmd+T - toggle light/dark mode
+			AMBIENCE: 'KeyE', // Ctrl+E or Cmd+E - toggle ambience
+			FULLSCREEN: 'KeyF' // Ctrl+F or Cmd+F - toggle fullscreen
+		};
+		this.DROPDOWN_KEYS_SET = new Set(Object.values(this.DROPDOWN_KEYS));
+
+		// Track if Cmd/Ctrl modifier is currently pressed
+		this.isCmdCtrlPressed = false;
+
 		// Bound handlers
 		this.boundHandleKeydown = this.handleKeydown.bind(this);
 		this.boundHandleKeyup = this.handleKeyup.bind(this);
-		this.boundRemoveTooltips = () => this.toggleTooltipActiveClass(false);
+		this.boundResetModifierState = this.resetModifierAndTooltips.bind(this);
 
-		// Initialise event listeners
-		document.addEventListener('keydown', this.boundHandleKeydown);
+		// Initialise event listeners (use capture phase for shortcuts to ensure early interception)
+		document.addEventListener('keydown', this.boundHandleKeydown, true); // capture phase
 		document.addEventListener('keyup', this.boundHandleKeyup);
-		window.addEventListener('blur', this.boundRemoveTooltips);
-		document.body.addEventListener('click', this.boundRemoveTooltips);
+		// Consolidated event listeners: all reset Cmd/Ctrl state and tooltip visibility
+		window.addEventListener('blur', this.boundResetModifierState);
+		document.body.addEventListener('click', this.boundResetModifierState);
+		document.addEventListener('focusin', this.boundResetModifierState);
 	}
 
 	// DOM Helpers
@@ -1421,11 +1460,27 @@ class KeyHandler {
 		return (this.debugElementCache ??= App.getEl('debug'));
 	}
 
+	/**
+	 * Get shortcut elements with lazy caching
+	 * Caching significantly improves performance since this is called frequently on Cmd/Ctrl state changes
+	 * @returns {Array<HTMLElement>} Cached array of shortcut elements
+	 */
+	getShortcutElements() {
+		return (this.shortcutElementsCache ??= Array.from(
+			document.querySelectorAll(this.SHORTCUT_SELECTOR)
+		));
+	}
+
 	// Event Handlers
 
 	handleKeydown(event) {
 		const rawKey = event.key;
 		const key = rawKey?.toLowerCase();
+		const code = event.code; // Physical key position (KeyM, KeyF, KeyR, etc.)
+		const hasCmdCtrlModifier = event.ctrlKey || event.metaKey; // For shortcuts and dropdown display
+
+		// Check if this is a modifier key only (don't return, we need to handle tooltips)
+		const isModifierKeyOnly = this.MODIFIER_KEYS_SET.has(code);
 
 		// Always allow Escape to close dialogs, regardless of animation state
 		if (rawKey === this.KEYS.ESCAPE) {
@@ -1439,14 +1494,32 @@ class KeyHandler {
 			if (aria.getCurrentDialog()) {
 				closeDialog('#');
 			}
-		} else {
-			if (
-				!isMenuInitialAnimationFinished ||
-				!isMenuDropdownTransitionFinished ||
-				!isAnyModalTransitionFinished ||
-				isWheelEventActive
-			)
-				return;
+			return;
+		}
+
+		// CRITICAL: Check for dropdown menu shortcuts FIRST and IMMEDIATELY prevent default
+		// This must happen before ANY other code to ensure browser defaults are blocked
+		// Must be called in capture phase (see addEventListener above)
+		if (!isModifierKeyOnly) {
+			if (hasCmdCtrlModifier && this.DROPDOWN_KEYS_SET.has(code)) {
+				event.preventDefault(); // Block browser behavior IMMEDIATELY
+			}
+		}
+
+		// Block additional keyboard interactions during animations
+		if (
+			!isMenuInitialAnimationFinished ||
+			!isMenuDropdownTransitionFinished ||
+			!isAnyModalTransitionFinished ||
+			isWheelEventActive
+		) {
+			// Still handle tooltip display even during animations
+			requestAnimationFrame(() => this.handleTooltipActiveClass(event));
+			return;
+		}
+
+		// Handle global dialog shortcuts (P, A, M, D) - only for non-modifier keys
+		if (!isModifierKeyOnly) {
 			switch (key) {
 				case this.KEYS.KEY_P:
 					this.toggleDialog(
@@ -1483,11 +1556,40 @@ class KeyHandler {
 			}
 		}
 
+		// Handle dropdown menu shortcuts
+		if (hasCmdCtrlModifier) {
+			// Track that Cmd/Ctrl is pressed
+			this.isCmdCtrlPressed = true;
+
+			// Execute shortcut if a key was pressed (not just modifier alone)
+			if (!isModifierKeyOnly) {
+				this.handleShortcut(event, code);
+			}
+
+			// Update shortcut visibility
+			this.updateShortcutVisibility();
+		}
+
 		requestAnimationFrame(() => this.handleTooltipActiveClass(event));
 	}
 
 	handleKeyup() {
 		this.toggleTooltipActiveClass(false);
+		// Reset Cmd/Ctrl pressed state and update shortcut visibility
+		this.isCmdCtrlPressed = false;
+		this.updateShortcutVisibility();
+	}
+
+	/**
+	 * Consolidated reset handler for Cmd/Ctrl state and tooltip visibility
+	 * Called on window blur, document click, and focusin events
+	 * Ensures consistent state management across all context-switching events
+	 * @private
+	 */
+	resetModifierAndTooltips() {
+		this.toggleTooltipActiveClass(false);
+		this.isCmdCtrlPressed = false;
+		this.updateShortcutVisibility();
 	}
 
 	toggleTooltipActiveClass(add) {
@@ -1495,6 +1597,111 @@ class KeyHandler {
 		const method = add ? 'add' : 'remove';
 		for (let i = 0; i < elements.length; i++) {
 			elements[i].classList[method](this.TOOLTIP_ACTIVE_CLASS);
+		}
+	}
+
+	// Dropdown Menu Shortcuts
+	// ============================================================================
+	// Keyboard Shortcut Strategy:
+	// We provide convenient dropdown menu shortcuts that work globally with Cmd/Ctrl:
+	// • Ctrl+T / Cmd+T: Toggle light/dark mode
+	// • Ctrl+E / Cmd+E: Toggle ambience audio
+	// • Ctrl+F / Cmd+F: Toggle fullscreen (overrides browser Find - justified for UX)
+	//
+	// These shortcuts are prevented globally to ensure consistent and predictable
+	// behavior, but they only execute when actually useful (not during animations).
+	// This approach avoids accidental browser behavior while keeping shortcuts
+	// discoverable through the keyboard hints shown when Cmd/Ctrl is pressed.
+	// ============================================================================
+
+	/**
+	 * Check if dropdown menu is currently open
+	 * @returns {boolean} True if dropdown menu is open
+	 */
+	isDropdownMenuOpen() {
+		if (typeof aria === 'undefined' || !aria.OpenDialogList) {
+			return false;
+		}
+		// Check if any dialog in the stack is the dropdown menu (uses wrapper ID)
+		for (let i = 0; i < aria.OpenDialogList.length; i++) {
+			const dialog = aria.OpenDialogList[i];
+			if (dialog && dialog.dialogNode && dialog.dialogNode.id === 'dropdown-menu-toggle') {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Execute keyboard shortcuts for dropdown menu items
+	 * Shortcuts work globally (not just when dropdown is open) for consistency
+	 * Shortcuts: T=Light/Dark mode toggle, E=Ambience toggle, F=Fullscreen toggle
+	 * @param {KeyboardEvent} event - The keyboard event (for potential future preventDefault calls)
+	 * @param {string} code - The physical keyboard code (e.g., 'KeyT', 'KeyE', 'KeyF')
+	 * @returns {void}
+	 */
+	handleShortcut(event, code) {
+		// Only execute if this is one of our shortcut keys
+		if (!this.DROPDOWN_KEYS_SET.has(code)) {
+			return;
+		}
+
+		// Execute the appropriate action
+		switch (code) {
+			case this.DROPDOWN_KEYS.MODE_TOGGLE:
+				this.toggleMode();
+				break;
+			case this.DROPDOWN_KEYS.AMBIENCE:
+				this.toggleAmbience();
+				break;
+			case this.DROPDOWN_KEYS.FULLSCREEN:
+				App.toggleFullscreen();
+				break;
+		}
+	}
+
+	/**
+	 * Toggle light/dark mode via keyboard shortcut
+	 * Dispatches change event to trigger any listeners (localStorage persistence, etc.)
+	 * @returns {void}
+	 */
+	toggleMode() {
+		const modeCheckbox = document.getElementById('mode');
+		if (modeCheckbox) {
+			modeCheckbox.checked = !modeCheckbox.checked;
+			modeCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+		}
+	}
+
+	/**
+	 * Toggle ambience audio via keyboard shortcut
+	 * Dispatches change event to trigger any listeners and update audio state
+	 * @returns {void}
+	 */
+	toggleAmbience() {
+		const ambienceCheckbox = document.getElementById('ambience');
+		if (ambienceCheckbox) {
+			ambienceCheckbox.checked = !ambienceCheckbox.checked;
+			ambienceCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+		}
+	}
+
+	/**
+	 * Update visibility of keyboard shortcuts in dropdown menu
+	 * Shortcuts only display when menu is open AND Cmd/Ctrl is pressed
+	 * Uses cached shortcut elements for efficient repeated calls
+	 */
+	updateShortcutVisibility() {
+		const isOpen = this.isDropdownMenuOpen();
+		const shouldShow = isOpen && this.isCmdCtrlPressed;
+		const shortcuts = this.getShortcutElements();
+
+		for (let i = 0; i < shortcuts.length; i++) {
+			if (shouldShow) {
+				shortcuts[i].classList.add(this.SHORTCUT_ACTIVE_CLASS);
+			} else {
+				shortcuts[i].classList.remove(this.SHORTCUT_ACTIVE_CLASS);
+			}
 		}
 	}
 
@@ -3652,13 +3859,23 @@ async function copyToClipboard(text) {
  * Keyboard-only users are unaffected as they don't trigger mouseenter events.
  */
 function setupHoverBlurBehaviour() {
+	const FOCUSABLE_SELECTOR = 'a, button, label, input, select, textarea, [tabindex]';
+
 	document.addEventListener(
 		'mouseenter',
 		(event) => {
-			const hoveredFocusable = event.target.closest(
-				'a, button, input, select, textarea, [tabindex]'
-			);
-			if (hoveredFocusable && document.activeElement !== hoveredFocusable) {
+			// Only blur if the target itself is focusable (not an ancestor)
+			if (!(event.target instanceof Element)) return;
+
+			// Check if target matches focusable selector directly
+			const matches = event.target.matches(FOCUSABLE_SELECTOR);
+			if (!matches) return;
+
+			// Exclude elements with tabindex="-1" (programmatically hidden from tab order)
+			if (event.target.getAttribute('tabindex') === '-1') return;
+
+			// Only blur if it's a different element than currently focused
+			if (document.activeElement !== event.target) {
 				document.activeElement.blur();
 			}
 		},
@@ -4588,10 +4805,12 @@ function initializeGlobalEventHandlers() {
 	// This allows handleTouchButtonClick to distinguish between "was already focused"
 	// vs "just got focused by this tap" (important for labels which focus before onclick)
 	document.addEventListener('pointerdown', (event) => {
-		const target = event.target;
-		// Mark element if it's currently focused before any focus change happens
-		if (document.activeElement === target) {
-			target.setAttribute('data-was-focused', 'true');
+		if (isTouchDevice) {
+			const target = event.target;
+			// Mark element if it's currently focused before any focus change happens
+			if (document.activeElement === target) {
+				target.setAttribute('data-was-focused', 'true');
+			}
 		}
 	});
 
@@ -4778,6 +4997,25 @@ document.addEventListener('DOMContentLoaded', () => {
 	new TouchHandler();
 	new KeyHandler();
 	App.textHighlighter = new TextHighlighter();
+
+	// Expose simple toggle methods on App for onclick handlers
+	App.toggleAmbience = (event) => {
+		if (event) event.preventDefault(); // Prevent default label->checkbox behavior
+		const ambienceCheckbox = document.getElementById('ambience');
+		if (ambienceCheckbox) {
+			ambienceCheckbox.checked = !ambienceCheckbox.checked;
+			ambienceCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+		}
+	};
+
+	App.toggleMode = (event) => {
+		if (event) event.preventDefault(); // Prevent default label->checkbox behavior
+		const modeCheckbox = document.getElementById('mode');
+		if (modeCheckbox) {
+			modeCheckbox.checked = !modeCheckbox.checked;
+			modeCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+		}
+	};
 
 	/* Interactive Components Initialisation */
 

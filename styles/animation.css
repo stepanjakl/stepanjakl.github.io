@@ -2022,7 +2022,8 @@ section[data-timeline-section] > div > nav ul li:not(:first-child) a:focus {
 
 /* Tooltip */
 
-.tooltip .tooltip__text {
+.tooltip .tooltip__text,
+.dropdown-menu__shortcut {
 	transition: opacity var(--animate-out-segment-2\/3) linear;
 	opacity: 0;
 }
@@ -2030,7 +2031,8 @@ section[data-timeline-section] > div > nav ul li:not(:first-child) a:focus {
 .tooltip:hover:not(.tooltip-key--active) .tooltip__text:not(.tooltip__text--active),
 .tooltip:focus-within:not(.tooltip-key--active, [data-focus-after-click]) .tooltip__text:not(.tooltip__text--active),
 .tooltip.tooltip-key--active .tooltip__text--active,
-.tooltip:focus-within.tooltip-key--active .tooltip__text--active {
+.tooltip:focus-within.tooltip-key--active .tooltip__text--active,
+.dropdown-menu__shortcut--active {
 	transition: opacity var(--animate-in-segment-2\/3) linear var(--animate-in-segment);
 	opacity: 1;
 }
