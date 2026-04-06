@@ -27,3 +27,12 @@
 .modal-profile__footer-art-gradient {
 	transform: none;
 }
+
+.modal__timeline-button-wrapper {
+	display: none;
+}
+
+:has(> img[loading='lazy'])::before {
+	content: none;
+	display: none;
+}

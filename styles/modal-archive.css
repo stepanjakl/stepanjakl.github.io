@@ -708,7 +708,6 @@ figure.modal-archive__project-hero {
 	flex: 1 0 100%;
 	scroll-snap-align: start;
 	border-radius: calc(var(--carousel-border-radius) - var(--carousel-padding));
-	overflow: hidden;
 }
 
 [data-carousel-slides] figure a {
@@ -731,6 +730,7 @@ figure.modal-archive__project-hero {
 	[data-carousel-slides] figure {
 		view-timeline-name: --parallaxtimeline;
 		view-timeline-axis: x;
+		overflow: hidden;
 	}
 
 	@keyframes parallax {

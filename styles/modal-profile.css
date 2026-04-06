@@ -4,6 +4,10 @@
 
 /* Layout */
 
+.modal--profile .modal__content {
+	overflow: clip;
+}
+
 @media (min-width: 45rem) {
 	.modal--profile .modal__body {
 		margin-bottom: 0;

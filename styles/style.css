@@ -676,7 +676,6 @@ main {
 	outline: solid max(1px, 0.0625rem) var(--modal-border-outer);
 	border: solid max(1px, 0.0625rem) var(--modal-border-inner);
 	border-radius: var(--segment-eighth) calc((var(--modal-button-border-radius) + var(--modal-button-inset)) + min(-1px, -0.0625rem)) var(--segment-eighth) var(--segment-eighth);
-	overflow: clip;
 	background-image: var(--modal-bg-pattern), linear-gradient(to bottom right in oklch, var(--modal-bg-blur));
 	background-repeat: repeat;
 	background-position: 100% 0%;
