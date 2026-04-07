@@ -593,6 +593,7 @@ body.modal-archive-open #modal-archive .modal__content {
 #timeline-section-year-2021-19:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section='2021-19'],
 #timeline-section-year-2019-18:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section='2019-18'],
 #timeline-section-year-elsewhen:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section='elsewhen'] {
+	overflow: hidden;
 	visibility: hidden;
 	opacity: 0;
 	height: 0;
@@ -615,6 +616,7 @@ body.modal-archive-open #modal-archive .modal__content {
 
 @media (min-width: 45rem) {
 	.modal-archive__timeline-grid [data-timeline-section] {
+		overflow: visible !important;
 		display: block !important;
 		visibility: visible !important;
 		opacity: 1 !important;

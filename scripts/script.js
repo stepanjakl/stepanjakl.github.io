@@ -1811,7 +1811,10 @@ class NavigationHandler {
 	handleVerticalPageScroll(direction) {
 		if (direction !== 'down' || window.location.hash) return;
 
-		if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
+		if (
+			window.scrollY + window.innerHeight >= document.body.scrollHeight &&
+			aria.OpenDialogList.length === 0
+		) {
 			openDialog(DIALOG_CONFIG.PROFILE.id, DIALOG_CONFIG.PROFILE.trigger, null, 'profile');
 		}
 	}
@@ -3424,7 +3427,6 @@ class Carousel {
 
 	scrollToSlide(slideEl) {
 		if (slideEl) {
-			console.log('Scrolling to slide:', slideEl);
 			slideEl.scrollIntoView({
 				behavior: App.getScrollBehavior(),
 				block: 'nearest',

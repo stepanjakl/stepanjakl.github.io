@@ -1810,6 +1810,7 @@ section[data-timeline-section] > div > nav ul li:not(:first-child) a:focus {
 [data-carousel-nav]:hover button[aria-current],
 [data-carousel-nav]:focus-within button[aria-current] {
 	width: 2.75rem;
+	transition: width var(--animate-in-segment) var(--ease-out-quad);
 }
 
 [data-carousel-arrows] li button {

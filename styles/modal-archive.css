@@ -129,7 +129,6 @@
 	flex-direction: column;
 	padding-bottom: 3rem;
 	row-gap: 3rem;
-	overflow: hidden;
 }
 
 .modal-archive__timeline-section > figure {
