@@ -630,6 +630,10 @@ main {
 
 /* Modal container */
 
+body.modal-open {
+	overflow: hidden;
+}
+
 .modal {
 	position: fixed;
 	pointer-events: none;

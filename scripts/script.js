@@ -990,10 +990,12 @@ function resetModalScrollOnClose(modalElement) {
 
 	const handleTransitionEnd = (event) => {
 		// Wait for the transform transition to finish (coincides with opacity/visibility)
-		if (event.target === modalElement && event.propertyName === 'transform') {
-			modalElement.removeEventListener('transitionend', handleTransitionEnd);
-			modalElement.scrollTop = 0;
-		}
+		requestAnimationFrame(() => {
+			if (event.target === modalElement && event.propertyName === 'transform') {
+				modalElement.removeEventListener('transitionend', handleTransitionEnd);
+				modalElement.scrollTop = 0;
+			}
+		});
 	};
 
 	modalElement.addEventListener('transitionend', handleTransitionEnd);
@@ -1001,8 +1003,10 @@ function resetModalScrollOnClose(modalElement) {
 	// Fallback: Timeout in case transitionend doesn't fire (e.g. detached DOM or suppressed animations)
 	// Animation duration is ~0.125s, so 400ms is a safe buffer
 	setTimeout(() => {
-		modalElement.removeEventListener('transitionend', handleTransitionEnd);
-		modalElement.scrollTop = 0;
+		requestAnimationFrame(() => {
+			modalElement.removeEventListener('transitionend', handleTransitionEnd);
+			modalElement.scrollTop = 0;
+		});
 	}, 400);
 }
 
@@ -4623,6 +4627,7 @@ function initializeClickHandlers() {
  * Keeps checkbox state in sync with aria-expanded attribute for screen readers
  */
 function initializeTimelineSectionToggles() {
+	const modalArchive = getModalElement(NAVIGATION_HASHES.ARCHIVE);
 	const toggles = [
 		{
 			checkbox: 'timeline-section-year-2024-21',
@@ -4653,6 +4658,11 @@ function initializeTimelineSectionToggles() {
 			// Update aria-expanded when checkbox changes
 			checkboxEl.addEventListener('change', () => {
 				labelEl.setAttribute('aria-expanded', checkboxEl.checked ? 'true' : 'false');
+				if (checkboxEl.checked) {
+					requestAnimationFrame(() => {
+						App.timeline.scrollParentToChildVertical(modalArchive, labelEl, 'instant');
+					});
+				}
 			});
 
 			// Also update when label is clicked (for keyboard users)
