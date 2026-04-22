@@ -8,6 +8,17 @@
  */
 
 // ============================================================================
+// Application Namespace
+// ============================================================================
+
+/**
+ * Application namespace for global state and utilities
+ * Used instead of modules to maintain vanilla JS with no build step
+ */
+window.App = window.App || {};
+App._elCache = App._elCache || {};
+
+// ============================================================================
 // Utility Functions
 // ============================================================================
 
@@ -63,6 +74,52 @@ function parseHash(hash = window.location.hash) {
 
 	return { base, params };
 }
+
+/**
+ * Convert percentage threshold string to pixel value based on viewport
+ * @param {string} percentageStr - e.g. '100%'
+ * @param {boolean} horizontal - Whether to use view width instead of height
+ * @returns {string} Pixel value string with 'px' suffix
+ */
+window.App.getPixelThreshold = (percentageStr, horizontal = false) => {
+	const percent = parseFloat(percentageStr) / 100;
+	const dimension = horizontal ? window.innerWidth : window.innerHeight;
+	return `${Math.round(dimension * percent)}px`;
+};
+
+/**
+ * Find the closest scrollable ancestor of an element
+ * @param {HTMLElement} element - The element to find the scroll parent for
+ * @returns {HTMLElement|null} The scrollable parent or null (viewport)
+ */
+window.App.getScrollParent = (element) => {
+	if (!element) return null;
+
+	let parent = element.parentElement;
+	while (parent) {
+		const style = window.getComputedStyle(parent);
+		const overflow = style.getPropertyValue('overflow');
+		const overflowY = style.getPropertyValue('overflow-y');
+		const overflowX = style.getPropertyValue('overflow-x');
+
+		// Check for scrollable overflow
+		const isScrollable =
+			/(auto|scroll)/.test(overflow) ||
+			/(auto|scroll)/.test(overflowY) ||
+			/(auto|scroll)/.test(overflowX);
+
+		// Also check for modal containers, which we know will be scrollable when opened
+		const isModal = parent.classList.contains('modal') || parent.id.startsWith('modal-');
+
+		if (isScrollable || isModal) {
+			// Don't use body/html as explicit roots, let them be null (viewport)
+			if (parent.tagName === 'BODY' || parent.tagName === 'HTML') return null;
+			return parent;
+		}
+		parent = parent.parentElement;
+	}
+	return null;
+};
 
 // ============================================================================
 // Transition & Animation Watchers
@@ -214,7 +271,7 @@ function initializeTimelineAccessibility() {
 	const timelineNavigation = document.querySelector('#timeline-navigation');
 	const fullscreenBtn = document.querySelector('.modal__fullscreen-button');
 	const timelineBtn = document.querySelector('.modal__timeline-button');
-	const timelineSkipLink = document.querySelector('#modal-archive-timline-skip-link');
+	const timelineSkipLink = document.querySelector('#modal-archive-timeline-skip-link');
 
 	if (!fullscreenBtn || !timelineBtn || !timelineSkipLink) return;
 
@@ -563,19 +620,6 @@ const getModalElement = (hash) => {
 	return null;
 };
 
-// ============================================================================
-// Application Namespace
-// ============================================================================
-
-/**
- * Application namespace for global state and utilities
- * Used instead of modules to maintain vanilla JS with no build step
- * Initialised early to provide getEl helper for ThemeManager which runs on parse
- * Full API populated later after all class definitions are complete
- */
-window.App = window.App || {};
-App._elCache = App._elCache || {};
-
 /**
  * Get element by ID with caching to reduce repeated DOM queries
  * Accepts either an ID string or an element reference for flexibility
@@ -752,11 +796,9 @@ class ThemeManager {
 // Initialise theme manager when DOM is ready
 // Since this script uses defer, DOM is already loaded
 try {
-	window.App = window.App || {};
 	window.App.themeManager = new ThemeManager();
 } catch (error) {
 	console.error('Failed to initialise theme manager:', error);
-	// Fallback: theme will use browser/system default without localStorage persistence
 }
 
 // ============================================================================
@@ -1095,7 +1137,7 @@ function registerDialogLifecycleHooks() {
 				App.initializeTimeline(!yearParam);
 
 				// Position timeline after modal transition completes
-				const modalArchiveEl = App.getEl('modal-archive');
+				const modalArchiveEl = App.getEl(DIALOG_CONFIG.ARCHIVE.id);
 
 				if (modalArchiveEl) {
 					let positioned = false;
@@ -1149,10 +1191,14 @@ function registerDialogLifecycleHooks() {
 
 			// Handle deep-link scrolling if ?year= parameter is present
 			if (yearParam) {
-				const modalArchiveEl = App.getEl('modal-archive');
+				const modalArchiveEl = App.getEl(DIALOG_CONFIG.ARCHIVE.id);
 
 				// Wait for modal transition to complete before scrolling
+				let deepLinkScrolled = false;
 				const handleDeepLinkScroll = () => {
+					if (deepLinkScrolled) return;
+					deepLinkScrolled = true;
+
 					afterPaint(() => {
 						// Scroll to the section title (header) rather than the content section
 						const targetSection = document.querySelector(
@@ -1584,6 +1630,68 @@ class KeyHandler {
 		this.updateShortcutVisibility();
 	}
 
+	// Dialog Control
+
+	/**
+	 * Toggle dialog open/closed based on current hash
+	 * @param {Event} event - The triggering event
+	 * @param {string} hash - Target hash (e.g., '#profile')
+	 * @param {string} dialogId - Dialog element ID
+	 * @param {string} triggerId - Element to focus when closing
+	 * @param {string|null} focusFirst - Element to focus when opening (optional)
+	 * @param {boolean} useIncludes - If true, match hash with includes() instead of === (for deep links)
+	 */
+	toggleDialog(event, hash, dialogId, triggerId, focusFirst = null, useIncludes = false) {
+		event.preventDefault();
+
+		const currentHash = window.location.hash;
+		// useIncludes: true = partial match (#archive?year=2024), false = exact match (#profile)
+		const shouldClose = useIncludes ? currentHash.includes(hash) : currentHash === hash;
+
+		if (shouldClose) {
+			closeDialog('#');
+		} else {
+			openDialog(dialogId, triggerId, focusFirst, hash.substring(1));
+		}
+	}
+
+	toggleDebug(event) {
+		event.preventDefault();
+		const debugElement = this.getDebugElement();
+		if (debugElement) {
+			debugElement.checked = !debugElement.checked;
+		}
+	}
+
+	// Tooltip Management
+
+	/**
+	 * Toggle active class on tooltips based on modifier keys or explicit state
+	 * @param {boolean|null} force - Explicit state to set (optional)
+	 */
+	toggleTooltipActiveClass(force = null) {
+		const tooltips = this.getTooltipElements();
+		const shouldShow = force !== null ? force : this.isCmdCtrlPressed;
+
+		for (let i = 0; i < tooltips.length; i++) {
+			if (shouldShow) {
+				tooltips[i].classList.add(this.TOOLTIP_ACTIVE_CLASS);
+			} else {
+				tooltips[i].classList.remove(this.TOOLTIP_ACTIVE_CLASS);
+			}
+		}
+	}
+
+	handleTooltipActiveClass(event) {
+		const { base: hash } = parseHash();
+
+		if (hash) {
+			this.toggleTooltipActiveClass(false);
+		} else if (event.ctrlKey || event.metaKey) {
+			this.toggleTooltipActiveClass(true);
+		}
+	}
+
 	/**
 	 * Consolidated reset handler for Cmd/Ctrl state and tooltip visibility
 	 * Called on window blur, document click, and focusin events
@@ -1594,14 +1702,6 @@ class KeyHandler {
 		this.toggleTooltipActiveClass(false);
 		this.isCmdCtrlPressed = false;
 		this.updateShortcutVisibility();
-	}
-
-	toggleTooltipActiveClass(add) {
-		const elements = this.getTooltipElements();
-		const method = add ? 'add' : 'remove';
-		for (let i = 0; i < elements.length; i++) {
-			elements[i].classList[method](this.TOOLTIP_ACTIVE_CLASS);
-		}
 	}
 
 	// Dropdown Menu Shortcuts
@@ -1708,56 +1808,7 @@ class KeyHandler {
 			}
 		}
 	}
-
-	// Dialog Control
-
-	/**
-	 * Toggle dialog open/closed based on current hash
-	 * @param {Event} event - The triggering event
-	 * @param {string} hash - Target hash (e.g., '#profile')
-	 * @param {string} dialogId - Dialog element ID
-	 * @param {string} triggerId - Element to focus when closing
-	 * @param {string|null} focusFirst - Element to focus when opening (optional)
-	 * @param {boolean} useIncludes - If true, match hash with includes() instead of === (for deep links)
-	 */
-	toggleDialog(event, hash, dialogId, triggerId, focusFirst = null, useIncludes = false) {
-		event.preventDefault();
-
-		const currentHash = window.location.hash;
-		// useIncludes: true = partial match (#archive?year=2024), false = exact match (#profile)
-		const shouldClose = useIncludes ? currentHash.includes(hash) : currentHash === hash;
-
-		if (shouldClose) {
-			closeDialog('#');
-		} else {
-			openDialog(dialogId, triggerId, focusFirst, hash.substring(1));
-		}
-	}
-
-	toggleDebug(event) {
-		event.preventDefault();
-		const debugElement = this.getDebugElement();
-		if (debugElement) {
-			debugElement.checked = !debugElement.checked;
-		}
-	}
-
-	// Tooltip Management
-
-	handleTooltipActiveClass(event) {
-		const { base: hash } = parseHash();
-
-		if (hash) {
-			this.toggleTooltipActiveClass(false);
-		} else if (event.ctrlKey || event.metaKey) {
-			this.toggleTooltipActiveClass(true);
-		}
-	}
 }
-
-// ============================================================================
-// NavigationHandler Base Class
-// ============================================================================
 
 /**
  * Base class for handling vertical and horizontal navigation gestures
@@ -1767,10 +1818,8 @@ class KeyHandler {
 class NavigationHandler {
 	constructor() {
 		// Configuration
-		this.SCROLL_MIN_THRESHOLD = 5;
+		this.SCROLL_MIN_THRESHOLD = 5; // Pixels for swipe direction detection
 	}
-
-	// Navigation Handlers
 
 	/**
 	 * Handle vertical scroll navigation (shared logic)
@@ -2095,29 +2144,29 @@ class HorizontalEdgeScroller {
 		leftEdge.setAttribute('data-edge-scroll-left', id);
 		leftEdge.setAttribute('aria-hidden', 'true');
 		leftEdge.style.cssText = `
-            position: absolute;
-            z-index: 5;
-            display: block;
-            width: ${this.edgeWidth}px;
-            user-select: none;
-            -webkit-user-select: none;
-            inset: 0 auto 0 0;
-            cursor: w-resize;
-        `;
+			position: absolute;
+			z-index: 5;
+			display: block;
+			width: ${this.edgeWidth}px;
+			user-select: none;
+			-webkit-user-select: none;
+			inset: 0 auto 0 0;
+			cursor: w-resize;
+		`;
 
 		const rightEdge = document.createElement('div');
 		rightEdge.setAttribute('data-edge-scroll-right', id);
 		rightEdge.setAttribute('aria-hidden', 'true');
 		rightEdge.style.cssText = `
-            position: absolute;
-            z-index: 5;
-            display: block;
-            width: ${this.edgeWidth}px;
-            user-select: none;
-            -webkit-user-select: none;
-            inset: 0 0 0 auto;
-            cursor: e-resize;
-        `;
+			position: absolute;
+			z-index: 5;
+			display: block;
+			width: ${this.edgeWidth}px;
+			user-select: none;
+			-webkit-user-select: none;
+			inset: 0 0 0 auto;
+			cursor: e-resize;
+		`;
 
 		// Add click handlers for navigation
 		leftEdge.addEventListener('click', () => {
@@ -2462,8 +2511,9 @@ class Popup {
 		}
 
 		const { width, height, left, top } = this.calculateWindowSize(dimensions);
+		const ASPECT_RATIO_TALL_THRESHOLD = 0.85; // Boundary to distinguish 'tall' images
 		const imageAspect = dimensions.width / dimensions.height;
-		const isTallImage = !isVideo && imageAspect < this.ASPECT_RATIO_TALL_THRESHOLD;
+		this.isTallImage = !isVideo && imageAspect < ASPECT_RATIO_TALL_THRESHOLD;
 
 		// Generate popup/tab HTML with shared functionality
 		const html = this.generatePopupHTML(href, isVideo, placeholderUrl, !isVideo);
@@ -2471,7 +2521,7 @@ class Popup {
 		const blobUrl = URL.createObjectURL(blob);
 
 		// If the image is tall, prefer opening a small HTML page in a new tab
-		if (isTallImage) {
+		if (this.isTallImage) {
 			const newTab = window.open(blobUrl, '_blank');
 
 			// If opening a new tab/window failed, revoke blob and fallback inline
@@ -2766,145 +2816,145 @@ class Popup {
 		const styles = document.createElement('style');
 		styles.id = 'media_fallback-styles';
 		styles.textContent = `
-            .media_fallback_overlay {
-                position: fixed;
-                z-index: 300;
-                inset: 0;
-            }
-            .media_fallback_overlay:has(.media_fallback-content video) {
-                background: rgb(0, 0, 0, 0.75);
-            }
-            .media_fallback-wrapper {
-                position: relative;
-                width: 100%;
-                height: 100%;
-                overflow-y: auto;
-                margin-inline: auto;
-                overscroll-behavior: none;
-            }
-            .media_fallback-content {
-                display: flex;
-                position: relative;
-                width: 100%;
-                height: auto;
-                min-height: 100%;
-            }
-            .media_fallback-content img {
-                position: absolute;
-                width: auto;
-                height: auto;
-                max-width: 100svh;
-                max-height: 100svw;
-                inset: 50% 0 0 50%;
-                transform: translate(-50%, -50%) rotate(-90deg);
-                transform-origin: center center;
-                opacity: 1;
-            }
-            .media_fallback-content img:nth-of-type(2) {
-                position: absolute;
-                inset: 50% 0 0 50%;
-            }
-            @media (min-width: 45rem) {
-                .media_fallback-content img {
-                    position: relative;
-                    width: 100%;
-                    height: 100%;
-                    max-width: 100%;
-                    margin: auto;
-                    top: 0;
-                    left: 0;
-                    transform: none;
-                }
-                .media_fallback-content img:nth-of-type(2) {
-                    inset: 0;
-                    height: auto;
-                }
-            }
-            .media_fallback-content.tall-ratio img {
-                position: relative;
-                width: 100%;
-                height: 100%;
-                max-width: 100%;
-                max-height: none;
-                inset: 0 auto auto 0;
-                transform: none;
-                margin: auto;
-            }
-            .media_fallback-content.tall-ratio img:nth-of-type(2) {
-                position: absolute;
-                inset: 0;
-                height: auto;
-                margin: auto;
-            }
-            .media_fallback-content.square-ratio {
-                height: auto;
-            }
-            .media_fallback-content.square-ratio img {
-                position: absolute;
-                width: auto;
-                height: auto;
-                max-height: 100vh;
-                max-width: 100vw;
-                inset: 50% 0 0 50%;
-                transform: translate(-50%, -50%);
-                margin: 0;
-            }
-            .media_fallback-content video {
-                position: relative;
-                width: 100%;
-                height: auto;
-                opacity: 1;
-            }
-            .media_fallback-close-overlay {
-                position: absolute;
-                inset: 0;
-                cursor: zoom-out;
-                z-index: 1;
-            }
-            .media_fallback-close-button {
-                position: fixed;
-                top: 0;
-                right: 50%;
-                transform: translateX(50%);
-                margin-top: var(--modal-button-inset);
-                width: var(--modal-button-size);
-                height: var(--modal-button-size);
-                border-radius: 50%;
-                color: var(--light-70);
-                background: var(--dark-55);
-                backdrop-filter: saturate(1.75) blur(1rem);
-                color: white;
-                border: none;
-                cursor: pointer;
-                z-index: 2;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.5rem;
-                line-height: 1;
-                transition: color 200ms linear, background-color 200ms linear, opacity 300ms ease-out;
-            }
-            .media_fallback-close-button:hover {
-                background: var(--dark-45);
-                color: var(--light-95);
-                transition: color 150ms linear, background-color 150ms linear, opacity 300ms ease-out;
-            }
-            .media_fallback-close-button::after {
-                content: '';
-                position: absolute;
-                inset: 0;
-                border-radius: 50%;
-                background: var(--light-35);
-                transition: background-color 200ms linear;
-            }
-            .media_fallback-close-button:hover::after {
-                background: var(--light-45);
-                transition: background-color 150ms linear;
-            }
-            .media_fallback-close-button.cursor-idle-fade {
-                opacity: 0;
-            }
-        `;
+			.media_fallback_overlay {
+				position: fixed;
+				z-index: 300;
+				inset: 0;
+			}
+			.media_fallback_overlay:has(.media_fallback-content video) {
+				background: rgb(0, 0, 0, 0.75);
+			}
+			.media_fallback-wrapper {
+				position: relative;
+				width: 100%;
+				height: 100%;
+				overflow-y: auto;
+				margin-inline: auto;
+				overscroll-behavior: none;
+			}
+			.media_fallback-content {
+				display: flex;
+				position: relative;
+				width: 100%;
+				height: auto;
+				min-height: 100%;
+			}
+			.media_fallback-content img {
+				position: absolute;
+				width: auto;
+				height: auto;
+				max-width: 100svh;
+				max-height: 100svw;
+				inset: 50% 0 0 50%;
+				transform: translate(-50%, -50%) rotate(-90deg);
+				transform-origin: center center;
+				opacity: 1;
+			}
+			.media_fallback-content img:nth-of-type(2) {
+				position: absolute;
+				inset: 50% 0 0 50%;
+			}
+			@media (min-width: 45rem) {
+				.media_fallback-content img {
+					position: relative;
+					width: 100%;
+					height: 100%;
+					max-width: 100%;
+					margin: auto;
+					top: 0;
+					left: 0;
+					transform: none;
+				}
+				.media_fallback-content img:nth-of-type(2) {
+					inset: 0;
+					height: auto;
+				}
+			}
+			.media_fallback-content.tall-ratio img {
+				position: relative;
+				width: 100%;
+				height: 100%;
+				max-width: 100%;
+				max-height: none;
+				inset: 0 auto auto 0;
+				transform: none;
+				margin: auto;
+			}
+			.media_fallback-content.tall-ratio img:nth-of-type(2) {
+				position: absolute;
+				inset: 0;
+				height: auto;
+				margin: auto;
+			}
+			.media_fallback-content.square-ratio {
+				height: auto;
+			}
+			.media_fallback-content.square-ratio img {
+				position: absolute;
+				width: auto;
+				height: auto;
+				max-height: 100vh;
+				max-width: 100vw;
+				inset: 50% 0 0 50%;
+				transform: translate(-50%, -50%);
+				margin: 0;
+			}
+			.media_fallback-content video {
+				position: relative;
+				width: 100%;
+				height: auto;
+				opacity: 1;
+			}
+			.media_fallback-close-overlay {
+				position: absolute;
+				inset: 0;
+				cursor: zoom-out;
+				z-index: 1;
+			}
+			.media_fallback-close-button {
+				position: fixed;
+				top: 0;
+				right: 50%;
+				transform: translateX(50%);
+				margin-top: var(--modal-button-inset);
+				width: var(--modal-button-size);
+				height: var(--modal-button-size);
+				border-radius: 50%;
+				color: var(--light-70);
+				background: var(--dark-55);
+				backdrop-filter: saturate(1.75) blur(1rem);
+				color: white;
+				border: none;
+				cursor: pointer;
+				z-index: 2;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 1.5rem;
+				line-height: 1;
+				transition: color 200ms linear, background-color 200ms linear, opacity 300ms ease-out;
+			}
+			.media_fallback-close-button:hover {
+				background: var(--dark-45);
+				color: var(--light-95);
+				transition: color 150ms linear, background-color 150ms linear, opacity 300ms ease-out;
+			}
+			.media_fallback-close-button::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				border-radius: 50%;
+				background: var(--light-35);
+				transition: background-color 200ms linear;
+			}
+			.media_fallback-close-button:hover::after {
+				background: var(--light-45);
+				transition: background-color 150ms linear;
+			}
+			.media_fallback-close-button.cursor-idle-fade {
+				opacity: 0;
+			}
+		`;
 		document.head.appendChild(styles);
 	}
 
@@ -3107,6 +3157,7 @@ class Carousel {
 
 		// State
 		this.observer = null;
+		this.preloadingObserver = null;
 		this.activeSlide = null;
 
 		this.init();
@@ -3122,6 +3173,27 @@ class Carousel {
 		this.setupSlidesKeyboardNavigation();
 		this.setupIntersectionObserver();
 		this.setupPreloadingEventListeners();
+		this.setupPreloadingObserver();
+
+		// Register for resize updates to keep pixel thresholds accurate
+		// Pixel-based rootMargins become invalid when viewport dimensions change
+		if (typeof ResizeManager !== 'undefined') {
+			ResizeManager.register(() => this.refreshIntersectionObservers());
+		}
+	}
+
+	/**
+	 * Refresh intersection observers when viewport size changes
+	 * Necessary because pixel-based rootMargins are calculated at creation time
+	 * and do not automatically update when viewport dimensions change
+	 */
+	refreshIntersectionObservers() {
+		// Only the preloading observer needs refresh as it uses pixel margins
+		// (The active slide observer uses 0% which is resolution-independent)
+		if (this.preloadingObserver) {
+			this.preloadingObserver.disconnect();
+			this.setupPreloadingObserver();
+		}
 	}
 
 	// Edge Navigation
@@ -3162,15 +3234,15 @@ class Carousel {
 
 		// Add ARIA live region for screen reader announcements
 		this.controlsEl.innerHTML = `
-                <div data-carousel-nav-wrapper>
-                    <div data-carousel-nav role="tablist" aria-label="Carousel navigation"></div>
-                </div>
-                <ul data-carousel-arrows>
-                    <li><button type="button" aria-label="Previous slide" class="carousel-button-prev"></button></li>
-                    <li><button type="button" aria-label="Next slide" class="carousel-button-next"></button></li>
-                </ul>
-                <div class="sr-only" role="status" aria-live="polite" aria-atomic="true" data-carousel-announcement></div>
-            `;
+			<div data-carousel-nav-wrapper>
+				<div data-carousel-nav role="tablist" aria-label="Carousel navigation"></div>
+			</div>
+			<ul data-carousel-arrows>
+				<li><button type="button" aria-label="Previous slide" class="carousel-button-prev"></button></li>
+				<li><button type="button" aria-label="Next slide" class="carousel-button-next"></button></li>
+			</ul>
+			<div class="sr-only" role="status" aria-live="polite" aria-atomic="true" data-carousel-announcement></div>
+		`;
 		this.carouselEl.appendChild(this.controlsEl);
 
 		this.navEl = this.controlsEl.querySelector('[data-carousel-nav]');
@@ -3404,10 +3476,34 @@ class Carousel {
 		this.observer = new IntersectionObserver(observerCallback, {
 			root: this.carouselEl,
 			rootMargin: '0%',
-			threshold: 0.5
+			threshold: 0.25 // Visibility required to mark slide as active
 		});
 
 		this.slidesEls.forEach((slideEl) => this.observer.observe(slideEl));
+	}
+
+	setupPreloadingObserver() {
+		const LAZY_LOAD_THRESHOLD = 0.5; // Load images when within 50% of viewport
+		const margin = App.getPixelThreshold?.(`${LAZY_LOAD_THRESHOLD * 100}%`, true) || '0px';
+
+		const observerCallback = (entries) => {
+			for (let i = 0; i < entries.length; i++) {
+				const entry = entries[i];
+				if (entry.isIntersecting) {
+					this.preloadSlideImages(entry.target);
+				}
+			}
+		};
+
+		this.preloadingObserver = new IntersectionObserver(observerCallback, {
+			// In Safari, root must be the actual scroll container for reliable rootMargin
+			root: this.slidesContainerEl,
+			// Expand the root margin horizontally based on the threshold in pixels
+			rootMargin: `0px ${margin} 0px ${margin}`,
+			threshold: 0.01 // Minimal intersection to trigger preloading
+		});
+
+		this.slidesEls.forEach((slideEl) => this.preloadingObserver.observe(slideEl));
 	}
 
 	// Navigation Methods
@@ -3443,8 +3539,10 @@ class Carousel {
 	 * @param {HTMLImageElement} img - Image element to preload
 	 */
 	preloadImage(img) {
-		if (img && img.getAttribute('loading') === 'lazy') {
-			img.setAttribute('loading', 'eager');
+		if (img && img.hasAttribute('loading')) {
+			// Removing the attribute is more reliable for Safari preloading
+			// than switching to 'eager' and ensures the CSS placeholder is cleared
+			img.removeAttribute('loading');
 		}
 	}
 
@@ -3503,10 +3601,15 @@ class Carousel {
 	// Cleanup
 
 	destroy() {
-		// Disconnect intersection observer
+		// Disconnect intersection observers
 		if (this.observer) {
 			this.observer.disconnect();
 			this.observer = null;
+		}
+
+		if (this.preloadingObserver) {
+			this.preloadingObserver.disconnect();
+			this.preloadingObserver = null;
 		}
 
 		// Remove keyboard event listeners from slide links
@@ -3750,7 +3853,7 @@ class MenuDropdownNavigator {
 		const dropdown = document.querySelector(this.dropdownSelector);
 		if (!dropdown) return;
 
-		const closeButton = App.getEl('dropdown-menu-toggle-button-close');
+		const closeButton = App.getEl(DIALOG_CONFIG.MENU.close);
 
 		// Right arrow: go to close button (only if currently in dropdown)
 		if (event.key === 'ArrowRight') {
@@ -4055,7 +4158,7 @@ function initializeTimeline(startObserver = true) {
 	const TIMELINE_CONFIG = {
 		labels: ['2024-21', '2021-19', '2019-18', 'elsewhen'],
 		containerId: 'horizontal-timeline',
-		hashPrefix: '#archive',
+		hashPrefix: NAVIGATION_HASHES.ARCHIVE,
 		scrollOffset: 24, // px from top when scrolling to sections
 		scrollEndTimeout: 300, // fallback for browsers without scrollend event
 		observerRootMargin: '-50% 0% -50% 0%', // centre detection zone vertically
@@ -4165,7 +4268,7 @@ App.initializeTimeline = initializeTimeline;
 function setupTimelineFocusTrap() {
 	const timelineWrapper = document.querySelector('#horizontal-timeline-wrapper');
 	const returnButton = document.querySelector('#horizontal-timeline-return');
-	const skipLink = document.querySelector('#modal-archive-timline-skip-link');
+	const skipLink = document.querySelector('#modal-archive-timeline-skip-link');
 
 	if (!timelineWrapper || !returnButton) {
 		console.warn('Timeline: Required elements not found');
@@ -4267,9 +4370,23 @@ function setupTimelineFocusTrap() {
  * Initialise dialog elements with ARIA attributes and backdrops
  */
 function initializeDialogs() {
-	const dialogConfigs = [DIALOG_CONFIG.PROFILE, DIALOG_CONFIG.ARCHIVE, DIALOG_CONFIG.MENU];
+	const configs = [
+		{
+			id: DIALOG_CONFIG.PROFILE.id,
+			trigger: DIALOG_CONFIG.PROFILE.trigger
+		},
+		{
+			id: DIALOG_CONFIG.ARCHIVE.id,
+			trigger: DIALOG_CONFIG.ARCHIVE.trigger
+		},
+		{
+			id: DIALOG_CONFIG.MENU.id,
+			trigger: DIALOG_CONFIG.MENU.trigger,
+			close: DIALOG_CONFIG.MENU.close
+		}
+	];
 
-	for (const config of dialogConfigs) {
+	for (const config of configs) {
 		const dialogEl = App.getEl(config.id);
 		if (dialogEl) {
 			if (!dialogEl.getAttribute('role')) {
@@ -4315,19 +4432,19 @@ const applyNoAnimation = () => {
 	const SKIP_ANIMATION_CLASS = 'skip-animation';
 	const elements = document.querySelectorAll(
 		`.intro__logo--animating,
-            .intro__name--animating,
-            .intro__name--animating .intro__name-frame>p,
-            .intro__title--animating,
-            .intro__title--animating>p,
-            .intro__title--animating .intro__animated-text span,
-            .intro__title--animating .intro__animated-text--alt span,
-            .availability--animating,
-            .availability--animating .availability__background,
-            .availability--animating .availability__content,
-            .menu--animating .menu__background,
-            .menu--animating .menu__email,
-            .menu--animating .menu__link,
-            .menu--animating #dropdown-menu-toggle`
+		.intro__name--animating,
+		.intro__name--animating .intro__name-frame>p,
+		.intro__title--animating,
+		.intro__title--animating>p,
+		.intro__title--animating .intro__animated-text span,
+		.intro__title--animating .intro__animated-text--alt span,
+		.availability--animating,
+		.availability--animating .availability__background,
+		.availability--animating .availability__content,
+		.menu--animating .menu__background,
+		.menu--animating .menu__email,
+		.menu--animating .menu__link,
+		.menu--animating #dropdown-menu-toggle`
 	);
 
 	for (let i = 0; i < elements.length; i++) {
@@ -4366,7 +4483,7 @@ function toggleFullscreen() {
 		const requestMethod =
 			document.documentElement.requestFullscreen ||
 			document.documentElement.webkitRequestFullscreen ||
-			document.documentElement.mozRequestFullScreen ||
+			document.documentElement.mozRequestFullscreen ||
 			document.documentElement.msRequestFullscreen;
 
 		if (requestMethod) {
@@ -4393,20 +4510,13 @@ App.toggleFullscreen = toggleFullscreen;
 function setupFullscreenSync() {
 	const syncHandler = () => {
 		const fullscreenInput = App.getEl('fullscreen');
-		const isFullscreen = !!(
-			document.fullscreenElement ||
-			document.webkitFullscreenElement ||
-			document.mozFullScreenElement ||
-			document.msFullscreenElement
-		);
+		const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement);
 		if (fullscreenInput) fullscreenInput.checked = isFullscreen;
 	};
 
 	// Listen for standard and vendor-prefixed fullscreen events
 	document.addEventListener('fullscreenchange', syncHandler);
 	document.addEventListener('webkitfullscreenchange', syncHandler);
-	document.addEventListener('mozfullscreenchange', syncHandler);
-	document.addEventListener('MSFullscreenChange', syncHandler);
 
 	// Set initial state
 	syncHandler();
@@ -4720,29 +4830,159 @@ function initializePopups() {
  * Adds 'loaded' class when images intersect viewport or are already loaded
  */
 function initializeImageLazyLoading() {
-	const observer = new IntersectionObserver((entries) => {
-		entries.forEach((entry) => {
-			if (entry.isIntersecting && entry.target.complete) {
-				entry.target.classList.add('loaded');
-				observer.unobserve(entry.target);
+	const LAZY_LOAD_THRESHOLD = 0.5; // Load images when within 50% of viewport
+
+	// Dynamic values that need recalculation on resize
+	let marginV = App.getPixelThreshold?.(`${LAZY_LOAD_THRESHOLD * 100}%`) || '0px';
+	let marginH = App.getPixelThreshold?.(`${LAZY_LOAD_THRESHOLD * 100}%`, true) || '0px';
+
+	// Cache observers by their root element to avoid unnecessary object creation
+	const observers = new Map();
+
+	/**
+	 * Get or create an IntersectionObserver for a specific scroll container
+	 * @param {HTMLElement|null} root - The scrollable parent or null for viewport
+	 * @returns {IntersectionObserver}
+	 */
+	function getObserver(root) {
+		if (observers.has(root)) return observers.get(root);
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					const img = entry.target;
+					const picture = img.parentElement;
+
+					if (entry.isIntersecting) {
+						// Proactively trigger load by removing lazy loading
+						// Removing the attribute is more reliable than switching to eager in some browsers
+						// It also explicitly clears CSS placeholders that use the [loading='lazy'] selector
+						if (img.hasAttribute('loading')) {
+							img.removeAttribute('loading');
+						}
+
+						// If image is already complete, handle loaded state immediately
+						if (img.complete) {
+							handleLoaded(img, picture);
+							observer.unobserve(img);
+						}
+					}
+				});
+			},
+			{
+				root: root,
+				// Percentages in rootMargin are known to be buggy in iOS Safari
+				// We use calculated pixel values for consistent behavior
+				rootMargin: `${marginV} ${marginH}`
+			}
+		);
+
+		observers.set(root, observer);
+		return observer;
+	}
+
+	function ensurePictureWrapper(img) {
+		let picture;
+
+		if (img.parentElement?.tagName === 'PICTURE') {
+			picture = img.parentElement;
+		} else {
+			picture = document.createElement('picture');
+			img.parentNode.insertBefore(picture, img);
+			picture.appendChild(img);
+		}
+
+		// Add placeholder if it doesn't exist
+		if (!picture.querySelector('.img-placeholder')) {
+			const placeholder = document.createElement('span');
+			placeholder.className = 'img-placeholder';
+			picture.appendChild(placeholder);
+		}
+
+		return picture;
+	}
+
+	function handleLoaded(img, picture) {
+		if (picture.classList.contains('loaded')) return;
+
+		picture.classList.add('loaded');
+
+		const placeholder = picture.querySelector('.img-placeholder');
+		if (!placeholder) return;
+
+		// Robust placeholder removal with safety timeout
+		let removed = false;
+		const removePlaceholder = () => {
+			if (removed) return;
+			removed = true;
+			requestAnimationFrame(() => {
+				placeholder.remove();
+			});
+		};
+
+		// Listen for transition end (fade out)
+		placeholder.addEventListener('transitionend', (e) => {
+			if (e.propertyName === 'opacity') {
+				removePlaceholder();
 			}
 		});
-	});
 
-	document.querySelectorAll('[loading="lazy"]').forEach((img) => {
-		if (img.complete) {
-			img.classList.add('loaded');
-		} else {
-			observer.observe(img);
-			img.addEventListener(
-				'load',
-				() => {
-					img.classList.add('loaded');
-				},
-				{ once: true }
-			);
-		}
-	});
+		// Fallback: Force removal after transition duration + buffer
+		// Approx 1000ms to be safe
+		setTimeout(removePlaceholder, 1000);
+	}
+
+	/**
+	 * Refresh all image lazy loading observers when viewport size changes
+	 * Re-calculates pixel thresholds and re-observes qualifying images
+	 */
+	function refreshObservers() {
+		// 1. Disconnect and clear all existing observers
+		observers.forEach((obs) => obs.disconnect());
+		observers.clear();
+
+		// 2. Recalculate margins with fresh viewport dimensions
+		marginV = App.getPixelThreshold?.(`${LAZY_LOAD_THRESHOLD * 100}%`) || '0px';
+		marginH = App.getPixelThreshold?.(`${LAZY_LOAD_THRESHOLD * 100}%`, true) || '0px';
+
+		// 3. Process all images that still have the loading="lazy" attribute
+		document.querySelectorAll('img[loading="lazy"]').forEach((img) => {
+			const picture = ensurePictureWrapper(img);
+
+			// Handle images that might already be loaded (e.g. from cache)
+			if (img.complete) {
+				handleLoaded(img, picture);
+			} else {
+				// Find the correct scroll container for this image
+				// This is critical for iOS Safari to respect rootMargin inside modals
+				const scrollParent = App.getScrollParent?.(img) || null;
+				const observer = getObserver(scrollParent);
+				observer.observe(img);
+
+				// Add one-time load listener if not already added
+				if (!img.dataset.loadListenerAdded) {
+					img.addEventListener(
+						'load',
+						() => {
+							if (img.complete && !img.hasAttribute('loading')) {
+								handleLoaded(img, picture);
+							}
+						},
+						{ once: true }
+					);
+					img.dataset.loadListenerAdded = 'true';
+				}
+			}
+		});
+	}
+
+	// 1. Perform initial setup
+	refreshObservers();
+
+	// 2. Register for future updates with centralised resize manager
+	if (typeof ResizeManager !== 'undefined') {
+		ResizeManager.register(refreshObservers);
+	}
 }
 
 // ============================================================================
@@ -4849,7 +5089,7 @@ function initializeGlobalEventHandlers() {
 			}
 
 			// 3. Handle skip-to-menu link (navigate to menu)
-			if (event.target.closest('a[href="#menu"].skip-link')) {
+			if (event.target.matches('a[href="#menu"].skip-link')) {
 				event.preventDefault();
 				// Open the menu dropdown programmatically instead of relying on hash change
 				// This ensures proper focus management and dialog activation
@@ -4858,13 +5098,13 @@ function initializeGlobalEventHandlers() {
 					'dropdown-menu-toggle-button-close'
 				);
 				if (menuToggleOpen) {
-					openDialog('dropdown-menu-toggle', menuToggleOpen, menuToggleClose, 'menu');
+					openDialog(DIALOG_CONFIG.MENU.id, menuToggleOpen, menuToggleClose, 'menu');
 				}
 				return;
 			}
 
 			// 4. Handle archive modal skip link (skip to timeline navigation)
-			if (event.target.closest('#modal-archive-timline-skip-link')) {
+			if (event.target.matches('#modal-archive-timeline-skip-link')) {
 				event.preventDefault();
 				App.isTimelineSkipLinkActivated = true;
 				requestAnimationFrame(() => {
@@ -4877,7 +5117,7 @@ function initializeGlobalEventHandlers() {
 			}
 
 			// 5. Handle timeline return button
-			if (event.target.closest('#horizontal-timeline-return')) {
+			if (event.target.matches('#horizontal-timeline-return')) {
 				event.preventDefault();
 				App.exitTimelineFocusTrap?.();
 				return;

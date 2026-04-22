@@ -20,6 +20,7 @@
 	display: none;
 }
 
+picture > img[loading='lazy'],
 [loading='lazy'] {
 	opacity: 1;
 }

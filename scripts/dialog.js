@@ -612,9 +612,6 @@ aria.Dialog.prototype.replace = function (newDialogId, newFocusAfterClosed, newF
 
 	// Create new dialog
 	new aria.Dialog(newDialogId, focusAfterClosed, newFocusFirst, hash);
-
-	// Initialise new modal-specific features
-	aria.callLifecycleHook(newDialogId, 'initialize');
 };
 
 /**

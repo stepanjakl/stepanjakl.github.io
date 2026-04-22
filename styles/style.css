@@ -189,7 +189,7 @@ html {
 	z-index: 999;
 }
 
-#modal-archive-timline-skip-link {
+#modal-archive-timeline-skip-link {
 	bottom: 0;
 	right: 0;
 	transform: translateY(calc(100% + var(--modal-button-gap)));
@@ -1385,9 +1385,23 @@ body {
 	margin-bottom: 0.625rem;
 }
 
+.tooltip .tooltip__text--top-left {
+	bottom: 100%;
+	margin-bottom: 0.625rem;
+	left: 100%;
+	transform: translateX(-100%);
+}
+
 .tooltip .tooltip__text--bottom {
 	top: 100%;
 	margin-top: 0.625rem;
+}
+
+.tooltip .tooltip__text--bottom-left {
+	top: 100%;
+	margin-top: 0.625rem;
+	left: 100%;
+	transform: translateX(-100%);
 }
 
 .tooltip .tooltip__text--left {
@@ -1560,19 +1574,23 @@ footer > div > div {
 
 /* Lazy loading images with fade-in transition */
 
-[loading='lazy'] {
+picture {
+	position: relative;
+	display: block;
+}
+
+picture > img[loading='lazy'] {
 	opacity: 0;
 	transition: opacity var(--anim-segment) var(--ease-in-quad);
 }
 
-[loading='lazy'].loaded {
+picture.loaded > img[loading='lazy'] {
 	opacity: 1;
 }
 
-/* Image placeholder - Seamless grid with randomized cell opacities */
+/* Placeholder for lazy loading images */
 
-:has(> img[loading='lazy'])::before {
-	content: '';
+.img-placeholder {
 	position: absolute;
 	inset: 0;
 
@@ -1585,12 +1603,11 @@ footer > div > div {
 	pointer-events: none;
 	z-index: 5;
 	opacity: 1;
+	transition: opacity var(--anim-segment) var(--ease-in-quad) var(--anim-segment);
 }
 
-/* Hide placeholder when image has loaded */
-:has(> img[loading='lazy'].loaded)::before {
+picture.loaded .img-placeholder {
 	opacity: 0;
-	transition: opacity var(--anim-segment) var(--ease-in-quad) var(--anim-segment);
 }
 
 @keyframes invert {

@@ -601,7 +601,6 @@ class HorizontalTimeline extends HTMLElement {
 	 */
 	startIntersectionObserver() {
 		if (this.intersectionObserver) {
-			console.warn('Timeline: Observer already running');
 			return;
 		}
 
