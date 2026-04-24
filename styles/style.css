@@ -24,6 +24,9 @@
 	--breakpoint-xl: 90rem;
 	--breakpoint-2xl: 105rem;
 	--breakpoint-3xl: 160rem;
+
+	/* Browser default dark mode support. Redundant with meta tag, but ensures dark mode works even if CSS loads after HTML parsing. Gives browser a chance to apply default dark styles before custom CSS arrives */
+	color-scheme: light dark;
 }
 
 main {

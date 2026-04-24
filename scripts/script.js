@@ -667,6 +667,46 @@ function deferredFocus(focusId) {
 }
 App.deferredFocus = deferredFocus;
 
+// ============================================================================
+// Event Delegation Handlers
+// ============================================================================
+
+/**
+ * Global click event handler for all data-action elements
+ * Centralized event handling prevents timing issues with deferred scripts
+ */
+/**
+ * Context menu handler for special right-click actions (right-click to hear name pronunciation)
+ * Integrated into click delegation system via initializeGlobalEventHandlers()
+ */
+function handleContextMenu(e) {
+	const target = e.target.closest('[data-action]');
+	if (!target || target.id !== 'intro-name') return;
+
+	e.preventDefault();
+
+	// Speech synthesis for name pronunciation
+	if ('speechSynthesis' in window) {
+		const msg = new SpeechSynthesisUtterance();
+		msg.volume = 0.5;
+		msg.lang = 'cs-CZ';
+		msg.voice = speechSynthesis.getVoices().find((voice) => voice.name === 'Zuzana');
+		msg.text = 'Štěpán Jákl';
+		speechSynthesis.speak(msg);
+	}
+}
+
+/**
+ * Note: Global keyboard shortcuts are handled by the KeyHandler class which:
+ * - Handles Cmd/Ctrl+P/A/M/D keyboard shortcuts with menu link navigation
+ * - Manages Cmd/Ctrl+T/E/F for dropdown menu shortcuts (Mode, Ambience, Fullscreen)
+ * - Handles Escape key for closing dialogs and popups
+ * - Manages tooltip display when Cmd/Ctrl is pressed
+ * - Respects animation states to prevent premature interaction
+ *
+ * No separate global keydown handler needed - KeyHandler provides comprehensive coverage
+ */
+
 // Public API methods (populated later during DOMContentLoaded, called from HTML inline handlers)
 App.timeline = null;
 App.textHighlighter = null;
@@ -709,6 +749,9 @@ class ThemeManager {
 		this.STORAGE_KEY = 'theme-mode';
 		this.DISABLE_TRANSITIONS_CLASS = 'disable-transitions';
 
+		// System preference listener reference (for potential cleanup)
+		this.mediaQueryListenerReference = null;
+
 		// DOM Cache (lazy initialised)
 		this.modeCheckboxElement = null;
 
@@ -734,14 +777,61 @@ class ThemeManager {
 			return;
 		}
 
-		// Apply saved theme on page load
+		// Apply saved theme on page load (or system preference if none saved)
 		this.applySavedTheme();
 
-		// Listen for theme changes and persist them
+		// Listen for manual theme changes and persist them
 		modeCheckbox.addEventListener('change', () => {
 			this.saveTheme();
 			this.disableTransitionsDuringSwitch();
 		});
+
+		// Listen for system preference changes
+		// Allows theme to update automatically if user changes system preference while in Automatic mode
+		this.setupSystemPreferenceListener();
+	}
+
+	// System Preference Detection
+
+	setupSystemPreferenceListener() {
+		if (!window.matchMedia) {
+			// Browser doesn't support matchMedia (very old browsers)
+			return;
+		}
+
+		// Create media query listener for system dark mode preference
+		const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+		// Handler for when system preference changes
+		const handleSystemPreferenceChange = (_event) => {
+			const modeCheckbox = this.getModeCheckbox();
+			if (!modeCheckbox) return;
+
+			// Only auto-update if user is in "Automatic" mode (no saved preference)
+			const savedTheme = localStorage.getItem(this.STORAGE_KEY);
+			if (!savedTheme) {
+				// Automatic mode: Dark mode is always the default, system preference is ignored
+				// This ensures dark mode regardless of system settings
+				modeCheckbox.checked = false; // false = dark mode
+			}
+		};
+
+		// Register listener with modern addEventListener syntax (supported since 2020+)
+		// Fallback: also support older addListener method for older browsers
+		if (darkModeQuery.addEventListener) {
+			darkModeQuery.addEventListener('change', handleSystemPreferenceChange);
+			this.mediaQueryListenerReference = {
+				query: darkModeQuery,
+				handler: handleSystemPreferenceChange
+			};
+		} else if (darkModeQuery.addListener) {
+			// Deprecated but supported in older browsers (<2020)
+			darkModeQuery.addListener(handleSystemPreferenceChange);
+			this.mediaQueryListenerReference = {
+				query: darkModeQuery,
+				handler: handleSystemPreferenceChange
+			};
+		}
 	}
 
 	// Theme Management
@@ -754,13 +844,13 @@ class ThemeManager {
 			const savedTheme = localStorage.getItem(this.STORAGE_KEY);
 
 			if (savedTheme === 'light') {
-				// Light mode: checkbox should be checked
+				// Explicit light mode: checkbox should be checked
 				modeCheckbox.checked = true;
-			} else if (savedTheme === 'dark') {
-				// Dark mode: checkbox should be unchecked
+			} else {
+				// Dark mode is default: either explicit 'dark' or no saved preference
+				// This means dark mode is the default regardless of system preference
 				modeCheckbox.checked = false;
 			}
-			// If no saved preference, leave checkbox in its default state
 		} catch (error) {
 			console.warn('Failed to load theme preference:', error);
 		}
@@ -2116,7 +2206,9 @@ class HorizontalEdgeScroller {
 			this.onResizeBound = this.onResize.bind(this);
 			document.addEventListener('mousemove', this.handleMouseMoveBound);
 			// Use centralised resize manager instead of direct window listener
-			this.unregisterResize = ResizeManager.register(this.onResizeBound);
+			if (typeof ResizeManager !== 'undefined') {
+				this.unregisterResize = ResizeManager.register(this.onResizeBound);
+			}
 			this.onResize();
 		}
 	}
@@ -4239,7 +4331,9 @@ function initializeTimeline(startObserver = true) {
 		handleResize();
 
 		// Register with centralised ResizeManager for cleanup and consistency
-		ResizeManager.register(handleResize);
+		if (typeof ResizeManager !== 'undefined') {
+			ResizeManager.register(handleResize);
+		}
 	};
 
 	// Store initialiser on timeline instance for external access
@@ -5066,10 +5160,131 @@ function initializeGlobalEventHandlers() {
 		}
 	});
 
-	// Single document click handler for multiple concerns
+	// Single document click handler for all click concerns using event delegation
 	document.addEventListener(
 		'click',
 		(event) => {
+			// First, handle data-action attributes for centralized event handling
+			// This handles: copy-name, copy-email, open-profile, open-archive, etc.
+			const dataActionTarget = event.target.closest('[data-action]');
+			if (dataActionTarget) {
+				const action = dataActionTarget.dataset.action;
+				switch (action) {
+					case 'copy-name': {
+						event.preventDefault();
+						(async () => {
+							const copied = await copyToClipboard('Štěpán Jákl');
+							if (copied) {
+								const status = document.getElementById('name-copy-status');
+								if (status) {
+									status.textContent = 'Copied to clipboard';
+									setTimeout(() => (status.textContent = ''), 2000);
+								}
+							}
+						})();
+						return;
+					}
+
+					case 'copy-email': {
+						event.preventDefault();
+						(async () => {
+							const copied = await copyToClipboard('stepan.jakl@icloud.com');
+							if (copied) {
+								const status = document.getElementById('email-copy-status');
+								if (status) {
+									status.textContent = 'Copied to clipboard';
+									setTimeout(() => (status.textContent = ''), 2000);
+								}
+							}
+						})();
+						return;
+					}
+
+					case 'external-link':
+						event.preventDefault();
+						window.open(dataActionTarget.getAttribute('href'), '_blank');
+						return;
+
+					case 'open-profile':
+						event.preventDefault();
+						openDialog(DIALOG_CONFIG.PROFILE.id, dataActionTarget, null, 'profile');
+						return;
+
+					case 'open-archive':
+						event.preventDefault();
+						openDialog(DIALOG_CONFIG.ARCHIVE.id, dataActionTarget, null, 'archive');
+						return;
+
+					case 'close-modal':
+						event.preventDefault();
+						closeDialog('#');
+						return;
+
+					case 'toggle-menu':
+						event.preventDefault();
+						openDialog(
+							DIALOG_CONFIG.MENU.id,
+							dataActionTarget,
+							'dropdown-menu-toggle-button-close',
+							'menu'
+						);
+						return;
+
+					case 'toggle-fullscreen': {
+						event.preventDefault();
+						// Call toggleFullscreen to actually enter/exit fullscreen
+						// The checkbox state is synced by setupFullscreenSync() listener
+						App.toggleFullscreen();
+						return;
+					}
+
+					case 'toggle-ambience': {
+						event.preventDefault();
+						const ambience = document.getElementById('ambience');
+						if (ambience) {
+							ambience.checked = !ambience.checked;
+							// Dispatch change event to trigger audio.js listener for persistence
+							ambience.dispatchEvent(new Event('change', { bubbles: true }));
+						}
+						return;
+					}
+
+					case 'toggle-mode': {
+						event.preventDefault();
+						const mode = document.getElementById('mode');
+						if (mode) {
+							mode.checked = !mode.checked;
+							// Dispatch change event to trigger ThemeManager listener for persistence
+							mode.dispatchEvent(new Event('change', { bubbles: true }));
+						}
+						return;
+					}
+
+					case 'toggle-debug': {
+						event.preventDefault();
+						const debug = document.getElementById('debug');
+						if (debug) {
+							debug.checked = !debug.checked;
+							// Debug toggle purely visual - no additional logic needed
+						}
+						return;
+					}
+
+					case 'toggle-animations': {
+						event.preventDefault();
+						const animations = document.getElementById('animations');
+						if (animations) {
+							animations.checked = !animations.checked;
+							// Dispatch change event to trigger AnimationPreferenceManager listener for persistence
+							animations.dispatchEvent(new Event('change', { bubbles: true }));
+						}
+						return;
+					}
+				}
+			}
+
+			// Then handle other click concerns (popup links, skip links, timeline, etc.)
+
 			// 1. Clear touch button primed states when user taps elsewhere
 			if (isTouchDevice) {
 				const primedElements = document.querySelectorAll(
@@ -5189,6 +5404,29 @@ function initializeGlobalEventHandlers() {
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
+	/* App Initialization & Animation Fix */
+
+	// Ensure animations state is applied on page load
+	// This fixes the issue where animations don't skip on first interaction
+	const animationsCheckbox = document.getElementById('animations');
+	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+	if (animationsCheckbox) {
+		if (prefersReducedMotion.matches) {
+			animationsCheckbox.checked = false;
+		}
+
+		// Dispatch change event to apply initial animation state
+		animationsCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+	}
+
+	// Setup event delegation for all data-action handlers
+	// This eliminates "App is not defined" errors by centralizing event handling
+	// Note: Don't register click handler here - it's already registered in initializeGlobalEventHandlers
+	// to avoid duplicate listeners. Only register context menu handler.
+	// Keyboard shortcuts are handled by KeyHandler class which provides comprehensive coverage.
+	document.addEventListener('contextmenu', handleContextMenu, true);
+
 	/* Core Initialisation */
 
 	initializeDialogs();
@@ -5309,11 +5547,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	/* Resize Handler Registration */
 
 	// Register timeline positioning with centralised resize manager
-	ResizeManager.register(() => {
-		if (App.timeline) {
-			App.positionTimeline();
-		}
-	});
+	if (typeof ResizeManager !== 'undefined') {
+		ResizeManager.register(() => {
+			if (App.timeline) {
+				App.positionTimeline();
+			}
+		});
+	}
 
 	// Initialize menu hover logic (Safari fix + focus management)
 	initializeMenuGroupHoverLogic();

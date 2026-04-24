@@ -173,6 +173,10 @@
 				rel="stylesheet"
 				href="styles/noscript.css" />
 		</noscript>
+		<!-- Early App namespace initialization to prevent "App is not defined" errors -->
+		<script>
+			window.App = window.App || { initialized: false, debug: console };
+		</script>
 		<!-- Structured data (JSON-LD schema) - Person -->
 		<script type="application/ld+json">
 			{
@@ -320,26 +324,12 @@
 					<!-- Left column: Name & logo -->
 					<div class="intro__left">
 						<h1
+							id="intro-name"
 							class="intro__name intro__name--animating tooltip highlight has-corners"
 							tabindex="0"
-							onkeydown="
-								if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
-									event.preventDefault();
-									this.click();
-								}
-							"
-							oncontextmenu="
-								if ('speechSynthesis' in window) {
-									let msg = new SpeechSynthesisUtterance();
-									msg.volume = 0.5;
-									msg.lang = 'cs-CZ';
-									msg.voice = speechSynthesis.getVoices().filter((voice) => voice.name === 'Zuzana')[0];
-									msg.text = 'Štěpán Jákl';
-									speechSynthesis.speak(msg);
-								}
-							"
+							data-action="copy-name"
 							role="button"
-							aria-label="Activate to copy name to clipboard"
+							aria-label="L-click to copy name to clipboard / R-click to pronounce"
 							aria-describedby="name-copy-status">
 							<!-- <span class="sr-only" lang="cs">Štěpán Jákl</span> -->
 							<div
@@ -474,16 +464,7 @@
 							<div class="tooltip">
 								<a
 									href="https://cal.com/stepanjakl"
-									onclick="
-										App.handleTouchButtonClick(
-											this,
-											event,
-											() => {
-												window.open(this.getAttribute('href'), '_blank');
-											},
-											true
-										)
-									"
+									data-action="external-link"
 									target="_blank"
 									aria-label="Open to new opportunities. Book a virtual meeting"
 									class="availability__button">
@@ -508,6 +489,7 @@
 							<button
 								type="button"
 								class="menu__item menu__email tooltip"
+								data-action="copy-email"
 								aria-label="Contact me via email. Click to copy my email address"
 								aria-describedby="email-copy-status"
 								style="--i: 0">
@@ -532,11 +514,7 @@
 								<a
 									href="#profile"
 									id="menu-link-profile"
-									onclick="
-										App.handleTouchButtonClick(this, event, () => {
-											openDialog('modal-profile', this, null, 'profile');
-										})
-									"
+									data-action="open-profile"
 									aria-label="Profile. Learn more about me. Keyboard shortcut: Command P"
 									class="menu__item menu__link menu__link--profile tooltip"
 									style="--i: 1">
@@ -564,11 +542,7 @@
 								<a
 									href="#archive"
 									id="menu-link-archive"
-									onclick="
-										App.handleTouchButtonClick(this, event, () => {
-											openDialog('modal-archive', this, null, 'archive');
-										})
-									"
+									data-action="open-archive"
 									aria-label="Archive. Explore snippets of my past work. Keyboard shortcut: Command A"
 									class="menu__item menu__link tooltip"
 									style="--i: 2">
@@ -598,19 +572,13 @@
 								aria-label="Dropdown menu toggle">
 								<a
 									href="#menu"
-									onclick="
-										event.preventDefault();
-										openDialog('dropdown-menu-toggle', this, 'dropdown-menu-toggle-button-close', 'menu');
-									"
+									data-action="toggle-menu"
 									id="dropdown-menu-toggle-button-open"
 									class="dropdown-menu__button-open"
 									aria-label="Open dropdown menu"></a>
 								<a
 									href="#"
-									onclick="
-										event.preventDefault();
-										closeDialog('#');
-									"
+									data-action="close-modal"
 									id="dropdown-menu-toggle-button-close"
 									class="dropdown-menu__button-close"
 									aria-label="Close dropdown menu"></a>
@@ -634,10 +602,7 @@
 								<a
 									href="#"
 									tabindex="-1"
-									onclick="
-										event.preventDefault();
-										closeDialog('#');
-									"
+									data-action="close-modal"
 									id="underlay-menu"
 									class="underlay underlay--menu"
 									aria-label="Close menu"></a>
@@ -692,12 +657,7 @@
 											for="mode"
 											tabindex="0"
 											class="dropdown-menu__toggle"
-											onclick="App.deferredFocus('dropdown-menu-dark-mode')"
-											onkeydown="
-												if (event.key === 'Enter') {
-													App.keyActivate('mode', 'dropdown-menu-dark-mode');
-												}
-											">
+											data-action="toggle-mode">
 											<svg>
 												<use href="images/icons.svg#menu-light-mode"></use>
 											</svg>
@@ -712,12 +672,7 @@
 											for="mode"
 											tabindex="0"
 											class="dropdown-menu__toggle"
-											onclick="App.deferredFocus('dropdown-menu-light-mode')"
-											onkeydown="
-												if (event.key === 'Enter') {
-													App.keyActivate('mode', 'dropdown-menu-light-mode');
-												}
-											">
+											data-action="toggle-mode">
 											<svg>
 												<use href="images/icons.svg#menu-dark-mode"></use>
 											</svg>
@@ -732,13 +687,7 @@
 											for="ambience"
 											tabindex="0"
 											class="dropdown-menu__toggle"
-											onclick="App.toggleAmbience(event)"
-											onkeydown="
-												if (event.key === 'Enter') {
-													document.getElementById('ambience').checked = !document.getElementById('ambience').checked;
-													document.getElementById('ambience').dispatchEvent(new Event('change', { bubbles: true }));
-												}
-											">
+											data-action="toggle-ambience">
 											<figure class="dropdown-menu__state-indicator"></figure>
 											<svg aria-hidden="true"></svg>
 											<span class="hidden ambience-checked:flex text-sm">Ambience off</span>
@@ -753,12 +702,7 @@
 											for="fullscreen"
 											tabindex="0"
 											class="dropdown-menu__toggle"
-											onclick="App.toggleFullscreen()"
-											onkeydown="
-												if (event.key === 'Enter') {
-													App.toggleFullscreen();
-												}
-											">
+											data-action="toggle-fullscreen">
 											<figure class="dropdown-menu__state-indicator"></figure>
 											<svg class="fullscreen-checked:hidden flex">
 												<use href="images/icons.svg#menu-fullscreen"></use>
@@ -780,16 +724,7 @@
 												for="debug"
 												tabindex="0"
 												class="dropdown-menu__toggle"
-												onkeydown="
-													if (event.key === 'Enter') {
-														App.keyActivate('debug');
-													}
-												"
-												onclick="
-													App.handleTouchButtonClick(this, event, () => {
-														App.keyActivate('debug');
-													})
-												">
+												data-action="toggle-debug">
 												<figure class="dropdown-menu__state-indicator"></figure>
 												<div>
 													<svg class="debug-checked:hidden flex">
@@ -807,16 +742,7 @@
 												for="animations"
 												tabindex="0"
 												class="dropdown-menu__toggle"
-												onkeydown="
-													if (event.key === 'Enter') {
-														App.keyActivate('animations');
-													}
-												"
-												onclick="
-													App.handleTouchButtonClick(this, event, () => {
-														App.keyActivate('animations');
-													})
-												">
+												data-action="toggle-animations">
 												<figure class="dropdown-menu__state-indicator"></figure>
 												<div>
 													<svg class="hidden reduce-checked:flex">
@@ -850,10 +776,7 @@
 							<div class="modal__controls">
 								<a
 									href="#"
-									onclick="
-										event.preventDefault();
-										closeDialog('#');
-									"
+									data-action="close-modal"
 									class="modal__close-button"
 									aria-label="Close modal">
 									<svg>
@@ -1158,10 +1081,7 @@
 							<div class="modal__controls">
 								<a
 									href="#"
-									onclick="
-										event.preventDefault();
-										closeDialog('#');
-									"
+									data-action="close-modal"
 									class="modal__close-button"
 									aria-label="Close modal">
 									<svg>
@@ -1171,12 +1091,7 @@
 								<label
 									for="fullscreen"
 									tabindex="0"
-									onclick="App.toggleFullscreen()"
-									onkeydown="
-										if (event.key === 'Enter') {
-											App.toggleFullscreen();
-										}
-									"
+									data-action="toggle-fullscreen"
 									class="modal__fullscreen-button tooltip">
 									<svg class="fullscreen-checked:hidden flex">
 										<use href="images/icons.svg#fullscreen"></use>
