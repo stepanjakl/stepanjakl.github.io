@@ -1534,34 +1534,30 @@ body {
 	transition: flex-grow var(--animate-out-segment) var(--ease-in-quad);
 }
 
-#dropdown-menu > div > .dropdown-menu__group > label > div {
+#dropdown-menu > div > .dropdown-menu__group > label > .dropdown-menu__toggle-icon {
 	transition: flex-grow var(--animate-out-segment) var(--ease-in-quad);
 }
 
-#dropdown-menu > div > .dropdown-menu__group > label:hover > div,
-#dropdown-menu > div > .dropdown-menu__group > label:focus > div {
+#dropdown-menu > div > .dropdown-menu__group > label:hover > .dropdown-menu__toggle-icon,
+#dropdown-menu > div > .dropdown-menu__group > label:focus > .dropdown-menu__toggle-icon {
 	flex-grow: 1;
 	transition: flex-grow var(--animate-in-segment) var(--ease-out-quad);
 }
 
-#dropdown-menu > div > .dropdown-menu__group:has(label:hover) > label:focus:not(:hover) > div,
-#dropdown-menu > div > .dropdown-menu__group.has-hovered-label > label:focus:not(:hover) > div {
+#dropdown-menu > div > .dropdown-menu__group:has(label:hover) > label:focus:not(:hover) > .dropdown-menu__toggle-icon,
+#dropdown-menu > div > .dropdown-menu__group.has-hovered-label > label:focus:not(:hover) > .dropdown-menu__toggle-icon {
 	flex-grow: 0;
 	transition: flex-grow var(--animate-out-segment) var(--ease-in-quad);
 }
 
-#dropdown-menu > div > .dropdown-menu__group > label > span {
-	transition: opacity var(--animate-out-segment-2\/3) linear;
-}
-
-#dropdown-menu > div > .dropdown-menu__group > label:hover > span,
-#dropdown-menu > div > .dropdown-menu__group > label:focus > span {
+#dropdown-menu > div > .dropdown-menu__group > label:hover > .dropdown-menu__toggle-label,
+#dropdown-menu > div > .dropdown-menu__group > label:focus > .dropdown-menu__toggle-label {
 	opacity: 1;
 	transition: opacity var(--animate-in-segment-2\/3) linear calc(var(--animate-in-segment) * 2);
 }
 
-#dropdown-menu > div > .dropdown-menu__group:has(label:hover) > label:focus:not(:hover) > span,
-#dropdown-menu > div > .dropdown-menu__group.has-hovered-label > label:focus:not(:hover) > span {
+#dropdown-menu > div > .dropdown-menu__group:has(label:hover) > label:focus:not(:hover) > .dropdown-menu__toggle-label,
+#dropdown-menu > div > .dropdown-menu__group.has-hovered-label > label:focus:not(:hover) > .dropdown-menu__toggle-label {
 	opacity: 0;
 	transition: opacity var(--animate-out-segment-2\/3) linear;
 }

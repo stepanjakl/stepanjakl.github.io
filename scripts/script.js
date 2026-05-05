@@ -577,6 +577,8 @@ const POPUP_LINK_SELECTOR =
  * Two-tap pattern prevents accidental activations on touch devices
  */
 const TOUCH_PRIMED_ATTRIBUTE = 'data-touch-primed';
+const TOUCH_TOOLTIP_SELF_HANDLED_ACTIONS = new Set(['copy-name', 'copy-email']);
+const TOUCH_PREVIEW_ACTIONS = new Set(['toggle-debug', 'toggle-animations']);
 
 /** CSS class names for device and feature detection */
 const DEVICE_CLASSES = Object.freeze({
@@ -634,47 +636,10 @@ function getElementByIdWithCaching(idOrEl) {
 }
 App.getEl = App.getEl || getElementByIdWithCaching;
 
-/**
- * Helper to activate (click) an element by ID and optionally focus another element
- * Intended for use from inline HTML handlers to centralise interaction logic
- * Keeps programmatic clicks consistent and avoids duplication across inline events
- * @param {string} clickId - ID of element to .click()
- * @param {string|null} focusId - ID of element to .focus() after click
- */
-function keyActivate(clickId, focusId = null) {
-	const el = App.getEl(clickId);
-	if (el && typeof el.click === 'function') {
-		el.click();
-	}
-	if (focusId) {
-		const f = App.getEl(focusId);
-		if (f && typeof f.focus === 'function') f.focus();
-	}
-}
-App.keyActivate = keyActivate;
-
-/**
- * Helper to defer focus to an element until after the next paint
- * Useful when the element to be focused is currently hidden but will become visible
- * @param {string} focusId - ID of element to .focus()
- */
-function deferredFocus(focusId) {
-	if (!focusId) return;
-	afterPaint(() => {
-		const f = App.getEl(focusId);
-		if (f && typeof f.focus === 'function') f.focus();
-	});
-}
-App.deferredFocus = deferredFocus;
-
 // ============================================================================
 // Event Delegation Handlers
 // ============================================================================
 
-/**
- * Global click event handler for all data-action elements
- * Centralized event handling prevents timing issues with deferred scripts
- */
 /**
  * Context menu handler for special right-click actions (right-click to hear name pronunciation)
  * Integrated into click delegation system via initializeGlobalEventHandlers()
@@ -1043,7 +1008,7 @@ const ResizeManager = {
 
 /**
  * Initialise 3D transform effect for modal profile footer art based on scroll
- * Event listeners persist for page lifetime per Y AGN I - no need for cleanup
+ * Event listeners persist for the page lifetime because the profile modal is never removed.
  * Transform updates are GPU-accelerated so performance impact is negligible
  */
 function initializeModalFooterArt() {
@@ -1065,7 +1030,11 @@ function initializeModalFooterArt() {
 	};
 
 	modalProfile.addEventListener('scroll', handleScroll, { passive: true });
-	window.addEventListener('resize', handleScroll);
+	if (typeof ResizeManager !== 'undefined') {
+		ResizeManager.register(handleScroll);
+	} else {
+		window.addEventListener('resize', handleScroll);
+	}
 	handleScroll();
 }
 
@@ -1080,8 +1049,11 @@ function initializeModalFooterArt() {
  *
  * @param {HTMLElement} modalElement - The modal element containing the control buttons
  */
+const controlButtonsUnfocusSetup = new WeakSet();
+
 function setupControlButtonsUnfocus(modalElement) {
 	if (!modalElement) return;
+	if (controlButtonsUnfocusSetup.has(modalElement)) return;
 
 	const controlButtons = modalElement.querySelectorAll(
 		'.modal__close-button, .modal__fullscreen-button, .modal__timeline-button'
@@ -1109,6 +1081,8 @@ function setupControlButtonsUnfocus(modalElement) {
 		},
 		{ passive: true }
 	);
+
+	controlButtonsUnfocusSetup.add(modalElement);
 }
 
 /**
@@ -1404,7 +1378,7 @@ function registerDialogLifecycleHooks() {
 		}
 	});
 
-	// Menu modal lifecycle (for title consistency)
+	// Menu modal lifecycle
 	aria.registerLifecycleHooks(DIALOG_CONFIG.MENU.id, {
 		initialize: () => {
 			// Add modal-specific class to body for CSS
@@ -1413,24 +1387,15 @@ function registerDialogLifecycleHooks() {
 			document.title = 'Menu - ' + originalTitle;
 		},
 		cleanup: () => {
-			// Remove modal-specific class from body
-			document.body.classList.remove('modal-open', 'modal-menu-open');
-
-			document.title = originalTitle;
-		}
-	});
-
-	// Dropdown menu lifecycle - hide keyboard shortcuts on close
-	aria.registerLifecycleHooks('dropdown-menu-toggle', {
-		initialize: () => {
-			// Shortcuts will be shown when Cmd/Ctrl is pressed
-		},
-		cleanup: () => {
-			// Update shortcut visibility when dropdown menu closes
 			const keyHandler = KeyHandler.instance;
 			if (keyHandler) {
 				keyHandler.updateShortcutVisibility();
 			}
+
+			// Remove modal-specific class from body
+			document.body.classList.remove('modal-open', 'modal-menu-open');
+
+			document.title = originalTitle;
 		}
 	});
 }
@@ -2194,7 +2159,8 @@ class HorizontalEdgeScroller {
 		this.mediaQuery = window.matchMedia('(min-width: 45rem)');
 
 		// Lifecycle (managed through destroy)
-		this.styleElement = null;
+		this.leftEdgeEl = null;
+		this.rightEdgeEl = null;
 		this.unregisterResize = null;
 
 		// Bound handlers
@@ -2225,59 +2191,43 @@ class HorizontalEdgeScroller {
 	updatePseudoElementStyles() {
 		const { id } = this.options;
 
-		// Remove existing elements if they exist
-		const existingLeft = this.element.querySelector(`[data-edge-scroll-left="${id}"]`);
-		const existingRight = this.element.querySelector(`[data-edge-scroll-right="${id}"]`);
-		if (existingLeft) existingLeft.remove();
-		if (existingRight) existingRight.remove();
+		if (!this.leftEdgeEl) {
+			this.leftEdgeEl = this.createEdgeElement(id, 'left');
+			this.element.appendChild(this.leftEdgeEl);
+		}
 
-		// Create actual DOM elements for edge scrolling
-		const leftEdge = document.createElement('div');
-		leftEdge.setAttribute('data-edge-scroll-left', id);
-		leftEdge.setAttribute('aria-hidden', 'true');
-		leftEdge.style.cssText = `
+		if (!this.rightEdgeEl) {
+			this.rightEdgeEl = this.createEdgeElement(id, 'right');
+			this.element.appendChild(this.rightEdgeEl);
+		}
+
+		this.leftEdgeEl.style.width = `${this.edgeWidth}px`;
+		this.rightEdgeEl.style.width = `${this.edgeWidth}px`;
+	}
+
+	createEdgeElement(id, side) {
+		const edge = document.createElement('div');
+		edge.setAttribute(`data-edge-scroll-${side}`, id);
+		edge.setAttribute('aria-hidden', 'true');
+		edge.style.cssText = `
 			position: absolute;
 			z-index: 5;
 			display: block;
-			width: ${this.edgeWidth}px;
 			user-select: none;
 			-webkit-user-select: none;
-			inset: 0 auto 0 0;
-			cursor: w-resize;
+			inset: ${side === 'left' ? '0 auto 0 0' : '0 0 0 auto'};
+			cursor: ${side === 'left' ? 'w-resize' : 'e-resize'};
 		`;
 
-		const rightEdge = document.createElement('div');
-		rightEdge.setAttribute('data-edge-scroll-right', id);
-		rightEdge.setAttribute('aria-hidden', 'true');
-		rightEdge.style.cssText = `
-			position: absolute;
-			z-index: 5;
-			display: block;
-			width: ${this.edgeWidth}px;
-			user-select: none;
-			-webkit-user-select: none;
-			inset: 0 0 0 auto;
-			cursor: e-resize;
-		`;
-
-		// Add click handlers for navigation
-		leftEdge.addEventListener('click', () => {
+		edge.addEventListener('click', () => {
+			const direction = side === 'left' ? -1 : 1;
 			this.element.scrollBy({
-				left: -this.element.clientWidth * 0.75,
-				behavior: 'smooth'
+				left: direction * this.element.clientWidth * 0.75,
+				behavior: App.getScrollBehavior()
 			});
 		});
 
-		rightEdge.addEventListener('click', () => {
-			this.element.scrollBy({
-				left: this.element.clientWidth * 0.75,
-				behavior: 'smooth'
-			});
-		});
-
-		// Append to element
-		this.element.appendChild(leftEdge);
-		this.element.appendChild(rightEdge);
+		return edge;
 	}
 
 	// Event Handlers
@@ -2386,16 +2336,10 @@ class HorizontalEdgeScroller {
 			}
 		}
 
-		// Remove edge scroll elements
-		const leftEdge = this.element.querySelector(`[data-edge-scroll-left="${this.options.id}"]`);
-		const rightEdge = this.element.querySelector(
-			`[data-edge-scroll-right="${this.options.id}"]`
-		);
-		if (leftEdge) leftEdge.remove();
-		if (rightEdge) rightEdge.remove();
-
-		// Remove the data attribute
-		this.element.removeAttribute('data-edge-scroll-id');
+		this.leftEdgeEl?.remove();
+		this.rightEdgeEl?.remove();
+		this.leftEdgeEl = null;
+		this.rightEdgeEl = null;
 	}
 }
 
@@ -2700,6 +2644,9 @@ class Popup {
 			video.src = url;
 			video.controls = true;
 			video.autoplay = true;
+			video.playsInline = true;
+			video.setAttribute('playsinline', '');
+			video.setAttribute('webkit-playsinline', '');
 			video.tabIndex = 0;
 
 			// Add error handler for video loading
@@ -2787,6 +2734,13 @@ class Popup {
 		wrapper.textContent = '';
 		wrapper.appendChild(fragment);
 
+		if (closeButton) {
+			this.fallbackContainer
+				.querySelectorAll(':scope > .media_fallback-close-button')
+				.forEach((button) => button.remove());
+			this.fallbackContainer.appendChild(closeButton);
+		}
+
 		// Add to DOM if needed
 		if (!this.fallbackContainer.parentElement) {
 			document.body.appendChild(this.fallbackContainer);
@@ -2828,10 +2782,7 @@ class Popup {
 				}
 			});
 
-			// Add direct click handler for close button
-			closeButton.addEventListener('click', () => {
-				this.closeFallbackView();
-			});
+			this.addCloseButtonHandlers(closeButton);
 		}
 
 		// Focus video initially for keyboard accessibility (videos autoplay)
@@ -2881,6 +2832,17 @@ class Popup {
 		}
 	}
 
+	addCloseButtonHandlers(button) {
+		const close = (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			this.closeFallbackView();
+		};
+
+		button.addEventListener('click', close);
+		button.addEventListener('touchend', close, { passive: false });
+	}
+
 	// UI Element Creation
 
 	createCloseButton() {
@@ -2912,6 +2874,7 @@ class Popup {
 				position: fixed;
 				z-index: 300;
 				inset: 0;
+				isolation: isolate;
 			}
 			.media_fallback_overlay:has(.media_fallback-content video) {
 				background: rgb(0, 0, 0, 0.75);
@@ -2996,6 +2959,7 @@ class Popup {
 				width: 100%;
 				height: auto;
 				opacity: 1;
+				z-index: 0;
 			}
 			.media_fallback-close-overlay {
 				position: absolute;
@@ -3018,10 +2982,13 @@ class Popup {
 				color: white;
 				border: none;
 				cursor: pointer;
-				z-index: 2;
+				z-index: 3;
 				display: flex;
 				align-items: center;
 				justify-content: center;
+				pointer-events: auto;
+				touch-action: manipulation;
+				-webkit-transform: translateX(50%) translateZ(0);
 				font-size: 1.5rem;
 				line-height: 1;
 				transition: color 200ms linear, background-color 200ms linear, opacity 300ms ease-out;
@@ -4162,6 +4129,61 @@ function handleTouchButtonClick(element, event, callback = null, focusAfterClick
 }
 App.handleTouchButtonClick = handleTouchButtonClick;
 
+function clearOtherTouchPrimedElements(target) {
+	if (!isTouchDevice) return;
+
+	const primedElements = document.querySelectorAll(`[${TOUCH_PRIMED_ATTRIBUTE}="true"]`);
+	primedElements.forEach((el) => {
+		if (!el.contains(target)) {
+			el.removeAttribute(TOUCH_PRIMED_ATTRIBUTE);
+		}
+	});
+}
+
+function getTouchPreviewHost(element) {
+	if (TOUCH_TOOLTIP_SELF_HANDLED_ACTIONS.has(element.dataset.action)) {
+		return null;
+	}
+
+	if (TOUCH_PREVIEW_ACTIONS.has(element.dataset.action)) {
+		return element;
+	}
+
+	if (element.classList.contains('tooltip')) {
+		return element.querySelector(':scope > .tooltip__text') ? element : null;
+	}
+
+	const parent = element.parentElement;
+	if (!parent?.classList.contains('tooltip')) return null;
+
+	const directActionElements = parent.querySelectorAll(':scope > [data-action]');
+	const hasDirectTooltipText = parent.querySelector(':scope > .tooltip__text');
+
+	return hasDirectTooltipText && directActionElements.length === 1 ? parent : null;
+}
+
+function shouldDelayTouchPreviewAction(element, event) {
+	if (!isTouchDevice || !getTouchPreviewHost(element)) {
+		return false;
+	}
+
+	const wasFocusedBeforeTap = element.getAttribute('data-was-focused') === 'true';
+	const isPrimed = element.getAttribute(TOUCH_PRIMED_ATTRIBUTE) === 'true';
+
+	element.removeAttribute('data-was-focused');
+
+	if (isPrimed || wasFocusedBeforeTap) {
+		element.removeAttribute(TOUCH_PRIMED_ATTRIBUTE);
+		return false;
+	}
+
+	event.preventDefault();
+	element.setAttribute(TOUCH_PRIMED_ATTRIBUTE, 'true');
+	element.focus();
+
+	return true;
+}
+
 // ============================================================================
 // Timeline Functions
 // ============================================================================
@@ -4257,6 +4279,12 @@ function initializeTimeline(startObserver = true) {
 		observerThresholds: [0, 0.25, 0.5, 0.75, 1] // granular intersection updates
 	};
 
+	const container = document.querySelector(`#${TIMELINE_CONFIG.containerId}`);
+	if (!container) {
+		console.error('Timeline: Container not found');
+		return;
+	}
+
 	// Create and configure timeline element
 	App.timeline = document.createElement('horizontal-timeline');
 	App.timeline.labels = TIMELINE_CONFIG.labels;
@@ -4266,22 +4294,23 @@ function initializeTimeline(startObserver = true) {
 	App.timeline.observerRootMargin = TIMELINE_CONFIG.observerRootMargin;
 	App.timeline.observerThresholds = TIMELINE_CONFIG.observerThresholds;
 
-	const container = document.querySelector(`#${TIMELINE_CONFIG.containerId}`);
-	if (!container) {
-		console.error('Timeline: Container not found');
-		return;
-	}
-
 	// Setup horizontal scrolling enhancements after timeline renders
 	let edgeScroller = null;
 	let dragScroll = null;
+	let refreshTimelineScrollers = null;
 
 	/**
 	 * Initialise horizontal scrollers for timeline navigation
 	 * Called after timeline is positioned in its final location
 	 */
 	const initializeTimelineScrollers = () => {
-		const timelineContent = document.querySelector('#timeline-content');
+		if (refreshTimelineScrollers) {
+			refreshTimelineScrollers();
+			return;
+		}
+
+		const timelineContent =
+			App.timeline.getTimelineContentEl?.() || document.querySelector('#timeline-content');
 		if (!timelineContent) {
 			console.warn('Timeline: Content element not found');
 			return;
@@ -4316,7 +4345,7 @@ function initializeTimeline(startObserver = true) {
 			}
 		};
 
-		const handleResize = () => {
+		refreshTimelineScrollers = () => {
 			// Check scrollability and create/destroy scrollers accordingly
 			if (isScrollable()) {
 				// Create scrollers if they don't exist yet
@@ -4328,11 +4357,11 @@ function initializeTimeline(startObserver = true) {
 		};
 
 		// Initial setup
-		handleResize();
+		refreshTimelineScrollers();
 
 		// Register with centralised ResizeManager for cleanup and consistency
 		if (typeof ResizeManager !== 'undefined') {
-			ResizeManager.register(handleResize);
+			ResizeManager.register(refreshTimelineScrollers);
 		}
 	};
 
@@ -4866,7 +4895,7 @@ function initializeTimelineSectionToggles() {
 				labelEl.setAttribute('aria-expanded', checkboxEl.checked ? 'true' : 'false');
 				if (checkboxEl.checked) {
 					requestAnimationFrame(() => {
-						App.timeline.scrollParentToChildVertical(modalArchive, labelEl, 'instant');
+						App.timeline?.scrollParentToChildVertical(modalArchive, labelEl, 'instant');
 					});
 				}
 			});
@@ -5152,7 +5181,7 @@ function initializeGlobalEventHandlers() {
 	// vs "just got focused by this tap" (important for labels which focus before onclick)
 	document.addEventListener('pointerdown', (event) => {
 		if (isTouchDevice) {
-			const target = event.target;
+			const target = event.target.closest('[data-action]') || event.target;
 			// Mark element if it's currently focused before any focus change happens
 			if (document.activeElement === target) {
 				target.setAttribute('data-was-focused', 'true');
@@ -5164,45 +5193,23 @@ function initializeGlobalEventHandlers() {
 	document.addEventListener(
 		'click',
 		(event) => {
-			// First, handle data-action attributes for centralized event handling
-			// This handles: copy-name, copy-email, open-profile, open-archive, etc.
+			clearOtherTouchPrimedElements(event.target);
+
+			// First, handle data-action attributes for centralized event handling.
+			// Name/email copy keep their richer tooltip and touch behavior in initializeClickHandlers().
 			const dataActionTarget = event.target.closest('[data-action]');
 			if (dataActionTarget) {
+				if (shouldDelayTouchPreviewAction(dataActionTarget, event)) return;
+
 				const action = dataActionTarget.dataset.action;
 				switch (action) {
-					case 'copy-name': {
-						event.preventDefault();
-						(async () => {
-							const copied = await copyToClipboard('Štěpán Jákl');
-							if (copied) {
-								const status = document.getElementById('name-copy-status');
-								if (status) {
-									status.textContent = 'Copied to clipboard';
-									setTimeout(() => (status.textContent = ''), 2000);
-								}
-							}
-						})();
-						return;
-					}
-
-					case 'copy-email': {
-						event.preventDefault();
-						(async () => {
-							const copied = await copyToClipboard('stepan.jakl@icloud.com');
-							if (copied) {
-								const status = document.getElementById('email-copy-status');
-								if (status) {
-									status.textContent = 'Copied to clipboard';
-									setTimeout(() => (status.textContent = ''), 2000);
-								}
-							}
-						})();
-						return;
-					}
-
 					case 'external-link':
 						event.preventDefault();
-						window.open(dataActionTarget.getAttribute('href'), '_blank');
+						window.open(
+							dataActionTarget.getAttribute('href'),
+							'_blank',
+							'noopener,noreferrer'
+						);
 						return;
 
 					case 'open-profile':
@@ -5284,18 +5291,6 @@ function initializeGlobalEventHandlers() {
 			}
 
 			// Then handle other click concerns (popup links, skip links, timeline, etc.)
-
-			// 1. Clear touch button primed states when user taps elsewhere
-			if (isTouchDevice) {
-				const primedElements = document.querySelectorAll(
-					`[${TOUCH_PRIMED_ATTRIBUTE}="true"]`
-				);
-				primedElements.forEach((el) => {
-					if (!el.contains(event.target)) {
-						el.removeAttribute(TOUCH_PRIMED_ATTRIBUTE);
-					}
-				});
-			}
 
 			// 2. Handle popup link clicks
 			const popupLink = event.target.closest(POPUP_LINK_SELECTOR);
@@ -5487,25 +5482,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	new TouchHandler();
 	new KeyHandler();
 	App.textHighlighter = new TextHighlighter();
-
-	// Expose simple toggle methods on App for onclick handlers
-	App.toggleAmbience = (event) => {
-		if (event) event.preventDefault(); // Prevent default label->checkbox behavior
-		const ambienceCheckbox = document.getElementById('ambience');
-		if (ambienceCheckbox) {
-			ambienceCheckbox.checked = !ambienceCheckbox.checked;
-			ambienceCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
-		}
-	};
-
-	App.toggleMode = (event) => {
-		if (event) event.preventDefault(); // Prevent default label->checkbox behavior
-		const modeCheckbox = document.getElementById('mode');
-		if (modeCheckbox) {
-			modeCheckbox.checked = !modeCheckbox.checked;
-			modeCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
-		}
-	};
 
 	/* Interactive Components Initialisation */
 

@@ -941,7 +941,7 @@ body {
 	}
 }
 
-.intro__logo span {
+.intro__logo .intro__logo-frame {
 	background-image: url('../images/logo-animated-dark.svg');
 	animation-name: logo-animation;
 	animation-duration: calc(var(--animate-in-segment) * 3);
@@ -955,8 +955,8 @@ body {
 	display: block;
 }
 
-.intro__logo:hover span,
-.intro__logo:focus span {
+.intro__logo:hover .intro__logo-frame,
+.intro__logo:focus .intro__logo-frame {
 	animation-play-state: running;
 }
 

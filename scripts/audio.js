@@ -84,9 +84,6 @@ App.audio = (function () {
 		masterVolume: 0.25,
 		rootFrequency: 220, // A3 - The tonal centre of our piece
 
-		// Sophisticated Scale: P4 below, Root, m3, P4, P5, Maj6, Maj7, Octave, Maj9
-		// Combines depth, tension, and heroic intervals for mature character
-		scale: [-5, 0, 3, 5, 7, 9, 11, 12, 14],
 		rhythm: [0, 0.6, 1.3, 2.1, 3.0, 3.7, 4.3], // Slower, more deliberate 5-second phrase
 		waveform: 'sine', // Warm, pure tone for sophistication
 
@@ -111,19 +108,6 @@ App.audio = (function () {
 			panAmount: 0.15 // Subtle panning for focus
 		},
 
-		// Weighted note selection probabilities
-		noteWeights: [
-			{ scaleIndex: 0, weight: 0.05 }, // P4 below (Depth)
-			{ scaleIndex: 1, weight: 0.25 }, // Root (Foundation)
-			{ scaleIndex: 2, weight: 0.1 }, // m3 (Subtle tension)
-			{ scaleIndex: 3, weight: 0.1 }, // P4 (Stability)
-			{ scaleIndex: 4, weight: 0.25 }, // P5 (Strength)
-			{ scaleIndex: 5, weight: 0.15 }, // Maj6 (Hope)
-			{ scaleIndex: 6, weight: 0.05 }, // Maj7 (Sophistication)
-			{ scaleIndex: 7, weight: 0.03 }, // Octave (Reduced)
-			{ scaleIndex: 8, weight: 0.02 } // Maj9 (Rare sparkle)
-		],
-
 		// UI Sound Effects
 		sfx: {
 			hover: {
@@ -142,6 +126,8 @@ App.audio = (function () {
 			}
 		}
 	});
+
+	const INTERACTIVE_SELECTOR = 'a, button, input, label, [tabindex], summary';
 
 	// ============================================================================
 	// Helper Functions
@@ -205,6 +191,27 @@ App.audio = (function () {
 			if (r > 0.7) return 3; // m3 for subtle melancholy
 			if (r > 0.4) return 5; // P4 for strength
 			return 0; // Root for finality
+		}
+	}
+
+	function isInteractiveElement(element) {
+		return element.matches?.(INTERACTIVE_SELECTOR) && element.getAttribute('tabindex') !== '-1';
+	}
+
+	function getSavedAmbienceState() {
+		try {
+			return localStorage.getItem('audio-ambience');
+		} catch (error) {
+			console.warn('Failed to load audio preference:', error);
+			return null;
+		}
+	}
+
+	function saveAmbienceState(isEnabled) {
+		try {
+			localStorage.setItem('audio-ambience', isEnabled);
+		} catch (error) {
+			console.warn('Failed to save audio preference:', error);
 		}
 	}
 
@@ -467,7 +474,7 @@ App.audio = (function () {
 		if (!ambienceCheckbox) return;
 
 		// Restore user preference from localStorage
-		const savedState = localStorage.getItem('audio-ambience');
+		const savedState = getSavedAmbienceState();
 		if (savedState === 'true') {
 			ambienceCheckbox.checked = true;
 			// Attempt to start. Note: Browsers may block this until user interaction.
@@ -478,7 +485,7 @@ App.audio = (function () {
 
 		// Toggle audio on checkbox change
 		ambienceCheckbox.addEventListener('change', () => {
-			localStorage.setItem('audio-ambience', ambienceCheckbox.checked);
+			saveAmbienceState(ambienceCheckbox.checked);
 			if (ambienceCheckbox.checked) {
 				start();
 			} else {
@@ -494,11 +501,7 @@ App.audio = (function () {
 		document.addEventListener(
 			'mouseenter',
 			(e) => {
-				if (
-					e.target.matches &&
-					e.target.matches('a, button, input, label, [tabindex], summary') &&
-					e.target.getAttribute('tabindex') !== '-1'
-				) {
+				if (isInteractiveElement(e.target)) {
 					playSFX('hover');
 				}
 			},
@@ -509,11 +512,7 @@ App.audio = (function () {
 		document.addEventListener(
 			'focus',
 			(e) => {
-				if (
-					e.target.matches &&
-					e.target.matches('a, button, input, label, [tabindex], summary') &&
-					e.target.getAttribute('tabindex') !== '-1'
-				) {
+				if (isInteractiveElement(e.target)) {
 					playSFX('hover');
 				}
 			},
@@ -522,7 +521,7 @@ App.audio = (function () {
 
 		// Click Sounds
 		document.addEventListener('click', (e) => {
-			if (e.target.closest('a, button, input, label, [tabindex], summary')) {
+			if (e.target.closest(INTERACTIVE_SELECTOR)) {
 				playSFX('click');
 			}
 		});

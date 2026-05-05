@@ -497,8 +497,8 @@ body {
 }
 
 #dropdown-menu > div > a > span,
-#dropdown-menu > div > label > span,
-#dropdown-menu > div > .dropdown-menu__group > label > span {
+#dropdown-menu > div > label > .dropdown-menu__toggle-label,
+#dropdown-menu > div > .dropdown-menu__group > label > .dropdown-menu__toggle-label {
 	color: var(--text-1);
 	margin-left: 0.875rem;
 	white-space: nowrap;
@@ -528,15 +528,15 @@ body {
 	box-shadow: inset 0 max(1px, 0.0625rem) 0 0 var(--dark-20);
 }
 
-#dropdown-menu > div > .dropdown-menu__group > label > div {
+#dropdown-menu > div > .dropdown-menu__group > label > .dropdown-menu__toggle-icon {
 	display: flex;
 }
 
-#dropdown-menu > div > .dropdown-menu__group > label:first-child > div {
+#dropdown-menu > div > .dropdown-menu__group > label:first-child > .dropdown-menu__toggle-icon {
 	justify-content: flex-start;
 }
 
-#dropdown-menu > div > .dropdown-menu__group > label:last-child > div {
+#dropdown-menu > div > .dropdown-menu__group > label:last-child > .dropdown-menu__toggle-icon {
 	justify-content: flex-end;
 }
 
@@ -562,18 +562,18 @@ body {
 	inset: 0 min(-1px, -0.0625rem) min(-1px, -0.0625rem);
 }
 
-#dropdown-menu > div > .dropdown-menu__group > label > span {
+#dropdown-menu > div > .dropdown-menu__group > label > .dropdown-menu__toggle-label {
 	position: absolute;
 	opacity: 0;
 	white-space: nowrap;
 	pointer-events: none;
 }
 
-#dropdown-menu > div > .dropdown-menu__group > label:first-child > span {
+#dropdown-menu > div > .dropdown-menu__group > label:first-child > .dropdown-menu__toggle-label {
 	left: calc(var(--dropdown-icon-size) + var(--dropdown-padding-left));
 }
 
-#dropdown-menu > div > .dropdown-menu__group > label:last-child > span {
+#dropdown-menu > div > .dropdown-menu__group > label:last-child > .dropdown-menu__toggle-label {
 	right: calc(var(--dropdown-icon-size) + var(--dropdown-padding-left));
 	margin-left: 0;
 	margin-right: 0.875rem;

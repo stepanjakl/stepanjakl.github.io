@@ -257,7 +257,7 @@ body.no-fullscreen .modal__fullscreen-button {
 
 /* Light mode - Logo */
 
-#mode:checked ~ main .intro__logo span {
+#mode:checked ~ main .intro__logo-frame {
 	background-image: url('../images/logo-animated-light.svg');
 }
 
@@ -750,7 +750,7 @@ body.modal-archive-open #modal-archive .modal__content {
 		mask-image: none;
 	}
 
-	#dropdown-menu label#dropdown-menu-reduce > div {
+	#dropdown-menu label#dropdown-menu-reduce > .dropdown-menu__toggle-icon {
 		opacity: 0.5;
 	}
 

@@ -259,13 +259,17 @@
 	mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.423 11a2 2 0 0 1 0 2l-1.846 3.196a2 2 0 0 1-1.732 1h-3.69a2 2 0 0 1-1.732-1L6.577 13a2 2 0 0 1 0-2l1.846-3.196a2 2 0 0 1 1.732-1h3.69a2 2 0 0 1 1.732 1L17.423 11Z"/></svg>');
 	mask-size: contain;
 	mask-repeat: no-repeat;
-	margin-right: 0.8125rem;
+	margin-right: 0.3125rem;
 	vertical-align: -0.046875rem;
 }
 
 @media (min-width: 45rem) {
 	.modal-profile__summary-list li {
 		font-weight: 400;
+	}
+
+	.modal-profile__summary-list li span::before {
+		margin-right: 0.8125rem;
 	}
 }
 

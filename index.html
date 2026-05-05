@@ -17,18 +17,19 @@
 			data-website-id="6f9d8fb6-c4c3-410e-bba3-7b8cafd6ed04"></script>
 		<!-- GlitchTip Error Tracking -->
 		<script
+			defer
 			src="https://browser.sentry-cdn.com/10.36.0/bundle.min.js"
-			crossorigin="anonymous"></script>
-		<script>
-			if (window.Sentry) {
-				Sentry.init({
-					dsn: 'https://7388455908f8442ba73a83bca2c9403c@app.glitchtip.com/13576',
-					tracesSampleRate: 0.01,
-					attachStacktrace: true,
-					autoSessionTracking: true
-				});
-			}
-		</script>
+			crossorigin="anonymous"
+			onload="
+				if (window.Sentry) {
+					Sentry.init({
+						dsn: 'https://7388455908f8442ba73a83bca2c9403c@app.glitchtip.com/13576',
+						tracesSampleRate: 0.01,
+						attachStacktrace: true,
+						autoSessionTracking: true
+					});
+				}
+			"></script>
 		<!-- Page metadata -->
 		<title>Štěpán Jákl | Full-stack web developer & interface designer</title>
 		<meta charset="UTF-8" />
@@ -95,14 +96,16 @@
 		<!-- Mobile Safari & PWA settings -->
 		<meta
 			name="theme-color"
-			content="#001417" />
+			content="#001417"
+			media="(prefers-color-scheme: dark)" />
 		<meta
 			name="apple-mobile-web-app-status-bar-style"
 			content="black-translucent" />
 		<!-- Icons & favicons -->
 		<meta
 			name="theme-color"
-			content="#ffffff" />
+			content="#ffffff"
+			media="(prefers-color-scheme: light)" />
 		<link
 			rel="icon"
 			href="images/favicon.svg" />
@@ -323,7 +326,8 @@
 				<header class="intro">
 					<!-- Left column: Name & logo -->
 					<div class="intro__left">
-						<h1
+						<h1 class="sr-only">Štěpán Jákl</h1>
+						<div
 							id="intro-name"
 							class="intro__name intro__name--animating tooltip highlight has-corners"
 							tabindex="0"
@@ -331,7 +335,6 @@
 							role="button"
 							aria-label="L-click to copy name to clipboard / R-click to pronounce"
 							aria-describedby="name-copy-status">
-							<!-- <span class="sr-only" lang="cs">Štěpán Jákl</span> -->
 							<div
 								class="intro__name-frame"
 								aria-hidden="true">
@@ -373,18 +376,18 @@
 								aria-live="polite"
 								aria-atomic="true"
 								class="sr-only"></span>
-						</h1>
+						</div>
 						<div
 							class="intro__logo intro__logo--animating has-corners"
 							role="img"
 							aria-label="Personal brand logo"
 							tabindex="-1">
-							<span class="intro__logo-frame">
+							<div class="intro__logo-frame">
 								<div class="corners">
 									<figure class="corners__item corners__item--tr"></figure>
 									<figure class="corners__item corners__item--bl"></figure>
 								</div>
-							</span>
+							</div>
 						</div>
 					</div>
 					<!-- Right column: Titles, availability & menu -->
@@ -392,7 +395,10 @@
 						id="intro-content"
 						class="intro__right">
 						<!-- Job titles -->
-						<h2 class="intro__title intro__primary-title intro__title--animating">
+						<div
+							class="intro__title intro__primary-title intro__title--animating"
+							role="heading"
+							aria-level="2">
 							<span class="sr-only">Full-stack developer</span>
 							<p
 								style="--i: 2"
@@ -423,7 +429,7 @@
 								<span style="--i: 8">e</span>
 								<span style="--i: 9">r</span>
 							</p>
-						</h2>
+						</div>
 						<div
 							class="intro__title intro__secondary-title intro__title--animating"
 							role="heading"
@@ -588,12 +594,12 @@
 									class="dropdown-menu__button"
 									tabindex="-1"
 									aria-label="Menu toggle. Keyboard shortcut: Command M">
-									<div class="dropdown-menu__button-icon">
+									<span class="dropdown-menu__button-icon">
 										<span>&nbsp;</span>
 										<span>&nbsp;</span>
 										<span>&nbsp;</span>
 										<span>&nbsp;</span>
-									</div>
+									</span>
 								</button>
 								<abbr class="tooltip__text--top tooltip__text tooltip__text--active">
 									<kbd><span>^</span></kbd>
@@ -661,7 +667,7 @@
 											<svg>
 												<use href="images/icons.svg#menu-light-mode"></use>
 											</svg>
-											<span class="text-sm">Light mode</span>
+											<span class="dropdown-menu__toggle-label text-sm">Light mode</span>
 											<abbr class="dropdown-menu__shortcut--bottom dropdown-menu__shortcut">
 												<kbd><span>^</span></kbd>
 												<kbd><span>T</span></kbd>
@@ -676,7 +682,7 @@
 											<svg>
 												<use href="images/icons.svg#menu-dark-mode"></use>
 											</svg>
-											<span class="text-sm">Dark mode</span>
+											<span class="dropdown-menu__toggle-label text-sm">Dark mode</span>
 											<abbr class="dropdown-menu__shortcut--bottom dropdown-menu__shortcut">
 												<kbd><span>^</span></kbd>
 												<kbd><span>T</span></kbd>
@@ -688,10 +694,10 @@
 											tabindex="0"
 											class="dropdown-menu__toggle"
 											data-action="toggle-ambience">
-											<figure class="dropdown-menu__state-indicator"></figure>
+											<span class="dropdown-menu__state-indicator"></span>
 											<svg aria-hidden="true"></svg>
-											<span class="hidden ambience-checked:flex text-sm">Ambience off</span>
-											<span class="ambience-checked:hidden flex text-sm">Ambience</span>
+											<span class="dropdown-menu__toggle-label hidden ambience-checked:flex text-sm">Ambience off</span>
+											<span class="dropdown-menu__toggle-label ambience-checked:hidden flex text-sm">Ambience</span>
 											<abbr class="dropdown-menu__shortcut--bottom dropdown-menu__shortcut">
 												<kbd><span>^</span></kbd>
 												<kbd><span>E</span></kbd>
@@ -703,15 +709,15 @@
 											tabindex="0"
 											class="dropdown-menu__toggle"
 											data-action="toggle-fullscreen">
-											<figure class="dropdown-menu__state-indicator"></figure>
+											<span class="dropdown-menu__state-indicator"></span>
 											<svg class="fullscreen-checked:hidden flex">
 												<use href="images/icons.svg#menu-fullscreen"></use>
 											</svg>
 											<svg class="hidden fullscreen-checked:flex">
 												<use href="images/icons.svg#menu-fullscreen-off"></use>
 											</svg>
-											<span class="hidden fullscreen-checked:flex text-sm">Exit</span>
-											<span class="fullscreen-checked:hidden flex text-sm">Fullscreen</span>
+											<span class="dropdown-menu__toggle-label hidden fullscreen-checked:flex text-sm">Exit</span>
+											<span class="dropdown-menu__toggle-label fullscreen-checked:hidden flex text-sm">Fullscreen</span>
 											<abbr class="dropdown-menu__shortcut--bottom dropdown-menu__shortcut">
 												<kbd><span>^</span></kbd>
 												<kbd><span>F</span></kbd>
@@ -725,17 +731,17 @@
 												tabindex="0"
 												class="dropdown-menu__toggle"
 												data-action="toggle-debug">
-												<figure class="dropdown-menu__state-indicator"></figure>
-												<div>
+												<span class="dropdown-menu__state-indicator"></span>
+												<span class="dropdown-menu__toggle-icon">
 													<svg class="debug-checked:hidden flex">
 														<use href="images/icons.svg#menu-debug"></use>
 													</svg>
 													<svg class="hidden debug-checked:flex">
 														<use href="images/icons.svg#menu-debug-off"></use>
 													</svg>
-												</div>
-												<span class="hidden debug-checked:flex text-sm">Debug off</span>
-												<span class="debug-checked:hidden flex text-sm">Debug</span>
+												</span>
+												<span class="dropdown-menu__toggle-label hidden debug-checked:flex text-sm">Debug off</span>
+												<span class="dropdown-menu__toggle-label debug-checked:hidden flex text-sm">Debug</span>
 											</label>
 											<label
 												id="dropdown-menu-reduce"
@@ -743,17 +749,17 @@
 												tabindex="0"
 												class="dropdown-menu__toggle"
 												data-action="toggle-animations">
-												<figure class="dropdown-menu__state-indicator"></figure>
-												<div>
+												<span class="dropdown-menu__state-indicator"></span>
+												<span class="dropdown-menu__toggle-icon">
 													<svg class="hidden reduce-checked:flex">
 														<use href="images/icons.svg#menu-reduce"></use>
 													</svg>
 													<svg class="reduce-checked:hidden flex">
 														<use href="images/icons.svg#menu-reduce-off"></use>
 													</svg>
-												</div>
-												<span class="hidden reduce-checked:flex text-sm">Reduce</span>
-												<span class="reduce-checked:hidden flex text-sm">Restore</span>
+												</span>
+												<span class="dropdown-menu__toggle-label hidden reduce-checked:flex text-sm">Reduce</span>
+												<span class="dropdown-menu__toggle-label reduce-checked:hidden flex text-sm">Restore</span>
 											</label>
 										</div>
 									</div>

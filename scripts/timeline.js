@@ -50,50 +50,8 @@
  * - observerThresholds: IntersectionObserver thresholds (default: [0, 0.25, 0.5, 0.75, 1])
  */
 class HorizontalTimeline extends HTMLElement {
-	/**
-	 * Index of the first "main" indicator (centred above the first label)
-	 *
-	 * HTML Structure Explanation:
-	 * The timeline HTML is generated with a specific pattern of divs representing vertical bars:
-	 * - 2 decorative divs at the start (left edge indicators)
-	 * - For each label: 5 divs (pattern: small, centred main bar, small, small, small)
-	 * - 1 final decorative div at the end (right edge indicator)
-	 *
-	 * Index breakdown (0-based):
-	 * [0] = First decorative div (left edge)
-	 * [1] = Second decorative div (left edge fade)
-	 * [2] = First label's leading small bar
-	 * [3] = First label's CENTRED MAIN BAR ← This is what we need!
-	 * [4] = First label's trailing small bar
-	 * ...and so on for subsequent labels
-	 *
-	 * This constant (3) points to the centred main bar above the first label,
-	 * which is marked as "active" when that timeline section is visible
-	 * See CSS selector: `#timeline_bars div:nth-child(6n + 4)` for 66.67% height bars
-	 */
+	// These offsets mirror the decorative bar pattern generated in render().
 	static TIMELINE_FIRST_INDICATOR_INDEX = 3;
-
-	/**
-	 * Number of indicator divs per label group
-	 *
-	 * Pattern per label (6 divs total):
-	 * [0] = Small bar (left padding)
-	 * [1] = Medium-tall bar (centred - the "main" indicator at nth-child(6n+4))
-	 * [2] = Small bar
-	 * [3] = Small bar
-	 * [4] = Small bar
-	 * [5] = Small bar (right padding before next group)
-	 *
-	 * When calculating which indicator to highlight for a given label index,
-	 * we use: TIMELINE_FIRST_INDICATOR_INDEX + (labelIndex * TIMELINE_INDICATORS_PER_LABEL)
-	 *
-	 * Example for label index 2:
-	 * 3 + (2 × 6) = 3 + 12 = 15 (the centred bar above the 3rd label)
-	 *
-	 * This constant ensures the calculation stays in sync with the HTML generation
-	 * in the render() method, which creates exactly 6 divs per label with specific
-	 * data-value attributes for click/hover handling
-	 */
 	static TIMELINE_INDICATORS_PER_LABEL = 6;
 
 	constructor() {
@@ -129,12 +87,9 @@ class HorizontalTimeline extends HTMLElement {
 		this.boundHandleMouseLeave = null;
 		this.boundHandleScrollEnd = null;
 		this.boundHandleClick = null;
+		this.boundHandleKeydown = null;
 		this.boundHandleMouseOver = null;
 		this.boundHandleMouseOut = null;
-	}
-
-	static get observedAttributes() {
-		return ['labels'];
 	}
 
 	// ========================================================================
@@ -144,16 +99,6 @@ class HorizontalTimeline extends HTMLElement {
 	connectedCallback() {
 		this.render();
 		this.setupEventHandlers();
-
-		// Notify that timeline is ready for external initialisation
-		if (this.onReady && typeof this.onReady === 'function') {
-			// Use double rAF to ensure layout is complete before callback
-			requestAnimationFrame(() => {
-				requestAnimationFrame(() => {
-					this.onReady();
-				});
-			});
-		}
 	}
 
 	disconnectedCallback() {
@@ -254,6 +199,11 @@ class HorizontalTimeline extends HTMLElement {
 		if (!parent || !child) return Promise.resolve();
 
 		return new Promise((resolve) => {
+			if (this.boundHandleScrollEnd) {
+				parent.removeEventListener('scrollend', this.boundHandleScrollEnd);
+				this.boundHandleScrollEnd = null;
+			}
+
 			this.isScrolling = true;
 
 			const parentRect = parent.getBoundingClientRect();
@@ -262,28 +212,30 @@ class HorizontalTimeline extends HTMLElement {
 				childRect.left - parentRect.left - (parentRect.width - childRect.width) / 2;
 			const initialScrollLeft = parent.scrollLeft;
 
-			// Early exit if at left edge and scrolling left
-			if (initialScrollLeft === 0 && scrollAmount < 0) {
+			if (Math.abs(scrollAmount) < 1 || (initialScrollLeft === 0 && scrollAmount < 0)) {
 				this.isScrolling = false;
 				resolve();
 				return;
 			}
 
+			let scrollEndFallback = null;
 			const handleScrollEnd = () => {
 				if (this.boundHandleScrollEnd) {
 					parent.removeEventListener('scrollend', this.boundHandleScrollEnd);
 					this.boundHandleScrollEnd = null;
 				}
+				if (scrollEndFallback) {
+					clearTimeout(scrollEndFallback);
+				}
 				this.isScrolling = false;
 				resolve();
 			};
 
-			// Use scrollend event if supported, otherwise fall back to timeout
+			scrollEndFallback = setTimeout(handleScrollEnd, this.scrollEndTimeout);
+
 			if ('onscrollend' in window) {
 				this.boundHandleScrollEnd = handleScrollEnd;
 				parent.addEventListener('scrollend', this.boundHandleScrollEnd, { once: true });
-			} else {
-				setTimeout(handleScrollEnd, this.scrollEndTimeout);
 			}
 
 			parent.scroll({
@@ -421,8 +373,6 @@ class HorizontalTimeline extends HTMLElement {
 
 		const activeLabel = this.querySelector(`[data-label-for="${section}"]`);
 		if (activeLabel) {
-			activeLabel.classList.add('active');
-
 			// Announce current section to screen readers
 			const announcement = document.getElementById('timeline-announcement');
 			if (announcement) {
@@ -451,7 +401,7 @@ class HorizontalTimeline extends HTMLElement {
 		// Calculate indicator position (centred above label)
 		const indicatorIndex =
 			HorizontalTimeline.TIMELINE_FIRST_INDICATOR_INDEX +
-			(labelIndex === 0 ? 0 : labelIndex * HorizontalTimeline.TIMELINE_INDICATORS_PER_LABEL);
+			labelIndex * HorizontalTimeline.TIMELINE_INDICATORS_PER_LABEL;
 
 		if (timelineEls[indicatorIndex]) {
 			timelineEls[indicatorIndex].classList.add('active');
@@ -691,4 +641,6 @@ class HorizontalTimeline extends HTMLElement {
 // Register Custom Element
 // ============================================================================
 
-customElements.define('horizontal-timeline', HorizontalTimeline);
+if (!customElements.get('horizontal-timeline')) {
+	customElements.define('horizontal-timeline', HorizontalTimeline);
+}
