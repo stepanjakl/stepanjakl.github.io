@@ -4270,7 +4270,7 @@ function initializeTimeline(startObserver = true) {
 
 	// Timeline configuration
 	const TIMELINE_CONFIG = {
-		labels: ['2024-21', '2021-19', '2019-18', 'elsewhen'],
+		labels: ['2026', '2024-21', '2021-19', '2019-18', 'elsewhen'],
 		containerId: 'horizontal-timeline',
 		hashPrefix: NAVIGATION_HASHES.ARCHIVE,
 		scrollOffset: 24, // px from top when scrolling to sections

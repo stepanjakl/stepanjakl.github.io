@@ -259,6 +259,21 @@ figure.modal-archive__project-hero picture img {
 	margin-right: 0.75rem;
 }
 
+.modal-archive__timeline-section h3 span.next::before {
+	/* Next ❯ */
+	content: '';
+	display: inline-flex;
+	width: 0.625em;
+	height: 0.625em;
+	background-color: currentcolor;
+	mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><path d="M6 0h4v4H6zm12 12h4v4h-4zm-4-4h4v4h-4zm-4-4h4v4h-4zM6 28v-4h4v4zm8-8v-4h4v4zm-4 4v-4h4v4z"/></svg>');
+	mask-size: contain;
+	mask-repeat: no-repeat;
+	vertical-align: -0.03125rem;
+	margin-left: 0.125rem;
+	margin-right: 0.625rem;
+}
+
 .modal-archive__timeline-section h3 span.spark::before {
 	/* Spark ✦ */
 	content: '';

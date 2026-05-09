@@ -35,7 +35,7 @@
  *
  * Usage:
  *   const timeline = document.createElement('horizontal-timeline')
- *   timeline.labels = ['2024-21', '2021-19', '2019-18', 'elsewhen']
+ *   timeline.labels = ['2026', '2024-21', '2021-19', '2019-18', 'elsewhen']
  *   timeline.hashPrefix = '#archive'  // Optional, defaults to '#archive'
  *   timeline.scrollOffset = 24        // Optional, defaults to 24
  *   container.appendChild(timeline)
