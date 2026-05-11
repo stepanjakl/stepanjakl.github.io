@@ -6,8 +6,8 @@
 
 horizontal-timeline {
 	/* Spacing */
-	--timeline-margin: 3rem;
-	--timeline-margin--hover: 1rem;
+	--timeline-margin: 14vw;
+	--timeline-margin--hover: calc(var(--timeline-margin) / 2);
 	--timeline-padding: 0.5rem 1.5rem 0.25rem 1.5rem;
 	--timeline-padding--hover: 0.875rem 5.5rem 0.625rem 5.5rem;
 
@@ -39,13 +39,21 @@ horizontal-timeline {
 	display: flex;
 	justify-content: center;
 	transition: margin var(--transition--default);
-	margin: 0 var(--timeline-margin);
 	pointer-events: none;
 }
 
 horizontal-timeline:hover {
 	transition: margin var(--transition--hover);
-	margin: 0 var(--timeline-margin--hover);
+}
+
+@media (min-width: 45rem) {
+	horizontal-timeline {
+		margin: 0 var(--timeline-margin);
+	}
+
+	horizontal-timeline:hover {
+		margin: 0 var(--timeline-margin--hover);
+	}
 }
 
 /* Wrapper */
@@ -478,18 +486,6 @@ horizontal-timeline:hover #timeline_labels button {
 		inset var(--transition-indicator);
 	opacity: 1;
 	inset: -0.09375rem 0 0;
-}
-
-/* Responsive adjustments */
-
-@media (min-width: 60rem) {
-	horizontal-timeline {
-		margin: 0 6rem;
-	}
-
-	horizontal-timeline:hover {
-		margin: 0 2rem;
-	}
 }
 
 /* Light mode - consolidated colour overrides */

@@ -6,11 +6,13 @@
 
 # Personal website of Štěpán Jákl
 
-**Experienced and detail-oriented user interface engineer focused on crafting intuitive, high-performance digital experiences.**
+**Full-stack developer and interface designer with experience building CMS platforms, dashboards, reusable tooling, integrations, and product-facing web systems, with a wider interest in connected physical/digital products.**
 
-**Equally dedicated to engineering and design, with a pragmatic mindset and a strong emphasis on user experience.**
+**I work across front-end, back-end, interface design, QA, production support, and maintainability, with a strong focus on making complex workflows clear, reliable, and usable.**
 
-**Committed to delivering high-quality results for projects with exciting propositions and realistic goals.**
+**Drawn to thoughtful projects with realistic goals: tools, platforms, and digital products that are useful in practice, carefully built, and easy for people to understand and operate.**
+
+**Equally dedicated to code and design, with a pragmatic eye for user experience, accessibility, performance, and long-term quality.**
 
 ---
 
