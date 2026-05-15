@@ -4270,7 +4270,7 @@ function initializeTimeline(startObserver = true) {
 
 	// Timeline configuration
 	const TIMELINE_CONFIG = {
-		labels: ['2026', '2024-21', '2021-19', '2019-18', 'elsewhen'],
+		labels: ['2026', '2025-21', '2023-19', '2019-18', 'elsewhen'],
 		containerId: 'horizontal-timeline',
 		hashPrefix: NAVIGATION_HASHES.ARCHIVE,
 		scrollOffset: 24, // px from top when scrolling to sections
@@ -4865,12 +4865,12 @@ function initializeTimelineSectionToggles() {
 	const modalArchive = getModalElement(NAVIGATION_HASHES.ARCHIVE);
 	const toggles = [
 		{
-			checkbox: 'timeline-section-year-2024-21',
-			label: '[for="timeline-section-year-2024-21"]'
+			checkbox: 'timeline-section-year-2025-21',
+			label: '[for="timeline-section-year-2025-21"]'
 		},
 		{
-			checkbox: 'timeline-section-year-2021-19',
-			label: '[for="timeline-section-year-2021-19"]'
+			checkbox: 'timeline-section-year-2023-19',
+			label: '[for="timeline-section-year-2023-19"]'
 		},
 		{
 			checkbox: 'timeline-section-year-2019-18',

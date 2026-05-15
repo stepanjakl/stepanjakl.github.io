@@ -589,8 +589,8 @@ body.modal-archive-open #modal-archive .modal__content {
 }
 
 /* Collapsible timeline sections on small screens */
-#timeline-section-year-2024-21:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section='2024-21'],
-#timeline-section-year-2021-19:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section='2021-19'],
+#timeline-section-year-2025-21:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section='2025-21'],
+#timeline-section-year-2023-19:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section='2023-19'],
 #timeline-section-year-2019-18:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section='2019-18'],
 #timeline-section-year-elsewhen:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section='elsewhen'] {
 	overflow: hidden;
@@ -600,15 +600,15 @@ body.modal-archive-open #modal-archive .modal__content {
 	padding: 0;
 }
 
-#timeline-section-year-2024-21:checked ~ .modal-archive__timeline-grid [data-timeline-section-title='2024-21'] svg:first-child,
-#timeline-section-year-2021-19:checked ~ .modal-archive__timeline-grid [data-timeline-section-title='2021-19'] svg:first-child,
+#timeline-section-year-2025-21:checked ~ .modal-archive__timeline-grid [data-timeline-section-title='2025-21'] svg:first-child,
+#timeline-section-year-2023-19:checked ~ .modal-archive__timeline-grid [data-timeline-section-title='2023-19'] svg:first-child,
 #timeline-section-year-2019-18:checked ~ .modal-archive__timeline-grid [data-timeline-section-title='2019-18'] svg:first-child,
 #timeline-section-year-elsewhen:checked ~ .modal-archive__timeline-grid [data-timeline-section-title='elsewhen'] svg:first-child {
 	display: none;
 }
 
-#timeline-section-year-2024-21:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title='2024-21'] svg:nth-child(2),
-#timeline-section-year-2021-19:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title='2021-19'] svg:nth-child(2),
+#timeline-section-year-2025-21:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title='2025-21'] svg:nth-child(2),
+#timeline-section-year-2023-19:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title='2023-19'] svg:nth-child(2),
 #timeline-section-year-2019-18:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title='2019-18'] svg:nth-child(2),
 #timeline-section-year-elsewhen:not(:checked) ~ .modal-archive__timeline-grid [data-timeline-section-title='elsewhen'] svg:nth-child(2) {
 	display: none;
