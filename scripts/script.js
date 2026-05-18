@@ -1116,6 +1116,13 @@ function resetModalScrollOnClose(modalElement) {
 	}, 400);
 }
 
+function syncTimelineSectionToggleAria(input) {
+	const label = document.querySelector(`[for="${input.id}"]`);
+	if (label) {
+		label.setAttribute('aria-expanded', input.checked ? 'true' : 'false');
+	}
+}
+
 /**
  * Register lifecycle hooks for modal dialogs
  * Connects generic dialog.js system with project-specific modal behaviour
@@ -1144,8 +1151,12 @@ function registerDialogLifecycleHooks() {
 			// Enforce accordion behavior: uncheck others
 			const allInputs = document.querySelectorAll('input[id^="timeline-section-year-"]');
 			allInputs.forEach((other) => {
-				if (other !== input) other.checked = false;
+				if (other !== input) {
+					other.checked = false;
+					syncTimelineSectionToggleAria(other);
+				}
 			});
+			syncTimelineSectionToggleAria(input);
 
 			// Update URL with year parameter
 			window.history.replaceState(
@@ -1183,9 +1194,11 @@ function registerDialogLifecycleHooks() {
 					);
 					allCheckboxes.forEach((cb) => {
 						cb.checked = false;
+						syncTimelineSectionToggleAria(cb);
 					});
 					// Check the target section
 					targetCheckbox.checked = true;
+					syncTimelineSectionToggleAria(targetCheckbox);
 				}
 			}
 
@@ -4865,6 +4878,10 @@ function initializeTimelineSectionToggles() {
 	const modalArchive = getModalElement(NAVIGATION_HASHES.ARCHIVE);
 	const toggles = [
 		{
+			checkbox: 'timeline-section-year-2026',
+			label: '[for="timeline-section-year-2026"]'
+		},
+		{
 			checkbox: 'timeline-section-year-2025-21',
 			label: '[for="timeline-section-year-2025-21"]'
 		},
@@ -4888,11 +4905,11 @@ function initializeTimelineSectionToggles() {
 
 		if (checkboxEl && labelEl) {
 			// Set initial aria-expanded state based on checkbox
-			labelEl.setAttribute('aria-expanded', checkboxEl.checked ? 'true' : 'false');
+			syncTimelineSectionToggleAria(checkboxEl);
 
 			// Update aria-expanded when checkbox changes
 			checkboxEl.addEventListener('change', () => {
-				labelEl.setAttribute('aria-expanded', checkboxEl.checked ? 'true' : 'false');
+				syncTimelineSectionToggleAria(checkboxEl);
 				if (checkboxEl.checked) {
 					requestAnimationFrame(() => {
 						App.timeline?.scrollParentToChildVertical(modalArchive, labelEl, 'instant');
@@ -4904,7 +4921,7 @@ function initializeTimelineSectionToggles() {
 			labelEl.addEventListener('click', () => {
 				// State will update after the click, so we use setTimeout
 				setTimeout(() => {
-					labelEl.setAttribute('aria-expanded', checkboxEl.checked ? 'true' : 'false');
+					syncTimelineSectionToggleAria(checkboxEl);
 				}, 0);
 			});
 		}
