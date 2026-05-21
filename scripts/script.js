@@ -5570,7 +5570,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const BG_COLOR = 'rgb(124, 206, 0, 0.075)';
 
 	// Message Content
-	const HEADER = 'Štěpán Jákl | Full-stack developer & interface designer';
+	const HEADER = 'Štěpán Jákl | Senior full-stack developer & interface designer';
 	const LINE_1 = 'This website is built with HTML, CSS, and vanilla JavaScript.';
 	const LINE_2 = 'The goal: a fast, pixel-perfect, and fully responsive experience.';
 	const LINE_3 = 'No frameworks, no build tools, no generators. Just pure craftsmanship.';

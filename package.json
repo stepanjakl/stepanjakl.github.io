@@ -1,6 +1,6 @@
 {
 	"name": "stepanjakl.github.io",
-	"description": "Personal website of Štěpán Jákl - Full-stack web developer & interface designer",
+	"description": "Personal website of Štěpán Jákl - Senior full-stack web developer & interface designer",
 	"private": true,
 	"scripts": {
 		"format": "prettier --write \"**/*.{js,css,html,json,md}\"",
