@@ -448,10 +448,6 @@ main {
 	color: var(--text-1);
 }
 
-.intro__title--animating {
-	animation: fade-in-title both;
-}
-
 .intro__primary-title span {
 	display: inline-block;
 	padding-top: calc(var(--segment-quarter) + 0.0624375rem);
@@ -958,16 +954,6 @@ body {
 .intro__logo:hover .intro__logo-frame,
 .intro__logo:focus .intro__logo-frame {
 	animation-play-state: running;
-}
-
-@keyframes logo-animation {
-	0% {
-		background-position: 0 0;
-	}
-
-	100% {
-		background-position: -75rem 0;
-	}
 }
 
 /* Side background shapes */
@@ -1611,30 +1597,4 @@ picture.loaded > img[loading='lazy'] {
 
 picture.loaded .img-placeholder {
 	opacity: 0;
-}
-
-@keyframes invert {
-	/* 0% → 24.99% : normal */
-	0%,
-	24.99% {
-		transform: scale(1, 1);
-	}
-
-	/* 25% → 49.99% : invert Y */
-	25%,
-	49.99% {
-		transform: scale(1, -1);
-	}
-
-	/* 50% → 74.99% : invert X and Y */
-	50%,
-	74.99% {
-		transform: scale(-1, -1);
-	}
-
-	/* 75% → 100% : invert X */
-	75%,
-	100% {
-		transform: scale(-1, 1);
-	}
 }

@@ -649,16 +649,7 @@ function handleContextMenu(e) {
 	if (!target || target.id !== 'intro-name') return;
 
 	e.preventDefault();
-
-	// Speech synthesis for name pronunciation
-	if ('speechSynthesis' in window) {
-		const msg = new SpeechSynthesisUtterance();
-		msg.volume = 0.5;
-		msg.lang = 'cs-CZ';
-		msg.voice = speechSynthesis.getVoices().find((voice) => voice.name === 'Zuzana');
-		msg.text = 'Štěpán Jákl';
-		speechSynthesis.speak(msg);
-	}
+	pronounceName();
 }
 
 /**
@@ -4030,6 +4021,35 @@ async function copyToClipboard(text) {
 	}
 }
 
+/**
+ * Pronounce 'Štěpán Jákl' using speech synthesis with a Czech voice
+ * Prefers the 'Zuzana' voice, falls back to any cs-* voice
+ * Defers via 'voiceschanged' because getVoices() returns [] until the
+ * browser has loaded its voice list (common on first invocation)
+ */
+function pronounceName() {
+	if (!('speechSynthesis' in window)) return;
+
+	const speak = () => {
+		const msg = new SpeechSynthesisUtterance();
+		msg.volume = 0.5;
+		msg.lang = 'cs-CZ';
+		msg.text = 'Štěpán Jákl';
+
+		const voices = speechSynthesis.getVoices();
+		const czechVoice = voices.find(
+			(voice) => voice.name === 'Zuzana' || voice.lang.startsWith('cs')
+		);
+		if (czechVoice) msg.voice = czechVoice;
+
+		speechSynthesis.speak(msg);
+	};
+
+	speechSynthesis.getVoices().length > 0
+		? speak()
+		: speechSynthesis.addEventListener('voiceschanged', speak, { once: true });
+}
+
 // ============================================================================
 // Hover Focus Management
 // ============================================================================
@@ -4736,28 +4756,6 @@ function initializeClickHandlers() {
 		let isCopyInProgress = false;
 		const DOUBLE_TAP_DELAY = 300;
 
-		// Pronounce name using speech synthesis
-		const pronounceName = () => {
-			const speak = () => {
-				const msg = new SpeechSynthesisUtterance();
-				msg.volume = 0.5;
-				msg.lang = 'cs-CZ';
-				msg.text = 'Štěpán Jákl';
-
-				const voices = speechSynthesis.getVoices();
-				const czechVoice = voices.find(
-					(voice) => voice.name === 'Zuzana' || voice.lang.startsWith('cs')
-				);
-				if (czechVoice) msg.voice = czechVoice;
-
-				speechSynthesis.speak(msg);
-			};
-
-			speechSynthesis.getVoices().length > 0
-				? speak()
-				: speechSynthesis.addEventListener('voiceschanged', speak, { once: true });
-		};
-
 		// Copy name to clipboard with screen reader announcement
 		const copyNameToClipboard = async (element, event) => {
 			isCopyInProgress = true;
@@ -4849,8 +4847,11 @@ function initializeClickHandlers() {
 	const emailStatus = document.getElementById('email-copy-status');
 	if (emailButton && emailTooltip && emailHighlight) {
 		emailButton.onclick = function (event) {
-			App.handleTouchButtonClick(this, event, () => {
-				copyToClipboard('stepan.jakl@icloud.com');
+			App.handleTouchButtonClick(this, event, async () => {
+				// Only show feedback when the copy actually succeeded (mirrors the name handler)
+				const successful = await copyToClipboard('stepan.jakl@icloud.com');
+				if (!successful) return;
+
 				App.textHighlighter.highlightAndCopyText(
 					event,
 					emailTooltip,

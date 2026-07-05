@@ -38,10 +38,6 @@
 	}
 }
 
-.menu--animating {
-	animation: fade-in-cta-2 both;
-}
-
 /* Menu background */
 
 .menu__background {
