@@ -21,10 +21,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install -g terser
-      - run: npm install -g csso-cli
-      - run: npm install -g html-minifier
-      - run: npm install -g svgo
+      # Pinned to major version (semver minor/patch only); keep in sync with minify-test.sh
+      - run: npm install -g terser@5
+      - run: npm install -g csso-cli@4
+      - run: npm install -g html-minifier@4
+      - run: npm install -g svgo@4
 
       # Perform minification, overwriting original files (originals preserved on release branch)
       - run: |

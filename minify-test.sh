@@ -36,7 +36,8 @@ calculate_savings() {
 }
 
 echo "Installing/updating dependencies with npm..."
-npm install -g terser csso-cli html-minifier svgo
+# Pinned to major version (semver minor/patch only); keep in sync with .github/workflows/minify.yml
+npm install -g terser@5 csso-cli@4 html-minifier@4 svgo@4
 
 echo "Creating temporary test folder..."
 mkdir -p ./tmp

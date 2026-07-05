@@ -412,8 +412,11 @@ horizontal-timeline:hover #timeline_labels button {
 	padding-top: 0.875rem;
 }
 
+/* isolation: contain the pill's z-index:-1 in a local stacking context so Safari does not
+   recomposite (blink) the active label when a sibling label's pill fades in on hover */
 #timeline_labels button > span {
 	position: relative;
+	isolation: isolate;
 	transition: color var(--transition-color);
 	text-align: center;
 	color: var(--text-2, #999999);

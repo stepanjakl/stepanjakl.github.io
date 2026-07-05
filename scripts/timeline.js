@@ -220,7 +220,9 @@ class HorizontalTimeline extends HTMLElement {
 
 			let scrollEndFallback = null;
 			const handleScrollEnd = () => {
-				if (this.boundHandleScrollEnd) {
+				// Identity check: a superseded scroll's stale fallback timer must not
+				// deregister the listener belonging to a newer scroll
+				if (this.boundHandleScrollEnd === handleScrollEnd) {
 					parent.removeEventListener('scrollend', this.boundHandleScrollEnd);
 					this.boundHandleScrollEnd = null;
 				}
