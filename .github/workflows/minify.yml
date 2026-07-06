@@ -11,6 +11,10 @@ on:
     branches:
       - release
 
+# Limit the GITHUB_TOKEN to pushing the minified output to `gh-pages`
+permissions:
+  contents: write
+
 jobs:
   checkout-minify-push:
     runs-on: ubuntu-latest
