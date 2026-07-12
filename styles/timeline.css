@@ -160,30 +160,30 @@ horizontal-timeline:hover #timeline-content {
 
 /* Timeline bar */
 
-#timeline_bars {
+#timeline-bars {
 	display: flex;
 	transition: height var(--transition--default);
 	height: var(--timeline-height);
 }
 
-horizontal-timeline:hover #timeline_bars {
+horizontal-timeline:hover #timeline-bars {
 	transition: height var(--transition--hover);
 	height: var(--timeline-height--hover);
 }
 
 /* Timeline indicators (vertical bars) */
 
-#timeline_bars div {
+#timeline-bars div {
 	display: flex;
 	align-items: end;
 	padding: 0 0.5rem;
 }
 
-#timeline_bars div[data-value] {
+#timeline-bars div[data-value] {
 	cursor: pointer;
 }
 
-#timeline_bars div span {
+#timeline-bars div span {
 	transition:
 		background-color var(--transition-color),
 		height var(--transition-indicator);
@@ -195,208 +195,208 @@ horizontal-timeline:hover #timeline_bars {
 
 /* Pattern-based indicator heights */
 
-#timeline_bars div:nth-child(6n + 4) span {
+#timeline-bars div:nth-child(6n + 4) span {
 	height: var(--indicator-height-xl);
 }
 
-#timeline_bars div:nth-child(6n + 3) span,
-#timeline_bars div:nth-child(6n + 5) span {
+#timeline-bars div:nth-child(6n + 3) span,
+#timeline-bars div:nth-child(6n + 5) span {
 	height: var(--indicator-height-md);
 }
 
 /* Edge indicators with reduced opacity */
 
-#timeline_bars div:nth-child(2) span,
-#timeline_bars div:nth-last-child(2) span {
+#timeline-bars div:nth-child(2) span,
+#timeline-bars div:nth-last-child(2) span {
 	background-color: var(--light-35);
 }
 
-#timeline_bars div:first-child span,
-#timeline_bars div:last-child span {
+#timeline-bars div:first-child span,
+#timeline-bars div:last-child span {
 	background-color: var(--light-25);
 }
 
 /* Active state - base styling with ripple effect */
 
-#timeline_bars div.active span {
+#timeline-bars div.active span {
 	background-color: var(--light-80);
 	height: 100%;
 }
 
-#timeline_bars div.active + div span,
-#timeline_bars div:has(+ div.active) span {
+#timeline-bars div.active + div span,
+#timeline-bars div:has(+ div.active) span {
 	background-color: var(--light-75);
 	height: var(--indicator-height-xxl);
 }
 
-#timeline_bars div.active + div + div span,
-#timeline_bars div:has(+ div + div.active) span {
+#timeline-bars div.active + div + div span,
+#timeline-bars div:has(+ div + div.active) span {
 	background-color: var(--light-70);
 	height: var(--indicator-height-lg);
 }
 
-#timeline_bars div.active + div + div + div span,
-#timeline_bars div:has(+ div + div + div.active) span {
+#timeline-bars div.active + div + div + div span,
+#timeline-bars div:has(+ div + div + div.active) span {
 	background-color: var(--light-65);
 }
 
-#timeline_bars div.active + div + div + div + div span,
-#timeline_bars div:has(+ div + div + div + div.active) span {
+#timeline-bars div.active + div + div + div + div span,
+#timeline-bars div:has(+ div + div + div + div.active) span {
 	background-color: var(--light-55);
 }
 
-#timeline_bars div.active + div + div + div + div + div span,
-#timeline_bars div:has(+ div + div + div + div + div.active) span {
+#timeline-bars div.active + div + div + div + div + div span,
+#timeline-bars div:has(+ div + div + div + div + div.active) span {
 	background-color: var(--light-50);
 }
 
 /* Hover states - interactive feedback with ripple effect */
 
-#timeline_bars div:hover span,
-#timeline_bars div.highlight span {
+#timeline-bars div:hover span,
+#timeline-bars div.highlight span {
 	height: 100%;
 }
 
-#timeline_bars div:has(+ div:hover) span,
-#timeline_bars div:hover + div span,
-#timeline_bars div:has(+ div.highlight) span,
-#timeline_bars div.highlight + div span {
+#timeline-bars div:has(+ div:hover) span,
+#timeline-bars div:hover + div span,
+#timeline-bars div:has(+ div.highlight) span,
+#timeline-bars div.highlight + div span {
 	height: var(--indicator-height-xxl);
 }
 
-#timeline_bars div:has(+ div + div:hover) span,
-#timeline_bars div:hover + div + div span,
-#timeline_bars div:has(+ div + div.highlight) span,
-#timeline_bars div.highlight + div + div span {
+#timeline-bars div:has(+ div + div:hover) span,
+#timeline-bars div:hover + div + div span,
+#timeline-bars div:has(+ div + div.highlight) span,
+#timeline-bars div.highlight + div + div span {
 	height: var(--indicator-height-lg);
 }
 
 /* Hover overrides - when hover ripple overlaps with active ripple, hover wins */
 
-#timeline_bars div:hover:has(+ div.active) span,
-#timeline_bars div:hover:has(+ div + div.active) span,
-#timeline_bars div:hover:has(+ div + div + div.active) span,
-#timeline_bars div:hover:has(+ div + div + div + div.active) span,
-#timeline_bars div:hover:has(+ div + div + div + div + div.active) span,
-#timeline_bars div.highlight:has(+ div.active) span,
-#timeline_bars div.highlight:has(+ div + div.active) span,
-#timeline_bars div.highlight:has(+ div + div + div.active) span,
-#timeline_bars div.highlight:has(+ div + div + div + div.active) span,
-#timeline_bars div.highlight:has(+ div + div + div + div + div.active) span {
+#timeline-bars div:hover:has(+ div.active) span,
+#timeline-bars div:hover:has(+ div + div.active) span,
+#timeline-bars div:hover:has(+ div + div + div.active) span,
+#timeline-bars div:hover:has(+ div + div + div + div.active) span,
+#timeline-bars div:hover:has(+ div + div + div + div + div.active) span,
+#timeline-bars div.highlight:has(+ div.active) span,
+#timeline-bars div.highlight:has(+ div + div.active) span,
+#timeline-bars div.highlight:has(+ div + div + div.active) span,
+#timeline-bars div.highlight:has(+ div + div + div + div.active) span,
+#timeline-bars div.highlight:has(+ div + div + div + div + div.active) span {
 	height: 100%;
 }
 
-#timeline_bars div.active + div:hover span,
-#timeline_bars div.active + div + div:hover span,
-#timeline_bars div.active + div + div + div:hover span,
-#timeline_bars div.active + div + div + div + div:hover span,
-#timeline_bars div.active + div + div + div + div + div:hover span,
-#timeline_bars div.active + div.highlight span,
-#timeline_bars div.active + div + div.highlight span,
-#timeline_bars div.active + div + div + div.highlight span,
-#timeline_bars div.active + div + div + div + div.highlight span,
-#timeline_bars div.active + div + div + div + div + div.highlight span {
+#timeline-bars div.active + div:hover span,
+#timeline-bars div.active + div + div:hover span,
+#timeline-bars div.active + div + div + div:hover span,
+#timeline-bars div.active + div + div + div + div:hover span,
+#timeline-bars div.active + div + div + div + div + div:hover span,
+#timeline-bars div.active + div.highlight span,
+#timeline-bars div.active + div + div.highlight span,
+#timeline-bars div.active + div + div + div.highlight span,
+#timeline-bars div.active + div + div + div + div.highlight span,
+#timeline-bars div.active + div + div + div + div + div.highlight span {
 	height: 100%;
 }
 
-#timeline_bars div.active + div:hover + div span,
-#timeline_bars div.active + div + div:hover + div span,
-#timeline_bars div.active + div + div + div:hover + div span,
-#timeline_bars div.active + div + div + div + div:hover + div span,
-#timeline_bars div.active + div.highlight + div span,
-#timeline_bars div.active + div + div.highlight + div span,
-#timeline_bars div.active + div + div + div.highlight + div span,
-#timeline_bars div.active + div + div + div + div.highlight + div span {
+#timeline-bars div.active + div:hover + div span,
+#timeline-bars div.active + div + div:hover + div span,
+#timeline-bars div.active + div + div + div:hover + div span,
+#timeline-bars div.active + div + div + div + div:hover + div span,
+#timeline-bars div.active + div.highlight + div span,
+#timeline-bars div.active + div + div.highlight + div span,
+#timeline-bars div.active + div + div + div.highlight + div span,
+#timeline-bars div.active + div + div + div + div.highlight + div span {
 	height: var(--indicator-height-xxl);
 }
 
-#timeline_bars div.active + div:hover + div + div span,
-#timeline_bars div.active + div + div:hover + div + div span,
-#timeline_bars div.active + div + div + div:hover + div + div span,
-#timeline_bars div.active + div.highlight + div + div span,
-#timeline_bars div.active + div + div.highlight + div + div span,
-#timeline_bars div.active + div + div + div.highlight + div + div span {
+#timeline-bars div.active + div:hover + div + div span,
+#timeline-bars div.active + div + div:hover + div + div span,
+#timeline-bars div.active + div + div + div:hover + div + div span,
+#timeline-bars div.active + div.highlight + div + div span,
+#timeline-bars div.active + div + div.highlight + div + div span,
+#timeline-bars div.active + div + div + div.highlight + div + div span {
 	height: var(--indicator-height-lg);
 }
 
-#timeline_bars div.active + div:has(+ div:hover) span,
-#timeline_bars div.active + div + div:has(+ div:hover) span,
-#timeline_bars div.active + div + div + div:has(+ div:hover) span,
-#timeline_bars div.active + div + div + div + div:has(+ div:hover) span,
-#timeline_bars div.active + div:has(+ div.highlight) span,
-#timeline_bars div.active + div + div:has(+ div.highlight) span,
-#timeline_bars div.active + div + div + div:has(+ div.highlight) span,
-#timeline_bars div.active + div + div + div + div:has(+ div.highlight) span {
+#timeline-bars div.active + div:has(+ div:hover) span,
+#timeline-bars div.active + div + div:has(+ div:hover) span,
+#timeline-bars div.active + div + div + div:has(+ div:hover) span,
+#timeline-bars div.active + div + div + div + div:has(+ div:hover) span,
+#timeline-bars div.active + div:has(+ div.highlight) span,
+#timeline-bars div.active + div + div:has(+ div.highlight) span,
+#timeline-bars div.active + div + div + div:has(+ div.highlight) span,
+#timeline-bars div.active + div + div + div + div:has(+ div.highlight) span {
 	height: var(--indicator-height-xxl);
 }
 
-#timeline_bars div.active + div:has(+ div + div:hover) span,
-#timeline_bars div.active + div + div:has(+ div + div:hover) span,
-#timeline_bars div.active + div + div + div:has(+ div + div:hover) span,
-#timeline_bars div.active + div:has(+ div + div.highlight) span,
-#timeline_bars div.active + div + div:has(+ div + div.highlight) span,
-#timeline_bars div.active + div + div + div:has(+ div + div.highlight) span {
+#timeline-bars div.active + div:has(+ div + div:hover) span,
+#timeline-bars div.active + div + div:has(+ div + div:hover) span,
+#timeline-bars div.active + div + div + div:has(+ div + div:hover) span,
+#timeline-bars div.active + div:has(+ div + div.highlight) span,
+#timeline-bars div.active + div + div:has(+ div + div.highlight) span,
+#timeline-bars div.active + div + div + div:has(+ div + div.highlight) span {
 	height: var(--indicator-height-lg);
 }
 
-#timeline_bars div:hover + div:has(+ div.active) span,
-#timeline_bars div:hover + div:has(+ div + div.active) span,
-#timeline_bars div:hover + div:has(+ div + div + div.active) span,
-#timeline_bars div:hover + div:has(+ div + div + div + div.active) span {
+#timeline-bars div:hover + div:has(+ div.active) span,
+#timeline-bars div:hover + div:has(+ div + div.active) span,
+#timeline-bars div:hover + div:has(+ div + div + div.active) span,
+#timeline-bars div:hover + div:has(+ div + div + div + div.active) span {
 	height: var(--indicator-height-xxl);
 }
 
-#timeline_bars div:hover + div + div:has(+ div.active) span,
-#timeline_bars div:hover + div + div:has(+ div + div.active) span,
-#timeline_bars div:hover + div + div:has(+ div + div + div.active) span {
+#timeline-bars div:hover + div + div:has(+ div.active) span,
+#timeline-bars div:hover + div + div:has(+ div + div.active) span,
+#timeline-bars div:hover + div + div:has(+ div + div + div.active) span {
 	height: var(--indicator-height-lg);
 }
 
-#timeline_bars div.highlight + div:has(+ div.active) span,
-#timeline_bars div.highlight + div:has(+ div + div.active) span,
-#timeline_bars div.highlight + div:has(+ div + div + div.active) span,
-#timeline_bars div.highlight + div:has(+ div + div + div + div.active) span {
+#timeline-bars div.highlight + div:has(+ div.active) span,
+#timeline-bars div.highlight + div:has(+ div + div.active) span,
+#timeline-bars div.highlight + div:has(+ div + div + div.active) span,
+#timeline-bars div.highlight + div:has(+ div + div + div + div.active) span {
 	height: var(--indicator-height-xxl);
 }
 
-#timeline_bars div.highlight + div + div:has(+ div.active) span,
-#timeline_bars div.highlight + div + div:has(+ div + div.active) span,
-#timeline_bars div.highlight + div + div:has(+ div + div + div.active) span {
+#timeline-bars div.highlight + div + div:has(+ div.active) span,
+#timeline-bars div.highlight + div + div:has(+ div + div.active) span,
+#timeline-bars div.highlight + div + div:has(+ div + div + div.active) span {
 	height: var(--indicator-height-lg);
 }
 
-#timeline_bars div:has(+ div:hover):has(+ div.active) span,
-#timeline_bars div:has(+ div:hover):has(+ div + div.active) span,
-#timeline_bars div:has(+ div:hover):has(+ div + div + div.active) span {
+#timeline-bars div:has(+ div:hover):has(+ div.active) span,
+#timeline-bars div:has(+ div:hover):has(+ div + div.active) span,
+#timeline-bars div:has(+ div:hover):has(+ div + div + div.active) span {
 	height: var(--indicator-height-xxl);
 }
 
-#timeline_bars div:has(+ div + div:hover):has(+ div.active) span,
-#timeline_bars div:has(+ div + div:hover):has(+ div + div.active) span {
+#timeline-bars div:has(+ div + div:hover):has(+ div.active) span,
+#timeline-bars div:has(+ div + div:hover):has(+ div + div.active) span {
 	height: var(--indicator-height-lg);
 }
 
-#timeline_bars div:has(+ div.highlight):has(+ div.active) span,
-#timeline_bars div:has(+ div.highlight):has(+ div + div.active) span,
-#timeline_bars div:has(+ div.highlight):has(+ div + div + div.active) span {
+#timeline-bars div:has(+ div.highlight):has(+ div.active) span,
+#timeline-bars div:has(+ div.highlight):has(+ div + div.active) span,
+#timeline-bars div:has(+ div.highlight):has(+ div + div + div.active) span {
 	height: var(--indicator-height-xxl);
 }
 
-#timeline_bars div:has(+ div + div.highlight):has(+ div.active) span,
-#timeline_bars div:has(+ div + div.highlight):has(+ div + div.active) span {
+#timeline-bars div:has(+ div + div.highlight):has(+ div.active) span,
+#timeline-bars div:has(+ div + div.highlight):has(+ div + div.active) span {
 	height: var(--indicator-height-lg);
 }
 
 /* Labels */
 
-#timeline_labels {
+#timeline-labels {
 	display: grid;
 	grid-auto-flow: column;
 	grid-auto-columns: 1fr;
 	padding: 0 0.5rem;
 }
 
-#timeline_labels button {
+#timeline-labels button {
 	transition: padding var(--transition--default);
 	position: relative;
 	display: inline-flex;
@@ -407,14 +407,14 @@ horizontal-timeline:hover #timeline_bars {
 	background: none;
 }
 
-horizontal-timeline:hover #timeline_labels button {
+horizontal-timeline:hover #timeline-labels button {
 	transition: padding var(--transition--hover);
 	padding-top: 0.875rem;
 }
 
 /* isolation: contain the pill's z-index:-1 in a local stacking context so Safari does not
    recomposite (blink) the active label when a sibling label's pill fades in on hover */
-#timeline_labels button > span {
+#timeline-labels button > span {
 	position: relative;
 	isolation: isolate;
 	transition: color var(--transition-color);
@@ -433,13 +433,13 @@ horizontal-timeline:hover #timeline_labels button {
 
 /* Text cropping for better vertical alignment */
 
-#timeline_labels button > span::before {
+#timeline-labels button > span::before {
 	content: '';
 	margin-bottom: -0.1864em;
 	display: table;
 }
 
-#timeline_labels button > span::after {
+#timeline-labels button > span::after {
 	content: '';
 	margin-top: -0.2024em;
 	display: table;
@@ -447,27 +447,27 @@ horizontal-timeline:hover #timeline_labels button {
 
 /* Special styling for last label ("elsewhen") */
 
-#timeline_labels button:last-child > span {
+#timeline-labels button:last-child > span {
 	font-size: 0.75892875rem;
 	line-height: 0.84375rem;
 }
 
-#timeline_labels button:last-child > span::before {
+#timeline-labels button:last-child > span::before {
 	margin-bottom: -0.1986em;
 }
 
-#timeline_labels button:last-child > span::after {
+#timeline-labels button:last-child > span::after {
 	margin-top: -0.21455em;
 }
 
-#timeline_labels button.active span {
+#timeline-labels button.active span {
 	transition: color var(--transition-color);
 	color: var(--text-1);
 }
 
 /* Label background pill (animated on hover/active) */
 
-#timeline_labels button > span > span {
+#timeline-labels button > span > span {
 	z-index: -1;
 	transition:
 		opacity var(--transition-color),
@@ -480,10 +480,10 @@ horizontal-timeline:hover #timeline_labels button {
 	border-radius: 999rem;
 }
 
-#timeline_labels button.active > span > span,
-#timeline_labels button.highlight > span > span,
-#timeline_labels button:hover > span > span,
-#timeline_labels button:focus > span > span {
+#timeline-labels button.active > span > span,
+#timeline-labels button.highlight > span > span,
+#timeline-labels button:hover > span > span,
+#timeline-labels button:focus > span > span {
 	transition:
 		opacity var(--transition-color),
 		inset var(--transition-indicator);
@@ -510,61 +510,61 @@ horizontal-timeline:hover #timeline_labels button {
 	display: none;
 }
 
-#mode:checked ~ main #timeline_labels button > span > span {
+#mode:checked ~ main #timeline-labels button > span > span {
 	background-color: var(--light-50);
 }
 
 /* Light mode - indicator colours */
 
-#mode:checked ~ main #timeline_bars div span {
+#mode:checked ~ main #timeline-bars div span {
 	background-color: var(--dark-45);
 }
 
-#mode:checked ~ main #timeline_bars div:nth-child(2) span,
-#mode:checked ~ main #timeline_bars div:nth-last-child(2) span {
+#mode:checked ~ main #timeline-bars div:nth-child(2) span,
+#mode:checked ~ main #timeline-bars div:nth-last-child(2) span {
 	background-color: var(--dark-40);
 }
 
-#mode:checked ~ main #timeline_bars div:first-child span,
-#mode:checked ~ main #timeline_bars div:last-child span {
+#mode:checked ~ main #timeline-bars div:first-child span,
+#mode:checked ~ main #timeline-bars div:last-child span {
 	background-color: var(--dark-30);
 }
 
 /* Light mode - active state colours */
 
-#mode:checked ~ main #timeline_bars div.active span {
+#mode:checked ~ main #timeline-bars div.active span {
 	background-color: var(--dark-70);
 }
 
-#mode:checked ~ main #timeline_bars div.active + div span,
-#mode:checked ~ main #timeline_bars div:has(+ div.active) span {
+#mode:checked ~ main #timeline-bars div.active + div span,
+#mode:checked ~ main #timeline-bars div:has(+ div.active) span {
 	background-color: var(--dark-70);
 }
 
-#mode:checked ~ main #timeline_bars div.active + div + div span,
-#mode:checked ~ main #timeline_bars div:has(+ div + div.active) span {
+#mode:checked ~ main #timeline-bars div.active + div + div span,
+#mode:checked ~ main #timeline-bars div:has(+ div + div.active) span {
 	background-color: var(--dark-65);
 }
 
-#mode:checked ~ main #timeline_bars div.active + div + div + div span,
-#mode:checked ~ main #timeline_bars div:has(+ div + div + div.active) span {
+#mode:checked ~ main #timeline-bars div.active + div + div + div span,
+#mode:checked ~ main #timeline-bars div:has(+ div + div + div.active) span {
 	background-color: var(--dark-60);
 }
 
-#mode:checked ~ main #timeline_bars div.active + div + div + div + div span,
-#mode:checked ~ main #timeline_bars div:has(+ div + div + div + div.active) span {
+#mode:checked ~ main #timeline-bars div.active + div + div + div + div span,
+#mode:checked ~ main #timeline-bars div:has(+ div + div + div + div.active) span {
 	background-color: var(--dark-55);
 }
 
-#mode:checked ~ main #timeline_bars div.active + div + div + div + div + div span,
-#mode:checked ~ main #timeline_bars div:has(+ div + div + div + div + div.active) span {
+#mode:checked ~ main #timeline-bars div.active + div + div + div + div + div span,
+#mode:checked ~ main #timeline-bars div:has(+ div + div + div + div + div.active) span {
 	background-color: var(--dark-50);
 }
 
 /* No-JS: Expand hit area for anchor-based navigation */
 
 @supports not (selector(:has(*))) {
-	#timeline_labels button::after {
+	#timeline-labels button::after {
 		content: '';
 		position: absolute;
 		inset: -1.875rem -0.3125rem -0.3125rem;

@@ -36,6 +36,7 @@ main {
 	--segment-half: calc(var(--segment) / 2);
 	--segment-third: calc(var(--segment) / 3);
 	--segment-quarter: calc(var(--segment) / 4);
+	--segment-fifth: calc(var(--segment) / 5);
 	--segment-eighth: calc(var(--segment) / 8);
 
 	/* Layout */
@@ -76,11 +77,6 @@ main {
 	font-family: 'Bai Jamjuree', sans-serif;
 }
 
-body,
-html {
-	background-color: var(--background);
-}
-
 /* Experimental CSS property for rounded corners using superellipse curve */
 
 *,
@@ -102,23 +98,6 @@ html {
 	position: absolute !important;
 	width: 1px !important;
 	white-space: nowrap !important;
-	user-select: none !important;
-}
-
-.sr-only-focusable,
-.sr-only-focusable:focus,
-.sr-only-focusable:active {
-	/* Hidden from visual display but accessible to screen readers and keyboard navigation */
-	position: absolute !important;
-	width: 1px !important;
-	height: 1px !important;
-	padding: 0 !important;
-	margin: -1px !important;
-	overflow: hidden !important;
-	clip: rect(0, 0, 0, 0) !important;
-	clip-path: inset(50%) !important;
-	white-space: nowrap !important;
-	border: 0 !important;
 	user-select: none !important;
 }
 
@@ -328,8 +307,8 @@ main {
 	background: none;
 	padding-top: var(--segment-third);
 	margin-top: calc(-1 * var(--segment-third));
-	padding-bottom: calc(var(--segment) / 5);
-	margin-bottom: calc(-1 * (var(--segment) / 5));
+	padding-bottom: var(--segment-fifth);
+	margin-bottom: calc(-1 * var(--segment-fifth));
 }
 
 .intro__name-frame {
@@ -414,11 +393,6 @@ main {
 }
 
 /* Intro logo */
-
-.intro__logo {
-	user-select: none;
-	-webkit-user-select: none;
-}
 
 .intro__logo-frame {
 	position: relative;
@@ -638,7 +612,7 @@ body.modal-open {
 	pointer-events: none;
 	z-index: 2;
 	inset: 0;
-	padding: calc(var(--segment) / 5);
+	padding: var(--segment-fifth);
 	overflow: hidden;
 	scroll-behavior: smooth;
 	overscroll-behavior: none;
@@ -675,7 +649,7 @@ body.modal-open {
 	position: relative;
 	height: auto;
 	min-height: 100%;
-	padding-top: calc(var(--segment) / 5);
+	padding-top: var(--segment-fifth);
 	outline: solid max(1px, 0.0625rem) var(--modal-border-outer);
 	border: solid max(1px, 0.0625rem) var(--modal-border-inner);
 	border-radius: var(--segment-eighth) calc((var(--modal-button-border-radius) + var(--modal-button-inset)) + min(-1px, -0.0625rem)) var(--segment-eighth) var(--segment-eighth);
@@ -686,7 +660,7 @@ body.modal-open {
 }
 
 .modal__content > * {
-	transform: translateY(calc((var(--segment) / 5) * -1));
+	transform: translateY(calc(var(--segment-fifth) * -1));
 }
 
 @media (min-width: 45rem) {
@@ -732,7 +706,7 @@ body.modal-open {
 	.modal__body {
 		--modal-margin-bottom: var(--segment);
 
-		margin-right: calc(var(--modal-button-size) + var(--modal-button-inset) + (var(--segment) / 5));
+		margin-right: calc(var(--modal-button-size) + var(--modal-button-inset) + var(--segment-fifth));
 	}
 }
 
@@ -813,22 +787,6 @@ body {
 	.modal__timeline-button-wrapper {
 		display: flex;
 	}
-}
-
-.modal__timeline-button .icon {
-	position: relative;
-	display: flex;
-	flex-direction: row;
-	height: 2.5px;
-	top: calc(0.5rem - 2.5px);
-}
-
-.modal__timeline-button .icon::before,
-.modal__timeline-button .icon::after {
-	content: '';
-	width: calc(50% + (2.5px) * tan(15deg));
-	height: 100%;
-	background-color: currentcolor;
 }
 
 /* Underlay */
@@ -929,6 +887,8 @@ body {
 	margin-top: -1.25rem;
 	margin-bottom: -1.25rem;
 	align-self: flex-start;
+	user-select: none;
+	-webkit-user-select: none;
 }
 
 @media (min-width: 45rem) {
@@ -987,7 +947,6 @@ body {
 	width: 8vh;
 	transform: rotate(45deg) translateY(-8vh);
 	transform-origin: top left;
-	background-image: linear-gradient(to top in oklch, var(--triangle-stripe));
 }
 
 .bg-triangle--left::after {
@@ -995,12 +954,9 @@ body {
 	position: absolute;
 	left: 0;
 	top: 0;
-	background-size: 100% 100%;
-	background-position: left;
 	width: 70.710678118655vh;
 	height: 70.710678118655vh;
 	transform: translateX(-50%) translateY(-50%) rotate(45deg);
-	background-image: linear-gradient(to top in oklch, var(--triangle));
 }
 
 .bg-triangle--right::before {
@@ -1011,7 +967,6 @@ body {
 	width: 8vh;
 	transform: rotate(45deg);
 	transform-origin: top right;
-	background-image: linear-gradient(to top in oklch, var(--triangle-stripe));
 }
 
 .bg-triangle--right::after {
@@ -1020,7 +975,6 @@ body {
 	right: 0;
 	transform-origin: center;
 	transform: translateX(50%) rotate(45deg);
-	background-image: linear-gradient(to top in oklch, var(--triangle));
 	opacity: 1;
 }
 
@@ -1390,11 +1344,6 @@ body {
 	top: 100%;
 	margin-top: 0.625rem;
 	left: 100%;
-	transform: translateX(-100%);
-}
-
-.tooltip .tooltip__text--left {
-	left: -0.625rem;
 	transform: translateX(-100%);
 }
 

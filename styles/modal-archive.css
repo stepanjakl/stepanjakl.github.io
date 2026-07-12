@@ -617,11 +617,6 @@ figure.modal-archive__project-hero picture img {
 
 /* Hover cards - variants */
 
-[class*='hover-cards--variant-'] > figure {
-	--aspect-w: 16;
-	--aspect-h: 9;
-}
-
 .hover-cards--variant-cloudraker-tfp {
 	max-width: 16rem;
 }

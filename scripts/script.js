@@ -23,8 +23,7 @@ App._elCache = App._elCache || {};
 // ============================================================================
 
 /** Detect if device supports touch input */
-const isTouchDevice =
-	'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 // Debounce function - prevents excessive function calls during rapid events
 // Used for resize handlers and other high-frequency events to reduce overhead
@@ -265,26 +264,21 @@ function initializeMenuGroupHoverLogic() {
 /**
  * Improves focus accessibility for the timeline button by virtually reordering it
  * to appear after the fullscreen button in the tab order.
- * Also ensures the label is keyboard accessible (tabindex + enter/space).
+ * (Enter/Space activation comes from the global focusable-label handler.)
  */
 function initializeTimelineAccessibility() {
 	const timelineNavigation = document.querySelector('#timeline-navigation');
-	const fullscreenBtn = document.querySelector('.modal__fullscreen-button');
 	const timelineBtn = document.querySelector('.modal__timeline-button');
 	const timelineSkipLink = document.querySelector('#modal-archive-timeline-skip-link');
 
-	if (!fullscreenBtn || !timelineBtn || !timelineSkipLink) return;
+	if (!timelineNavigation || !timelineBtn || !timelineSkipLink) return;
 
 	// Ensure timeline button is keyboard focusable
 	timelineBtn.setAttribute('tabindex', '0');
 
-	// Consolidated keyboard handler for timeline button
-	// Handles: activation (Enter/Space), shift+tab (to skip link), tab (to next focusable element)
+	// Tab order override: shift+tab returns to the skip link, tab enters the timeline navigation
 	timelineBtn.addEventListener('keydown', (e) => {
-		if (e.key === 'Enter' || e.key === ' ') {
-			e.preventDefault();
-			timelineBtn.click();
-		} else if (e.key === 'Tab') {
+		if (e.key === 'Tab') {
 			e.preventDefault();
 			if (e.shiftKey) {
 				// Shift+Tab: Focus skip link
@@ -535,6 +529,23 @@ function isFocusable(element) {
 	}
 }
 
+/**
+ * Toggle a hidden state checkbox by ID
+ * Dispatching 'change' mirrors a user click so persistence managers
+ * (theme, ambience, animations) react the same way regardless of trigger
+ * @param {string} id - Checkbox element ID
+ * @param {boolean} dispatch - Whether to dispatch a change event (default: true)
+ */
+function toggleCheckbox(id, dispatch = true) {
+	const checkbox = App.getEl(id);
+	if (!checkbox) return;
+
+	checkbox.checked = !checkbox.checked;
+	if (dispatch) {
+		checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+	}
+}
+
 // ============================================================================
 // Global Constants & Configuration
 // ============================================================================
@@ -634,7 +645,7 @@ function getElementByIdWithCaching(idOrEl) {
 	if (typeof idOrEl !== 'string') return idOrEl;
 	return (App._elCache[idOrEl] ??= document.getElementById(idOrEl));
 }
-App.getEl = App.getEl || getElementByIdWithCaching;
+App.getEl = getElementByIdWithCaching;
 
 // ============================================================================
 // Event Delegation Handlers
@@ -663,7 +674,7 @@ function handleContextMenu(e) {
  * No separate global keydown handler needed - KeyHandler provides comprehensive coverage
  */
 
-// Public API methods (populated later during DOMContentLoaded, called from HTML inline handlers)
+// Public App API (populated during DOMContentLoaded; shared across handlers and timeline.js)
 App.timeline = null;
 App.textHighlighter = null;
 App.popupInstance = null;
@@ -705,9 +716,6 @@ class ThemeManager {
 		this.STORAGE_KEY = 'theme-mode';
 		this.DISABLE_TRANSITIONS_CLASS = 'disable-transitions';
 
-		// System preference listener reference (for potential cleanup)
-		this.mediaQueryListenerReference = null;
-
 		// DOM Cache (lazy initialised)
 		this.modeCheckboxElement = null;
 
@@ -741,53 +749,6 @@ class ThemeManager {
 			this.saveTheme();
 			this.disableTransitionsDuringSwitch();
 		});
-
-		// Listen for system preference changes
-		// Allows theme to update automatically if user changes system preference while in Automatic mode
-		this.setupSystemPreferenceListener();
-	}
-
-	// System Preference Detection
-
-	setupSystemPreferenceListener() {
-		if (!window.matchMedia) {
-			// Browser doesn't support matchMedia (very old browsers)
-			return;
-		}
-
-		// Create media query listener for system dark mode preference
-		const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-		// Handler for when system preference changes
-		const handleSystemPreferenceChange = (_event) => {
-			const modeCheckbox = this.getModeCheckbox();
-			if (!modeCheckbox) return;
-
-			// Only auto-update if user is in "Automatic" mode (no saved preference)
-			const savedTheme = localStorage.getItem(this.STORAGE_KEY);
-			if (!savedTheme) {
-				// Automatic mode: Dark mode is always the default, system preference is ignored
-				// This ensures dark mode regardless of system settings
-				modeCheckbox.checked = false; // false = dark mode
-			}
-		};
-
-		// Register listener with modern addEventListener syntax (supported since 2020+)
-		// Fallback: also support older addListener method for older browsers
-		if (darkModeQuery.addEventListener) {
-			darkModeQuery.addEventListener('change', handleSystemPreferenceChange);
-			this.mediaQueryListenerReference = {
-				query: darkModeQuery,
-				handler: handleSystemPreferenceChange
-			};
-		} else if (darkModeQuery.addListener) {
-			// Deprecated but supported in older browsers (<2020)
-			darkModeQuery.addListener(handleSystemPreferenceChange);
-			this.mediaQueryListenerReference = {
-				query: darkModeQuery,
-				handler: handleSystemPreferenceChange
-			};
-		}
 	}
 
 	// Theme Management
@@ -931,7 +892,6 @@ class AnimationPreferenceManager {
 
 // Initialise animation preference manager
 try {
-	window.App = window.App || {};
 	window.App.animationPreferenceManager = new AnimationPreferenceManager();
 } catch (error) {
 	console.error('Failed to initialise animation preference manager:', error);
@@ -1021,11 +981,7 @@ function initializeModalFooterArt() {
 	};
 
 	modalProfile.addEventListener('scroll', handleScroll, { passive: true });
-	if (typeof ResizeManager !== 'undefined') {
-		ResizeManager.register(handleScroll);
-	} else {
-		window.addEventListener('resize', handleScroll);
-	}
+	ResizeManager.register(handleScroll);
 	handleScroll();
 }
 
@@ -1493,7 +1449,6 @@ class KeyHandler {
 
 		// DOM Cache (lazy initialised)
 		this.tooltipElementsCache = null;
-		this.debugElementCache = null;
 		this.shortcutElementsCache = null;
 
 		// Constants
@@ -1562,14 +1517,6 @@ class KeyHandler {
 	}
 
 	/**
-	 * Get debug checkbox element with lazy caching
-	 * @returns {HTMLElement|null} Cached debug checkbox element
-	 */
-	getDebugElement() {
-		return (this.debugElementCache ??= App.getEl('debug'));
-	}
-
-	/**
 	 * Get shortcut elements with lazy caching
 	 * Caching significantly improves performance since this is called frequently on Cmd/Ctrl state changes
 	 * @returns {Array<HTMLElement>} Cached array of shortcut elements
@@ -1585,7 +1532,7 @@ class KeyHandler {
 	handleKeydown(event) {
 		const rawKey = event.key;
 		const key = rawKey?.toLowerCase();
-		const code = event.code; // Physical key position (KeyM, KeyF, KeyR, etc.)
+		const code = event.code; // Physical key position (KeyT, KeyE, KeyF)
 		const hasCmdCtrlModifier = event.ctrlKey || event.metaKey; // For shortcuts and dropdown display
 
 		// Check if this is a modifier key only (don't return, we need to handle tooltips)
@@ -1716,10 +1663,8 @@ class KeyHandler {
 
 	toggleDebug(event) {
 		event.preventDefault();
-		const debugElement = this.getDebugElement();
-		if (debugElement) {
-			debugElement.checked = !debugElement.checked;
-		}
+		// Debug toggle is purely visual - no listeners to notify
+		toggleCheckbox('debug', false);
 	}
 
 	// Tooltip Management
@@ -1812,40 +1757,14 @@ class KeyHandler {
 		// Execute the appropriate action
 		switch (code) {
 			case this.DROPDOWN_KEYS.MODE_TOGGLE:
-				this.toggleMode();
+				toggleCheckbox('mode');
 				break;
 			case this.DROPDOWN_KEYS.AMBIENCE:
-				this.toggleAmbience();
+				toggleCheckbox('ambience');
 				break;
 			case this.DROPDOWN_KEYS.FULLSCREEN:
 				App.toggleFullscreen();
 				break;
-		}
-	}
-
-	/**
-	 * Toggle light/dark mode via keyboard shortcut
-	 * Dispatches change event to trigger any listeners (localStorage persistence, etc.)
-	 * @returns {void}
-	 */
-	toggleMode() {
-		const modeCheckbox = document.getElementById('mode');
-		if (modeCheckbox) {
-			modeCheckbox.checked = !modeCheckbox.checked;
-			modeCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
-		}
-	}
-
-	/**
-	 * Toggle ambience audio via keyboard shortcut
-	 * Dispatches change event to trigger any listeners and update audio state
-	 * @returns {void}
-	 */
-	toggleAmbience() {
-		const ambienceCheckbox = document.getElementById('ambience');
-		if (ambienceCheckbox) {
-			ambienceCheckbox.checked = !ambienceCheckbox.checked;
-			ambienceCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
 		}
 	}
 
@@ -2457,6 +2376,9 @@ class CursorIdleDetector {
  * Supports placeholder images for progressive loading
  */
 class Popup {
+	/** Tracks popup blocking across all instances (session-wide fallback switch) */
+	static isPopupBlocked = false;
+
 	constructor() {
 		// Constants
 		this.POPUP_SCREEN_WIDTH_RATIO = 0.9;
@@ -2476,11 +2398,6 @@ class Popup {
 		this.handleFallbackClick = null;
 		this.focusTrap = null; // FocusTrap instance for accessibility
 		this.cursorIdleDetector = null;
-
-		// Static property to track popup blocking across all instances
-		if (typeof Popup.isPopupBlocked === 'undefined') {
-			Popup.isPopupBlocked = false;
-		}
 	}
 
 	// HTML Generation
@@ -2541,19 +2458,18 @@ class Popup {
 		if (!dimensions) {
 			console.warn('Could not retrieve media dimensions for the popup.');
 			this.showFallbackView(href, isVideo, dimensions, placeholderUrl);
-			return true;
+			return;
 		}
 
 		if (Popup.isPopupBlocked) {
 			console.info('Popups are blocked for this session. Using fallback view...');
 			this.showFallbackView(href, isVideo, dimensions, placeholderUrl);
-			return true;
+			return;
 		}
 
 		const { width, height, left, top } = this.calculateWindowSize(dimensions);
-		const ASPECT_RATIO_TALL_THRESHOLD = 0.85; // Boundary to distinguish 'tall' images
 		const imageAspect = dimensions.width / dimensions.height;
-		this.isTallImage = !isVideo && imageAspect < ASPECT_RATIO_TALL_THRESHOLD;
+		const isTallImage = !isVideo && imageAspect < this.ASPECT_RATIO_TALL_THRESHOLD;
 
 		// Generate popup/tab HTML with shared functionality
 		const html = this.generatePopupHTML(href, isVideo, placeholderUrl, !isVideo);
@@ -2561,7 +2477,7 @@ class Popup {
 		const blobUrl = URL.createObjectURL(blob);
 
 		// If the image is tall, prefer opening a small HTML page in a new tab
-		if (this.isTallImage) {
+		if (isTallImage) {
 			const newTab = window.open(blobUrl, '_blank');
 
 			// If opening a new tab/window failed, revoke blob and fallback inline
@@ -2572,10 +2488,9 @@ class Popup {
 					'Opening new tab was blocked. Falling back to inline view for the session.'
 				);
 				this.showFallbackView(href, isVideo, dimensions, placeholderUrl);
-				return true;
 			}
 
-			return false;
+			return;
 		}
 
 		// Otherwise attempt to open a centred popup window
@@ -2589,10 +2504,7 @@ class Popup {
 			Popup.isPopupBlocked = true;
 			console.info('Popup was blocked. Using inline fallback for the session.');
 			this.showFallbackView(href, isVideo, dimensions, placeholderUrl);
-			return true;
 		}
-
-		return false;
 	}
 
 	// Fallback View
@@ -2980,10 +2892,9 @@ class Popup {
 				width: var(--modal-button-size);
 				height: var(--modal-button-size);
 				border-radius: 50%;
-				color: var(--light-70);
+				color: white;
 				background: var(--dark-55);
 				backdrop-filter: saturate(1.75) blur(1rem);
-				color: white;
 				border: none;
 				cursor: pointer;
 				z-index: 3;
@@ -3240,9 +3151,7 @@ class Carousel {
 
 		// Register for resize updates to keep pixel thresholds accurate
 		// Pixel-based rootMargins become invalid when viewport dimensions change
-		if (typeof ResizeManager !== 'undefined') {
-			ResizeManager.register(() => this.refreshIntersectionObservers());
-		}
+		ResizeManager.register(() => this.refreshIntersectionObservers());
 	}
 
 	/**
@@ -3397,23 +3306,9 @@ class Carousel {
 			}
 		});
 
+		// Native buttons fire 'click' on Enter/Space, so these also cover keyboard activation
 		this.prevButtonEl.addEventListener('click', () => this.navigateToSlide('prev'));
 		this.nextButtonEl.addEventListener('click', () => this.navigateToSlide('next'));
-
-		// Add keyboard shortcuts for prev/next buttons
-		this.prevButtonEl.addEventListener('keydown', (event) => {
-			if (event.key === 'Enter' || event.key === ' ') {
-				event.preventDefault();
-				this.navigateToSlide('prev');
-			}
-		});
-
-		this.nextButtonEl.addEventListener('keydown', (event) => {
-			if (event.key === 'Enter' || event.key === ' ') {
-				event.preventDefault();
-				this.navigateToSlide('next');
-			}
-		});
 	}
 
 	// Slides Keyboard Navigation
@@ -3547,7 +3442,7 @@ class Carousel {
 
 	setupPreloadingObserver() {
 		const LAZY_LOAD_THRESHOLD = 0.5; // Load images when within 50% of viewport
-		const margin = App.getPixelThreshold?.(`${LAZY_LOAD_THRESHOLD * 100}%`, true) || '0px';
+		const margin = App.getPixelThreshold(`${LAZY_LOAD_THRESHOLD * 100}%`, true);
 
 		const observerCallback = (entries) => {
 			for (let i = 0; i < entries.length; i++) {
@@ -3659,32 +3554,6 @@ class Carousel {
 			},
 			true
 		); // Use capture to catch hover on any button within nav
-	}
-
-	// Cleanup
-
-	destroy() {
-		// Disconnect intersection observers
-		if (this.observer) {
-			this.observer.disconnect();
-			this.observer = null;
-		}
-
-		if (this.preloadingObserver) {
-			this.preloadingObserver.disconnect();
-			this.preloadingObserver = null;
-		}
-
-		// Remove keyboard event listeners from slide links
-		const slideLinks = this.slidesEls
-			.map((slide) => slide.querySelector('a'))
-			.filter((link) => link !== null);
-		slideLinks.forEach((link) => {
-			link.removeAttribute('tabindex');
-		});
-
-		// Clear bound handler reference
-		this.boundHandleSlidesKeydown = null;
 	}
 }
 
@@ -3834,20 +3703,6 @@ class KeyboardNavigator {
 			items[targetIndex].focus();
 		}
 	}
-
-	// Cleanup
-
-	destroy() {
-		if (this.containers) {
-			this.containers.forEach((container) => {
-				const items = this.getItems(container);
-				items.forEach((item) => {
-					item.removeEventListener('keydown', this.boundHandleKeydown);
-					item.removeAttribute('tabindex');
-				});
-			});
-		}
-	}
 }
 
 // ============================================================================
@@ -3973,12 +3828,6 @@ class MenuDropdownNavigator {
 
 		items[targetIndex].focus();
 	}
-
-	// Cleanup
-
-	destroy() {
-		document.removeEventListener('keydown', this.boundHandleKeydown);
-	}
 }
 
 // ============================================================================
@@ -4007,7 +3856,7 @@ async function copyToClipboard(text) {
 		textarea.value = text;
 		textarea.style.position = 'absolute';
 		textarea.style.left = '-999rem';
-		textarea.style.top = window.pageYOffset + 'px';
+		textarea.style.top = window.scrollY + 'px';
 		textarea.setAttribute('readonly', '');
 		document.body.appendChild(textarea);
 		textarea.select();
@@ -4393,9 +4242,7 @@ function initializeTimeline(startObserver = true) {
 		refreshTimelineScrollers();
 
 		// Register with centralised ResizeManager for cleanup and consistency
-		if (typeof ResizeManager !== 'undefined') {
-			ResizeManager.register(refreshTimelineScrollers);
-		}
+		ResizeManager.register(refreshTimelineScrollers);
 	};
 
 	// Store initialiser on timeline instance for external access
@@ -4457,8 +4304,8 @@ function setupTimelineFocusTrap() {
 
 		const activeLabel =
 			labelElement ||
-			timelineWrapper.querySelector('#timeline_labels [data-label-for]:focus') ||
-			timelineWrapper.querySelector('#timeline_labels [data-label-for][tabindex="0"]');
+			timelineWrapper.querySelector('#timeline-labels [data-label-for]:focus') ||
+			timelineWrapper.querySelector('#timeline-labels [data-label-for][tabindex="0"]');
 
 		if (!activeLabel) return;
 
@@ -4495,7 +4342,7 @@ function setupTimelineFocusTrap() {
 			// Focus first label (user wants to navigate, not immediately return)
 			requestAnimationFrame(() => {
 				const firstLabel = timelineWrapper.querySelector(
-					'#timeline_labels [data-label-for][tabindex="0"]'
+					'#timeline-labels [data-label-for][tabindex="0"]'
 				);
 				(firstLabel || returnButton).focus();
 			});
@@ -4617,12 +4464,7 @@ const applyNoAnimation = () => {
  * @returns {boolean} True if fullscreen is supported
  */
 const isFullscreenSupported = () => {
-	return !!(
-		document.fullscreenEnabled ||
-		document.webkitFullscreenEnabled ||
-		document.mozFullScreenEnabled ||
-		document.msFullscreenEnabled
-	);
+	return !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
 };
 
 /**
@@ -4638,19 +4480,13 @@ function toggleFullscreen() {
 	if (!document.fullscreenElement) {
 		const requestMethod =
 			document.documentElement.requestFullscreen ||
-			document.documentElement.webkitRequestFullscreen ||
-			document.documentElement.mozRequestFullscreen ||
-			document.documentElement.msRequestFullscreen;
+			document.documentElement.webkitRequestFullscreen;
 
 		if (requestMethod) {
 			requestMethod.call(document.documentElement);
 		}
 	} else {
-		const exitMethod =
-			document.exitFullscreen ||
-			document.webkitExitFullscreen ||
-			document.mozCancelFullScreen ||
-			document.msExitFullscreen;
+		const exitMethod = document.exitFullscreen || document.webkitExitFullscreen;
 
 		if (exitMethod) {
 			exitMethod.call(document);
@@ -4874,58 +4710,28 @@ function initializeClickHandlers() {
 /**
  * Initialise timeline section toggles with aria-expanded synchronization
  * Keeps checkbox state in sync with aria-expanded attribute for screen readers
+ * Toggles are discovered from the DOM - the same source handleMobileArchiveChange uses
  */
 function initializeTimelineSectionToggles() {
 	const modalArchive = getModalElement(NAVIGATION_HASHES.ARCHIVE);
-	const toggles = [
-		{
-			checkbox: 'timeline-section-year-2026',
-			label: '[for="timeline-section-year-2026"]'
-		},
-		{
-			checkbox: 'timeline-section-year-2025-21',
-			label: '[for="timeline-section-year-2025-21"]'
-		},
-		{
-			checkbox: 'timeline-section-year-2023-19',
-			label: '[for="timeline-section-year-2023-19"]'
-		},
-		{
-			checkbox: 'timeline-section-year-2019-18',
-			label: '[for="timeline-section-year-2019-18"]'
-		},
-		{
-			checkbox: 'timeline-section-year-elsewhen',
-			label: '[for="timeline-section-year-elsewhen"]'
-		}
-	];
+	const checkboxes = document.querySelectorAll('input[id^="timeline-section-year-"]');
 
-	toggles.forEach(({ checkbox, label }) => {
-		const checkboxEl = document.getElementById(checkbox);
-		const labelEl = document.querySelector(label);
+	checkboxes.forEach((checkboxEl) => {
+		const labelEl = document.querySelector(`[for="${checkboxEl.id}"]`);
+		if (!labelEl) return;
 
-		if (checkboxEl && labelEl) {
-			// Set initial aria-expanded state based on checkbox
+		// Set initial aria-expanded state based on checkbox
+		syncTimelineSectionToggleAria(checkboxEl);
+
+		// Update aria-expanded when checkbox changes (label clicks fire this too)
+		checkboxEl.addEventListener('change', () => {
 			syncTimelineSectionToggleAria(checkboxEl);
-
-			// Update aria-expanded when checkbox changes
-			checkboxEl.addEventListener('change', () => {
-				syncTimelineSectionToggleAria(checkboxEl);
-				if (checkboxEl.checked) {
-					requestAnimationFrame(() => {
-						App.timeline?.scrollParentToChildVertical(modalArchive, labelEl, 'instant');
-					});
-				}
-			});
-
-			// Also update when label is clicked (for keyboard users)
-			labelEl.addEventListener('click', () => {
-				// State will update after the click, so we use setTimeout
-				setTimeout(() => {
-					syncTimelineSectionToggleAria(checkboxEl);
-				}, 0);
-			});
-		}
+			if (checkboxEl.checked) {
+				requestAnimationFrame(() => {
+					App.timeline?.scrollParentToChildVertical(modalArchive, labelEl, 'instant');
+				});
+			}
+		});
 	});
 }
 
@@ -4974,8 +4780,8 @@ function initializeImageLazyLoading() {
 	const LAZY_LOAD_THRESHOLD = 0.5; // Load images when within 50% of viewport
 
 	// Dynamic values that need recalculation on resize
-	let marginV = App.getPixelThreshold?.(`${LAZY_LOAD_THRESHOLD * 100}%`) || '0px';
-	let marginH = App.getPixelThreshold?.(`${LAZY_LOAD_THRESHOLD * 100}%`, true) || '0px';
+	let marginV = App.getPixelThreshold(`${LAZY_LOAD_THRESHOLD * 100}%`);
+	let marginH = App.getPixelThreshold(`${LAZY_LOAD_THRESHOLD * 100}%`, true);
 
 	// Cache observers by their root element to avoid unnecessary object creation
 	const observers = new Map();
@@ -5083,8 +4889,8 @@ function initializeImageLazyLoading() {
 		observers.clear();
 
 		// 2. Recalculate margins with fresh viewport dimensions
-		marginV = App.getPixelThreshold?.(`${LAZY_LOAD_THRESHOLD * 100}%`) || '0px';
-		marginH = App.getPixelThreshold?.(`${LAZY_LOAD_THRESHOLD * 100}%`, true) || '0px';
+		marginV = App.getPixelThreshold(`${LAZY_LOAD_THRESHOLD * 100}%`);
+		marginH = App.getPixelThreshold(`${LAZY_LOAD_THRESHOLD * 100}%`, true);
 
 		// 3. Process all images that still have the loading="lazy" attribute
 		document.querySelectorAll('img[loading="lazy"]').forEach((img) => {
@@ -5121,9 +4927,7 @@ function initializeImageLazyLoading() {
 	refreshObservers();
 
 	// 2. Register for future updates with centralised resize manager
-	if (typeof ResizeManager !== 'undefined') {
-		ResizeManager.register(refreshObservers);
-	}
+	ResizeManager.register(refreshObservers);
 }
 
 // ============================================================================
@@ -5263,48 +5067,26 @@ function initializeGlobalEventHandlers() {
 						return;
 					}
 
-					case 'toggle-ambience': {
+					case 'toggle-ambience':
 						event.preventDefault();
-						const ambience = document.getElementById('ambience');
-						if (ambience) {
-							ambience.checked = !ambience.checked;
-							// Dispatch change event to trigger audio.js listener for persistence
-							ambience.dispatchEvent(new Event('change', { bubbles: true }));
-						}
+						toggleCheckbox('ambience');
 						return;
-					}
 
-					case 'toggle-mode': {
+					case 'toggle-mode':
 						event.preventDefault();
-						const mode = document.getElementById('mode');
-						if (mode) {
-							mode.checked = !mode.checked;
-							// Dispatch change event to trigger ThemeManager listener for persistence
-							mode.dispatchEvent(new Event('change', { bubbles: true }));
-						}
+						toggleCheckbox('mode');
 						return;
-					}
 
-					case 'toggle-debug': {
+					case 'toggle-debug':
 						event.preventDefault();
-						const debug = document.getElementById('debug');
-						if (debug) {
-							debug.checked = !debug.checked;
-							// Debug toggle purely visual - no additional logic needed
-						}
+						// Debug toggle is purely visual - no listeners to notify
+						toggleCheckbox('debug', false);
 						return;
-					}
 
-					case 'toggle-animations': {
+					case 'toggle-animations':
 						event.preventDefault();
-						const animations = document.getElementById('animations');
-						if (animations) {
-							animations.checked = !animations.checked;
-							// Dispatch change event to trigger AnimationPreferenceManager listener for persistence
-							animations.dispatchEvent(new Event('change', { bubbles: true }));
-						}
+						toggleCheckbox('animations');
 						return;
-					}
 				}
 			}
 
@@ -5352,7 +5134,7 @@ function initializeGlobalEventHandlers() {
 			}
 
 			// 6. Update exit target when timeline label clicked
-			const labelButton = event.target.closest('#timeline_labels [data-label-for]');
+			const labelButton = event.target.closest('#timeline-labels [data-label-for]');
 			if (labelButton) {
 				const timelineWrapper = getTimelineWrapper();
 				if (timelineWrapper?.contains(labelButton)) {
@@ -5387,9 +5169,26 @@ function initializeGlobalEventHandlers() {
 	document.addEventListener('keydown', (event) => {
 		const { key } = event;
 
+		// Activate focusable labels and role="button" elements with Enter/Space
+		// Unlike native buttons, these have no built-in keyboard activation
+		// (WCAG 2.1.1) - covers dropdown toggles, fullscreen/timeline labels,
+		// mobile section toggles, and the intro name
+		if (key === 'Enter' || key === ' ') {
+			const target = event.target;
+			if (
+				target instanceof Element &&
+				target.matches('label[tabindex="0"], [role="button"][tabindex="0"]') &&
+				!target.matches('button, a[href], input, select, textarea')
+			) {
+				event.preventDefault(); // Space would otherwise scroll the page
+				target.click();
+				return;
+			}
+		}
+
 		// Update exit target during timeline arrow navigation
 		if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(key)) {
-			const labelButton = event.target.closest('#timeline_labels [data-label-for]');
+			const labelButton = event.target.closest('#timeline-labels [data-label-for]');
 			if (labelButton) {
 				const timelineWrapper = getTimelineWrapper();
 				if (timelineWrapper?.contains(labelButton)) {
@@ -5397,10 +5196,10 @@ function initializeGlobalEventHandlers() {
 					setTimeout(() => {
 						const newFocusedLabel =
 							timelineWrapper.querySelector(
-								'#timeline_labels [data-label-for]:focus'
+								'#timeline-labels [data-label-for]:focus'
 							) ||
 							timelineWrapper.querySelector(
-								'#timeline_labels [data-label-for][tabindex="0"]'
+								'#timeline-labels [data-label-for][tabindex="0"]'
 							);
 						if (newFocusedLabel) {
 							App.updateTimelineExitFocusTarget?.(newFocusedLabel);
@@ -5433,11 +5232,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		animationsCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
 	}
 
-	// Setup event delegation for all data-action handlers
-	// This eliminates "App is not defined" errors by centralizing event handling
-	// Note: Don't register click handler here - it's already registered in initializeGlobalEventHandlers
-	// to avoid duplicate listeners. Only register context menu handler.
-	// Keyboard shortcuts are handled by KeyHandler class which provides comprehensive coverage.
+	// Right-click on the intro name plays the pronunciation
+	// (click/keyboard delegation lives in initializeGlobalEventHandlers; shortcuts in KeyHandler)
 	document.addEventListener('contextmenu', handleContextMenu, true);
 
 	/* Core Initialisation */
@@ -5487,7 +5283,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		{ once: true }
 	);
 
-	/* Initial Animation Control */
+	/* Transition & Animation Watchers */
 
 	initializeMenuInitialAnimationWatcher();
 	initializeMenuTransitionWatcher();
@@ -5541,13 +5337,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	/* Resize Handler Registration */
 
 	// Register timeline positioning with centralised resize manager
-	if (typeof ResizeManager !== 'undefined') {
-		ResizeManager.register(() => {
-			if (App.timeline) {
-				App.positionTimeline();
-			}
-		});
-	}
+	ResizeManager.register(() => {
+		if (App.timeline) {
+			App.positionTimeline();
+		}
+	});
 
 	// Initialize menu hover logic (Safari fix + focus management)
 	initializeMenuGroupHoverLogic();

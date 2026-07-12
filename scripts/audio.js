@@ -396,18 +396,9 @@ App.audio = (function () {
 				// Fade In: Avoid popping by ramping volume up
 				masterGainNode.gain.value = 0;
 				masterGainNode.gain.setTargetAtTime(1, ctx.currentTime, 1);
-
-				// Begin generative loops (only if not already running)
-				if (padTimerId === null) {
-					padTimerId = 0; // Set to non-null to indicate running
-					createPad();
-				}
-				if (melodyTimerId === null) {
-					melodyTimerId = 0; // Set to non-null to indicate running
-					createMelody();
-				}
 			} catch (e) {
 				console.error('Audio start failed:', e);
+				return;
 			}
 		} else {
 			// Resume context if it was suspended by the browser
@@ -420,16 +411,16 @@ App.audio = (function () {
 				masterGainNode.gain.cancelScheduledValues(ctx.currentTime);
 				masterGainNode.gain.setTargetAtTime(1, ctx.currentTime, 1);
 			}
+		}
 
-			// Restart loops if they were stopped
-			if (padTimerId === null) {
-				padTimerId = 0; // Set to non-null to indicate running
-				createPad();
-			}
-			if (melodyTimerId === null) {
-				melodyTimerId = 0; // Set to non-null to indicate running
-				createMelody();
-			}
+		// (Re)start generative loops if they are not already running
+		if (padTimerId === null) {
+			padTimerId = 0; // Set to non-null to indicate running
+			createPad();
+		}
+		if (melodyTimerId === null) {
+			melodyTimerId = 0; // Set to non-null to indicate running
+			createMelody();
 		}
 	}
 

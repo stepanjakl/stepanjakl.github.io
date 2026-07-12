@@ -120,7 +120,7 @@ class HorizontalTimeline extends HTMLElement {
             <div id="timeline-wrapper">
                 <div id="timeline-content">
                     <div>
-                        <div id="timeline_bars">
+                        <div id="timeline-bars">
                             ${this.labels
 								.map(
 									(label, index) => `
@@ -135,7 +135,7 @@ class HorizontalTimeline extends HTMLElement {
 								)
 								.join('')}
                         </div>
-                        <div id="timeline_labels" role="tablist" aria-label="Timeline navigation">
+                        <div id="timeline-labels" role="tablist" aria-label="Timeline navigation">
                             ${this.labels.map((label, index) => `<button type="button" role="tab" data-label-for="${label}" aria-label="View ${label} projects" aria-selected="${index === 0 ? 'true' : 'false'}" aria-controls="timeline-content-${label}" tabindex="${index === 0 ? '0' : '-1'}"><span>${label}<span></span></span></button>`).join('')}
                         </div>
                     </div>
@@ -158,7 +158,7 @@ class HorizontalTimeline extends HTMLElement {
 	}
 
 	getTimelineAllDivEls() {
-		return (this.timelineAllDivEls ??= Array.from(this.querySelectorAll('#timeline_bars div')));
+		return (this.timelineAllDivEls ??= Array.from(this.querySelectorAll('#timeline-bars div')));
 	}
 
 	getSectionEls() {
@@ -421,14 +421,14 @@ class HorizontalTimeline extends HTMLElement {
 		// Click handling - labels and indicators
 		this.boundHandleClick = (event) => {
 			// Handle label clicks
-			const labelButton = event.target.closest('#timeline_labels [data-label-for]');
+			const labelButton = event.target.closest('#timeline-labels [data-label-for]');
 			if (labelButton && this.contains(labelButton)) {
 				this.handleLabelClick(labelButton);
 				return;
 			}
 
 			// Handle indicator clicks - delegate to corresponding label
-			const indicator = event.target.closest('#timeline_bars [data-value]');
+			const indicator = event.target.closest('#timeline-bars [data-value]');
 			if (indicator && this.contains(indicator)) {
 				const value = indicator.getAttribute('data-value');
 				const label = this.querySelector(`[data-label-for="${value}"]`);
@@ -439,7 +439,7 @@ class HorizontalTimeline extends HTMLElement {
 
 		// Keyboard navigation for timeline labels
 		this.boundHandleKeydown = (event) => {
-			const labelButton = event.target.closest('#timeline_labels [data-label-for]');
+			const labelButton = event.target.closest('#timeline-labels [data-label-for]');
 			if (!labelButton || !this.contains(labelButton)) return;
 
 			const labelEls = this.getLabelEls();
@@ -486,7 +486,7 @@ class HorizontalTimeline extends HTMLElement {
 		// Hover highlighting - bidirectional between indicators and labels
 		this.boundHandleMouseOver = (event) => {
 			// Indicator hover → highlight label
-			const indicator = event.target.closest('#timeline_bars [data-value]');
+			const indicator = event.target.closest('#timeline-bars [data-value]');
 			if (indicator && this.contains(indicator)) {
 				const value = indicator.getAttribute('data-value');
 				const label = this.querySelector(`[data-label-for="${value}"]`);
@@ -495,11 +495,11 @@ class HorizontalTimeline extends HTMLElement {
 			}
 
 			// Label hover → highlight centred indicator
-			const label = event.target.closest('#timeline_labels [data-label-for]');
+			const label = event.target.closest('#timeline-labels [data-label-for]');
 			if (label && this.contains(label)) {
 				const value = label.getAttribute('data-label-for');
 				const indicator = this.querySelector(
-					`#timeline_bars div:nth-child(6n + 4)[data-value="${value}"]`
+					`#timeline-bars div:nth-child(6n + 4)[data-value="${value}"]`
 				);
 				if (indicator) indicator.classList.add('highlight');
 			}
@@ -507,7 +507,7 @@ class HorizontalTimeline extends HTMLElement {
 
 		this.boundHandleMouseOut = (event) => {
 			// Remove highlight from indicator-triggered label
-			const indicator = event.target.closest('#timeline_bars [data-value]');
+			const indicator = event.target.closest('#timeline-bars [data-value]');
 			if (indicator && this.contains(indicator)) {
 				const value = indicator.getAttribute('data-value');
 				const label = this.querySelector(`[data-label-for="${value}"]`);
@@ -516,11 +516,11 @@ class HorizontalTimeline extends HTMLElement {
 			}
 
 			// Remove highlight from label-triggered indicator
-			const label = event.target.closest('#timeline_labels [data-label-for]');
+			const label = event.target.closest('#timeline-labels [data-label-for]');
 			if (label && this.contains(label)) {
 				const value = label.getAttribute('data-label-for');
 				const indicator = this.querySelector(
-					`#timeline_bars div:nth-child(6n + 4)[data-value="${value}"]`
+					`#timeline-bars div:nth-child(6n + 4)[data-value="${value}"]`
 				);
 				if (indicator) indicator.classList.remove('highlight');
 			}

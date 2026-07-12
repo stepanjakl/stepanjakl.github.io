@@ -196,9 +196,6 @@ body.no-fullscreen .modal__fullscreen-button {
 
 #mode:checked ~ main #dropdown-menu > div > .dropdown-menu__group > label:first-child {
 	border-right: none;
-}
-
-#mode:checked ~ main #dropdown-menu > div > .dropdown-menu__group > label:first-child {
 	border-bottom-left-radius: calc(var(--menu-border-radius) - max(1px, 0.0625rem));
 }
 
@@ -259,9 +256,6 @@ body.no-fullscreen .modal__fullscreen-button {
 
 #mode:checked ~ main .intro__logo-frame {
 	background-image: url('../images/logo-animated-light.svg');
-}
-
-#mode:checked ~ main .intro__logo-frame {
 	--corner-color: var(--cyan-full-65);
 	--corner-color--active: var(--blue-full-65);
 }
@@ -632,7 +626,7 @@ body.modal-archive-open #modal-archive .modal__content {
 
 #timeline:checked ~ main #horizontal-timeline-wrapper,
 .modal__timeline-button-wrapper {
-	bottom: calc((var(--segment) / 5) * -1);
+	bottom: calc(var(--segment-fifth) * -1);
 }
 
 @media (min-width: 45rem) {
@@ -763,11 +757,6 @@ body.modal-archive-open #modal-archive .modal__content {
 
 	#mode:checked ~ main #timeline-wrapper {
 		background-color: var(--cyan-half-85);
-	}
-
-	#mode:checked ~ #timeline-wrapper::before {
-		border-radius: calc(var(--timeline-radius) + max(1px, 0.0625rem));
-		background-image: linear-gradient(to bottom, var(--dark-30), var(--dark-45));
 	}
 
 	.modal-profile-side-ruler-art {

@@ -230,21 +230,6 @@ aria.Utils = aria.Utils || {
 	backdropClass: 'dialog-backdrop',
 	focusDataAttr: 'data-focus-after-click',
 
-	matches: (element, selector) => {
-		const proto = Element.prototype;
-		const func =
-			proto.matches ||
-			proto.matchesSelector ||
-			proto.webkitMatchesSelector ||
-			proto.mozMatchesSelector ||
-			proto.msMatchesSelector ||
-			proto.oMatchesSelector ||
-			function (s) {
-				return Array.from(this.parentNode.querySelectorAll(s)).includes(this);
-			};
-		return func.call(element, selector);
-	},
-
 	remove: (item) => {
 		item.remove ? item.remove() : item.parentNode && item.parentNode.removeChild(item);
 	},
@@ -493,24 +478,21 @@ aria.Dialog.prototype.createFocusTrapNodes = function () {
 	/**
 	 * Helper to create a focus trap sentinel node
 	 * Reduces duplication between pre/post nodes
-	 * @param {string} position - 'before' or 'after' for debugging context
 	 * @returns {HTMLElement} Configured sentinel node
 	 */
-	const createSentinel = (_position) => {
+	const createSentinel = () => {
 		const node = document.createElement('div');
 		node.tabIndex = 0;
 		node.className = this.FOCUS_TRAP_NODE_CLASS;
-		// Optional: add data attribute for debugging
-		// node.setAttribute('data-trap-position', position)
 		return node;
 	};
 
 	// Pre-dialog focus trap (before dialog in DOM)
-	this.preNode = createSentinel('before');
+	this.preNode = createSentinel();
 	this.dialogNode.parentNode.insertBefore(this.preNode, this.dialogNode);
 
 	// Post-dialog focus trap (after dialog in DOM)
-	this.postNode = createSentinel('after');
+	this.postNode = createSentinel();
 	this.dialogNode.parentNode.insertBefore(this.postNode, this.dialogNode.nextSibling);
 };
 

@@ -328,7 +328,6 @@ html {
 	--modal-underlay-bg-profile: rgb(255, 255, 255, 0);
 	--modal-underlay-bg-archive: rgb(255, 255, 255, 0);
 	--modal-icon: var(--cyan-half-45);
-	--modal-icon--hover: var(--cyan-full-35);
 	--modal-icon-bg: var(--light-25);
 	--modal-icon--hover: var(--text-1);
 	--modal-line: var(--cyan-quarter-60);
