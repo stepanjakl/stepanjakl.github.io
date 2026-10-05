@@ -6,7 +6,7 @@
 
 # Personal website of Štěpán Jákl
 
-**Senior full-stack developer and interface designer with experience building CMS platforms, dashboards, reusable tooling, integrations, and product-facing web systems, with a wider interest in connected physical/digital products.**
+**Full-stack developer and interface designer with experience building CMS platforms, dashboards, reusable tooling, integrations, and product-facing web systems, with a wider interest in connected physical/digital products.**
 
 **I work across front-end, back-end, interface design, QA, production support, and maintainability, with a strong focus on making complex workflows clear, reliable, and usable.**
 

@@ -1,8 +1,8 @@
 {
 	"id": "/",
-	"name": "Štěpán Jákl - Senior full-stack web developer & interface designer",
+	"name": "Štěpán Jákl - Full-stack web developer & interface designer",
 	"short_name": "Štěpán Jákl",
-	"description": "Senior product-oriented full-stack developer and interface designer building clear, reliable digital systems across CMS platforms, dashboards, tools, and physical/digital products.",
+	"description": "Product-oriented full-stack developer and interface designer building clear, reliable digital systems across CMS platforms, dashboards, tools, and physical/digital products.",
 	"start_url": "/",
 	"scope": "/",
 	"display": "standalone",

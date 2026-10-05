@@ -2402,11 +2402,19 @@ class Popup {
 
 	// HTML Generation
 
-	generatePopupHTML(href, isVideo, placeholderUrl, includeOverlay = false) {
+	generatePopupHTML(
+		href,
+		isVideo,
+		placeholderUrl,
+		includeOverlay = false,
+		fitToViewport = false
+	) {
+		const imageHeight = fitToViewport ? '100%' : 'auto';
+		const imageFit = fitToViewport ? 'object-fit:contain;' : '';
 		const mediaElementHtml = isVideo
 			? `<video src="${href}" controls autoplay playsinline onerror="console.error('Video file not found or failed to load: ${href}')"></video>`
 			: placeholderUrl
-				? `<img src="${href}" onload="requestAnimationFrame(()=>requestAnimationFrame(()=>{this.nextElementSibling.style.opacity='0'}))" onerror="console.error('Image file not found or failed to load: ${href}')" style="width:100%;height:auto"><img src="${placeholderUrl}" onerror="console.warn('Placeholder image not found or failed to load: ${placeholderUrl}')" style="position:absolute;inset:0;width:100%;height:auto;transition:opacity .3s linear">`
+				? `<img src="${href}" onload="requestAnimationFrame(()=>requestAnimationFrame(()=>{this.nextElementSibling.style.opacity='0'}))" onerror="console.error('Image file not found or failed to load: ${href}')" style="width:100%;height:${imageHeight};${imageFit}"><img src="${placeholderUrl}" onerror="console.warn('Placeholder image not found or failed to load: ${placeholderUrl}')" style="position:absolute;inset:0;width:100%;height:${imageHeight};${imageFit}transition:opacity .3s linear">`
 				: `<img src="${href}" onerror="console.error('Image file not found or failed to load: ${href}')" />`;
 
 		const overlayHtml = includeOverlay
@@ -2422,6 +2430,7 @@ class Popup {
         <style>
           html,body{margin:0;padding:0;background-color:#000;position:relative;min-height:100vh}
           img,video{width:100%;height:auto;display:block;position:relative;z-index:0}
+          ${fitToViewport ? 'html,body{height:100%;min-height:0}img{height:100%;object-fit:contain}' : ''}
         </style>
         </head>
         <body>
@@ -2449,6 +2458,7 @@ class Popup {
 		this.triggeringElement = element;
 
 		const isVideo = this.isVideo(href);
+		const fitToViewport = !isVideo && element.hasAttribute('data-popup-fit');
 		const placeholderUrl = !isVideo ? this.getPlaceholderUrl(href) : null;
 
 		const dimensions = isVideo
@@ -2457,22 +2467,23 @@ class Popup {
 
 		if (!dimensions) {
 			console.warn('Could not retrieve media dimensions for the popup.');
-			this.showFallbackView(href, isVideo, dimensions, placeholderUrl);
+			this.showFallbackView(href, isVideo, dimensions, placeholderUrl, fitToViewport);
 			return;
 		}
 
 		if (Popup.isPopupBlocked) {
 			console.info('Popups are blocked for this session. Using fallback view...');
-			this.showFallbackView(href, isVideo, dimensions, placeholderUrl);
+			this.showFallbackView(href, isVideo, dimensions, placeholderUrl, fitToViewport);
 			return;
 		}
 
 		const { width, height, left, top } = this.calculateWindowSize(dimensions);
 		const imageAspect = dimensions.width / dimensions.height;
-		const isTallImage = !isVideo && imageAspect < this.ASPECT_RATIO_TALL_THRESHOLD;
+		const isTallImage =
+			!isVideo && !fitToViewport && imageAspect < this.ASPECT_RATIO_TALL_THRESHOLD;
 
 		// Generate popup/tab HTML with shared functionality
-		const html = this.generatePopupHTML(href, isVideo, placeholderUrl, !isVideo);
+		const html = this.generatePopupHTML(href, isVideo, placeholderUrl, !isVideo, fitToViewport);
 		const blob = new Blob([html], { type: 'text/html' });
 		const blobUrl = URL.createObjectURL(blob);
 
@@ -2487,7 +2498,7 @@ class Popup {
 				console.info(
 					'Opening new tab was blocked. Falling back to inline view for the session.'
 				);
-				this.showFallbackView(href, isVideo, dimensions, placeholderUrl);
+				this.showFallbackView(href, isVideo, dimensions, placeholderUrl, fitToViewport);
 			}
 
 			return;
@@ -2503,13 +2514,13 @@ class Popup {
 		if (!popup || popup.closed || typeof popup.closed === 'undefined') {
 			Popup.isPopupBlocked = true;
 			console.info('Popup was blocked. Using inline fallback for the session.');
-			this.showFallbackView(href, isVideo, dimensions, placeholderUrl);
+			this.showFallbackView(href, isVideo, dimensions, placeholderUrl, fitToViewport);
 		}
 	}
 
 	// Fallback View
 
-	showFallbackView(url, isVideo, dimensions, placeholderUrl) {
+	showFallbackView(url, isVideo, dimensions, placeholderUrl, fitToViewport = false) {
 		// Initialise fallback container only once
 		if (!this.fallbackContainer) {
 			this.initializeFallbackContainer();
@@ -2528,6 +2539,7 @@ class Popup {
 		// Reset wrapper state
 		wrapper.classList.remove(this.TALL_RATIO_CLASS);
 		wrapper.classList.remove(this.SQUARE_RATIO_CLASS);
+		wrapper.classList.toggle('fit-to-viewport', fitToViewport);
 
 		// Build content based on media type
 		const fragment = document.createDocumentFragment();
@@ -2542,7 +2554,7 @@ class Popup {
 		}
 
 		// Handle square and tall ratio for images
-		if (!isVideo && dimensions) {
+		if (!isVideo && dimensions && !fitToViewport) {
 			const aspectRatio = dimensions.width / dimensions.height;
 			if (aspectRatio < this.ASPECT_RATIO_TALL_THRESHOLD) {
 				wrapper.classList.add(this.TALL_RATIO_CLASS);
@@ -2870,6 +2882,21 @@ class Popup {
 				transform: translate(-50%, -50%);
 				margin: 0;
 			}
+			.media_fallback-content.fit-to-viewport {
+				height: 100svh;
+				min-height: 0;
+			}
+			.media_fallback-content.fit-to-viewport img {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				max-width: 100%;
+				max-height: 100%;
+				inset: 0;
+				transform: none;
+				object-fit: contain;
+				margin: 0;
+			}
 			.media_fallback-content video {
 				position: relative;
 				width: 100%;
@@ -3000,7 +3027,7 @@ class Popup {
 	}
 
 	getPlaceholderUrl(url) {
-		return url.replace('.full.', '.min.');
+		return url.includes('.full.') ? url.replace('.full.', '.min.') : null;
 	}
 
 	// Dimension Calculation
@@ -5157,8 +5184,10 @@ function initializeGlobalEventHandlers() {
 			// Preload placeholder images for faster popup display
 			if (!App.popupInstance.isVideo(link.href)) {
 				const placeholderUrl = App.popupInstance.getPlaceholderUrl(link.href);
-				const preloadImg = new Image();
-				preloadImg.src = placeholderUrl;
+				if (placeholderUrl) {
+					const preloadImg = new Image();
+					preloadImg.src = placeholderUrl;
+				}
 			}
 			App.popupPreloadedLinks.add(link);
 		},
@@ -5365,7 +5394,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const BG_COLOR = 'rgb(124, 206, 0, 0.075)';
 
 	// Message Content
-	const HEADER = 'Štěpán Jákl | Senior full-stack developer & interface designer';
+	const HEADER = 'Štěpán Jákl | Full-stack developer & interface designer';
 	const LINE_1 = 'This website is built with HTML, CSS, and vanilla JavaScript.';
 	const LINE_2 = 'The goal: a fast, pixel-perfect, and fully responsive experience.';
 	const LINE_3 = 'No frameworks, no build tools, no generators. Just pure craftsmanship.';
