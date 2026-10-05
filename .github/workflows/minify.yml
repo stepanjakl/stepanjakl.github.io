@@ -46,7 +46,7 @@ jobs:
             csso "$file" --output "$file"
           done
           # Minify HTML
-          html-minifier --case-sensitive --collapse-inline-tag-whitespace --collapse-whitespace --minify-css --minify-js --minify-urls --quote-character='"' --remove-comments index.html --output index.html
+          html-minifier --case-sensitive --collapse-whitespace --minify-css --minify-js --minify-urls --quote-character='"' --remove-comments index.html --output index.html
           # Optimise images (SVGs only)
           svgo -f ./images --exclude icons.svg --exclude logos.svg
 

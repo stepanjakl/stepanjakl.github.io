@@ -68,7 +68,7 @@ total_img_after=0
 echo "Minifying index.html"
 size_before=$(stat -f%z index.html)
 total_html_before=$size_before
-html-minifier --case-sensitive --collapse-inline-tag-whitespace --collapse-whitespace --minify-css --minify-js --minify-urls --quote-character='"' --remove-comments index.html --output index.html
+html-minifier --case-sensitive --collapse-whitespace --minify-css --minify-js --minify-urls --quote-character='"' --remove-comments index.html --output index.html
 size_after=$(stat -f%z index.html)
 total_html_after=$size_after
 calculate_savings $size_before $size_after
