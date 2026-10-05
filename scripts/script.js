@@ -1157,20 +1157,22 @@ function registerDialogLifecycleHooks() {
 
 			// Initialise timeline on first modal open
 			if (!App.timeline) {
-				// Don't start observer if we have a year parameter (will start after deep-link scroll)
-				App.initializeTimeline(!yearParam);
-
-				// Position timeline after modal transition completes
+				// Create and position timeline after modal transition completes (keeps DOM work out of the opening frames)
 				const modalArchiveEl = App.getEl(DIALOG_CONFIG.ARCHIVE.id);
 
 				if (modalArchiveEl) {
 					let positioned = false;
 
 					const positionOnce = () => {
-						if (!positioned) {
-							positioned = true;
-							App.positionTimeline();
-						}
+						if (positioned) return;
+						positioned = true;
+
+						// Modal closed before transition finished: retry on next open
+						if (!document.body.classList.contains('modal-archive-open')) return;
+
+						// Don't start observer if we have a year parameter (will start after deep-link scroll)
+						App.initializeTimeline(!yearParam);
+						App.positionTimeline();
 					};
 
 					// Primary: Listen for transition end
@@ -1198,7 +1200,7 @@ function registerDialogLifecycleHooks() {
 
 			// Track user scrolling on the modal to enable hash updates
 			const modalArchive = getModalElement(NAVIGATION_HASHES.ARCHIVE);
-			if (modalArchive && App.timeline) {
+			if (modalArchive) {
 				const handleUserScroll = () => {
 					if (App.timeline) {
 						App.timeline.hasUserScrolled = true;
