@@ -805,7 +805,13 @@ figure.modal-archive__project-hero picture img {
 	background: var(--context-bg-modal);
 }
 
+.carousel--project {
+	--slide-ratio: 1636 / 2624;
+}
+
 .carousel--project [data-carousel-slides-wrapper] {
+	--slide-height: calc((100cqw - var(--carousel-padding) * 2) * var(--slide-ratio));
+
 	container-type: inline-size;
 }
 
@@ -820,17 +826,83 @@ figure.modal-archive__project-hero picture img {
 }
 
 /* Keep edge navigation over the image, clear of its caption. */
-.carousel--project [data-carousel-edge-left],
-.carousel--project [data-carousel-edge-right] {
-	top: var(--carousel-padding);
-	bottom: auto;
-	height: calc((100cqw - var(--carousel-padding) * 2) * 1636 / 2624);
+@media not all and (hover: none) and (pointer: coarse) {
+	.carousel--project [data-carousel-edge-left],
+	.carousel--project [data-carousel-edge-right] {
+		top: var(--carousel-padding);
+		bottom: auto;
+		height: var(--slide-height);
+	}
 }
 
-.carousel--project figcaption,
-.image-grid--portrait figcaption {
+.carousel--project figcaption {
 	padding: 0.75rem 0.5rem 0.5rem;
 	font-size: var(--text-xs-font-size);
+}
+
+/* Portrait screenshots: a height-capped carousel on narrow screens, a three-up grid from 45rem. */
+.carousel--portrait {
+	--slide-ratio: 2532 / 1170;
+}
+
+.carousel--portrait [data-carousel-slides-wrapper] {
+	--slide-height: min((100cqw - var(--carousel-padding) * 2) * var(--slide-ratio), 60svh);
+}
+
+.carousel--portrait [data-carousel-slides] {
+	touch-action: pan-x pan-y;
+}
+
+.carousel--portrait [data-carousel-slides] figure a img {
+	width: auto;
+	max-height: var(--slide-height);
+	margin-inline: auto;
+	border-radius: calc(var(--carousel-border-radius) - var(--carousel-padding));
+}
+
+@media (min-width: 45rem) {
+	.carousel--portrait [data-carousel-slides] {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+		overflow: visible;
+		border: 0;
+		border-radius: 0;
+		background: none;
+	}
+
+	.carousel--portrait [data-carousel-slides] figure {
+		padding: var(--carousel-padding);
+		background: var(--context-bg-modal);
+		border-radius: var(--carousel-border-radius);
+	}
+
+	.carousel--portrait [data-carousel-slides] figure a {
+		animation: none;
+	}
+
+	.carousel--portrait [data-carousel-slides] figure a img {
+		width: 100%;
+		max-height: none;
+	}
+
+	.carousel--portrait [data-carousel-edge-left],
+	.carousel--portrait [data-carousel-edge-right],
+	.carousel--portrait [data-carousel-controls] {
+		display: none;
+	}
+}
+
+@media (min-width: 50rem) {
+	.carousel--portrait [data-carousel-slides] {
+		gap: 1.25rem;
+	}
+}
+
+@media (min-width: 75rem) {
+	.carousel--portrait [data-carousel-slides] {
+		gap: 1.5rem;
+	}
 }
 
 @supports (animation-timeline: view()) {
@@ -996,27 +1068,6 @@ figure.modal-archive__project-hero picture img {
 @media (min-width: 75rem) {
 	.image-grid {
 		gap: 1.5rem;
-	}
-}
-
-/* Portrait screenshots retain the image-grid frame and spacing. */
-.image-grid.image-grid--portrait {
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	align-self: normal;
-}
-
-.image-grid--portrait a {
-	aspect-ratio: auto;
-}
-
-.image-grid--portrait img {
-	height: auto;
-}
-
-@media (max-width: 29.999rem) {
-	.image-grid.image-grid--portrait {
-		grid-template-columns: repeat(3, minmax(12rem, 1fr));
-		overflow-x: auto;
 	}
 }
 

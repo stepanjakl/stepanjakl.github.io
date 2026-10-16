@@ -3180,7 +3180,10 @@ class Carousel {
 
 		// Register for resize updates to keep pixel thresholds accurate
 		// Pixel-based rootMargins become invalid when viewport dimensions change
-		ResizeManager.register(() => this.refreshIntersectionObservers());
+		ResizeManager.register(() => {
+			this.refreshIntersectionObservers();
+			this.syncSlideLinksTabindex();
+		});
 	}
 
 	/**
@@ -3355,10 +3358,7 @@ class Carousel {
 
 		if (slideLinks.length === 0) return;
 
-		// Set initial tabindex: first link focusable, rest not
-		slideLinks.forEach((link, index) => {
-			link.setAttribute('tabindex', index === 0 ? '0' : '-1');
-		});
+		this.syncSlideLinksTabindex();
 
 		// Attach single event listener to container (event delegation)
 		this.slidesContainerEl.addEventListener('keydown', (event) => {
@@ -3422,6 +3422,22 @@ class Carousel {
 		});
 	}
 
+	/**
+	 * Keep only the active slide's link in the tab order while the slides scroll;
+	 * when CSS lays them out side by side (.carousel--portrait grid), every link stays reachable
+	 */
+	syncSlideLinksTabindex() {
+		const isScrollable =
+			this.slidesContainerEl.scrollWidth > this.slidesContainerEl.clientWidth;
+		const activeIndex = Math.max(this.slidesEls.indexOf(this.activeSlide), 0);
+
+		this.slidesEls.forEach((slide, index) => {
+			slide
+				.querySelector('a')
+				?.setAttribute('tabindex', !isScrollable || index === activeIndex ? '0' : '-1');
+		});
+	}
+
 	// Intersection Observer
 
 	setupIntersectionObserver() {
@@ -3442,13 +3458,7 @@ class Carousel {
 						this.dotEls[j].setAttribute('tabindex', isActive ? '0' : '-1');
 					}
 
-					// Update slide links tabindex to match active slide
-					const slideLinks = this.slidesEls
-						.map((slide) => slide.querySelector('a'))
-						.filter((link) => link !== null);
-					slideLinks.forEach((link, index) => {
-						link.setAttribute('tabindex', index === slideIndex ? '0' : '-1');
-					});
+					this.syncSlideLinksTabindex();
 
 					// Announce slide change to screen readers
 					if (this.announcementEl) {
