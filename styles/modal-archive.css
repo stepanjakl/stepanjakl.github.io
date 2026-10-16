@@ -748,7 +748,6 @@ figure.modal-archive__project-hero picture img {
 	width: 100%;
 	column-gap: var(--slide-offset);
 	border-radius: var(--carousel-border-radius);
-	touch-action: pan-x;
 	border: solid var(--carousel-padding) transparent;
 	background: var(--context-bg-modal);
 }
@@ -847,10 +846,6 @@ figure.modal-archive__project-hero picture img {
 
 .carousel--portrait [data-carousel-slides-wrapper] {
 	--slide-height: min((100cqw - var(--carousel-padding) * 2) * var(--slide-ratio), 60svh);
-}
-
-.carousel--portrait [data-carousel-slides] {
-	touch-action: pan-x pan-y;
 }
 
 .carousel--portrait [data-carousel-slides] figure a img {
